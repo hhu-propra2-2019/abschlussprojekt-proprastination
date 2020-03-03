@@ -47,6 +47,7 @@ checkstyleTest {
 
 dependencies {
     spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.7.1'
+    runtimeOnly 'com.h2database:h2'
     implementation 'mops:styleguide:2.0.0'
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
