@@ -29,9 +29,25 @@ repositories {
 
 }
 
+def configDir = "${project.rootDir}/quality"
+
+checkstyle {
+    toolVersion '7.8.1'
+    configFile file("$configDir/checkstyle/proprastination_checks.xml")
+//    configProperties.checkstyleSuppressionsPath = file("$configDir/checkstyle/suppressions.xml").absolutePath
+}
+
+checkstyleMain {
+    source = 'src/main/java'
+}
+
+checkstyleTest {
+    source = 'src/test/java'
+}
+
 dependencies {
     spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.7.1'
-    implementation "mops:styleguide:1.0.7"
+    implementation 'mops:styleguide:2.0.0'
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-security'
