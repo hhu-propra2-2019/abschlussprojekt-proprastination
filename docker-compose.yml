@@ -1,0 +1,22 @@
+version: '3.3'
+services:
+  mysql:
+    image: mysql:8
+    ports:
+      - '3306:3306'
+    environment:
+      - MYSQL_DATABASE=mops
+      - MYSQL_USER=mops
+      - MYSQL_PASSWORD=mops
+      - MYSQL_ROOT_PASSWORD=root_password
+    volumes:
+      - ./mysql/db/entrypoint:/docker-entrypoint-initdb.d/
+      - ./mysql/db/config.cnf:/etc/mysql/conf.d/config.cnf
+  mops:
+    depends_on:
+      - mysql
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
