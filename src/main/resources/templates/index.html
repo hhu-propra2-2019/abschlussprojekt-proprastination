@@ -1,30 +1,21 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{mopslayout :: html(name='KorrektorInnenbewerbung', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}">
+      th:replace="~{mopslayout :: html(name='Name des Subsystems', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}">
 <head>
     <meta charset="utf-8">
-    <title>KorrektorInnenbewerbung</title>
+    <title>Name des Subsystems</title>
     <th:block th:fragment="headcontent">
         <!-- Links, Skripts, Styles hier einfügen! -->
     </th:block>
 </head>
 <body>
-<header class="header header-main">
-    <a>
-        <h1>KorrektorInnenbewerbung <3</h1>
-    </a>
+<header>
+    <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
+        <!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
+    </nav>
 </header>
 <main th:fragment="bodycontent">
-    <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
-        <ul>
-            <li class="active">
-                <a th:href="@{/home}" href="/home">Home</a>
-            </li>
-            <li>
-                <a th:href="@{/account}" href="/account">Account</a>
-            </li>
-        </ul>
-    </nav>
+    <!-- Restlichen Inhalt hier einfügen! -->
 </main>
 </body>
 </html>
