@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/bewerbung2")
 public class TestController {
 
-    @GetMapping("/test")
+    @GetMapping("/")
     public String bla(){
 
         return "bla";
