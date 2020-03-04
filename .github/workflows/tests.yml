@@ -1,4 +1,4 @@
-name: Gradle Checks
+name: Tests
 
 on: 
   pull_request:
@@ -9,7 +9,7 @@ on:
     - cron:  '0 12,13,14,15,16,17,18 * * *'
 
 jobs:
-  build:
+  runTests:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
