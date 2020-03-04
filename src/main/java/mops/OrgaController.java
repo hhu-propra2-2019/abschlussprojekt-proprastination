@@ -2,12 +2,14 @@ package mops;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/bewerbung2")
 public class OrgaController {
 
-    @GetMapping("/orgaOverview")
-    public String index(){
-        return "orgaOverview";
+    @GetMapping("/overview")
+    public String orga() {
+        return "overview";
     }
 }
