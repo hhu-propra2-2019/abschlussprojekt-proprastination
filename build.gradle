@@ -9,8 +9,6 @@ plugins {
 group = 'mops'
 sourceCompatibility = '11'
 
-checkstyle { toolVersion '8.28' }
-
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
@@ -31,17 +29,9 @@ repositories {
 def configDir = "${project.rootDir}/quality"
 
 checkstyle {
-    toolVersion '7.8.1'
+    toolVersion '8.28'
     configFile file("$configDir/checkstyle/proprastination_checks.xml")
 //    configProperties.checkstyleSuppressionsPath = file("$configDir/checkstyle/suppressions.xml").absolutePath
-}
-
-checkstyleMain {
-    source = 'src/main/java'
-}
-
-checkstyleTest {
-    source = 'src/test/java'
 }
 
 dependencies {
