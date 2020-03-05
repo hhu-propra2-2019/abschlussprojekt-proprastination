@@ -13,4 +13,10 @@ public class ApplicationController {
 
         return "main";
     }
+
+   @GetMapping("/personal")
+    public String personal(){
+
+        return "personal";
+    }
 }

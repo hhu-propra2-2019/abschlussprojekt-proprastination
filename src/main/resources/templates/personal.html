@@ -1,13 +1,12 @@
-<!DOCTYPE html>
+<!DOCTYPE html>add
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{mopslayout :: html(name='KorektorInnenbewerbung', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}">
+      th:replace="~{mopslayout :: html(name='Persönliche Ansicht', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}">
 <head>
     <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
-    <title>KorrektorInnenbewerbung</title>
+    <title>Persönliche Ansicht</title>
     <th:block th:fragment="headcontent">
-    <link href="../static/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"
-          th:href="@{node_modules/bootstrap/dist/css/bootstrap.min.css}">
+        <link href="../static/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"
+              th:href="@{node_modules/bootstrap/dist/css/bootstrap.min.css}">
     </th:block>
 </head>
 <body>
@@ -20,8 +19,8 @@
                 </a>
             </li>
             <li>
-                <a th:href="@{personal}">
-                    Persönliche Ansicht
+                <a th:href="@{./}">
+                    Dashboard
                 </a>
             </li>
         </ul>
