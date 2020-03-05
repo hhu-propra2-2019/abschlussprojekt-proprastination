@@ -20,5 +20,4 @@ public class Applicant {
     private final Certificate [] certs;
     @Singular private final List<Application> applications;
 
-
 }
