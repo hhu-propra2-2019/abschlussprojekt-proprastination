@@ -2,6 +2,8 @@ package mops.model.classes;
 
 import lombok.*;
 
+import java.util.List;
+
 @Value
 @Builder(toBuilder = true)
 @Getter
@@ -17,6 +19,5 @@ public class Applicant {
     private final Status status;
     private final Certificate [] certs;
     @Singular private final List<Application> applications;
-
 
 }
