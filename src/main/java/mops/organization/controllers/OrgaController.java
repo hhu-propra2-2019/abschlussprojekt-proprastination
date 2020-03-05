@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/bewerbung2")
 public class OrgaController {
 
-    private Account createAccountFromPrincipal(KeycloakAuthenticationToken token) {
+    private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
         KeycloakPrincipal principal = (KeycloakPrincipal) token.getPrincipal();
         return new Account(
                 principal.getName(),
@@ -26,7 +26,7 @@ public class OrgaController {
 
     @GetMapping("/")
     @Secured("ROLE_orga")
-    public String index(KeycloakAuthenticationToken token, Model model) {
+    public String index(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
@@ -34,7 +34,7 @@ public class OrgaController {
     }
 
     @GetMapping("/logout")
-    public String logout(HttpServletRequest request) throws Exception {
+    public String logout(final HttpServletRequest request) throws Exception {
         request.logout();
         return "redirect:/";
     }
