@@ -34,8 +34,16 @@ checkstyle {
 //    configProperties.checkstyleSuppressionsPath = file("$configDir/checkstyle/suppressions.xml").absolutePath
 }
 
+tasks.withType(com.github.spotbugs.SpotBugsTask) {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+
+
 dependencies {
-    spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.7.1'
+    compileOnly 'com.github.spotbugs:spotbugs-annotations:4.0.0-RC1'
     runtimeOnly 'com.h2database:h2'
     implementation 'mops:styleguide:2.1.0'
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
