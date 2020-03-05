@@ -1,112 +1,69 @@
 <!DOCTYPE html>
+
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       th:replace="~{mopslayout :: html(name='Orga', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}">
+
 <head>
     <meta charset="utf-8">
     <title>Name des Subsystems</title>
     <th:block th:fragment="headcontent">
         <!-- Links, Skripts, Styles hier einfügen! -->
+
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+        <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+
+        <script>
+            $(document).ready(function() {
+                $('#table_id').DataTable( {
+                    "paging":   false,
+                    "searching": false,
+                    "info":     false
+                } );
+            } );
+        </script>
     </th:block>
 </head>
 <body>
+
+
 <header>
     <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
         <!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
     </nav>
 </header>
+
 <main th:fragment="bodycontent">
-    <div class="container">
-        <div class="row py-2">
-            <div class="col px-0">
-                <div class="card rounded-0">
-                    <div class="card-body">
-                        This is some text within a card body.
-                    </div>
-                </div>
-            </div>
-            <div class="col px-0">
-                <div class="card rounded-0">
-                    <div class="card-body">
-                        This is some text within a card body.
-                    </div>
-                </div>
-            </div>
-            <div class="col px-0">
-                <div class="card rounded-0">
-                    <div class="card-body">
-                        This is some text within a card body.
-                    </div>
-                </div>
-            </div>
-            <div class="col px-0">
-                <div class="card rounded-0">
-                    <div class="card-body">
-                        This is some text within a card body.
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row py-2">
-            <div class="col px-0">
-                <div class="card rounded-0">
-                    <div class="card-body">
-                        This is some text within a card body.
-                    </div>
-                </div>
-            </div>
-            <div class="col px-0">
-                <div class="card rounded-0">
-                    <div class="card-body">
-                        This is some text within a card body.
-                    </div>
-                </div>
-            </div>
-            <div class="col px-0">
-                <div class="card rounded-0">
-                    <div class="card-body">
-                        This is some text within a card body.
-                    </div>
-                </div>
-            </div>
-            <div class="col px-0">
-                <div class="card rounded-0">
-                    <div class="card-body">
-                        This is some text within a card body.
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row py-2">
-            <div class="col px-0">
-                <div class="card rounded-0">
-                    <div class="card-body">
-                        This is some text within a card body.
-                    </div>
-                </div>
-            </div>
-            <div class="col px-0">
-                <div class="card rounded-0">
-                    <div class="card-body">
-                        This is some text within a card body.
-                    </div>
-                </div>
-            </div>
-            <div class="col px-0">
-                <div class="card rounded-0">
-                    <div class="card-body">
-                        This is some text within a card body.
-                    </div>
-                </div>
-            </div>
-            <div class="col px-0">
-                <div class="card rounded-0">
-                    <div class="card-body">
-                        This is some text within a card body.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <table id="table_id" class="table">
+        <thead>
+        <tr>
+            <th class="text-center">Priorität des Organisators</th>
+            <th class="text-center">Unikennung</th>
+            <th class="text-center">Note</th>
+            <th class="text-center">Priorität des Bewerbers</th>
+            <th class="text-center">Ganze Bewerbung</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="text-center">
+                <select name="priority" id="priority">
+                    <option value="very high">++</option>
+                    <option value="high">+</option>
+                    <option value="medium">o</option>
+                    <option value="low">-</option>
+                </select>
+            </td>
+            <td class="text-center">Mamus100</td>
+            <td class="text-center">2,7</td>
+            <td class="text-center">++</td>
+            <td class="text-center">
+                <button type="button" class="btn btn-outline-dark">Bewerbung ansehen</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </main>
 </body>
 </html>
