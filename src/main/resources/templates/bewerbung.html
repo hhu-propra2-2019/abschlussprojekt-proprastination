@@ -21,28 +21,103 @@
     <h2> Persönliche Daten</h2> <br>
     <label for="adress1">Straße und Hausnummer</label> <br>
         <input type="text" name="adress1" id="adress1"> <br>
-
     <label for="adress2">Postleitzahl und Ort</label> <br>
         <input type="text" name="adress2" id="adress2"> <br>
     <label for="birthday">Geburtstag</label> <br>
         <input type="date" name="birthday" id="birthday"> <br>
-    <label>Geburtsort (und ggf. Land falls abweichend von Deutschland)</label> <br>
-    <label>Nationalität</label> <br>
-    <label>Immatrikulation</label> <br>
-    <label>Einstellungsstatus</label> <br>
-    <label>Universitätsabschluss</label> <br>
+    <label for="placeofbirth">Geburtsort (und ggf. Land falls abweichend von Deutschland)</label> <br>
+        <input type="text" name="placeofbirth" id="placeofbirth"> <br>
+    <label for="nationality">Nationalität</label> <br>
+        <select name="nationality" id="nationality"></select> <br>
+    <label for="subject">
+        Wählen Sie ihr aktuellen Studienfach aus falls Sie an der HHU immatrikuliert sind.
+        Ansonsten wählen sie bitte die Option "nicht immatrikuliert".
+    </label> <br>
+        <select name="subject" id="subject"></select> <br>
+    <label for="status">
+        Wählen sie bitte Ihren aktuellen Angestelltenstatus
+    </label> <br>
+        <select name="status" id="status">
+            <option value="neueinstellung">
+                Neueinstellung (bisher keine Anstellung an der HHU)
+            </option>
+            <option value="weiterbeschaeftigung">
+                Weiterbeschäftigung (bestehender Vertrag bis zum DD.MM.YYYY)
+            </option>
+            <option value="wiedereinstellung">
+                Wiedereinstellung (KEIN bestehender Vertrag bis zum DD.MM.YYYY)
+            </option>
+        </select> <br>
+    <label for="graduation">
+        Was ist der bisher höchste Universitätsabschluss, den Sie erreicht haben? <br>
+        Bitte schreiben Sie in das Textfeld, in welchem Fach Sie Ihren Abschluss erreicht haben. <br>
+        Falls der Abschluss nicht an der HHU erlangt wurde, schreiben sie dies bitte dazu.
+    </label> <br>
+        <select name="graduation" id="graduation">
+            <option value="bachelor">Bachelor</option>
+            <option value="master">Master</option>
+            <option value="diplom">Diplom</option>
+            <option value="staatsexamen">Staatsexamen</option>
+            <option value="else">Anderes</option>
+            <option value="none">kein Universitätsabschluss</option>
+        </select> <br>
+        <input type="text" name="graduationsubject" id="graduationsubject"> <br>
 
-    <label>Fach</label> <br>
+    <label>
+        Wählen sie das Fach für das Sie sich bewerben möchten:
+    </label> <br>
+        <select name="module" id="module"></select> <br>
 
-    <label>Arbeitszeit</label> <br>
+    <label>
+        Geben Sie bitte an wie viele Stunden pro Woche sie arbeiten möchten
+    </label> <br>
+        <select name="time" id="time">
+            <option value="9">9 Stunden/Woche</option>
+            <option value="10">10 Stunden/Woche</option>
+            <option value="17">17 Stunden/Woche</option>
+        </select> <br>
     <label>Note</label> <br>
-    <label>Semester</label> <br>
-    <label>Dozent</label> <br>
-    <label>Tutor/Korrektor</label> <br>
-    <label>Priorität</label> <br>
+        <select name="grade" id="grade">
+            <option value="10">1,0</option>
+            <option value="13">1,3</option>
+            <option value="17">1,7</option>
+            <option value="20">2,0</option>
+            <option value="23">2,3</option>
+            <option value="27">2,7</option>
+            <option value="30">3,0</option>
+            <option value="33">3,3</option>
+            <option value="37">3,7</option>
+            <option value="40">4,0</option>
+            <option value="50">5,0</option>
+        </select> <br>
+    <label>In welchem Semester haben Sie dieses Modul bestanden</label> <br>
+        <select name="semester" id="semester"></select> <br>
+    <label>Bei welchem Dozent haben Sie dieses Modul bestanden</label> <br>
+        <input type="text" name="lecturer" id="lecturer"> <br>
+    <label>Welche Aufgaben möchten Sie übernehmen?</label> <br>
+        <select name="tasks" id="tasks">
+            <option value="corrctor">Korrektor</option>
+            <option value="correctorandtutor">Korrektor und Tutor</option>
+            <option value="nomatter">Ist mir egal</option>
+        </select> <br>
+    <label>
+        Geben Sie bitte hier ihre Priorität für dieses Modul an,
+        falls sie vor haben sich noch bei anderen Modulen zu bewerben:
+    </label> <br>
+        <select name="priority" id="priority">
+            <option value="very high"></option>
+            <option value="high"></option>
+            <option value="medium"></option>
+            <option value="low"></option>
+        </select> <br>
 
 
-    <label>Sonstige Informationen </label> <br>
+    <label>
+        Beschreiben Sie hier kurz Ihre bisherigen Erfahrungen und sonstige Anmerkungen:
+    </label> <br>
+        <textarea name="diverse" id="diverse">
+
+        </textarea> <br>
     </div>
 </main>
 </body>
