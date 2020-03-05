@@ -1,9 +1,8 @@
 package mops.model.classes;
 
 import org.junit.jupiter.api.Test;
-import static org.assertj.core.api.Assertions.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 class ApplicantTest {
 
@@ -32,13 +31,13 @@ class ApplicantTest {
                 .build();
 
         assertThat(applicant)
-                .hasFieldOrPropertyWithValue("name","J")
-                .hasFieldOrPropertyWithValue("birthday","01.01.2001")
-                .hasFieldOrPropertyWithValue("birthplace","Wakanda")
-                .hasFieldOrPropertyWithValue("course","Arts")
-                .hasFieldOrPropertyWithValue("address",address)
-                .hasFieldOrPropertyWithValue("nationality","English")
-                .hasFieldOrPropertyWithValue("status",Status.NEW)
+                .hasFieldOrPropertyWithValue("name", "J")
+                .hasFieldOrPropertyWithValue("birthday", "01.01.2001")
+                .hasFieldOrPropertyWithValue("birthplace", "Wakanda")
+                .hasFieldOrPropertyWithValue("course", "Arts")
+                .hasFieldOrPropertyWithValue("address", address)
+                .hasFieldOrPropertyWithValue("nationality", "English")
+                .hasFieldOrPropertyWithValue("status", Status.NEW)
                 .hasFieldOrPropertyWithValue("certs", certs);
 
     }

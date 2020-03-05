@@ -1,14 +1,16 @@
 package mops.model.classes;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
 
 class ApplicationTest {
+    Application application;
 
-    @Test
-    void TestBuilder() {
-        Application application = Application.builder()
+    @BeforeEach
+    void setup() {
+        application = Application.builder()
                 .hours(2)
                 .grade(1.3)
                 .lecturer("Tester")
@@ -18,6 +20,11 @@ class ApplicationTest {
                 .comment("")
                 .build();
 
+    }
+
+    @Test
+    void TestBuilder() {
+        //Arrange in BeforeEach
 
         assertThat(application)
                 .hasFieldOrPropertyWithValue("hours", 2)
@@ -64,5 +71,25 @@ class ApplicationTest {
                             .build();
                 }
         ).isInstanceOf(NullPointerException.class);
+    }
+
+    @Test
+    void testToString() {
+        //Arrange in BeforeEach
+
+        assertThat(application.toString()).isEqualTo("Application(hours=4, module=ProPra, grade=1.7, lecturer=Tester, semester=WS2022, comment=, role=KORREKTOR)");
+
+    }
+
+    @Test
+    void testToBuilder() {
+        //Arrange in BeforeEach
+
+        Application.ApplicationBuilder applicationBuilder = application.toBuilder();
+        Application application2 = applicationBuilder.build();
+
+        assertThat(application2).isEqualTo(application);
+
+
     }
 }
