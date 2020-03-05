@@ -7,11 +7,12 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-//@RequestMapping("/bewerbung2") //TODO: MUSS GEÄNDERT WERDEN! Auf Workaround warten.
+@RequestMapping("/bewerbung2")
 public class OrgaController {
 
     private Account createAccountFromPrincipal(KeycloakAuthenticationToken token) {
