@@ -12,7 +12,20 @@
 <body>
 <header>
     <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
-        <!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
+        <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
+            <ul>
+                <li>
+                    <a th:href="@{/}">
+                        Startseite
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{./}">
+                        Dashboard
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </nav>
 </header>
 <main th:fragment="bodycontent">
