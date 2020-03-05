@@ -9,6 +9,10 @@ class ApplicantTest {
 
     @Test
     void builder() {
+        Certificate[] certs = {Certificate.builder()
+                .name("Bachelor")
+                .university("Harvard")
+                .build()};
         Address address = Address.builder()
                 .street("Baker Street 21B")
                 .city("London")
@@ -24,6 +28,7 @@ class ApplicantTest {
                 .course("Arts")
                 .nationality("English")
                 .status(Status.NEW)
+                .certs(certs)
                 .build();
 
         assertThat(applicant)
@@ -33,11 +38,9 @@ class ApplicantTest {
                 .hasFieldOrPropertyWithValue("course","Arts")
                 .hasFieldOrPropertyWithValue("address",address)
                 .hasFieldOrPropertyWithValue("nationality","English")
-                .hasFieldOrPropertyWithValue("status",Status.NEW);
+                .hasFieldOrPropertyWithValue("status",Status.NEW)
+                .hasFieldOrPropertyWithValue("certs", certs);
 
     }
 
-    @Test
-    void toBuilder() {
-    }
 }
