@@ -12,7 +12,6 @@ import lombok.ToString;
 @Getter
 @Builder(toBuilder = true)
 public class Application {
-
     private final int hours;
     @NonNull
     private final String module;
