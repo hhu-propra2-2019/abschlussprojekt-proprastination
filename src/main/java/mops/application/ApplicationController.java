@@ -14,7 +14,19 @@ public class ApplicationController {
         return "main";
     }
 
-   @GetMapping("/personal")
+    @GetMapping("/newAppl")
+    public String newAppl(){
+
+        return "newAppl";
+    }
+
+    @GetMapping("/openAppl")
+    public String openAppl(){
+
+        return "openAppl";
+    }
+
+    @GetMapping("/personal")
     public String personal(){
 
         return "personal";
