@@ -11,8 +11,10 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class KeycloakConfig {
+
+    @SuppressWarnings({"checkstyle:MissingJavadocMethod", "checkstyle:DesignForExtension"})
     @Bean
-    public KeycloakSpringBootConfigResolver KeycloakConfigResolver() {
+    public KeycloakSpringBootConfigResolver keycloakConfigResolver() {
         return new KeycloakSpringBootConfigResolver();
     }
 }
