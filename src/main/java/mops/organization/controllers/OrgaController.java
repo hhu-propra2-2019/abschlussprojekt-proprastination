@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
@@ -24,6 +25,13 @@ public class OrgaController {
                 token.getAccount().getRoles());
     }
 
+    /**
+     * The GepMapping for the main page
+     *
+     * @param token The KeycloakAuthentication
+     * @param model The Website model
+     * @return The HTML file rendered as a String
+     */
     @GetMapping("/")
     @Secured("ROLE_orga")
     public String index(final KeycloakAuthenticationToken token, final Model model) {
@@ -33,8 +41,15 @@ public class OrgaController {
         return "orga_main";
     }
 
+    /**
+     * The GetMapping for logging out
+     *
+     * @param request The HttpServletRequest
+     * @return a redirect to /
+     * @throws ServletException If the logout fails
+     */
     @GetMapping("/logout")
-    public String logout(final HttpServletRequest request) throws Exception {
+    public String logout(final HttpServletRequest request) throws ServletException {
         request.logout();
         return "redirect:/";
     }
