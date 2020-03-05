@@ -2,15 +2,67 @@ package mops.model.classes;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 class ApplicationTest {
 
     @Test
-    void builder() {
+    void TestBuilder() {
+        Application application = Application.builder()
+                .hours(2)
+                .grade(1.3)
+                .lecturer("Tester")
+                .role(Role.KORREKTOR)
+                .semester("WS2020")
+                .module("ProPra")
+                .comment("")
+                .build();
+
+
+        assertThat(application)
+                .hasFieldOrPropertyWithValue("hours", 2)
+                .hasFieldOrPropertyWithValue("grade", 1.3)
+                .hasFieldOrPropertyWithValue("lecturer", "Tester")
+                .hasFieldOrPropertyWithValue("role", Role.KORREKTOR)
+                .hasFieldOrPropertyWithValue("semester", "WS2020")
+                .hasFieldOrPropertyWithValue("module", "ProPra")
+                .hasFieldOrPropertyWithValue("comment", "");
+
+
     }
 
     @Test
     void testEquals() {
+        Application application1 = Application.builder()
+                .hours(2)
+                .grade(1.3)
+                .lecturer("Tester")
+                .role(Role.KORREKTOR)
+                .semester("WS2020")
+                .module("ProPra")
+                .comment("")
+                .build();
+
+        Application application2 = Application.builder()
+                .hours(2)
+                .grade(1.3)
+                .lecturer("Tester")
+                .role(Role.KORREKTOR)
+                .semester("WS2020")
+                .module("ProPra")
+                .comment("")
+                .build();
+
+        assertThat(application1).isEqualTo(application2);
+    }
+
+    @Test
+    void testBuilderFailsWithMissingArgument() {
+        assertThatThrownBy(() -> {
+                    Application application = Application.builder()
+                            .hours(2)
+                            .build();
+                }
+        ).isInstanceOf(NullPointerException.class);
     }
 }

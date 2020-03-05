@@ -2,6 +2,8 @@ package mops.model.classes;
 
 import lombok.*;
 
+import java.util.List;
+
 @Value
 @Builder(toBuilder = true)
 @Getter

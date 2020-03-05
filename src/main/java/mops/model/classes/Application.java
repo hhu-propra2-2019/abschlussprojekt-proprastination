@@ -1,9 +1,6 @@
 package mops.model.classes;
 
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.NotNull;
 
@@ -13,11 +10,11 @@ import javax.validation.constraints.NotNull;
 @Builder(toBuilder = true)
 public class Application {
 
-    @NotNull
+    @NonNull
     private final int hours;
-    @NotNull
+    @NonNull
     private final String module;
-    @NotNull
+    @NonNull
     private final double grade;
     private final String lecturer;
     private final String semester;

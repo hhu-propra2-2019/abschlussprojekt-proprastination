@@ -8,7 +8,13 @@ import java.util.Set;
 @Getter
 @AllArgsConstructor
 public class Account {
+    /**
+     * Saves Name of User
+     */
     private final String name;
+    /**
+     *
+     */
     private final String email;
     private final String image;
     private final Set<String> roles;
