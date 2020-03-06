@@ -75,4 +75,15 @@ class ApplicantTest {
     void TestToString() {
         assertThat(applicant.toString()).isEqualTo("Applicant(name=J, birthplace=Wakanda, address=Address(street=Baker Street 21B, city=London, country=England, zipcode=20394), birthday=01.01.2001, nationality=English, course=Arts, status=Status.NEW, certs=[Certificate(name=Bachelor, university=Harvard)], applications=[Application(hours=0, module=Divination, grade=0.0, lecturer=null, semester=null, comment=null, role=null)])");
     }
+
+    @Test
+    void testToBuilder() {
+        Applicant.ApplicantBuilder applicantBuilder = applicant.toBuilder();
+        Applicant applicant1 = applicantBuilder.build();
+
+        Applicant.ApplicantBuilder applicantBuilder1 = applicant1.toBuilder();
+        Applicant applicant2 = applicantBuilder1.build();
+
+        assertThat(applicant1).isEqualTo(applicant2);
+    }
 }
