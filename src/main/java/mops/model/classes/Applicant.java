@@ -5,11 +5,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Singular;
 import lombok.ToString;
-import lombok.Value;
 
 import java.util.List;
 
-@Value
 @Builder(toBuilder = true)
 @Getter
 @EqualsAndHashCode
