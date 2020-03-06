@@ -34,9 +34,17 @@ checkstyle {
 //    configProperties.checkstyleSuppressionsPath = file("$configDir/checkstyle/suppressions.xml").absolutePath
 }
 
+tasks.withType(com.github.spotbugs.SpotBugsTask) {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+
+
 dependencies {
-    spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.7.1'
     compile group: 'org.postgresql', name: 'postgresql', version: '42.2.10'
+    compileOnly 'com.github.spotbugs:spotbugs-annotations:4.0.0-RC1'
     implementation 'mops:styleguide:2.1.0'
     testCompile("org.assertj:assertj-core:3.15.0")
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
