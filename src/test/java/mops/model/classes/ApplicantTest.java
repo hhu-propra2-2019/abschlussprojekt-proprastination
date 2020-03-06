@@ -1,7 +1,5 @@
 package mops.model.classes;
 
-import org.junit.Before;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +11,7 @@ import static org.assertj.core.api.Assertions.*;
 
 class ApplicantTest {
     Applicant applicant;
-    Certificate[] certs;
+    List<Certificate> certs;
     Address address;
     List<Application> applicationList;
 
@@ -21,11 +19,11 @@ class ApplicantTest {
     void init() {
         Application application = Application.builder().module("Divination").build();
         applicationList = Arrays.asList(application);
-
-        certs = new Certificate[]{Certificate.builder()
+        Certificate cert = Certificate.builder()
                 .name("Bachelor")
                 .university("Harvard")
-                .build()};
+                .build();
+        certs = Arrays.asList(cert);
         address = Address.builder()
                 .street("Baker Street 21B")
                 .city("London")
@@ -47,7 +45,7 @@ class ApplicantTest {
     }
 
     @Test
-    void TestBuilder() {
+    void testBuilder() {
 
         assertThat(applicant)
                 .hasFieldOrPropertyWithValue("name", "J")
@@ -63,7 +61,7 @@ class ApplicantTest {
     }
 
     @Test
-    void TestEquals() {
+    void testEquals() {
         Applicant.ApplicantBuilder applicantBuilder = applicant.toBuilder();
         Applicant applicant1 = applicantBuilder.build();
 
@@ -72,7 +70,7 @@ class ApplicantTest {
     }
 
     @Test
-    void TestToString() {
+    void testToString() {
         assertThat(applicant.toString()).isEqualTo("Applicant(name=J, birthplace=Wakanda, address=Address(street=Baker Street 21B, city=London, country=England, zipcode=20394), birthday=01.01.2001, nationality=English, course=Arts, status=Status.NEW, certs=[Certificate(name=Bachelor, university=Harvard)], applications=[Application(hours=0, module=Divination, grade=0.0, lecturer=null, semester=null, comment=null, role=null)])");
     }
 
