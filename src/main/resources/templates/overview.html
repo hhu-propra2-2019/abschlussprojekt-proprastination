@@ -11,7 +11,6 @@
 
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
         <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
-
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 
         <script>
@@ -21,20 +20,17 @@
                     return $('select', td).val();
                 } );
             }
-        </script>
-
-        <script>
             $(document).ready(function() {
                 $('#table_id').DataTable( {
                     "paging":   false,
                     "searching": false,
                     "info":     false,
                     "columns": [
-                        { "orderDataType": "dom-select" },
-                        null,
-                        null,
-                        null,
-                        null
+                        {"name": "ProfPrio", "orderable": true, "orderDataType": "dom-select" },
+                        {"name": "Unikennung", "orderable": true},
+                        {"name": "Note", "orderable": true},
+                        {"name": "AppPrio", "orderable": true},
+                        {"name": "Button", "orderable": false}
                     ]
                 } );
             } );
@@ -51,7 +47,7 @@
 </header>
 
 <main th:fragment="bodycontent">
-    <table id="table_id" class="table">
+    <table id="table_id" class="display" style="width:100%">
         <thead>
         <tr>
             <th class="text-center">Priorität des Organisators</th>
