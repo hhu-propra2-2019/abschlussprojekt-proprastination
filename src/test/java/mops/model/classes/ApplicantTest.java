@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.*;
 
 class ApplicantTest {
     Applicant applicant;
-    Certificate[] certs;
+    List<Certificate> certs;
     Address address;
     List<Application> applicationList;
 
@@ -19,11 +19,11 @@ class ApplicantTest {
     void init() {
         Application application = Application.builder().module("Divination").build();
         applicationList = Arrays.asList(application);
-
-        certs = new Certificate[]{Certificate.builder()
+        Certificate cert = Certificate.builder()
                 .name("Bachelor")
                 .university("Harvard")
-                .build()};
+                .build();
+        certs = Arrays.asList(cert);
         address = Address.builder()
                 .street("Baker Street 21B")
                 .city("London")

@@ -10,17 +10,18 @@ import static org.assertj.core.api.Assertions.*;
 
 class DistributionTest {
     Distribution dist;
-    Applicant[] emps;
+    List <Applicant> emps;
 
     @BeforeEach
     void init(){
         Application application = Application.builder().module("Divination").build();
         List<Application> applicationList = Arrays.asList(application);
 
-        Certificate[] certs = new Certificate[]{Certificate.builder()
+        Certificate cert = Certificate.builder()
                 .name("Bachelor")
                 .university("Harvard")
-                .build()};
+                .build();
+        List<Certificate> certs = Arrays.asList(cert);
         Address address = Address.builder()
                 .street("Baker Street 21B")
                 .city("London")
@@ -39,7 +40,7 @@ class DistributionTest {
                 .certs(certs)
                 .applications(applicationList)
                 .build();
-        emps = new Applicant[]{ applicant };
+        emps = Arrays.asList(applicant);
         dist = Distribution.builder()
                 .employees(emps)
                 .module("ProPra")
