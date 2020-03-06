@@ -77,7 +77,7 @@ class ApplicationTest {
     void testToString() {
         //Arrange in BeforeEach
 
-        assertThat(application.toString()).isEqualTo("Application(hours=4, module=ProPra, grade=1.7, lecturer=Tester, semester=WS2022, comment=, role=KORREKTOR)");
+        assertThat(application.toString()).isEqualTo("Application(hours=2, module=ProPra, grade=1.3, lecturer=Tester, semester=WS2020, comment=, role=KORREKTOR)");
 
     }
 
