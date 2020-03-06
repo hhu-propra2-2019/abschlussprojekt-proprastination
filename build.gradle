@@ -43,9 +43,10 @@ tasks.withType(com.github.spotbugs.SpotBugsTask) {
 
 
 dependencies {
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.10'
     compileOnly 'com.github.spotbugs:spotbugs-annotations:4.0.0-RC1'
-    runtimeOnly 'com.h2database:h2'
     implementation 'mops:styleguide:2.1.0'
+    testCompile("org.assertj:assertj-core:3.15.0")
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -59,6 +60,7 @@ dependencies {
     }
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation("org.assertj:assertj-core:3.15.0")
     testCompile("org.assertj:assertj-core:3.11.1")
     compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.8.11.2'
     compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5:3.0.4.RELEASE'
