@@ -32,7 +32,8 @@ public class OrgaController {
      * @param model The Website model
      * @return The HTML file rendered as a String
      */
-    @GetMapping("/")
+
+    @GetMapping("/organizator")
     @Secured("ROLE_orga")
     public String index(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {

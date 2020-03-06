@@ -1,5 +1,9 @@
-package mops.application;
+package mops.application.controllers;
 
+import mops.organization.webclasses.Account;
+import org.keycloak.KeycloakPrincipal;
+import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,7 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/bewerbung2")
 public class ApplicationController {
 
-    @GetMapping("/")
+    @GetMapping("/applicant")
+    @Secured("ROLE_studentin")
     public String main(){
 
         return "main";
