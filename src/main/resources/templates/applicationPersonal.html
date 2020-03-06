@@ -137,77 +137,10 @@
                     <div class="col">
                         <select name="module" id="module" class="form-control"></select>
                     </div>
-                </div>
-            </div>
-        </div>
-        <br>
-        <div class="card">
-            <div class="card-body">
-                <div class="row">
                     <div class="col">
-                        <label for="workload">
-                            Geben Sie bitte an wie viele Stunden pro Woche sie arbeiten möchten
-                        </label> <br>
-                        <select name="workload" id="workload" class="form-control">
-                            <option value="9">9 Stunden/Woche</option>
-                            <option value="10">10 Stunden/Woche</option>
-                            <option value="17">17 Stunden/Woche</option>
-                        </select>
-                    </div>
-                    <div class="col">
-                        <label for="grade">Geben die von Ihnen in diesem Modul erreichte Note an</label> <br>
-                        <select name="grade" id="grade" class="form-control">
-                            <option value="10">1,0</option>
-                            <option value="13">1,3</option>
-                            <option value="17">1,7</option>
-                            <option value="20">2,0</option>
-                            <option value="23">2,3</option>
-                            <option value="27">2,7</option>
-                            <option value="30">3,0</option>
-                            <option value="33">3,3</option>
-                            <option value="37">3,7</option>
-                            <option value="40">4,0</option>
-                            <option value="50">5,0</option>
-                        </select> <br>
+                        <a th:href="@{module}" class="btn btn-primary form-control"> Submit </a>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col">
-                        <label for="semester">In welchem Semester haben Sie dieses Modul bestanden</label> <br>
-                        <select name="semester" id="semester" class="form-control"></select>
-                        <br>
-                    </div>
-                    <div class="col">
-                        <label for="lecturer">Bei welchem Dozent haben Sie dieses Modul bestanden</label> <br>
-                        <input type="text" name="lecturer" id="lecturer" class="form-control" placeholder="Dozent">
-                        <br>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <label for="tasks">Welche Aufgaben möchten Sie übernehmen?</label> <br> <br>
-                            <select name="tasks" id="tasks" class="form-control">
-                                <option value="corrctor">Korrektor</option>
-                                <option value="correctorandtutor">Korrektor und Tutor</option>
-                                <option value="nomatter">Ist mir egal</option>
-                            </select>
-                    </div>
-                    <div class="col">
-                        <label for="priority">
-                            Geben Sie bitte hier ihre Priorität für dieses Modul an,
-                            falls sie vor haben sich noch bei anderen Modulen zu bewerben:
-                        </label> <br>
-                        <select name="priority" id="priority" class="form-control">
-                            <option value="1">++</option>
-                            <option value="2">+</option>
-                            <option value="3">o</option>
-                        </select> <br>
-                    </div>
-                </div>
-
-
-
-
             </div>
         </div>
     </div>

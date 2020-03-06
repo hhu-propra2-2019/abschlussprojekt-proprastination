@@ -16,7 +16,7 @@ public class ApplicationController {
 
     @GetMapping("/application")
     public String newAppl(){
-        return "application";
+        return "applicationPersonal";
     }
 
     @GetMapping("/openAppl")
@@ -29,5 +29,10 @@ public class ApplicationController {
     public String personal(){
 
         return "personal";
+    }
+
+    @GetMapping("/module")
+    public String module(){
+        return "applicationModule";
     }
 }
