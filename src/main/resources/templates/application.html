@@ -50,22 +50,20 @@
                 <div class="row">
                     Bitte geben Sie ihren Geburtstag, Ihren Geburtsort (falls das Land abweichend von Deutschland ist,
                     geben sie bitte auch das Land an) und Ihre Nationalität.
+                    <br>
                     <div class="col">
                         <label for="birthday" class="form">Geburtstag</label>
                         <input type="date" name="birthday" id="birthday"
                                class="form-control" placeholder="Geburtstag (DD.MM.YYYY)"> <br>
-                        <br>
                     </div>
                     <div class="col">
                         <label for="placeofbirth" class="form">Geburtsort</label>
                         <input type="text" name="placeofbirth" id="placeofbirth"
                                class="form-control" placeholder="Geburtsort"> <br>
-                        <br>
                     </div>
                     <div class="col">
                         <label for="nationality" class="form">Nationalität</label>
                         <select name="nationality" id="nationality" class="form-control"></select> <br>
-                        <br>
                     </div>
                 </div>
                 <div class="row">
@@ -84,7 +82,6 @@
                 <div class="row">
                     <div class="col">
                         <select name="subject" id="subject" class="form-control"></select> <br>
-                        <br>
                     </div>
                     <div class="col">
                         <select name="status" id="status" class="form-control">
@@ -97,13 +94,14 @@
                             <option value="wiedereinstellung">
                                 Wiedereinstellung (KEIN bestehender Vertrag bis zum DD.MM.YYYY)
                             </option>
-                        </select> <br>
+                        </select>
                     </div>
                 </div>
                 <div class="row">
                     Was ist der bisher höchste Universitätsabschluss, den Sie erreicht haben?
                     Bitte schreiben Sie in das Textfeld, in welchem Fach Sie Ihren Abschluss erreicht haben.
                     Falls der Abschluss nicht an der HHU erlangt wurde, schreiben sie dies bitte dazu.
+                    <br>
                     <div class="col">
                         <select name="graduation" id="graduation" class="form-control">
                             <option value="bachelor">Bachelor</option>
@@ -130,61 +128,86 @@
         <br>
         <div class="card">
             <div class="card-body">
-                <label for="module">
-                    Wählen sie das Fach für das Sie sich bewerben möchten:
-                </labelfor> <br>
-                <select name="module" id="module"></select> <br>
+                <div class="row">
+                    <div class="col">
+                        <label for="module">
+                            Wählen sie das Modul für das Sie sich bewerben möchten:
+                        </label>
+                    </div>
+                    <div class="col">
+                        <select name="module" id="module" class="form-control"></select>
+                    </div>
+                </div>
             </div>
         </div>
         <br>
         <div class="card">
             <div class="card-body">
-                <label for="workload">
-                    Geben Sie bitte an wie viele Stunden pro Woche sie arbeiten möchten
-                </label> <br>
-                <select name="workload" id="workload">
-                    <option value="9">9 Stunden/Woche</option>
-                    <option value="10">10 Stunden/Woche</option>
-                    <option value="17">17 Stunden/Woche</option>
-                </select> <br>
-                <br>
-                <label for="grade">Note</label> <br>
-                <select name="grade" id="grade">
-                    <option value="10">1,0</option>
-                    <option value="13">1,3</option>
-                    <option value="17">1,7</option>
-                    <option value="20">2,0</option>
-                    <option value="23">2,3</option>
-                    <option value="27">2,7</option>
-                    <option value="30">3,0</option>
-                    <option value="33">3,3</option>
-                    <option value="37">3,7</option>
-                    <option value="40">4,0</option>
-                    <option value="50">5,0</option>
-                </select> <br>
-                <br>
-                <label for="semester">In welchem Semester haben Sie dieses Modul bestanden</label> <br>
-                <select name="semester" id="semester"></select> <br>
-                <br>
-                <label for="lecturer">Bei welchem Dozent haben Sie dieses Modul bestanden</label> <br>
-                <input type="text" name="lecturer" id="lecturer"> <br>
-                <br>
-                <label for="tasks">Welche Aufgaben möchten Sie übernehmen?</labelf> <br>
-                <select name="tasks" id="tasks">
-                    <option value="corrctor">Korrektor</option>
-                    <option value="correctorandtutor">Korrektor und Tutor</option>
-                    <option value="nomatter">Ist mir egal</option>
-                </select> <br>
-                <br>
-                <label for="priority">
-                    Geben Sie bitte hier ihre Priorität für dieses Modul an,
-                    falls sie vor haben sich noch bei anderen Modulen zu bewerben:
-                </label> <br>
-                <select name="priority" id="priority">
-                    <option value="1">++</option>
-                    <option value="2">+</option>
-                    <option value="3">o</option>
-                </select> <br>
+                <div class="row">
+                    <div class="col">
+                        <label for="workload">
+                            Geben Sie bitte an wie viele Stunden pro Woche sie arbeiten möchten
+                        </label> <br>
+                        <select name="workload" id="workload" class="form-control">
+                            <option value="9">9 Stunden/Woche</option>
+                            <option value="10">10 Stunden/Woche</option>
+                            <option value="17">17 Stunden/Woche</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="grade">Geben die von Ihnen in diesem Modul erreichte Note an</label> <br>
+                        <select name="grade" id="grade" class="form-control">
+                            <option value="10">1,0</option>
+                            <option value="13">1,3</option>
+                            <option value="17">1,7</option>
+                            <option value="20">2,0</option>
+                            <option value="23">2,3</option>
+                            <option value="27">2,7</option>
+                            <option value="30">3,0</option>
+                            <option value="33">3,3</option>
+                            <option value="37">3,7</option>
+                            <option value="40">4,0</option>
+                            <option value="50">5,0</option>
+                        </select> <br>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="semester">In welchem Semester haben Sie dieses Modul bestanden</label> <br>
+                        <select name="semester" id="semester" class="form-control"></select>
+                        <br>
+                    </div>
+                    <div class="col">
+                        <label for="lecturer">Bei welchem Dozent haben Sie dieses Modul bestanden</label> <br>
+                        <input type="text" name="lecturer" id="lecturer" class="form-control" placeholder="Dozent">
+                        <br>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="tasks">Welche Aufgaben möchten Sie übernehmen?</label> <br> <br>
+                            <select name="tasks" id="tasks" class="form-control">
+                                <option value="corrctor">Korrektor</option>
+                                <option value="correctorandtutor">Korrektor und Tutor</option>
+                                <option value="nomatter">Ist mir egal</option>
+                            </select>
+                    </div>
+                    <div class="col">
+                        <label for="priority">
+                            Geben Sie bitte hier ihre Priorität für dieses Modul an,
+                            falls sie vor haben sich noch bei anderen Modulen zu bewerben:
+                        </label> <br>
+                        <select name="priority" id="priority" class="form-control">
+                            <option value="1">++</option>
+                            <option value="2">+</option>
+                            <option value="3">o</option>
+                        </select> <br>
+                    </div>
+                </div>
+
+
+
+
             </div>
         </div>
     </div>
