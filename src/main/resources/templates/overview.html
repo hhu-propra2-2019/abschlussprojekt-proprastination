@@ -40,13 +40,6 @@
                 } );
             } );
         </script>
-        <script>
-            $('.openBtn').on('click',function(){
-                $('.modal-body').load('orga_main.html',function(){
-                    $('#modal_id').modal({show:true});
-                });
-            });
-        </script>
     </th:block>
 </head>
 <body>
@@ -98,11 +91,19 @@
                             <div class="modal-body">
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+                                <button type="button" class="btn btn-default closeBtn" data-dismiss="modal">Schließen</button>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <script>
+                    $('.openBtn').on('click',function(){
+                        $('.modal-body').load('/bewerbung2/modal',function(){
+                            $('#modal_id').show(true);
+                        });
+                    });
+                </script>
             </td>
         </tr>
         </tbody>

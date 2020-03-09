@@ -52,6 +52,15 @@ public class OrgaController {
     }
 
     /**
+     * temporär.
+     * @return overview.html
+     */
+    @GetMapping("/modal")
+    public String modal() {
+        return "modaltest";
+    }
+
+    /**
      * The GetMapping for logging out
      *
      * @param request The HttpServletRequest
