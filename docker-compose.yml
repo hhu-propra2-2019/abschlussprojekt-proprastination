@@ -1,20 +1,16 @@
 version: '3.3'
 services:
-  mysql:
-    image: mysql:8
+  db:
+    image: postgres
     ports:
-      - '3306:3306'
+      - '5432:5432'
     environment:
-      - MYSQL_DATABASE=mops
-      - MYSQL_USER=mops
-      - MYSQL_PASSWORD=mops
-      - MYSQL_ROOT_PASSWORD=root_password
-    volumes:
-      - ./mysql/db/entrypoint:/docker-entrypoint-initdb.d/
-      - ./mysql/db/config.cnf:/etc/mysql/conf.d/config.cnf
+      - POSTGRES_USER=mops
+      - POSTGRES_PASSWORD=mops
+      - POSTGRES_DB=moepsinnen
   mops:
     depends_on:
-      - mysql
+      - db
     build:
       context: .
       dockerfile: Dockerfile
