@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Objects;
+
 @Controller
 @RequestMapping("/bewerbung2")
 public class DistributeController {
@@ -43,10 +45,11 @@ public class DistributeController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
-        if(token.getAccount().getRoles().contains("ROLE_orga")){
+        if (Objects.requireNonNull(token).getAccount().getRoles().contains("ROLE_orga")) {
             return "redirect:/bewerbung2/organizator/";
+        } else {
+            return "redirect:/bewerbung2/applicant/";
         }
-        else return "redirect:/bewerbung2/applicant/";
     }
 
 }
