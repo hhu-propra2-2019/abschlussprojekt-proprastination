@@ -1,6 +1,6 @@
-package mops.application.controllers;
+package mops.controllers;
 
-import mops.organization.webclasses.Account;
+import mops.model.Account;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.security.access.annotation.Secured;
