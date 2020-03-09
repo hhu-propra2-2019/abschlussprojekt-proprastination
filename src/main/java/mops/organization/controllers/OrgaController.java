@@ -42,6 +42,15 @@ public class OrgaController {
         return "orga_main";
     }
 
+    @GetMapping("/overview")
+    @Secured("ROLE_orga")
+    public String overview(final KeycloakAuthenticationToken token, final Model model) {
+        if (token != null) {
+            model.addAttribute("account", createAccountFromPrincipal(token));
+        }
+        return "overview";
+    }
+
     /**
      * temporär.
      * @return overview.html
