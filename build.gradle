@@ -31,7 +31,7 @@ def configDir = "${project.rootDir}/quality"
 checkstyle {
     toolVersion '8.28'
     configFile file("$configDir/checkstyle/proprastination_checks.xml")
-//    configProperties.checkstyleSuppressionsPath = file("$configDir/checkstyle/suppressions.xml").absolutePath
+    checkstyleTest.enabled = false
 }
 
 tasks.withType(com.github.spotbugs.SpotBugsTask) {
@@ -54,6 +54,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.keycloak:keycloak-spring-boot-starter:9.0.0'
     implementation 'org.keycloak.bom:keycloak-adapter-bom:3.3.0.Final'
+    compile group: 'org.webjars', name: 'jquery', version: '3.3.1'
     testCompile 'com.tngtech.archunit:archunit:0.13.0'
     testCompile 'com.tngtech.archunit:archunit-junit5:0.13.0'
     compileOnly 'org.projectlombok:lombok'
