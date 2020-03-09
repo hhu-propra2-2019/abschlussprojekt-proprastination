@@ -31,7 +31,7 @@ def configDir = "${project.rootDir}/quality"
 checkstyle {
     toolVersion '8.28'
     configFile file("$configDir/checkstyle/proprastination_checks.xml")
-//    configProperties.checkstyleSuppressionsPath = file("$configDir/checkstyle/suppressions.xml").absolutePath
+    checkstyleTest.enabled = false
 }
 
 tasks.withType(com.github.spotbugs.SpotBugsTask) {
