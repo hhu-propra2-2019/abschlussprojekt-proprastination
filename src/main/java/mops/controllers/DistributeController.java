@@ -53,7 +53,7 @@ public class DistributeController {
         List list = new LinkedList(Objects.requireNonNull(token).getAuthorities());
         for (Object object : list) {
             if (object.equals(new SimpleGrantedAuthority("ROLE_orga"))) {
-                return "redirect:/bewerbung2/organizator/";
+                return "redirect:/bewerbung2/organizer/";
             } else if (object.equals(new SimpleGrantedAuthority("ROLE_studentin"))) {
                 return "redirect:/bewerbung2/applicant/";
             }
