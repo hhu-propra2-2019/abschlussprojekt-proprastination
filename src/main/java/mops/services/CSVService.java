@@ -27,7 +27,7 @@ public class CSVService {
     public static List<String> getCountries(){
         List<String> list = new ArrayList<>();
         List<String[]> countries = new ArrayList<>();
-        countries = readFromCSV("csv/countries.csv");
+        countries = readFromCSV("src/main/resources/csv/countries.csv");
         String[] help;
         for(int i = 0; i < countries.size(); i++){
             help = countries.get(i);

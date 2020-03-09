@@ -1,6 +1,7 @@
 package mops.controllers;
 
 import mops.model.Account;
+import mops.services.CSVService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.security.access.annotation.Secured;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/bewerbung2/applicant")
@@ -54,6 +57,9 @@ public class ApplicationController {
     public String newAppl(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
+            List<String> endCountries = new ArrayList<>();
+            endCountries = CSVService.getCountries();
+            model.addAttribute("countries",endCountries);
         }
         return "applicationPersonal";
     }
