@@ -40,6 +40,13 @@
                 } );
             } );
         </script>
+        <script>
+            $('.openBtn').on('click',function(){
+                $('.modal-body').load('orga_main.html',function(){
+                    $('#modal_id').modal({show:true});
+                });
+            });
+        </script>
     </th:block>
 </head>
 <body>
@@ -77,10 +84,10 @@
             <td class="text-center">2,7</td>
             <td class="text-center">++</td>
             <td class="text-center">
-                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">Bewerbung ansehen</button>
+                <button type="button" class="btn btn-default openBtn" data-toggle="modal" data-target="#modal_id">Bewerbung ansehen</button>
 
                 <!-- Modal -->
-                <div class="modal fade" id="myModal" role="dialog">
+                <div class="modal fade" id="modal_id" role="dialog">
                     <div class="modal-dialog">
 
                         <!-- Modal content-->
@@ -89,49 +96,11 @@
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body">
-                                <p>Bewerbung Mamus</p>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
                             </div>
                         </div>
-
-                    </div>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td class="text-center">
-                <select name="priority">
-                    <option value="1">++</option>
-                    <option value="2">+</option>
-                    <option value="3">o</option>
-                    <option value="4">-</option>
-                </select>
-            </td>
-            <td class="text-center">Camus100</td>
-            <td class="text-center">4,0</td>
-            <td class="text-center">o</td>
-            <td class="text-center">
-                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal2">Bewerbung ansehen</button>
-
-                <!-- Modal -->
-                <div class="modal fade" id="myModal2" role="dialog">
-                    <div class="modal-dialog">
-
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            </div>
-                            <div class="modal-body">
-                                <p>Bewerbung Camus</p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
             </td>

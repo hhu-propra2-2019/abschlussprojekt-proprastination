@@ -43,6 +43,15 @@ public class OrgaController {
     }
 
     /**
+     * temporär.
+     * @return overview.html
+     */
+    @GetMapping("/overview")
+    public String orga() {
+        return "overview";
+    }
+
+    /**
      * The GetMapping for logging out
      *
      * @param request The HttpServletRequest
