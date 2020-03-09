@@ -8,6 +8,8 @@ services:
       - POSTGRES_USER=mops
       - POSTGRES_PASSWORD=mops
       - POSTGRES_DB=moepsinnen
+    volumes:
+      - postgres:/var/lib/postgresql/data
   mops:
     depends_on:
       - db
@@ -16,3 +18,5 @@ services:
       dockerfile: Dockerfile
     ports:
       - '8080:8080'
+volumes:
+  postgres:
