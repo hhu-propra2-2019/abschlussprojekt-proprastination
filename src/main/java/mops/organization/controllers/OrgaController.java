@@ -53,16 +53,7 @@ public class OrgaController {
 
     /**
      * temporär.
-     * @return overview.html
-     */
-    @GetMapping("/overview")
-    public String orga() {
-        return "overview";
-    }
-
-    /**
-     * temporär.
-     * @return overview.html
+     * @return modal.html (nur zum Testen)
      */
     @GetMapping("/modal")
     public String modal() {
