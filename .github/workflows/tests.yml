@@ -1,0 +1,21 @@
+name: Tests
+
+on:
+  pull_request:
+    branches:
+      - master
+      - develop
+  schedule:
+    - cron:  '0 11,12,13,14,15,16,17 * * 1,2,3,4,5'
+
+jobs:
+  runTests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Setup java v11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Run Tests with Gradle
+        run: ./gradlew test

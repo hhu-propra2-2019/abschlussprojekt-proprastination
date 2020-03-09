@@ -9,8 +9,6 @@ plugins {
 group = 'mops'
 sourceCompatibility = '11'
 
-checkstyle { toolVersion '8.28' }
-
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
@@ -31,23 +29,24 @@ repositories {
 def configDir = "${project.rootDir}/quality"
 
 checkstyle {
-    toolVersion '7.8.1'
+    toolVersion '8.28'
     configFile file("$configDir/checkstyle/proprastination_checks.xml")
 //    configProperties.checkstyleSuppressionsPath = file("$configDir/checkstyle/suppressions.xml").absolutePath
 }
 
-checkstyleMain {
-    source = 'src/main/java'
+tasks.withType(com.github.spotbugs.SpotBugsTask) {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
 }
 
-checkstyleTest {
-    source = 'src/test/java'
-}
 
 dependencies {
-    spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.7.1'
-    runtimeOnly 'com.h2database:h2'
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.10'
+    compileOnly 'com.github.spotbugs:spotbugs-annotations:4.0.0-RC1'
     implementation 'mops:styleguide:2.1.0'
+    testCompile("org.assertj:assertj-core:3.15.0")
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -55,15 +54,21 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.keycloak:keycloak-spring-boot-starter:9.0.0'
     implementation 'org.keycloak.bom:keycloak-adapter-bom:3.3.0.Final'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     compile group: 'org.webjars', name: 'jquery', version: '3.3.1'
-
+    testCompile 'com.tngtech.archunit:archunit:0.13.0'
+    testCompile 'com.tngtech.archunit:archunit-junit5:0.13.0'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation("org.assertj:assertj-core:3.15.0")
+    testCompile("org.assertj:assertj-core:3.11.1")
+    compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.8.11.2'
+    compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5:3.0.4.RELEASE'
+    implementation 'junit:junit:4.12'
 }
 
 test {
