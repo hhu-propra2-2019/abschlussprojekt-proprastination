@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.annotation.SessionScope;
 
 @SessionScope
-import javax.servlet.http.HttpServletRequest;
-
 @Controller
 @RequestMapping("/bewerbung2/organizator")
 public class OrgaController {
@@ -42,19 +40,7 @@ public class OrgaController {
         }
         return "orgaMain";
     }
-
-    /**
-     * The GetMapping for logging out
-     *
-     * @param request The HttpServletRequest
-     * @return a redirect to /
-     * @throws ServletException If the logout fails
-     */
-    @GetMapping("/logout")
-    public String logout(final HttpServletRequest request) throws ServletException {
-        request.logout();
-        return "redirect:/";
-    }
+    
 
 
 }
