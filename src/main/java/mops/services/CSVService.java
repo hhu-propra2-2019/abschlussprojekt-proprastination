@@ -13,25 +13,25 @@ import java.util.List;
 public class CSVService {
 
     public static List<String[]> readFromCSV(String csvName){
-        List<String[]> help = new ArrayList<>();
+        List<String[]> list = new ArrayList<>();
         try {
             CSVReader csvReader = new CSVReader(new FileReader(csvName));
-            help = csvReader.readAll();
+            list = csvReader.readAll();
             csvReader.close();
         } catch (IOException | CsvException e) {
             e.printStackTrace();
         }
-        return help;
+        return list;
     }
 
     public static List<String> getCountries(){
         List<String> list = new ArrayList<>();
         List<String[]> countries = new ArrayList<>();
         countries = readFromCSV("src/main/resources/csv/countries.csv");
-        String[] help;
+        String[] strArr;
         for(int i = 0; i < countries.size(); i++){
-            help = countries.get(i);
-            list.add(help[0]);
+            strArr = countries.get(i);
+            list.add(strArr[0]);
         }
         return list;
     }
