@@ -1,6 +1,6 @@
-package mops.application.controllers;
+package mops.controllers;
 
-import mops.organization.webclasses.Account;
+import mops.model.Account;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.security.access.annotation.Secured;
@@ -32,10 +32,9 @@ public class ApplicationController {
      * @param model The Website model
      * @return The HTML file rendered as a String
      */
-
     @GetMapping("/")
     @Secured("ROLE_studentin")
-    public String main(final KeycloakAuthenticationToken token, final Model model){
+    public String main(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
@@ -52,7 +51,7 @@ public class ApplicationController {
 
     @GetMapping("/application")
     @Secured("ROLE_studentin")
-    public String newAppl(final KeycloakAuthenticationToken token, final Model model){
+    public String newAppl(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
@@ -68,7 +67,7 @@ public class ApplicationController {
      */
 
     @GetMapping("/openAppl")
-    public String openAppl(final KeycloakAuthenticationToken token, final Model model){
+    public String openAppl(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
@@ -84,7 +83,7 @@ public class ApplicationController {
      */
 
     @GetMapping("/personal")
-    public String personal(final KeycloakAuthenticationToken token, final Model model){
+    public String personal(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
@@ -101,7 +100,7 @@ public class ApplicationController {
      */
 
     @GetMapping("/module")
-    public String module(final KeycloakAuthenticationToken token, final Model model){
+    public String module(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
