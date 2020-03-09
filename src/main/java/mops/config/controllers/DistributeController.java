@@ -13,6 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/bewerbung2")
 public class DistributeController {
 
+    /**
+     * Method for creating an Account
+     *
+     * @param token The KeycloakAuthentication
+     * @return The Users Account
+     */
+
     private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
         KeycloakPrincipal principal = (KeycloakPrincipal) token.getPrincipal();
         return new Account(
@@ -21,6 +28,14 @@ public class DistributeController {
                 null,
                 token.getAccount().getRoles());
     }
+
+    /**
+     * The GetMapping to redirect users in dependence of their role
+     *
+     * @param token The KeycloakAuthentication
+     * @param model The Website model
+     * @return The HTML file rendered as a String
+     */
 
     @GetMapping("/")
     @PreAuthorize("hasRole('ROLE_orga') or hasRole('ROLE_studentin')")
