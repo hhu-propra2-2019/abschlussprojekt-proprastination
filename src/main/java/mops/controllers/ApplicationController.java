@@ -59,7 +59,7 @@ public class ApplicationController {
             model.addAttribute("account", createAccountFromPrincipal(token));
             List<String> endCountries = new ArrayList<>();
             endCountries = CSVService.getCountries();
-            model.addAttribute("countries",endCountries);
+            model.addAttribute("countries", endCountries);
         }
         return "applicationPersonal";
     }
