@@ -2,7 +2,6 @@ package mops.services;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.stereotype.Service;
 
 import java.io.FileReader;
@@ -26,8 +25,6 @@ public class CSVService {
         List<String[]> list = new ArrayList<>();
         final Charset charset = Charset.forName("UTF-8");
         try {
-            @SuppressFBWarnings(value = "DM_DEFAULT_ENCODING",
-                    justification = "Default-Encoding wurde mit Charset umgangen")
             CSVReader csvReader = new CSVReader(new FileReader(csvName, charset));
             list = csvReader.readAll();
             csvReader.close();
@@ -41,7 +38,6 @@ public class CSVService {
      * @return list of countries
      */
 
-    @SuppressFBWarnings(value = "DLS_DEAD_LOCAL_STORE", justification = "Variabel countries wird benutzt")
     public static List<String> getCountries() {
         List<String> list = new ArrayList<>();
         List<String[]> countries = readFromCSV("src/main/resources/csv/countries.csv");
