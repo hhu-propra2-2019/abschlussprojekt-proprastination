@@ -44,7 +44,13 @@ public class OrgaController {
         return "orgaMain";
     }
 
-   @GetMapping("/overview")
+    /**
+     * Shows overview of applications for a module.
+     * @param token
+     * @param model
+     * @return overview.html as String
+     */
+    @GetMapping("/overview")
     @Secured("ROLE_orga")
     public String overview(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
