@@ -1,4 +1,4 @@
-package mops.config.controllers;
+package mops.controllers;
 
 import mops.organization.webclasses.Account;
 import org.keycloak.KeycloakPrincipal;
