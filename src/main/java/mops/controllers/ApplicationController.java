@@ -18,7 +18,7 @@ import java.util.List;
 
 @Controller
 @SessionScope
-@RequestMapping("/bewerbung2/applicant")
+@RequestMapping("/bewerbung2/bewerber")
 public class ApplicationController {
 
     private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
@@ -54,7 +54,7 @@ public class ApplicationController {
      * @return The HTML file rendered as a String
      */
 
-    @GetMapping("/application")
+    @GetMapping("/neueBewerbung")
     @Secured("ROLE_studentin")
     public String newAppl(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
@@ -74,7 +74,7 @@ public class ApplicationController {
      * @return The HTML file rendered as a String
      */
 
-    @GetMapping("/openAppl")
+    @GetMapping("/offeneBewerbungen")
     public String openAppl(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
@@ -90,7 +90,7 @@ public class ApplicationController {
      * @return The HTML file rendered as a String
      */
 
-    @GetMapping("/personal")
+    @GetMapping("/profil")
     public String personal(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
@@ -107,25 +107,11 @@ public class ApplicationController {
      * @return The HTML file rendered as a String
      */
 
-    @GetMapping("/module")
+    @GetMapping("/modul")
     public String module(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
         return "applicationModule";
-    }
-
-    /**
-     * The GetMapping for logging out
-     *
-     * @param request The HttpServletRequest
-     * @return a redirect to /
-     * @throws ServletException If the logout fails
-     */
-
-    @GetMapping("/logout")
-    public String logout(final HttpServletRequest request) throws ServletException {
-        request.logout();
-        return "redirect:/";
     }
 }
