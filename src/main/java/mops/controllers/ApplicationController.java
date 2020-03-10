@@ -114,4 +114,20 @@ public class ApplicationController {
         }
         return "applicationModule";
     }
+
+    /**
+     * The GetMapping for the module page
+     *
+     * @param token The KeycloakAuthentication
+     * @param model The Website model
+     * @return The HTML file rendered as a String
+     */
+
+    @GetMapping("/uebersicht")
+    public String overview(final KeycloakAuthenticationToken token, final Model model) {
+        if (token != null) {
+            model.addAttribute("account", createAccountFromPrincipal(token));
+        }
+        return "applicationOverview";
+    }
 }
