@@ -11,9 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.annotation.SessionScope;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Controller
 @SessionScope
 @RequestMapping("/bewerbung2/bewerber")
@@ -57,9 +54,7 @@ public class ApplicationController {
     public String newAppl(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
-            List<String> endCountries = new ArrayList<>();
-            endCountries = CSVService.getCountries();
-            model.addAttribute("countries",endCountries);
+            model.addAttribute("countries", CSVService.getCountries());
         }
         return "applicationPersonal";
     }
