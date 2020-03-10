@@ -1,6 +1,5 @@
 package mops.model.classes;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
