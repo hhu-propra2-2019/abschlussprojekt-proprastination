@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.annotation.SessionScope;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+
 @SessionScope
 @Controller
 @RequestMapping("/bewerbung2/organisator")
@@ -41,6 +44,40 @@ public class OrgaController {
         return "orgaMain";
     }
 
+    /**
+     * Shows overview of applications for a module.
+     * @param token
+     * @param model
+     * @return overview.html as String
+     */
+    @GetMapping("/overview")
+    @Secured("ROLE_orga")
+    public String overview(final KeycloakAuthenticationToken token, final Model model) {
+        if (token != null) {
+            model.addAttribute("account", createAccountFromPrincipal(token));
+        }
+        return "overview";
+    }
 
+    /**
+     * temporär.
+     * @return modal.html (nur zum Testen)
+     */
+    @GetMapping("/modal")
+    public String modal() {
+        return "modaltest";
+    }
 
+    /**
+     * The GetMapping for logging out
+     *
+     * @param request The HttpServletRequest
+     * @return a redirect to /
+     * @throws ServletException If the logout fails
+     */
+    @GetMapping("/logout")
+    public String logout(final HttpServletRequest request) throws ServletException {
+        request.logout();
+        return "redirect:/";
+    }
 }
