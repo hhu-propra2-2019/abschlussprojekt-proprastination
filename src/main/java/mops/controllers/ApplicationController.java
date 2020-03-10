@@ -116,7 +116,7 @@ public class ApplicationController {
     }
 
     /**
-     * The GetMapping for the module page
+     * The GetMapping for the overview
      *
      * @param token The KeycloakAuthentication
      * @param model The Website model
