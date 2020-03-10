@@ -31,7 +31,12 @@
 <main th:fragment="bodycontent">
     <div style="text-align: center;">
         <!-- Restlichen Inhalt hier einfügen! -->
-        <h1>[Modulname]</h1>
+        <div class="card">
+            <div class="card-body">
+                <h1>[Modulname]</h1>
+            </div>
+        </div>
+        <br>
         <div class="card">
             <div class="card-body">
                 <div class="row">
@@ -76,7 +81,7 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <label for="tasks">Welche Aufgaben möchten Sie übernehmen?</label> <br> <br>
+                        <label for="tasks">Welche Aufgaben möchten Sie übernehmen</label> <br> <br>
                         <select name="tasks" id="tasks" class="form-control">
                             <option value="corrctor">Korrektor</option>
                             <option value="correctorandtutor">Korrektor und Tutor</option>
@@ -86,7 +91,7 @@
                     <div class="col">
                         <label for="priority">
                             Geben Sie bitte hier ihre Priorität für dieses Modul an,
-                            falls sie vor haben sich noch bei anderen Modulen zu bewerben:
+                            falls sie vor haben sich noch bei anderen Modulen zu bewerben
                         </label> <br>
                         <select name="priority" id="priority" class="form-control">
                             <option value="1">++</option>
@@ -101,16 +106,30 @@
         <div class="card">
             <div class="card-body">
                 <div class="row">
-                    <div class="col">
+                    <div class="col-6">
                         <label for="module">
                             Falls Sie sich bei einem weiteren Modul bewerben möchten können Sie dieses hier auswählen
                         </label>
                     </div>
-                    <div class="col">
+                    <div class="col-4">
                         <select name="module" id="module" class="form-control"></select>
                     </div>
-                    <div class="col">
-                        <a th:href="@{module}" class="btn btn-primary form-control"> Submit </a>
+                    <div class="col-2">
+                        <a th:href="@{modul}" class="btn btn-primary form-control"> Bestätige </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-10">
+                        Klicken sie hier falls sie ihre Bewerbung einreichen wollen.
+                        Sie wird bis zur Frist noch änderbar sein.
+                    </div>
+                    <div class="col-2">
+                        <a th:href="@{uebersicht}" class="btn btn-primary form-control"> Einreichen </a>
                     </div>
                 </div>
             </div>
