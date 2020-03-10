@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{mopslayout :: html(name='Orga', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}">
+
+<head>
+    <meta charset="utf-8">
+    <title>Name des Subsystems</title>
+    <th:block th:fragment="headcontent">
+        <!-- Links, Skripts, Styles hier einfügen! -->
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+        <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+
+
+        <script>
+            $.fn.dataTable.ext.order['dom-select'] = function  ( settings, col )
+            {
+                return this.api().column( col, {order:'index'} ).nodes().map( function ( td, i ) {
+                    return $('select', td).val();
+                } );
+            }
+            $(document).ready(function() {
+                $('#table_id').DataTable( {
+                    "paging":   false,
+                    "searching": false,
+                    "info":     false,
+                    "columns": [
+                        {"name": "ProfPrio", "orderable": true, "orderDataType": "dom-select" },
+                        {"name": "Unikennung", "orderable": true},
+                        {"name": "Note", "orderable": true},
+                        {"name": "AppPrio", "orderable": true},
+                        {"name": "Button", "orderable": false}
+                    ]
+                } );
+            } );
+        </script>
+    </th:block>
+</head>
+<body>
+
+
+<header>
+    <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
+        <!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
+    </nav>
+</header>
+
+<main th:fragment="bodycontent">
+    <table id="table_id" class="display" style="width:100%">
+        <thead>
+        <tr>
+            <th class="text-center">Priorität des Organisators</th>
+            <th class="text-center">Unikennung</th>
+            <th class="text-center">Note</th>
+            <th class="text-center">Priorität des Bewerbers</th>
+            <th class="text-center">Ganze Bewerbung</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr>
+            <td class="text-center">
+                <select name="priority">
+                    <option value="1">++</option>
+                    <option value="2">+</option>
+                    <option value="3">o</option>
+                    <option value="4">-</option>
+                </select>
+            </td>
+            <td class="text-center">Mamus100</td>
+            <td class="text-center">2,7</td>
+            <td class="text-center">++</td>
+            <td class="text-center">
+                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">Bewerbung ansehen</button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="myModal" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Bewerbung Mamus</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="text-center">
+                <select name="priority">
+                    <option value="1">++</option>
+                    <option value="2">+</option>
+                    <option value="3">o</option>
+                    <option value="4">-</option>
+                </select>
+            </td>
+            <td class="text-center">Camus100</td>
+            <td class="text-center">4,0</td>
+            <td class="text-center">o</td>
+            <td class="text-center">
+                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal2">Bewerbung ansehen</button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="myModal2" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Bewerbung Camus</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>
