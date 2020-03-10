@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping("/bewerbung2/applicant")
@@ -57,9 +55,7 @@ public class ApplicationController {
     public String newAppl(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
-            List<String> endCountries = new ArrayList<>();
-            endCountries = CSVService.getCountries();
-            model.addAttribute("countries", endCountries);
+            model.addAttribute("countries", CSVService.getCountries());
         }
         return "applicationPersonal";
     }
