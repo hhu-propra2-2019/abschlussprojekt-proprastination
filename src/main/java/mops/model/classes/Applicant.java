@@ -1,5 +1,6 @@
 package mops.model.classes;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import lombok.Value;
 
 import java.util.List;
 
+@SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "not gonna change Lombok")
 @Value
 @Builder(toBuilder = true)
 @Getter

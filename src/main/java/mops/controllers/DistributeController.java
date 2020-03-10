@@ -1,14 +1,20 @@
 package mops.controllers;
 
-import mops.organization.webclasses.Account;
+import mops.model.Account;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.annotation.SessionScope;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 
+@SessionScope
 @Controller
 @RequestMapping("/bewerbung2")
 public class DistributeController {
@@ -43,11 +49,15 @@ public class DistributeController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
-        if (token.getAccount().getRoles().contains("ROLE_orga")) {
-            return "redirect:/bewerbung2/organizator/";
-        } else {
-            return "redirect:/bewerbung2/applicant/";
+        List list = new LinkedList(Objects.requireNonNull(token).getAuthorities());
+        for (Object object : list) {
+            if (object.equals(new SimpleGrantedAuthority("ROLE_orga"))) {
+                return "redirect:/bewerbung2/organisator/";
+            } else if (object.equals(new SimpleGrantedAuthority("ROLE_studentin"))) {
+                return "redirect:/bewerbung2/bewerber/";
+            }
         }
+        return "redirect:/error";
     }
 
 }
