@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.*;
 
 class ApplicantTest {
     Applicant applicant;
-    List<Certificate> certs;
+    Certificate cert;
     Address address;
     List<Application> applicationList;
 
@@ -19,11 +19,10 @@ class ApplicantTest {
     void init() {
         Application application = Application.builder().module("Divination").build();
         applicationList = Arrays.asList(application);
-        Certificate cert = Certificate.builder()
+        cert = Certificate.builder()
                 .name("Bachelor")
                 .university("Harvard")
                 .build();
-        certs = Arrays.asList(cert);
         address = Address.builder()
                 .street("Baker Street 21B")
                 .city("London")
@@ -39,7 +38,7 @@ class ApplicantTest {
                 .course("Arts")
                 .nationality("English")
                 .status(Status.NEW)
-                .certs(certs)
+                .cert(cert)
                 .applications(applicationList)
                 .build();
     }
@@ -55,7 +54,7 @@ class ApplicantTest {
                 .hasFieldOrPropertyWithValue("address", address)
                 .hasFieldOrPropertyWithValue("nationality", "English")
                 .hasFieldOrPropertyWithValue("status", Status.NEW)
-                .hasFieldOrPropertyWithValue("certs", certs)
+                .hasFieldOrPropertyWithValue("cert", cert)
                 .hasFieldOrPropertyWithValue("applications", applicationList);
 
     }
@@ -71,7 +70,7 @@ class ApplicantTest {
 
     @Test
     void testToString() {
-        assertThat(applicant.toString()).isEqualTo("Applicant(name=J, birthplace=Wakanda, address=Address(street=Baker Street 21B, city=London, country=England, zipcode=20394), birthday=01.01.2001, nationality=English, course=Arts, status=Status.NEW, certs=[Certificate(name=Bachelor, university=Harvard)], applications=[Application(hours=0, module=Divination, grade=0.0, lecturer=null, semester=null, comment=null, role=null)])");
+        assertThat(applicant.toString()).isEqualTo("Applicant(name=J, birthplace=Wakanda, address=Address(street=Baker Street 21B, city=London, country=England, zipcode=20394), birthday=01.01.2001, nationality=English, course=Arts, status=Status.NEW, cert=Certificate(name=Bachelor, university=Harvard), applications=[Application(hours=0, module=Divination, grade=0.0, lecturer=null, semester=null, comment=null, role=null)])");
     }
 
     @Test

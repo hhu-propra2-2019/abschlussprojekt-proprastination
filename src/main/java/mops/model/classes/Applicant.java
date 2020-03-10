@@ -20,7 +20,7 @@ public class Applicant {
     private final String nationality;
     private final String course;
     private final Status status;
-    private final List<Certificate> certs;
+    private final Certificate cert;
     @Singular
     private final List<Application> applications;
 
