@@ -13,8 +13,6 @@ import org.springframework.web.context.annotation.SessionScope;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @SessionScope
@@ -59,9 +57,7 @@ public class ApplicationController {
     public String newAppl(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
-            List<String> endCountries = new ArrayList<>();
-            endCountries = CSVService.getCountries();
-            model.addAttribute("countries",endCountries);
+            model.addAttribute("countries", CSVService.getCountries());
         }
         return "applicationPersonal";
     }
