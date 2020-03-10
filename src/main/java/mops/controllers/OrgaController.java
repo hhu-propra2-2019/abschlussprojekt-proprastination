@@ -12,7 +12,7 @@ import org.springframework.web.context.annotation.SessionScope;
 
 @SessionScope
 @Controller
-@RequestMapping("/bewerbung2/organizer")
+@RequestMapping("/bewerbung2/organisator")
 public class OrgaController {
 
     private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
