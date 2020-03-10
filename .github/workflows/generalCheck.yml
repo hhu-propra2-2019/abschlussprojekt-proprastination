@@ -1,4 +1,4 @@
-name: Checkstyle & Spotbugs
+name: General Checks
 
 on:
   pull_request:
@@ -6,10 +6,10 @@ on:
       - master
       - develop
   schedule:
-    - cron:  '0 11,12,13,14,15,16,17 * * *'
+    - cron:  '0 11,12,13,14,15,16,17 * * 1,2,3,4,5'
 
 jobs:
-  checkbugsandspotbugs:
+  GeneralChecks:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -18,4 +18,4 @@ jobs:
         with:
           java-version: 11
       - name: Run Tests with Gradle
-        run: ./gradlew check
+        run: gradle check

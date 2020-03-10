@@ -32,7 +32,7 @@ checkstyle {
     toolVersion '8.28'
     checkstyleTest.enabled = false
     configFile file("$configDir/checkstyle/proprastination_checks.xml")
-//    configProperties.checkstyleSuppressionsPath = file("$configDir/checkstyle/suppressions.xml").absolutePath
+    checkstyleTest.enabled = false
 }
 
 tasks.withType(com.github.spotbugs.SpotBugsTask) {
@@ -45,14 +45,19 @@ tasks.withType(com.github.spotbugs.SpotBugsTask) {
 
 dependencies {
     compileOnly 'com.github.spotbugs:spotbugs-annotations:4.0.0-RC1'
+    compile 'com.opencsv:opencsv:5.1'
     implementation 'mops:styleguide:2.1.0'
     testCompile("org.assertj:assertj-core:3.15.0")
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.keycloak:keycloak-spring-boot-starter:9.0.0'
     implementation 'org.keycloak.bom:keycloak-adapter-bom:3.3.0.Final'
+    compile group: 'org.webjars', name: 'jquery', version: '3.3.1'
+    testCompile 'com.tngtech.archunit:archunit:0.13.0'
+    testCompile 'com.tngtech.archunit:archunit-junit5:0.13.0'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
