@@ -43,10 +43,11 @@ public class DistributeController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
-        if(token.getAccount().getRoles().contains("ROLE_orga")){
+        if (token.getAccount().getRoles().contains("ROLE_orga")) {
             return "redirect:/bewerbung2/organizator/";
+        } else {
+            return "redirect:/bewerbung2/applicant/";
         }
-        else return "redirect:/bewerbung2/applicant/";
     }
 
 }
