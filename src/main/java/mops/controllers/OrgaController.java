@@ -62,6 +62,7 @@ public class OrgaController {
     /**
      * Needed to display additional information about each application on the overview page.
      * (Inside a modal / popup window.)
+     * @return "applicationModalContent", the HTML file with the modal content.
      */
     @GetMapping("/modal")
     public String applicationInfo() {
