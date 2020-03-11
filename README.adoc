@@ -17,9 +17,9 @@ Aktuell bewerben sich engagierte Studenten über ein Umfrageformular im Ilias au
 Dieses Formular hat durchaus Vorteile, die wir in unserem System übernehmen werden, wie beispielsweise die Abgrenzung der persönlichen Daten
 des Bewerbers von den Bewerbungen der einzelnen Module und das Umgehen von einzelnen Formularen/Umfragen pro Bewerbung für ein Modul.
 
-Allerdings lässt die Geschwindigkeit des Backend Vorgangs zu wünschen übrig und das weiterleiten bzw. kopieren einer Bewerbung nimmt mehr
+Allerdings lässt die Geschwindigkeit des Backend Vorgangs zu wünschen übrig und das Weiterleiten bzw. Kopieren einer Bewerbung nimmt mehr
 Zeit in Anspruch als es sollte. Auch erfahren Studenten erst sehr spät etwas über den Status ihrer Bewerbung, was ein gut geplantes Semester schwer macht.
-
+Die Modularität ist nicht gegeben, da eine einmal abgeschickte Bewerbung nicht ändern kann.
 
 == Systembeschreibung
 
@@ -36,7 +36,7 @@ In jedem Semester werden studentische Hilfskräfte für den Übungsbetrieb benö
 * *Effizienz*:
   Bewerber und Organisator erhalten schnelle Rückmeldung und einzelne Bewertungsschritte gehen flüssiger ineinander über
 * *Benutzbarkeit*:
-  Übersichtliche UIs mit einfachen Buttons zum Hinzufügen von Bewerbungen direkt vom Dashboard
+  Übersichtliche UI's mit intuitiven Buttons zum Hinzufügen von Bewerbungen direkt vom Dashboard
 * *Zuverlässigkeit*:
    Wenig Platz für Fehlermöglichkeiten und viele Tests in der Entwicklungsphase
 
