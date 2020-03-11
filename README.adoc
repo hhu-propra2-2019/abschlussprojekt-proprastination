@@ -19,7 +19,7 @@ des Bewerbers von den Bewerbungen der einzelnen Module und das Umgehen von einze
 
 Allerdings lässt die Geschwindigkeit des Backend Vorgangs zu wünschen übrig und das Weiterleiten bzw. Kopieren einer Bewerbung nimmt mehr
 Zeit in Anspruch als es sollte. Auch erfahren Studenten erst sehr spät etwas über den Status ihrer Bewerbung, was ein gut geplantes Semester schwer macht.
-Die Modularität ist nicht gegeben, da eine einmal abgeschickte Bewerbung nicht ändern kann.
+Die Modularität ist nicht gegeben, da eine einmal abgeschickte Bewerbung nicht geändert werden kann.
 
 == Systembeschreibung
 
