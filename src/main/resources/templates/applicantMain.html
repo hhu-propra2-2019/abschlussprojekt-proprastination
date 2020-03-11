@@ -55,7 +55,7 @@
                 <div class="row">
                     <h3 class="col">Persönliche Informationen</h3>
                     <div class="btn btn-link">
-                        <a href="https://keycloak.cs.hhu.de/auth/realms/MOPS/account">Edit</a>
+                        <a href="https://keycloak.cs.hhu.de/auth/realms/MOPS/account">Bearbeiten</a>
                     </div>
                 </div>
             </div>
@@ -82,7 +82,14 @@
         </div>
     </div>
     <div class="card bg-light mb-3 border-primary">
-        <div class="card-header">Offene Bewerbungen</div>
+        <div class="card-header">
+            <div class="row">
+                <h3 class="col">Offene Bewerbungen</h3>
+                <div class="btn btn-link">
+                    <a th:href="@{uebersicht}">Bearbeiten</a>
+                </div>
+            </div>
+        </div>
         <div class="card-body">
             <div class="row">
                 <table class="table">
