@@ -20,14 +20,14 @@ public class ApplicationControllerTest {
     @Test
     @WithMockKeycloackAuth(name = "test_dödel", roles = "studentin")
     public void applicantCanAccessApplicant() throws Exception {
-        mockMvc.perform(get("/bewerbung2/applicant/"))
+        mockMvc.perform(get("/bewerbung2/bewerber/"))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithMockKeycloackAuth(name = "test_dödel", roles = "orga")
     public void organizerCantAccessApplicant() throws Exception {
-        mockMvc.perform(get("/bewerbung2/applicant/"))
+        mockMvc.perform(get("/bewerbung2/bewerber/"))
                 .andExpect(status().isForbidden());
     }
 }
