@@ -1,3 +1,4 @@
+
 package mops.controllers;
 
 import mops.model.Account;
@@ -32,6 +33,7 @@ public class ApplicationController {
      * @param model The Website model
      * @return The HTML file rendered as a String
      */
+
     @GetMapping("/")
     @Secured("ROLE_studentin")
     public String main(final KeycloakAuthenticationToken token, final Model model) {

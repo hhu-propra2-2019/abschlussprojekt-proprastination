@@ -1,0 +1,5 @@
+FROM postgres:latest
+ENV
+    - POSTGRES_USER=mops
+    - POSTGRES_PASSWORD=mops
+    - POSTGRES_DB=moepsinnen
