@@ -11,8 +11,20 @@
 <body>
 <header>
     <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
-        <!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
+        <ul>
+            <li>
+                <a th:href="@{/}">
+                    Startseite
+                </a>
+            </li>
+            <li>
+                <a th:href="@{./}">
+                    Dashboard
+                </a>
+            </li>
+        </ul>
     </nav>
+</header>
 </header>
 <main th:fragment="bodycontent">
     <!-- Restlichen Inhalt hier einfügen! -->
@@ -20,7 +32,7 @@
         <div class="card bg-light mb-3 border-primary">
             <div class="card-body">
                 <label><h2>Ihre Bewerbungen</h2></label>
-                <a th:href="@{/}" class="btn btn-outline-primary" style="float: right;"> Zurück </a>
+                <a th:href="@{./}" class="btn btn-outline-primary" style="float: right;"> Zurück </a>
             </div>
         </div>
 
