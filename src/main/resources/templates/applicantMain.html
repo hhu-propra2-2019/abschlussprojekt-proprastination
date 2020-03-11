@@ -51,23 +51,67 @@
             </div>
         </div>
         <div class="card bg-light mb-3 border-primary">
-            <h3 class="card-header">Persönliche Informationen</h3>
+            <div class="card-header">
+                <div class="row">
+                    <h3 class="col">Persönliche Informationen</h3>
+                    <div class="btn btn-link">
+                        <a href="https://keycloak.cs.hhu.de/auth/realms/MOPS/account">Edit</a>
+                    </div>
+                </div>
+            </div>
             <div class="card-body">
                 <table class="table">
                     <thead>
                     </thead>
                     <tbody th:object="${account}">
                     <tr>
-                        <td>Name</td>
-                        <td th:text="*{name}">Max Mustermann</td>
+                        <td scope="col">Name</td>
+                        <td scope="col" th:text="*{name}">Max Mustermann</td>
                     </tr>
                     <tr>
-                        <td>Rolle</td>
-                        <td th:text="*{roles}">Admin</td>
+                        <td scope="col">Rolle</td>
+                        <td scope="col" th:text="*{roles}">Admin</td>
                     </tr>
                     <tr>
-                        <td >E-Mail</td>
-                        <td th:text="*{email}">Max.Mustermann@uni-duesseldorf.de</td>
+                        <td scope="col">E-Mail</td>
+                        <td scope="col" th:text="*{email}">Max.Mustermann@uni-duesseldorf.de</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="card bg-light mb-3 border-primary">
+        <div class="card-header">Offene Bewerbungen</div>
+        <div class="card-body">
+            <div class="row">
+                <table class="table">
+                    <thead>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Modul</th>
+                        <th scope="col">Bewerbungsfrist</th>
+                        <th scope="col">Bewerbungsstatus</th>
+                    </tr>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Example #1</td>
+                        <td>Example #2</td>
+                        <td>Example #3</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Example #1</td>
+                        <td>Example #2</td>
+                        <td>Example #3</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>Example #1</td>
+                        <td>Example #2</td>
+                        <td>Example #3</td>
                     </tr>
                     </tbody>
                 </table>
