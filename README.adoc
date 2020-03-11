@@ -21,7 +21,7 @@ Allerdings lässt die Geschwindigkeit des Backend Vorgangs zu wünschen übrig u
 Zeit in Anspruch als es sollte. Auch erfahren Studenten erst sehr spät etwas über den Status ihrer Bewerbung, was ein gut geplantes Semester schwer macht.
 Die Modularität ist nicht gegeben, da eine einmal abgeschickte Bewerbung nicht geändert werden kann.
 
-== Systembeschreibung
+== Systembeschreibung (Vorgabe)
 
 In jedem Semester werden studentische Hilfskräfte für den Übungsbetrieb benötigt. In (zumindest) den Grundlagenveranstaltungen wird dazu ein gemeinsames Bewerbungsverfahren benutzt:
 
