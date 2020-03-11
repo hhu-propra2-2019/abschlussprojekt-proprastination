@@ -30,6 +30,7 @@ def configDir = "${project.rootDir}/quality"
 
 checkstyle {
     toolVersion '8.28'
+    checkstyleTest.enabled = false
     configFile file("$configDir/checkstyle/proprastination_checks.xml")
     checkstyleTest.enabled = false
 }
@@ -43,8 +44,8 @@ tasks.withType(com.github.spotbugs.SpotBugsTask) {
 
 
 dependencies {
-    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.10'
     compileOnly 'com.github.spotbugs:spotbugs-annotations:4.0.0-RC1'
+    compile group: 'org.json', name: 'json', version: '20190722'
     compile 'com.opencsv:opencsv:5.1'
     implementation 'mops:styleguide:2.1.0'
     testCompile("org.assertj:assertj-core:3.15.0")
@@ -68,9 +69,9 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation("org.assertj:assertj-core:3.15.0")
     testCompile("org.assertj:assertj-core:3.11.1")
-    compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.8.11.2'
     compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5:3.0.4.RELEASE'
     implementation 'junit:junit:4.12'
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.10'
 }
 
 test {

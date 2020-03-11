@@ -20,17 +20,17 @@
                 </a>
             </li>
             <li>
-                <a th:href="@{application}">
+                <a th:href="@{neueBewerbung}">
                     Neue Bewerbungen
                 </a>
             </li>
             <li>
-                <a th:href="@{openAppl}">
+                <a th:href="@{offeneBewerbungen}">
                     Offene Bewerbungen
                 </a>
             </li>
             <li>
-                <a th:href="@{personal}">
+                <a th:href="@{profil}">
                     Persönliche Ansicht
                 </a>
             </li>
@@ -38,7 +38,42 @@
     </nav>
 </header>
 <main th:fragment="bodycontent">
-    <!-- Restlichen Inhalt hier einfügen! -->
+    <div class="card-deck">
+        <div class="card bg-light mb-3 border-primary">
+            <h3 class="card-header ">Neue Bewerbungen</h3>
+            <div class="card-body">
+                <p class="card-text">Hier können Sie neue Bewerbungen für Module ausfüllen
+                    und abschicken. Diese werden nach Ablauf der Frist weitergeleitet und Sie
+                    werden per Post über das ergebniss benachrichtigt. Blablabla hier fehlt noch Text.</p>
+                <div class="text-center">
+                    <a th:href="@{neueBewerbung}" class="btn btn-outline-primary">Neue Bewerbung</a>
+                </div>
+            </div>
+        </div>
+        <div class="card bg-light mb-3 border-primary">
+            <h3 class="card-header">Persönliche Informationen</h3>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                    </thead>
+                    <tbody th:object="${account}">
+                    <tr>
+                        <td>Name</td>
+                        <td th:text="*{name}">Max Mustermann</td>
+                    </tr>
+                    <tr>
+                        <td>Rolle</td>
+                        <td th:text="*{roles}">Admin</td>
+                    </tr>
+                    <tr>
+                        <td >E-Mail</td>
+                        <td th:text="*{email}">Max.Mustermann@uni-duesseldorf.de</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </main>
 </body>
 </html>

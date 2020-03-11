@@ -1,17 +1,13 @@
 package mops.model.classes;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Singular;
 import lombok.ToString;
-import lombok.Value;
 
 import java.util.List;
 
-@SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "not gonna change Lombok")
-@Value
 @Builder(toBuilder = true)
 @Getter
 @EqualsAndHashCode
@@ -24,7 +20,7 @@ public class Applicant {
     private final String nationality;
     private final String course;
     private final Status status;
-    private final Certificate[] certs;
+    private final List<Certificate> certs;
     @Singular
     private final List<Application> applications;
 
