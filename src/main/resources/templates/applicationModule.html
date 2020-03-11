@@ -31,13 +31,8 @@
 <main th:fragment="bodycontent">
     <div style="text-align: center;">
         <!-- Restlichen Inhalt hier einfügen! -->
-        <div class="card">
-            <div class="card-body">
-                <h1>[Modulname]</h1>
-            </div>
-        </div>
-        <br>
-        <div class="card">
+        <div class="card bg-light mb-3 border-primary">
+            <div class="card-header"><h2>[Modulname]</h2></div>
             <div class="card-body">
                 <div class="row">
                     <div class="col">
@@ -103,7 +98,7 @@
             </div>
         </div>
         <br>
-        <div class="card">
+        <div class="card bg-light mb-3 border-primary">
             <div class="card-body">
                 <div class="row">
                     <div class="col-6">
@@ -129,7 +124,7 @@
                         Sie wird bis zur Frist noch änderbar sein.
                     </div>
                     <div class="col-2">
-                        <a th:href="@{uebersicht}" class="btn btn-primary form-control"> Einreichen </a>
+                        <a th:href="@{uebersicht}" class="btn btn-outline-primary form-control"> Einreichen </a>
                     </div>
                 </div>
             </div>
