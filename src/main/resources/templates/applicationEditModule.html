@@ -32,7 +32,9 @@
     <div style="text-align: center;">
         <!-- Restlichen Inhalt hier einfügen! -->
         <div class="card bg-light mb-3 border-primary">
-            <div class="card-header"><h2>[Modulname]</h2>
+            <div class="card-header">
+                <label><h2>[Modulname]</h2></label>
+                <a th:href="@{uebersicht}" class="btn btn-outline-primary" style="float: right;"> Speichern </a>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -94,38 +96,6 @@
                             <option value="2">+</option>
                             <option value="3">o</option>
                         </select> <br>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <br>
-        <div class="card bg-light mb-3 border-primary">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-6">
-                        <label for="module">
-                            Falls Sie sich bei einem weiteren Modul bewerben möchten können Sie dieses hier auswählen
-                        </label>
-                    </div>
-                    <div class="col-4">
-                        <select name="module" id="module" class="form-control"></select>
-                    </div>
-                    <div class="col-2">
-                        <a th:href="@{modul}" class="btn btn-outline-primary form-control"> Bestätige </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <br>
-        <div class="card bg-light mb-3 border-primary">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-10">
-                        Klicken sie hier falls sie ihre Bewerbung einreichen wollen.
-                        Sie wird bis zur Frist noch änderbar sein.
-                    </div>
-                    <div class="col-2">
-                        <a th:href="@{uebersicht}" class="btn btn-outline-primary form-control"> Einreichen </a>
                     </div>
                 </div>
             </div>

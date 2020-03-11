@@ -125,4 +125,36 @@ public class ApplicationController {
         }
         return "applicationOverview";
     }
+
+    /**
+     * The GetMapping for the edit form fot personal data
+     *
+     * @param token The KeycloakAuthentication
+     * @param model The Website model
+     * @return The HTML file rendered as a String
+     */
+
+    @GetMapping("/bearbeitePersoenlicheDaten")
+    public String editPersonalData(final KeycloakAuthenticationToken token, final Model model) {
+        if (token != null) {
+            model.addAttribute("account", createAccountFromPrincipal(token));
+        }
+        return "applicationEditPersonal";
+    }
+
+    /**
+     * The GetMapping for the edit form for modules
+     *
+     * @param token The KeycloakAuthentication
+     * @param model The Website model
+     * @return The HTML file rendered as a String
+     */
+
+    @GetMapping("/bearbeiteModulDaten")
+    public String editModuleData(final KeycloakAuthenticationToken token, final Model model) {
+        if (token != null) {
+            model.addAttribute("account", createAccountFromPrincipal(token));
+        }
+        return "applicationEditPersonal";
+    }
 }
