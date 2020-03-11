@@ -60,12 +60,13 @@ public class OrgaController {
     }
 
     /**
-     * temporär.
-     * @return modal.html (nur zum Testen)
+     * Needed to display additional information about each application on the overview page.
+     * (Inside a modal / popup window.)
+     * @return "applicationModalContent", the HTML file with the modal content.
      */
     @GetMapping("/modal")
-    public String modal() {
-        return "modaltest";
+    public String applicationInfo() {
+        return "applicationModalContent";
     }
 
     /**
