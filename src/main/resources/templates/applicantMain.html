@@ -40,8 +40,10 @@
 <main th:fragment="bodycontent">
     <div class="card-deck">
         <div class="card bg-light mb-3 border-primary">
-            <h3 class="card-header ">Neue Bewerbungen</h3>
-            <div class="card-body">
+            <div class="card-header d-flex justify-content-start align-items-start">
+                <h3 class="col">Neue Bewerbungen</h3>
+            </div>
+            <div class="card-body flex-column h-100">
                 <p class="card-text">Hier können Sie neue Bewerbungen für Module ausfüllen
                     und abschicken. Diese werden nach Ablauf der Frist weitergeleitet und Sie
                     werden per Post über das ergebniss benachrichtigt. Blablabla hier fehlt noch Text.</p>
@@ -51,15 +53,15 @@
             </div>
         </div>
         <div class="card bg-light mb-3 border-primary">
-            <div class="card-header">
-                <div class="row">
+            <div class="card-header d-flex justify-content-between align-items-start">
+                <div>
                     <h3 class="col">Persönliche Informationen</h3>
-                    <div class="btn btn-link">
-                        <a href="https://keycloak.cs.hhu.de/auth/realms/MOPS/account">Bearbeiten</a>
-                    </div>
+                </div>
+                <div class="btn btn-link">
+                    <a href="https://keycloak.cs.hhu.de/auth/realms/MOPS/account">Bearbeiten</a>
                 </div>
             </div>
-            <div class="card-body">
+            <div class="card-body flex-column h-100">
                 <table class="table">
                     <thead>
                     </thead>

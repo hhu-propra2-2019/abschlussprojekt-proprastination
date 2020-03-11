@@ -19,7 +19,8 @@
     <div style="text-align: center">
         <div class="card bg-light mb-3 border-primary">
             <div class="card-body">
-                <h2>Ihre Bewerbungen</h2>
+                <label><h2>Ihre Bewerbungen</h2></label>
+                <a th:href="@{/}" class="btn btn-outline-primary" style="float: right;"> Zurück </a>
             </div>
         </div>
 
@@ -27,7 +28,7 @@
         <div class="card bg-light mb-3 border-primary">
             <div class="card-header">
                 <label><h3>Persönliche Daten</h3></label>
-                <a th:href="@{bearbeitePersoenlicheDaten}" class="btn btn-outline-primary" style="float: right;"> bearbeiten </a>
+                <a th:href="@{bearbeitePersoenlicheDaten}" class="btn btn-outline-primary" style="float: right;"> Bearbeiten </a>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -78,7 +79,7 @@
         <div class="card bg-light mb-3 border-primary">
             <div class="card-header">
                 <label><h3>[Modulname]</h3></label>
-                <a th:href="@{bearbeiteModulDaten}" class="btn btn-outline-primary" style="float: right;"> bearbeiten </a>
+                <a th:href="@{bearbeiteModulDaten}" class="btn btn-outline-primary" style="float: right;"> Bearbeiten </a>
             </div>
             <div class="card-body">
                 <div class="row">
