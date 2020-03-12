@@ -40,7 +40,7 @@ public class ApplicationController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
-        return "applicantMain";
+        return "applicant/applicantMain";
     }
 
     /**
@@ -58,7 +58,7 @@ public class ApplicationController {
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("countries", CSVService.getCountries());
         }
-        return "applicationPersonal";
+        return "applicant/applicationPersonal";
     }
 
     /**
@@ -74,7 +74,7 @@ public class ApplicationController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
-        return "openAppl";
+        return "applicant/openAppl";
     }
 
     /**
@@ -90,7 +90,7 @@ public class ApplicationController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
-        return "personal";
+        return "applicant/personal";
     }
 
 
@@ -107,7 +107,7 @@ public class ApplicationController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
-        return "applicationModule";
+        return "applicant/applicationModule";
     }
 
     /**
@@ -123,7 +123,7 @@ public class ApplicationController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
-        return "applicationOverview";
+        return "applicant/applicationOverview";
     }
 
     /**
@@ -139,7 +139,7 @@ public class ApplicationController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
-        return "applicationEditPersonal";
+        return "applicant/applicationEditPersonal";
     }
 
     /**
@@ -155,6 +155,6 @@ public class ApplicationController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
-        return "applicationEditPersonal";
+        return "applicant/applicationEditPersonal";
     }
 }

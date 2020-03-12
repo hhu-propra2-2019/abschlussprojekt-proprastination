@@ -41,14 +41,14 @@ public class OrgaController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
-        return "orgaMain";
+        return "organizer/orgaMain";
     }
 
     /**
      * Shows overview of applications for a module.
      * @param token
      * @param model
-     * @return overview.html as String
+     * @return orgaOverview.html as String
      */
     @GetMapping("/overview")
     @Secured("ROLE_orga")
@@ -56,7 +56,7 @@ public class OrgaController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
-        return "overview";
+        return "organizer/overview";
     }
 
     /**
@@ -64,9 +64,10 @@ public class OrgaController {
      * (Inside a modal / popup window.)
      * @return "applicationModalContent", the HTML file with the modal content.
      */
+    @Secured("ROLE_orga")
     @GetMapping("/modal")
     public String applicationInfo() {
-        return "applicationModalContent";
+        return "organizer/applicationModalContent";
     }
 
     /**
