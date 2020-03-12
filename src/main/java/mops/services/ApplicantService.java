@@ -4,9 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import mops.db.dto.ApplicantDTO;
 import mops.db.repositories.ApplicantRepository;
-import mops.model.classes.Applicant;
-import mops.model.classes.Application;
-import mops.model.classes.Role;
+import mops.model.classes.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,12 +54,29 @@ public class ApplicantService {
         return application;
     }
 
-    /**
-     * saves Applicant with Username as jsonString
-     * @param applicant The Applicant
-     * @param username The Username
-     */
+    public Applicant createApplicant(final String name, final String birthplace, final Address address, final String birthday, final String nationality, final String course,
+                                     final Status status, final Certificate certs, final List<Application> applications) {
+        Applicant applicant = Applicant.builder()
+                .name(name)
+                .birthplace(birthplace)
+                .address(address)
+                .birthday(birthday)
+                .nationality(nationality)
+                .course(course)
+                .status(status)
+                .certs(certs)
+                .applications(applications)
+                .build();
+        return applicant;
+    }
 
+
+    /**
+     * Saves Applicant.
+     *
+     * @param applicant
+     * @param username
+     */
     public void save(final Applicant applicant, final String username) {
         ObjectMapper mapper = new ObjectMapper();
         String jsonString = null;
@@ -116,6 +131,26 @@ public class ApplicantService {
     }
 
 
+    public List<Application> getAllApplications() {
+        ObjectMapper mapper = new ObjectMapper();
+        List<String> result = repo.findAllApplications();
+        List<Application> applications = new ArrayList<>();
+        List<Application> temp = new ArrayList<>();
+
+        for (String s : result) {
+            try {
+                Application[] array = mapper.readValue(s, Application[].class);
+                temp = Arrays.asList(array);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            applications.addAll(temp);
+        }
+
+        return applications;
+    }
+
+
     /**
      * Returns an Iterable over the ApplicantDTOs.
      *
@@ -139,11 +174,22 @@ public class ApplicantService {
         return applicants;
     }
 
+    private String objectToJsonString(Object object) {
+        ObjectMapper mapper = new ObjectMapper();
+        String output = "";
+        try {
+            output = mapper.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return output;
+
+    }
     /**
-     * Parses DTO to Model
-     * @param dto Applicantdto
-     * @return the applicant
-     */
+    * Parses DTO to Model
+    * @param dto Applicantdto
+    * @return the applicant
+    */
     private Applicant dtoToModel(final ApplicantDTO dto) {
         if (dto == null) {
             return null;
