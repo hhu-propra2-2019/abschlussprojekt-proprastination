@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{mopslayout :: html(name='Name des Subsystems', title='Optional: Tabtitel', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}">
+<head>
+    <meta charset="utf-8">
+    <title>Name des Subsystems</title>
+    <th:block th:fragment="headcontent">
+        <!-- Links, Skripts, Styles hier einfügen! -->
+        <script>
+            function allowDrop(ev) {
+                ev.preventDefault();
+            }
+
+            function drag(ev) {
+                ev.dataTransfer.setData("text", ev.target.id);
+            }
+
+            function drop(ev) {
+                ev.preventDefault();
+                var data = ev.dataTransfer.getData("text");
+                ev.target.appendChild(document.getElementById(data));
+            }
+        </script>
+    </th:block>
+</head>
+<body>
+<header>
+    <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
+        <!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
+    </nav>
+</header>
+<main th:fragment="bodycontent">
+    <!-- Restlichen Inhalt hier einfügen! -->
+    <div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-header">Propra</div>
+            <div class="card-body" id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-header">RDB</div>
+            <div class="card-body" id="div2" ondrop="drop(event)" ondragover="allowDrop(event)">
+            </div>
+        </div>
+    </div>
+
+        <div class="card" style="width: 18rem;" id="drag1" draggable="true" ondragstart="drag(event)">
+            <div class="card-body">Test</div>
+        </div>
+
+    </div>
+</main>
+</body>>
