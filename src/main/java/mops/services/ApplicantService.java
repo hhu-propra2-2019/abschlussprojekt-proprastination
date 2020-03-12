@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,8 +55,28 @@ public class ApplicantService {
         return application;
     }
 
-    public Applicant createApplicant(final String name, final String birthplace, final Address address, final String birthday, final String nationality, final String course,
-                                     final Status status, final Certificate certs, final List<Application> applications) {
+    /**
+     * Create Applicant with Builder
+     * @param name
+     * @param birthplace
+     * @param address
+     * @param birthday
+     * @param nationality
+     * @param course
+     * @param status
+     * @param certs
+     * @param applications
+     * @return Applicant created
+     */
+    public Applicant createApplicant(final String name,
+                                     final String birthplace,
+                                     final Address address,
+                                     final String birthday,
+                                     final String nationality,
+                                     final String course,
+                                     final Status status,
+                                     final Certificate certs,
+                                     final List<Application> applications) {
         Applicant applicant = Applicant.builder()
                 .name(name)
                 .birthplace(birthplace)
@@ -130,7 +151,10 @@ public class ApplicantService {
         return repo.findDistinctByUsername(username);
     }
 
-
+    /**
+     * Returns allApplications as List<Application>
+     * @return List
+     */
     public List<Application> getAllApplications() {
         ObjectMapper mapper = new ObjectMapper();
         List<String> result = repo.findAllApplications();
@@ -163,7 +187,6 @@ public class ApplicantService {
 
     /**
      * Returns all Applicants as a List,
-     *
      * @return List<Applicant>
      */
     public List<Applicant> getAll() {
@@ -174,7 +197,12 @@ public class ApplicantService {
         return applicants;
     }
 
-    private String objectToJsonString(Object object) {
+    /**
+     * Parses Object to JsonString
+     * @param object Object to parse
+     * @return String
+     */
+    private String objectToJsonString(final Object object) {
         ObjectMapper mapper = new ObjectMapper();
         String output = "";
         try {

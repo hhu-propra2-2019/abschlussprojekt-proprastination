@@ -2,6 +2,7 @@
 package mops.controllers;
 
 import mops.model.Account;
+import mops.services.ApplicantService;
 import mops.services.CSVService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
@@ -144,7 +145,7 @@ public class ApplicationController {
                              @RequestParam("graduation") final String graduation,
                              @RequestParam("diverse") final String diverse,
                              @RequestParam("module") final String module) {
-        
+        ApplicantService.
         return "applicationModule";
     }
 
