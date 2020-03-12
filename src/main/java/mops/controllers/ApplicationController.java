@@ -9,7 +9,9 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.annotation.SessionScope;
 
 @Controller
@@ -107,6 +109,43 @@ public class ApplicationController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
+        return "applicationModule";
+    }
+
+    /**
+     * Post Mapping after Pers Data
+     * @param token
+     * @param model
+     * @param street
+     * @param place
+     * @param plz
+     * @param birthplace
+     * @param nationality
+     * @param birthday
+     * @param gender
+     * @param subject
+     * @param status
+     * @param graduation
+     * @param diverse
+     * @param module
+     * @return
+     */
+
+    @PostMapping(value = "/modul")
+    public String postModule(final KeycloakAuthenticationToken token, final Model model,
+                             @RequestParam("street") final String street,
+                             @RequestParam("place") final String place,
+                             @RequestParam("plz") final String plz,
+                             @RequestParam("placeofbirth") final String birthplace,
+                             @RequestParam("nationality") final String nationality,
+                             @RequestParam("birthday") final String birthday,
+                             @RequestParam("gender") final String gender,
+                             @RequestParam("subject") final String subject,
+                             @RequestParam("status") final String status,
+                             @RequestParam("graduation") final String graduation,
+                             @RequestParam("diverse") final String diverse,
+                             @RequestParam("module") final String module) {
+       //create Applicant von ApplicantService
         return "applicationModule";
     }
 

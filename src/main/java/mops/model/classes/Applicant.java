@@ -1,5 +1,9 @@
 package mops.model.classes;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -8,10 +12,11 @@ import lombok.ToString;
 
 import java.util.List;
 
-@Builder(toBuilder = true)
+@Builder(builderClassName = "ApplicantBuilder", toBuilder = true)
 @Getter
 @EqualsAndHashCode
 @ToString
+@JsonDeserialize(builder = Applicant.ApplicantBuilder.class)
 public class Applicant {
     private final String name;
     private final String birthplace;
@@ -23,5 +28,10 @@ public class Applicant {
     private final List<Certificate> certs;
     @Singular
     private final List<Application> applications;
+
+    @JsonPOJOBuilder(withPrefix = "")
+    public static class ApplicantBuilder {
+
+    }
 
 }
