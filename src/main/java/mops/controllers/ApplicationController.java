@@ -130,7 +130,6 @@ public class ApplicationController {
      * @param module
      * @return
      */
-
     @PostMapping(value = "/modul")
     public String postModule(final KeycloakAuthenticationToken token, final Model model,
                              @RequestParam("street") final String street,
@@ -145,7 +144,7 @@ public class ApplicationController {
                              @RequestParam("graduation") final String graduation,
                              @RequestParam("diverse") final String diverse,
                              @RequestParam("module") final String module) {
-       //create Applicant von ApplicantService
+        
         return "applicationModule";
     }
 

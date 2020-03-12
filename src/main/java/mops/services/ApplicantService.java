@@ -10,9 +10,7 @@ import mops.model.classes.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,7 +37,13 @@ public class ApplicantService {
      * @param role     Role as mops.classes.Role.
      * @return Application.
      */
-    public Application createApplication(final String module, final String lecturer, final String semester, final String comment, final int hours, final double grade, final Role role) {
+    public Application createApplication(final String module,
+                                         final String lecturer,
+                                         final String semester,
+                                         final String comment,
+                                         final int hours,
+                                         final double grade,
+                                         final Role role) {
         Application application = Application.builder()
                 .module(module)
                 .comment(comment)
@@ -52,8 +56,13 @@ public class ApplicantService {
         return application;
     }
 
+    /**
+     * saves Applicant with Username as jsonString
+     * @param applicant The Applicant
+     * @param username The Username
+     */
 
-    public void save(Applicant applicant, String username) {
+    public void save(final Applicant applicant, final String username) {
         ObjectMapper mapper = new ObjectMapper();
         String jsonString = null;
         try {
@@ -75,7 +84,12 @@ public class ApplicantService {
         }
     }
 
-    public void save(ApplicantDTO dto) {
+    /**
+     * Saves through DTO into Database
+     * @param dto The DTO used
+     */
+
+    public void save(final ApplicantDTO dto) {
         repo.save(dto);
     }
 
@@ -85,14 +99,19 @@ public class ApplicantService {
      * @param username username sould be equal to Keycloak-Username.
      * @return Applicant.
      */
-    public Applicant findByUsername(String username) {
+    public Applicant findByUsername(final String username) {
         ApplicantDTO dto = repo.findDistinctByUsername(username);
         Applicant applicant = null;
         applicant = dtoToModel(dto);
         return applicant;
     }
 
-    public ApplicantDTO find(String username) {
+    /**
+     * Find ApplicantDTO with username in Database
+     * @param username
+     * @return ApplicantDTO
+     */
+    public ApplicantDTO find(final String username) {
         return repo.findDistinctByUsername(username);
     }
 
@@ -120,7 +139,12 @@ public class ApplicantService {
         return applicants;
     }
 
-    private Applicant dtoToModel(ApplicantDTO dto) {
+    /**
+     * Parses DTO to Model
+     * @param dto Applicantdto
+     * @return the applicant
+     */
+    private Applicant dtoToModel(final ApplicantDTO dto) {
         if (dto == null) {
             return null;
         }
