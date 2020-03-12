@@ -4,9 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import mops.db.dto.ApplicantDTO;
 import mops.db.repositories.ApplicantRepository;
-import mops.model.classes.Applicant;
-import mops.model.classes.Application;
-import mops.model.classes.Role;
+import mops.model.classes.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,8 +50,30 @@ public class ApplicantService {
         return application;
     }
 
+    public Applicant createApplicant(final String name, final String birthplace, final Address address, final String birthday, final String nationality, final String course,
+                                     final Status status, final Certificate certs, final List<Application> applications) {
+        Applicant applicant = Applicant.builder()
+                .name(name)
+                .birthplace(birthplace)
+                .address(address)
+                .birthday(birthday)
+                .nationality(nationality)
+                .course(course)
+                .status(status)
+                .certs(certs)
+                .applications(applications)
+                .build();
+        return applicant;
+    }
 
-    public void save(Applicant applicant, String username) {
+
+    /**
+     * Saves Applicant.
+     *
+     * @param applicant
+     * @param username
+     */
+    public void save(final Applicant applicant, final String username) {
         ObjectMapper mapper = new ObjectMapper();
         String jsonString = null;
         try {
@@ -92,8 +112,38 @@ public class ApplicantService {
         return applicant;
     }
 
+    /*
+    public Applicant findByApplication(Application application) {
+        ObjectMapper mapper = new ObjectMapper();
+        String searchString = objectToJsonString(application);
+
+        Applicant applicant = dtoToModel(repo.findByApplication(searchString));
+        return applicant;
+    }*/
+
+
     public ApplicantDTO find(String username) {
         return repo.findDistinctByUsername(username);
+    }
+
+
+    public List<Application> getAllApplications() {
+        ObjectMapper mapper = new ObjectMapper();
+        List<String> result = repo.findAllApplications();
+        List<Application> applications = new ArrayList<>();
+        List<Application> temp = new ArrayList<>();
+
+        for (String s : result) {
+            try {
+                Application[] array = mapper.readValue(s, Application[].class);
+                temp = Arrays.asList(array);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            applications.addAll(temp);
+        }
+
+        return applications;
     }
 
 
@@ -118,6 +168,18 @@ public class ApplicantService {
             applicants.add(dtoToModel(applicantDTO));
         });
         return applicants;
+    }
+
+    private String objectToJsonString(Object object) {
+        ObjectMapper mapper = new ObjectMapper();
+        String output = "";
+        try {
+            output = mapper.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return output;
+
     }
 
     private Applicant dtoToModel(ApplicantDTO dto) {

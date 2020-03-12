@@ -11,6 +11,7 @@ class ApplicationTest {
     @BeforeEach
     void setup() {
         application = Application.builder()
+                .applicantusername("user")
                 .hours(2)
                 .grade(1.3)
                 .lecturer("Tester")
@@ -27,6 +28,7 @@ class ApplicationTest {
         //Arrange in BeforeEach
 
         assertThat(application)
+                .hasFieldOrPropertyWithValue("applicantusername", "user")
                 .hasFieldOrPropertyWithValue("hours", 2)
                 .hasFieldOrPropertyWithValue("grade", 1.3)
                 .hasFieldOrPropertyWithValue("lecturer", "Tester")

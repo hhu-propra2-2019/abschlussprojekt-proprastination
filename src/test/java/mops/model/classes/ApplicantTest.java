@@ -23,7 +23,6 @@ class ApplicantTest {
                 .name("Bachelor")
                 .university("Harvard")
                 .build();
-        certs = Arrays.asList(cert);
         address = Address.builder()
                 .street("Baker Street 21B")
                 .city("London")
@@ -39,7 +38,7 @@ class ApplicantTest {
                 .course("Arts")
                 .nationality("English")
                 .status(Status.NEW)
-                .certs(certs)
+                .certs(cert)
                 .applications(applicationList)
                 .build();
     }

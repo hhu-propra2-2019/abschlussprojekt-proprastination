@@ -29,10 +29,9 @@ public class DataJdbcConfiguration extends AbstractJdbcConfiguration {
                 Arrays.asList(PGobjectToStringConverter.INSTANCE, StringToPGobjectConverter.INSTANCE));
 
     }
-
     //@Bean
     //QueryMappingConfiguration rowMappers() {
-    //    return new DefaultQueryMappingConfiguration().registerRowMapper(ApplicantDTO.class, new ApplicantMapper());
+    //    return new DefaultQueryMappingConfiguration().registerRowMapper(Application.class, new ApplicationMapper());
     //}
 
     @ReadingConverter
