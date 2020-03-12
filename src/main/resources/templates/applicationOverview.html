@@ -32,11 +32,9 @@
         <div class="card bg-light mb-3 border-primary">
             <div class="card-body">
                 <label><h2>Ihre Bewerbungen</h2></label>
-                <a th:href="@{./}" class="btn btn-outline-primary" style="float: right;"> Zurück </a>
+                <a th:href="@{./}" class="btn btn-outline-primary" style="float: right;"> Dashboard </a>
             </div>
         </div>
-
-        <br>
         <div class="card bg-light mb-3 border-primary">
             <div class="card-header">
                 <label><h3>Persönliche Daten</h3></label>
@@ -95,37 +93,40 @@
                 </div>
             </div>
         </div>
-        <br>
-        <div class="card bg-light mb-3 border-primary">
-            <div class="card-header">
-                <label><h3>[Modulname]</h3></label>
-                <a th:href="@{bearbeiteModulDaten}" class="btn btn-outline-primary" style="float: right;"> Bearbeiten </a>
-            </div>
-            <div class="card-body">
-                <div class="col-auto">
-                    <div class="row">
-                        <label for="worktime">Arbeitszeit:&nbsp;</label>
-                        <label id="worktime">24/7</label>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="card bg-light mb-3 border-primary">
+                    <div class="card-header">
+                        <label><h3>[Modulname]</h3></label>
+                        <a th:href="@{bearbeiteModulDaten}" class="btn btn-outline-primary" style="float: right;"> Bearbeiten </a>
                     </div>
-                    <div class="row">
-                        <label for="grade">Note:&nbsp;</label>
-                        <label id="grade">1,0</label>
-                    </div>
-                    <div class="row">
-                        <label for="semester">Semester:&nbsp;</label>
-                        <label id="semester">SoSe20</label>
-                    </div>
-                    <div class="row">
-                        <label for="lecturer">Dozent:&nbsp;</label>
-                        <label id="lecturer">Musterprof</label>
-                    </div>
-                    <div class="row">
-                        <label for="task">Aufgabe:&nbsp;</label>
-                        <label id="task">Korrektor</label>
-                    </div>
-                    <div class="row">
-                        <label for="priority">Priorität:&nbsp;</label>
-                        <label id="priority">++</label>
+                    <div class="card-body">
+                        <div class="col-auto">
+                            <div class="row">
+                                <label for="worktime">Arbeitszeit:&nbsp;</label>
+                                <label id="worktime">24/7</label>
+                            </div>
+                            <div class="row">
+                                <label for="grade">Note:&nbsp;</label>
+                                <label id="grade">1,0</label>
+                            </div>
+                            <div class="row">
+                                <label for="semester">Semester:&nbsp;</label>
+                                <label id="semester">SoSe20</label>
+                            </div>
+                            <div class="row">
+                                <label for="lecturer">Dozent:&nbsp;</label>
+                                <label id="lecturer">Musterprof</label>
+                            </div>
+                            <div class="row">
+                                <label for="task">Aufgabe:&nbsp;</label>
+                                <label id="task">Korrektor</label>
+                            </div>
+                            <div class="row">
+                                <label for="priority">Priorität:&nbsp;</label>
+                                <label id="priority">++</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
