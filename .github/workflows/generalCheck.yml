@@ -17,5 +17,7 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: initialize db
+        run: docker run -p 5432:5432 --name db-container -e POSTGRES_PASSWORD=123 -d postgres
       - name: Run Tests with Gradle
         run: gradle check
