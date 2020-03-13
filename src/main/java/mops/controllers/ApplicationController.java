@@ -157,6 +157,7 @@ public class ApplicationController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("module", modules);
+            model.addAttribute("semesters", CSVService.getSemester());
             ApplicantService applicantService = new ApplicantService();
             Address address = Address.builder()
                     .street(street)
@@ -192,7 +193,7 @@ public class ApplicationController {
                                @RequestParam("module") final String module,
                                @RequestParam("workload") final String workload,
                                @RequestParam("grade") final String grade,
-                               @RequestParam("semester") final String semester,
+                               @RequestParam("semesters") final String semester,
                                @RequestParam("lecturer") final String lecturer,
                                @RequestParam("tasks") final String tasks,
                                @RequestParam("priority") final String priority

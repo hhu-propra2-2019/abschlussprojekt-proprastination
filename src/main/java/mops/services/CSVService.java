@@ -78,4 +78,19 @@ public class CSVService {
         }
         return list;
     }
+
+    /**
+     * returnes semesters from semester.csv
+     * @return List of all Semesters
+     */
+    public static List<String> getSemester() {
+        List<String> list = new ArrayList<>();
+        List<String[]> semester = readFromCSV("src/main/resources/csv/semester.csv");
+        String[] strArr;
+        for(int i = 0; i < semester.size(); i++) {
+            strArr = semester.get(i);
+            list.add(strArr[0]);
+        }
+        return list;
+    }
 }

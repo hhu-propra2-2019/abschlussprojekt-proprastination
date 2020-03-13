@@ -65,8 +65,10 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <label for="semester">In welchem Semester haben Sie dieses Modul bestanden</label> <br>
-                        <select name="semester" id="semester" class="form-control"></select>
+                        <label for="semesters">In welchem Semester haben Sie dieses Modul bestanden</label> <br>
+                        <select name="semesters" id="semesters" class="form-control">
+                            <option th:each="semester:${semesters}" th:text="${semester}"></option>
+                        </select>
                         <br>
                     </div>
                     <div class="col">
