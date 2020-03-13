@@ -19,6 +19,8 @@ class ApplicantServiceTest {
 
     @Autowired
     ApplicantService service;
+
+
     Applicant applicant;
     Application application;
     Application application2;

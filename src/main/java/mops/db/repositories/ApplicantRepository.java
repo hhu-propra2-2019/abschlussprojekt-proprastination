@@ -31,16 +31,6 @@ public interface ApplicantRepository extends CrudRepository<ApplicantDTO, String
     Optional<Integer> getIdByUsername(@Param("user") String username);
 
     /**
-     * Returns an ApplicantDTO for a given username.
-     *
-     * @param application Application converted to JSON-String.
-     * @param username    Unique username to distiniguish users.
-     * @return ApplicantDTO
-     */
-    @Query("SELECT * FROM applicant WHERE (details ->> applications LIKE %:application%) AND username = :username")
-    ApplicantDTO findByApplication(@Param("application") String application, @Param("username") String username);
-
-    /**
      * Returns all Applications as JSON-String list.
      *
      * @return List<String> , String in JSON format.

@@ -1,3 +1,5 @@
+DROP TABLE if exists applicant, priorization, distribution;
+
 create table applicant
 (
 	username varchar not null,
