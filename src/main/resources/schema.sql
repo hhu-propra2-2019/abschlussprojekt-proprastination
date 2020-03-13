@@ -2,6 +2,9 @@ DROP TABLE if exists applicant, priorization, distribution;
 
 create table applicant
 (
+	id serial
+		constraint applicant_pk
+			primary key,
 	username varchar not null,
 	details json
 );
@@ -9,9 +12,7 @@ create table applicant
 create unique index applicant_username_uindex
 	on applicant (username);
 
-alter table applicant
-	add constraint applicant_pk
-		primary key (username);
+
 create table priorization
 (
     id int not null
