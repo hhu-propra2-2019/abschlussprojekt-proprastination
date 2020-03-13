@@ -5,6 +5,7 @@ import mops.model.Account;
 import mops.model.classes.Address;
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
+import mops.model.classes.Role;
 import mops.services.ApplicantService;
 import mops.services.CSVService;
 import org.keycloak.KeycloakPrincipal;
@@ -170,9 +171,25 @@ public class ApplicationController {
         return "applicationModule";
     }
 
+    /**
+     *
+     * @param applicant
+     * @param token
+     * @param model
+     * @param module
+     * @param workload
+     * @param grade
+     * @param semester
+     * @param lecturer
+     * @param tasks
+     * @param priority
+     * @return
+     */
     @PostMapping("/uebersicht")
     public String postOverview(final KeycloakAuthenticationToken token,
                                final Model model,
+                               @RequestParam("applicant") final Applicant applicant,
+                               @RequestParam("module") final String module,
                                @RequestParam("workload") final String workload,
                                @RequestParam("grade") final String grade,
                                @RequestParam("semester") final String semester,
@@ -183,6 +200,16 @@ public class ApplicationController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
 
+            ApplicantService applicantService = new ApplicantService();
+
+            Application application = applicantService.createApplication(module,
+                    lecturer,
+                    semester,
+                    null,
+                    Integer.parseInt(workload),
+                    Double.parseDouble(grade),
+                    Role.KORREKTOR);
+            applicant.getApplications().add(application);
         }
         return "applicationOverview";
     }
