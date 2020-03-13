@@ -112,13 +112,7 @@ public class ApplicantService {
      * @param username  Keycloak-name/Uni-Kennung.
      */
     public void save(final Applicant applicant, final String username) {
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonString = null;
-        try {
-            jsonString = mapper.writeValueAsString(applicant);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        String jsonString = objectToJsonString(applicant);
         ApplicantDTO dto = new ApplicantDTO();
         dto.setUsername(username);
         dto.setDetails(jsonString);
@@ -186,16 +180,6 @@ public class ApplicantService {
     }
 
     /**
-     * Returns an Iterable over the ApplicantDTOs.
-     *
-     * @return Iterable<ApplicantDTO>
-     */
-    @Deprecated
-    public Iterable<ApplicantDTO> getAllIterable() {
-        return repo.findAll();
-    }
-
-    /**
      * Returns all Applicants as a List,
      *
      * @return List<Applicant>
@@ -208,7 +192,7 @@ public class ApplicantService {
 
     private String objectToJsonString(final Object object) {
         ObjectMapper mapper = new ObjectMapper();
-        String output = "";
+        String output = null;
         try {
             output = mapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
