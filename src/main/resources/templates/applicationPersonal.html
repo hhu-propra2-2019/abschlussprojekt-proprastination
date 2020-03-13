@@ -31,142 +31,151 @@
 <main th:fragment="bodycontent">
     <div style="text-align: center;">
     <!-- Restlichen Inhalt hier einfügen! -->
-        <div class="card bg-light mb-3 border-primary">
-            <div class="card-header"><h2>Persönliche Daten</h2></div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-5">
-                        <input type="text" name="street" id="street"
-                               class="form-control" placeholder="Straße und Hausnummer"> <br>
-                        <br>
+        <form th:action="@{/bewerbung2/bewerber/modul}" th:method="POST">
+            <div class="card bg-light mb-3 border-primary">
+                <div class="card-header"><h2>Persönliche Daten</h2></div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-5">
+                            <input type="text" name="street" id="street"
+                                   class="form-control" placeholder="Straße und Hausnummer"> <br>
+                            <br>
+                        </div>
+                        <div class="col-5">
+                            <input type="text" name="place" id="place"
+                                   class="form-control" placeholder="Ort"> <br>
+                        </div>
+                        <div class="col-2">
+                            <input type="text" name="plz" id="plz" class="form-control" placeholder="Postleitzahl"> <br>
+                        </div>
                     </div>
-                    <div class="col-5">
-                        <input type="text" name="place" id="place"
-                               class="form-control" placeholder="Ort"> <br>
-                    </div>
-                    <div class="col-2">
-                        <input type="text" name="plz" id="plz" class="form-control" placeholder="Postleitzahl"> <br>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-5">
-                        <input type="text" name="placeofbirth" id="placeofbirth"
-                               class="form-control" placeholder="Geburtsort, Land"> <br>
-                    </div>
-                    <div class="col-5">
-                        <select name="nationality" id="nationality" class="form-control">
-                            <option value="" disabled selected hidden>Nationalität</option>
-                            <option th:each="country:${countries}" th:text="${country}"></option>
-                        </select> <br>
-                    </div>
-                    <div class="col-2">
-                        <input type="text" name="birthday" id="birthday" onfocus="(this.type='date')"
-                               onblur="(this.type='text')" class="form-control" placeholder="Geburtstag"> <br><br>
-                    </div>
-
-                </div>
-                <div class="row">
-                    <div class="col-2">
-                        <select name="gender" id="gender" class="form-control">
-                            <option value="" disabled selected hidden>Geschlecht</option>
-                            <option value="male">männlich</option>
-                            <option value="female">weiblich</option>
-                            <option value="diverse">divers</option>
-                        </select>
-                    </div>
-                    <div class="col-4">
-                        <div align="right">
-                            <label for="subject">
-                                Wählen Sie ihr aktuellen Studienfach aus falls Sie an der HHU immatrikuliert sind.
-                                Ansonsten wählen sie bitte die Option <br>"nicht immatrikuliert".
-                            </label> <br>
+                    <div class="row">
+                        <div class="col-5">
+                            <input type="text" name="placeofbirth" id="placeofbirth"
+                                   class="form-control" placeholder="Geburtsort, Land"> <br>
+                        </div>
+                        <div class="col-5">
+                            <select name="nationality" id="nationality" class="form-control">
+                                <option value="" disabled selected hidden>Nationalität</option>
+                                <option th:each="country:${countries}" th:text="${country}"></option>
+                            </select> <br>
+                        </div>
+                        <div class="col-2">
+                            <input type="text" name="birthday" id="birthday" onfocus="(this.type='date')"
+                                   onblur="(this.type='text')" class="form-control" placeholder="Geburtstag"> <br><br>
                         </div>
 
                     </div>
-                    <div class="col-6">
-                        <select name="subject" id="subject" class="form-control"></select> <br> <br>
+                    <div class="row">
+                        <div class="col-2">
+                            <select name="gender" id="gender" class="form-control">
+                                <option value="" disabled selected hidden>Geschlecht</option>
+                                <option value="male">männlich</option>
+                                <option value="female">weiblich</option>
+                                <option value="diverse">divers</option>
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <div align="right">
+                                <label for="courses">
+                                    Wählen Sie ihr aktuellen Studienfach aus falls Sie an der HHU immatrikuliert sind.
+                                    Ansonsten wählen sie bitte die Option <br>"nicht immatrikuliert".
+                                </label> <br>
+                            </div>
+
+                        </div>
+                        <div class="col-6">
+                            <select name="courses" id="courses" class="form-control">
+                                <option th:each="course:${courses}" th:text="${course}"></option>
+                            </select> <br> <br>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        <div align="right">
-                            <label for="status">
-                                Wählen sie bitte Ihren aktuellen Angestelltenstatus
+                    <div class="row">
+                        <div class="col-6">
+                            <div align="right">
+                                <label for="status">
+                                    Wählen sie bitte Ihren aktuellen Angestelltenstatus
+                                </label> <br>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <select name="status" id="status" class="form-control">
+                                <option value="neueinstellung">
+                                    Neueinstellung (bisher keine Anstellung an der HHU)
+                                </option>
+                                <option value="weiterbeschaeftigung">
+                                    Weiterbeschäftigung (bestehender Vertrag bis zum DD.MM.YYYY)
+                                </option>
+                                <option value="wiedereinstellung">
+                                    Wiedereinstellung (KEIN bestehender Vertrag bis zum DD.MM.YYYY)
+                                </option>
+                            </select>
+                            <br><br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="graduation">
+                                Was ist der bisher höchste Universitätsabschluss, den Sie erreicht haben?
+                                Bitte schreiben Sie in das Textfeld, in welchem Fach Sie Ihren Abschluss erreicht haben.
+                                Falls der Abschluss nicht an der HHU erlangt wurde, schreiben sie dies bitte dazu.
                             </label> <br>
                         </div>
                     </div>
-                    <div class="col-6">
-                        <select name="status" id="status" class="form-control">
-                            <option value="neueinstellung">
-                                Neueinstellung (bisher keine Anstellung an der HHU)
-                            </option>
-                            <option value="weiterbeschaeftigung">
-                                Weiterbeschäftigung (bestehender Vertrag bis zum DD.MM.YYYY)
-                            </option>
-                            <option value="wiedereinstellung">
-                                Wiedereinstellung (KEIN bestehender Vertrag bis zum DD.MM.YYYY)
-                            </option>
-                        </select>
-                        <br><br>
+                    <div class="row">
+                        <div class="col-6">
+                            <select name="graduation" id="graduation" class="form-control">
+                                <option value="bachelor">Bachelor</option>
+                                <option value="master">Master</option>
+                                <option value="diplom">Diplom</option>
+                                <option value="staatsexamen">Staatsexamen</option>
+                                <option value="else">Anderes</option>
+                                <option value="none">kein Universitätsabschluss</option>
+                            </select> <br>
+                        </div>
+                        <div class="col-6">
+                            <input type="text" name="graduationsubject" id="graduationsubject"
+                                   class="form-control" placeholder="Abschlussfach"> <br>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <label for="graduation">
-                            Was ist der bisher höchste Universitätsabschluss, den Sie erreicht haben?
-                            Bitte schreiben Sie in das Textfeld, in welchem Fach Sie Ihren Abschluss erreicht haben.
-                            Falls der Abschluss nicht an der HHU erlangt wurde, schreiben sie dies bitte dazu.
-                        </label> <br>
+                    <div class="row">
+                        <div class="col">
+                            <label for="diverse">
+                                Beschreiben Sie hier kurz Ihre bisherigen Erfahrungen und sonstige Anmerkungen:
+                            </label> <br>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        <select name="graduation" id="graduation" class="form-control">
-                            <option value="bachelor">Bachelor</option>
-                            <option value="master">Master</option>
-                            <option value="diplom">Diplom</option>
-                            <option value="staatsexamen">Staatsexamen</option>
-                            <option value="else">Anderes</option>
-                            <option value="none">kein Universitätsabschluss</option>
-                        </select> <br>
-                    </div>
-                    <div class="col-6">
-                        <input type="text" name="graduationsubject" id="graduationsubject"
-                               class="form-control" placeholder="Abschlussfach"> <br>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <label for="diverse">
-                            Beschreiben Sie hier kurz Ihre bisherigen Erfahrungen und sonstige Anmerkungen:
-                        </label> <br>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <textarea name="diverse" id="diverse" class="form-control" rows="6"></textarea> <br>
+                    <div class="row">
+                        <div class="col">
+                            <textarea name="diverse" id="diverse" class="form-control" rows="6"></textarea> <br>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <br>
-        <div class="card bg-light mb-3 border-primary">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-6">
-                        <label for="module">
-                            Wählen sie das Modul für das Sie sich bewerben möchten:
-                        </label>
-                    </div>
-                    <div class="col-4">
-                        <select name="module" id="module" class="form-control"></select>
-                    </div>
-                    <div class="col-2">
-                        <a th:href="@{modul}" class="btn btn-outline-primary form-control"> Bestätige </a>
+            <br>
+            <div class="card bg-light mb-3 border-primary">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="modules">
+                                Wählen sie das Modul für das Sie sich bewerben möchten:
+                            </label>
+                        </div>
+                        <div class="col-4">
+                            <select name="modules" id="modules" class="form-control">
+                                <option th:each="module:${modules}" th:text="${module}"></option>
+                            </select>
+                        </div>
+                        <div class="col-2">
+                            <!--
+                            <a th:href="@{modul}" class="btn btn-outline-primary form-control"> Bestätige </a>
+                            -->
+                            <input th:type="submit" th:text="bestätige" th:value="submit">
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
 </main>
 </body>

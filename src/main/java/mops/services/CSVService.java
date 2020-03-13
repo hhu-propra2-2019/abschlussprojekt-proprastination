@@ -48,4 +48,34 @@ public class CSVService {
         }
         return list;
     }
+
+    /**
+     * return Module from module.csv
+     * @return List of all modules
+     */
+    public static List<String> getModules() {
+        List<String> list = new ArrayList<>();
+        List<String[]> modules = readFromCSV("src/main/resources/csv/module.csv");
+        String[] strArr;
+        for(int i = 0; i < modules.size(); i++) {
+            strArr = modules.get(i);
+            list.add(strArr[0]);
+        }
+        return list;
+    }
+
+    /**
+     * returns courses from courses.csv
+     * @return List of all courses
+     */
+    public static List<String> getCourses() {
+        List<String> list = new ArrayList<>();
+        List<String[]> courses = readFromCSV("src/main/resources/csv/courses.csv");
+        String[] strArr;
+        for(int i = 0; i < courses.size(); i++) {
+            strArr = courses.get(i);
+            list.add(strArr[0]);
+        }
+        return list;
+    }
 }

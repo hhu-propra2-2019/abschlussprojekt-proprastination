@@ -2,6 +2,9 @@
 package mops.controllers;
 
 import mops.model.Account;
+import mops.model.classes.Address;
+import mops.model.classes.Applicant;
+import mops.model.classes.Application;
 import mops.services.ApplicantService;
 import mops.services.CSVService;
 import org.keycloak.KeycloakPrincipal;
@@ -14,6 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.annotation.SessionScope;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @SessionScope
@@ -60,6 +66,8 @@ public class ApplicationController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("countries", CSVService.getCountries());
+            model.addAttribute("courses", CSVService.getCourses());
+            model.addAttribute("modules", CSVService.getModules());
         }
         return "applicationPersonal";
     }
@@ -97,7 +105,7 @@ public class ApplicationController {
     }
 
 
-    /**
+/*    /**
      * The GetMapping for the module page
      *
      * @param token The KeycloakAuthentication
@@ -105,13 +113,13 @@ public class ApplicationController {
      * @return The HTML file rendered as a String
      */
 
-    @GetMapping("/modul")
+   /* @GetMapping("/modul")
     public String module(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
         return "applicationModule";
-    }
+    }*/
 
     /**
      * Post Mapping after Pers Data
@@ -124,14 +132,14 @@ public class ApplicationController {
      * @param nationality
      * @param birthday
      * @param gender
-     * @param subject
+     * @param course
      * @param status
      * @param graduation
      * @param diverse
-     * @param module
+     * @param modules
      * @return
      */
-    @PostMapping(value = "/modul")
+    @PostMapping("/modul")
     public String postModule(final KeycloakAuthenticationToken token, final Model model,
                              @RequestParam("street") final String street,
                              @RequestParam("place") final String place,
@@ -140,13 +148,43 @@ public class ApplicationController {
                              @RequestParam("nationality") final String nationality,
                              @RequestParam("birthday") final String birthday,
                              @RequestParam("gender") final String gender,
-                             @RequestParam("subject") final String subject,
+                             @RequestParam("courses") final String course,
                              @RequestParam("status") final String status,
                              @RequestParam("graduation") final String graduation,
                              @RequestParam("diverse") final String diverse,
-                             @RequestParam("module") final String module) {
-        ApplicantService.
+                             @RequestParam("modules") final String modules) {
+        if (token != null) {
+            model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("module", modules);
+            ApplicantService applicantService = new ApplicantService();
+            Address address = Address.builder()
+                    .street(street)
+                    .city(place)
+                    .zipcode(Integer.parseInt(plz))
+                    .build();
+            List<Application> applications = new ArrayList<>();
+            Applicant applicant = applicantService.createApplicant(token.getName(), birthplace,
+                    address, birthday, nationality, course, null, null, applications);
+            model.addAttribute("applicant", applicant);
+        }
         return "applicationModule";
+    }
+
+    @PostMapping("/uebersicht")
+    public String postOverview(final KeycloakAuthenticationToken token,
+                               final Model model,
+                               @RequestParam("workload") final String workload,
+                               @RequestParam("grade") final String grade,
+                               @RequestParam("semester") final String semester,
+                               @RequestParam("lecturer") final String lecturer,
+                               @RequestParam("tasks") final String tasks,
+                               @RequestParam("priority") final String priority
+                               ) {
+        if (token != null) {
+            model.addAttribute("account", createAccountFromPrincipal(token));
+
+        }
+        return "applicationOverview";
     }
 
     /**
