@@ -200,9 +200,7 @@ public class ApplicationController {
                                ) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
-
             ApplicantService applicantService = new ApplicantService();
-
             Application application = applicantService.createApplication(module,
                     lecturer,
                     semester,
@@ -215,7 +213,7 @@ public class ApplicationController {
         return "applicationOverview";
     }
 
-    /**
+   /* /**
      * The GetMapping for the overview
      *
      * @param token The KeycloakAuthentication
@@ -223,13 +221,13 @@ public class ApplicationController {
      * @return The HTML file rendered as a String
      */
 
-    @GetMapping("/uebersicht")
+    /*@GetMapping("/uebersicht")
     public String overview(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
         return "applicationOverview";
-    }
+    }*/
 
     /**
      * The GetMapping for the edit form fot personal data
