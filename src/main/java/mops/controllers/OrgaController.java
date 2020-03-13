@@ -62,7 +62,7 @@ public class OrgaController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
-        return "organizer/overview";
+        return "organizer/orgaOverview";
     }
 
     /**
