@@ -1,8 +1,11 @@
 package mops.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import mops.model.Account;
+import mops.services.ApplicantService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +20,9 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping("/bewerbung2/organisator")
 public class OrgaController {
+
+    @Autowired
+    private ApplicantService applicantService;
 
     private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
         KeycloakPrincipal principal = (KeycloakPrincipal) token.getPrincipal();
@@ -37,7 +43,7 @@ public class OrgaController {
 
     @GetMapping("/")
     @Secured("ROLE_orga")
-    public String index(final KeycloakAuthenticationToken token, final Model model) {
+    public String index(final KeycloakAuthenticationToken token, final Model model) throws JsonProcessingException {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }

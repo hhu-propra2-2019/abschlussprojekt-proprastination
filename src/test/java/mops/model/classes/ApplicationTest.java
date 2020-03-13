@@ -11,8 +11,10 @@ class ApplicationTest {
     @BeforeEach
     void setup() {
         application = Application.builder()
+                .applicantusername("user")
                 .hours(2)
                 .grade(1.3)
+                .priority(1)
                 .lecturer("Tester")
                 .role(Role.KORREKTOR)
                 .semester("WS2020")
@@ -27,7 +29,9 @@ class ApplicationTest {
         //Arrange in BeforeEach
 
         assertThat(application)
+                .hasFieldOrPropertyWithValue("applicantusername", "user")
                 .hasFieldOrPropertyWithValue("hours", 2)
+                .hasFieldOrPropertyWithValue("priority", 1)
                 .hasFieldOrPropertyWithValue("grade", 1.3)
                 .hasFieldOrPropertyWithValue("lecturer", "Tester")
                 .hasFieldOrPropertyWithValue("role", Role.KORREKTOR)
@@ -41,8 +45,10 @@ class ApplicationTest {
     @Test
     void testEquals() {
         Application application1 = Application.builder()
+                .applicantusername("user")
                 .hours(2)
                 .grade(1.3)
+                .priority(1)
                 .lecturer("Tester")
                 .role(Role.KORREKTOR)
                 .semester("WS2020")
@@ -51,8 +57,10 @@ class ApplicationTest {
                 .build();
 
         Application application2 = Application.builder()
+                .applicantusername("user")
                 .hours(2)
                 .grade(1.3)
+                .priority(1)
                 .lecturer("Tester")
                 .role(Role.KORREKTOR)
                 .semester("WS2020")
@@ -77,7 +85,7 @@ class ApplicationTest {
     void testToString() {
         //Arrange in BeforeEach
 
-        assertThat(application.toString()).isEqualTo("Application(hours=2, module=ProPra, grade=1.3, lecturer=Tester, semester=WS2020, comment=, role=KORREKTOR)");
+        assertThat(application.toString()).isEqualTo("Application(applicantusername=user, hours=2, module=ProPra, priority=1, grade=1.3, lecturer=Tester, semester=WS2020, comment=, role=KORREKTOR)");
 
     }
 

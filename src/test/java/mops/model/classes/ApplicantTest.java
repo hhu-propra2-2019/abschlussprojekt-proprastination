@@ -11,19 +11,18 @@ import static org.assertj.core.api.Assertions.*;
 
 class ApplicantTest {
     Applicant applicant;
-    List<Certificate> certs;
+    Certificate certs;
     Address address;
     List<Application> applicationList;
 
     @BeforeEach
     void init() {
-        Application application = Application.builder().module("Divination").build();
+        Application application = Application.builder().module("Divination").applicantusername("hans222").build();
         applicationList = Arrays.asList(application);
-        Certificate cert = Certificate.builder()
+        certs = Certificate.builder()
                 .name("Bachelor")
                 .university("Harvard")
                 .build();
-        certs = Arrays.asList(cert);
         address = Address.builder()
                 .street("Baker Street 21B")
                 .city("London")
@@ -71,7 +70,7 @@ class ApplicantTest {
 
     @Test
     void testToString() {
-        assertThat(applicant.toString()).isEqualTo("Applicant(name=J, birthplace=Wakanda, address=Address(street=Baker Street 21B, city=London, country=England, zipcode=20394), birthday=01.01.2001, nationality=English, course=Arts, status=Status.NEW, certs=[Certificate(name=Bachelor, university=Harvard)], applications=[Application(hours=0, module=Divination, grade=0.0, lecturer=null, semester=null, comment=null, role=null)])");
+        assertThat(applicant.toString()).isEqualTo("Applicant(name=J, birthplace=Wakanda, address=Address(street=Baker Street 21B, city=London, country=England, zipcode=20394), birthday=01.01.2001, nationality=English, course=Arts, status=Status.NEW, certs=Certificate(name=Bachelor, university=Harvard), applications=[Application(applicantusername=hans222, hours=0, module=Divination, priority=0, grade=0.0, lecturer=null, semester=null, comment=null, role=null)])");
     }
 
     @Test
