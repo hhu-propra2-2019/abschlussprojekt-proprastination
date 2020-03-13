@@ -174,7 +174,6 @@ public class ApplicationController {
 
     /**
      *
-     * @param applicant
      * @param token
      * @param model
      * @param module
@@ -189,8 +188,8 @@ public class ApplicationController {
     @PostMapping("/uebersicht")
     public String postOverview(final KeycloakAuthenticationToken token,
                                final Model model,
-                               @RequestParam("applicant") final Applicant applicant,
-                               @RequestParam("module") final String module,
+             //                  @RequestParam("applicant") final Applicant applicant,
+        //                       @RequestParam("module") final String module,
                                @RequestParam("workload") final String workload,
                                @RequestParam("grade") final String grade,
                                @RequestParam("semesters") final String semester,
@@ -199,16 +198,18 @@ public class ApplicationController {
                                @RequestParam("priority") final String priority
                                ) {
         if (token != null) {
+            System.out.println("Hello");
             model.addAttribute("account", createAccountFromPrincipal(token));
             ApplicantService applicantService = new ApplicantService();
-            Application application = applicantService.createApplication(module,
+            Application application = applicantService.createApplication(token.getName(),
+                    "RDB",
                     lecturer,
                     semester,
                     null,
                     Integer.parseInt(workload),
                     Double.parseDouble(grade),
                     Role.KORREKTOR);
-            applicant.getApplications().add(application);
+           // applicant.getApplications().add(application);
         }
         return "applicationOverview";
     }

@@ -31,9 +31,9 @@
 <main th:fragment="bodycontent">
     <div style="text-align: center;">
         <!-- Restlichen Inhalt hier einfügen! -->
-        <form th:action="@{bewerbung2/bewerber/uebersicht}" th:method="POST">
+        <form th:action="@{uebersicht}" th:method="POST">
             <div class="card bg-light mb-3 border-primary">
-                <div class="card-header"> <label th:for="module"><h2 th:text="${module}"></h2></label>
+                <div class="card-header"> <label th:for="module"><h2 th:id="module" th:value="${module}" th:text="${module}"></h2></label>
                 </div>
                 <div class="card-body">
                     <div class="row">

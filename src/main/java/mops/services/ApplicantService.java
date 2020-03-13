@@ -27,6 +27,7 @@ public class ApplicantService {
     /**
      * Returns an application from given the parameters.
      *
+     * @param username Username
      * @param module   Module as String.
      * @param lecturer Lecturer as String.
      * @param semester Semester as String.
@@ -36,7 +37,8 @@ public class ApplicantService {
      * @param role     Role as mops.classes.Role.
      * @return Application.
      */
-    public Application createApplication(final String module,
+    public Application createApplication(final String username,
+                                         final String module,
                                          final String lecturer,
                                          final String semester,
                                          final String comment,
@@ -44,6 +46,7 @@ public class ApplicantService {
                                          final double grade,
                                          final Role role) {
         Application application = Application.builder()
+                .applicantusername(username)
                 .module(module)
                 .comment(comment)
                 .hours(hours)
