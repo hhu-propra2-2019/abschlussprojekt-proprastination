@@ -4,13 +4,16 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import mops.db.dto.ApplicantDTO;
 import mops.db.repositories.ApplicantRepository;
-import mops.model.classes.*;
+import mops.model.classes.Address;
+import mops.model.classes.Applicant;
+import mops.model.classes.Application;
+import mops.model.classes.Certificate;
+import mops.model.classes.Role;
+import mops.model.classes.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,19 +30,33 @@ public class ApplicantService {
 
     /**
      * Returns an application from given the parameters.
+     * Seems unnecessary tho!
      *
-     * @param module   Module as String.
-     * @param lecturer Lecturer as String.
-     * @param semester Semester as String.
-     * @param comment  Comment as String.
-     * @param hours    Hours as Integer.
-     * @param grade    Grade as Double.
-     * @param role     Role as mops.classes.Role.
+     * @param uniquename unikennung
+     * @param priority   int prio.
+     * @param module     Module as String.
+     * @param lecturer   Lecturer as String.
+     * @param semester   Semester as String.
+     * @param comment    Comment as String.
+     * @param hours      Hours as Integer.
+     * @param grade      Grade as Double.
+     * @param role       Role as mops.classes.Role.
      * @return Application.
      */
-    public Application createApplication(final String module, final String lecturer, final String semester, final String comment, final int hours, final double grade, final Role role) {
-        Application application = Application.builder()
+    @SuppressWarnings({"checkstyle:ParameterNumber"})
+    public Application createApplication(final String uniquename,
+                                         final String module,
+                                         final String lecturer,
+                                         final String semester,
+                                         final String comment,
+                                         final int hours,
+                                         final double grade,
+                                         final Role role,
+                                         final int priority) {
+        return Application.builder()
+                .applicantusername(uniquename)
                 .module(module)
+                .priority(priority)
                 .comment(comment)
                 .hours(hours)
                 .grade(grade)
@@ -47,12 +64,34 @@ public class ApplicantService {
                 .semester(semester)
                 .role(role)
                 .build();
-        return application;
     }
 
-    public Applicant createApplicant(final String name, final String birthplace, final Address address, final String birthday, final String nationality, final String course,
-                                     final Status status, final Certificate certs, final List<Application> applications) {
-        Applicant applicant = Applicant.builder()
+    /**
+     * Returns an Applicant given the input parameters.
+     * Seems unnecessary!
+     *
+     * @param name         String name.
+     * @param birthplace   String birthplace.
+     * @param address      Address address.
+     * @param birthday     String birthday.
+     * @param nationality  String nationality.
+     * @param course       String course.
+     * @param status       String status.
+     * @param certs        Certificate cert.
+     * @param applications List<Application>
+     * @return Applicant.
+     */
+    @SuppressWarnings("checkstyle:ParameterNumber")
+    public Applicant createApplicant(final String name,
+                                     final String birthplace,
+                                     final Address address,
+                                     final String birthday,
+                                     final String nationality,
+                                     final String course,
+                                     final Status status,
+                                     final Certificate certs,
+                                     final List<Application> applications) {
+        return Applicant.builder()
                 .name(name)
                 .birthplace(birthplace)
                 .address(address)
@@ -63,15 +102,14 @@ public class ApplicantService {
                 .certs(certs)
                 .applications(applications)
                 .build();
-        return applicant;
     }
 
 
     /**
      * Saves Applicant.
      *
-     * @param applicant
-     * @param username
+     * @param applicant Applicant.
+     * @param username  Keycloak-name/Uni-Kennung.
      */
     public void save(final Applicant applicant, final String username) {
         ObjectMapper mapper = new ObjectMapper();
@@ -86,7 +124,7 @@ public class ApplicantService {
         dto.setDetails(jsonString);
 
         Optional<Integer> opt = repo.getIdByUsername(username);
-        opt.ifPresent(value -> dto.setId(value));
+        opt.ifPresent(dto::setId);
 
         try {
             repo.save(dto);
@@ -95,57 +133,57 @@ public class ApplicantService {
         }
     }
 
-    public void save(ApplicantDTO dto) {
-        repo.save(dto);
-    }
-
     /**
      * Returns Applicant or null given the username;
      *
      * @param username username sould be equal to Keycloak-Username.
      * @return Applicant.
      */
-    public Applicant findByUsername(String username) {
+    public Applicant findByUsername(final String username) {
         ApplicantDTO dto = repo.findDistinctByUsername(username);
-        Applicant applicant = null;
+        Applicant applicant;
         applicant = dtoToModel(dto);
         return applicant;
     }
 
-    /*
-    public Applicant findByApplication(Application application) {
-        ObjectMapper mapper = new ObjectMapper();
-        String searchString = objectToJsonString(application);
-
-        Applicant applicant = dtoToModel(repo.findByApplication(searchString));
-        return applicant;
-    }*/
-
-
-    public ApplicantDTO find(String username) {
-        return repo.findDistinctByUsername(username);
-    }
-
-
+    /**
+     * Returns all Applications as a list.
+     *
+     * @return List<Application>
+     */
     public List<Application> getAllApplications() {
         ObjectMapper mapper = new ObjectMapper();
-        List<String> result = repo.findAllApplications();
-        List<Application> applications = new ArrayList<>();
-        List<Application> temp = new ArrayList<>();
-
-        for (String s : result) {
+        List<Application> result = new ArrayList<>();
+        for (String s : repo.findAllApplications()) {
             try {
-                Application[] array = mapper.readValue(s, Application[].class);
-                temp = Arrays.asList(array);
+                result.add(mapper.readValue(s, Application.class));
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
-            applications.addAll(temp);
         }
 
-        return applications;
+        return result;
     }
 
+    /**
+     * Returns all Applications given a module as a List.
+     *
+     * @param module String module name.
+     * @return List<Application>
+     */
+    public List<Application> getAllApplicationsByModule(final String module) {
+        ObjectMapper mapper = new ObjectMapper();
+        List<Application> result = new ArrayList<>();
+        for (String s : repo.findAllApplicationsByModuleName(module)) {
+            try {
+                result.add(mapper.readValue(s, Application.class));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
+    }
 
     /**
      * Returns an Iterable over the ApplicantDTOs.
@@ -164,13 +202,11 @@ public class ApplicantService {
      */
     public List<Applicant> getAll() {
         List<Applicant> applicants = new ArrayList<>();
-        repo.findAll().forEach(applicantDTO -> {
-            applicants.add(dtoToModel(applicantDTO));
-        });
+        repo.findAll().forEach(applicantDTO -> applicants.add(dtoToModel(applicantDTO)));
         return applicants;
     }
 
-    private String objectToJsonString(Object object) {
+    private String objectToJsonString(final Object object) {
         ObjectMapper mapper = new ObjectMapper();
         String output = "";
         try {
@@ -182,7 +218,7 @@ public class ApplicantService {
 
     }
 
-    private Applicant dtoToModel(ApplicantDTO dto) {
+    private Applicant dtoToModel(final ApplicantDTO dto) {
         if (dto == null) {
             return null;
         }

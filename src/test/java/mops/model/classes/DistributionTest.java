@@ -14,14 +14,13 @@ class DistributionTest {
 
     @BeforeEach
     void init(){
-        Application application = Application.builder().module("Divination").build();
+        Application application = Application.builder().module("Divination").applicantusername("ident").build();
         List<Application> applicationList = Arrays.asList(application);
 
         Certificate cert = Certificate.builder()
                 .name("Bachelor")
                 .university("Harvard")
                 .build();
-        List<Certificate> certs = Arrays.asList(cert);
         Address address = Address.builder()
                 .street("Baker Street 21B")
                 .city("London")
@@ -37,7 +36,7 @@ class DistributionTest {
                 .course("Arts")
                 .nationality("English")
                 .status(Status.NEW)
-                .certs(certs)
+                .certs(cert)
                 .applications(applicationList)
                 .build();
         emps = Arrays.asList(applicant);
@@ -75,6 +74,6 @@ class DistributionTest {
 
     @Test
     void testToString() {
-        assertThat(dist.toString()).isEqualTo("Distribution(module=ProPra, employees=[Applicant(name=J, birthplace=Wakanda, address=Address(street=Baker Street 21B, city=London, country=England, zipcode=20394), birthday=01.01.2001, nationality=English, course=Arts, status=Status.NEW, certs=[Certificate(name=Bachelor, university=Harvard)], applications=[Application(hours=0, module=Divination, grade=0.0, lecturer=null, semester=null, comment=null, role=null)])])");
+        assertThat(dist.toString()).isEqualTo("Distribution(module=ProPra, employees=[Applicant(name=J, birthplace=Wakanda, address=Address(street=Baker Street 21B, city=London, country=England, zipcode=20394), birthday=01.01.2001, nationality=English, course=Arts, status=Status.NEW, certs=Certificate(name=Bachelor, university=Harvard), applications=[Application(applicantusername=ident, hours=0, module=Divination, priority=0, grade=0.0, lecturer=null, semester=null, comment=null, role=null)])])");
     }
 }
