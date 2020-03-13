@@ -27,8 +27,11 @@
                         {"name": "ProfPrio", "orderable": true, "orderDataType": "dom-select" },
                         {"name": "Unikennung", "orderable": true},
                         {"name": "Note", "orderable": true},
+                        {"name": "Rolle", "orderable": true},
+                        {"name": "Stunden", "orderable": true, "orderDataType": "dom-select" },
                         {"name": "AppPrio", "orderable": true},
-                        {"name": "Button", "orderable": false}
+                        {"name": "ButtonShow", "orderable": false},
+                        {"name": "ButtonComment", "orderable": false}
                     ]
                 } );
             } );
@@ -45,35 +48,50 @@
 </header>
 
 <main th:fragment="bodycontent">
-    <table id="table_id" class="display" style="width:100%">
-        <thead>
-        <tr>
-            <th class="text-center">Priorität des Organisators</th>
-            <th class="text-center">Unikennung</th>
-            <th class="text-center">Note</th>
-            <th class="text-center">Priorität des Bewerbers</th>
-            <th class="text-center">Ganze Bewerbung</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td class="text-center">
-                <select name="priority">
-                    <option value="1">++</option>
-                    <option value="2">+</option>
-                    <option value="3">o</option>
-                    <option value="4">-</option>
-                </select>
-            </td>
-            <td class="text-center">Mamus100</td>
-            <td class="text-center">2,7</td>
-            <td class="text-center">++</td>
-            <td class="text-center">
-                <button type="button" class="btn btn-outline-dark openBtn" data-toggle="modal" data-target="#modal_id">Bewerbung ansehen</button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <form th:action="@{./}" th:method="POST">
+        <table id="table_id" class="display" style="width:100%">
+            <thead>
+            <tr>
+                <th class="text-center">Ihre Priorität</th>
+                <th class="text-center">Unikennung</th>
+                <th class="text-center">Note</th>
+                <th class="text-center">Rolle</th>
+                <th class="text-center">Stundenanzahl</th>
+                <th class="text-center">Priorität des Bewerbers</th>
+                <th class="text-center">Ganze Bewerbung</th>
+                <th class="text-center">Anmerkung</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="text-center">
+                    <select name="priority" id="priority">
+                        <option value="1">++</option>
+                        <option value="2">+</option>
+                        <option value="3">o</option>
+                        <option value="4">-</option>
+                    </select>
+                </td>
+                <td class="text-center">Mamus100</td>
+                <td class="text-center">2,7</td>
+                <td class="text-center">Tutor</td>
+                <td class="text-center">
+                    <select name="hours" id="hours">
+                        <option value="7">7 Stunden</option>
+                        <option value="9">9 Stunden</option>
+                        <option value="17">17 Stunden</option>
+                    </select>
+                </td>
+                <td class="text-center">++</td>
+                <td class="text-center">
+                    <button type="button" class="btn btn-outline-dark openBtn" data-toggle="modal" data-target="#applicationModal">Bewerbung ansehen</button>
+                </td>
+                <td class="text-center">
+                    <button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#commentModal">Anmerkung hinzufügen</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
 
     <div class="modal fade" id="modal_id" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
