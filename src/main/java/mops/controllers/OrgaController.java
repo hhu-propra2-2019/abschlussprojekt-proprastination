@@ -10,7 +10,9 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.annotation.SessionScope;
 
 import javax.servlet.ServletException;
@@ -51,6 +53,25 @@ public class OrgaController {
     }
 
     /**
+     * PostMapping to save changes
+     * @param token
+     * @param model
+     * @param priority
+     * @param hours
+     * @param comment
+     * @return
+     * @throws JsonProcessingException
+     */
+    @PostMapping("/")
+    //@Secured("ROLE orga")
+    public String save(final KeycloakAuthenticationToken token, final Model model, @RequestParam("priority") final String priority, @RequestParam("hours") final String hours, @RequestParam("comment") final String comment) throws JsonProcessingException {
+        if (token != null) {
+            model.addAttribute("account", createAccountFromPrincipal(token));
+        }
+        return "organizer/orgaMain";
+    }
+
+    /**
      * Shows overview of applications for a module.
      * @param token
      * @param model
@@ -70,8 +91,8 @@ public class OrgaController {
      * (Inside a modal / popup window.)
      * @return "applicationModalContent", the HTML file with the modal content.
      */
-    @Secured("ROLE_orga")
     @GetMapping("/modal")
+    @Secured("ROLE_orga")
     public String applicationInfo() {
         return "organizer/applicationModalContent";
     }
