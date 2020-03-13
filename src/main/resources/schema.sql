@@ -5,12 +5,13 @@ create table applicant
 	id serial
 		constraint applicant_pk
 			primary key,
-	username varchar not null,
+	username varchar,
 	details json
 );
 
 create unique index applicant_username_uindex
 	on applicant (username);
+
 
 
 create table priorization
