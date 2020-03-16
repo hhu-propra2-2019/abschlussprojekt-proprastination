@@ -33,7 +33,7 @@
         <!-- Restlichen Inhalt hier einfügen! -->
         <form th:action="@{uebersicht}" th:method="POST">
             <div class="card bg-light mb-3 border-primary">
-                <div class="card-header"> <label th:for="module"><h2 th:id="module" th:value="${module}" th:text="${module}"></h2></label>
+                <div class="card-header"><h2 th:text="${module}"></h2>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -130,7 +130,9 @@
                         <div class="col-2">
                             <!--<a th:href="@{uebersicht}" class="btn btn-outline-primary form-control"> Einreichen </a>
                             -->
-                            <input th:type="submit" th:value="submit">
+                            <input th:type="hidden" th:name="module" th:value="${module}">
+                            <input th:type="hidden" th:name="applicant" th:value="${applicant}">
+                            <button th:type="submit">Einreichen</button>
                         </div>
                     </div>
                 </div>
