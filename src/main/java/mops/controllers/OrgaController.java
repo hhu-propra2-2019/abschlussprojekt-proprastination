@@ -59,12 +59,15 @@ public class OrgaController {
      * @param priority
      * @param hours
      * @param comment
-     * @return
+     * @return orgaMain.html rendered as a String
      * @throws JsonProcessingException
      */
     @PostMapping("/")
     //@Secured("ROLE orga")
-    public String save(final KeycloakAuthenticationToken token, final Model model, @RequestParam("priority") final String priority, @RequestParam("hours") final String hours, @RequestParam("comment") final String comment) throws JsonProcessingException {
+    public String save(final KeycloakAuthenticationToken token, final Model model,
+                       @RequestParam("priority") final String priority,
+                       @RequestParam("hours") final String hours,
+                       @RequestParam("comment") final String comment) throws JsonProcessingException {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
