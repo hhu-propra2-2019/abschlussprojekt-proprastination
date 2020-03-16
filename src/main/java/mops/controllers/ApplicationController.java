@@ -2,9 +2,11 @@
 package mops.controllers;
 
 import mops.model.Account;
+import mops.services.ApplicantService;
 import mops.services.CSVService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +18,9 @@ import org.springframework.web.context.annotation.SessionScope;
 @SessionScope
 @RequestMapping("/bewerbung2/bewerber")
 public class ApplicationController {
+
+    @Autowired
+    private ApplicantService applicantServiceservice;
 
     private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
         KeycloakPrincipal principal = (KeycloakPrincipal) token.getPrincipal();
@@ -122,6 +127,8 @@ public class ApplicationController {
     public String overview(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("applicant", applicantServiceservice.findByUsername("has220"));
+            System.out.print("stop");
         }
         return "applicant/applicationOverview";
     }
