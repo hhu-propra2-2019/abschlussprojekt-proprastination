@@ -31,7 +31,7 @@
 <main th:fragment="bodycontent">
     <div style="text-align: center;">
         <!-- Restlichen Inhalt hier einfügen! -->
-        <form th:action="@{uebersicht}" th:method="POST">
+        <form th:action="${weiteresModul}" th:method="POST">
             <div class="card bg-light mb-3 border-primary">
                 <div class="card-header"><h2 th:text="${module}"></h2>
                 </div>
@@ -106,15 +106,18 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-6">
-                            <label for="module">
+                            <label for="modules">
                                 Falls Sie sich bei einem weiteren Modul bewerben möchten können Sie dieses hier auswählen
                             </label>
                         </div>
                         <div class="col-4">
-                            <select name="module" id="module" class="form-control"></select>
+                            <select name="modules" id="modules" class="form-control">
+                                <option th:each="module:${modules}" th:text="${module}"></option>
+                            </select>
                         </div>
                         <div class="col-2">
-                            <a th:href="@{modul}" class="btn btn-outline-primary form-control"> Bestätige </a>
+              <!--              <a th:href="@{modul}" class="btn btn-outline-primary form-control"> Bestätige </a>-->
+                            <button th:type="submit" th:formaction="@{weiteresModul}">Weiteres Modul</button>
                         </div>
                     </div>
                 </div>
@@ -132,7 +135,7 @@
                             -->
                             <input th:type="hidden" th:name="module" th:value="${module}">
                             <input th:type="hidden" th:name="applicant" th:value="${applicant}">
-                            <button th:type="submit">Einreichen</button>
+                            <button th:type="submit" th:formaction="@{uebersicht}">Einreichen</button>
                         </div>
                     </div>
                 </div>

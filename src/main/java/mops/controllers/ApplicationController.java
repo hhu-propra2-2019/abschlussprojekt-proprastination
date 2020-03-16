@@ -158,6 +158,7 @@ public class ApplicationController {
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("module", modules);
             model.addAttribute("semesters", CSVService.getSemester());
+            model.addAttribute("modules", CSVService.getModules());
             ApplicantService applicantService = new ApplicantService();
             Address address = Address.builder()
                     .street(street)
@@ -168,6 +169,31 @@ public class ApplicationController {
             Applicant applicant = applicantService.createApplicant(token.getName(), birthplace,
                     address, birthday, nationality, course, null, null, applications);
             model.addAttribute("applicant", applicant);
+        }
+        return "applicationModule";
+    }
+
+    /**
+     * xxxx
+     * @param token
+     * @param model
+     * @param modules
+     * @param applicant
+     * @return xx
+     */
+    @PostMapping("/weiteresModul")
+    public String weiteresModul (final KeycloakAuthenticationToken token,
+                                 final Model model,
+                                 @RequestParam("modules") final String modules,
+                                 @RequestParam("applicant") final String applicant) {
+        if (token != null) {
+            model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("module", modules);
+            model.addAttribute("semesters", CSVService.getSemester());
+            model.addAttribute("modules", CSVService.getModules());
+            model.addAttribute("applicant", applicant);
+            ApplicantService applicantService = new ApplicantService();
+            System.out.println(applicant);
         }
         return "applicationModule";
     }
@@ -214,21 +240,6 @@ public class ApplicationController {
         return "applicationOverview";
     }
 
-   /* /**
-     * The GetMapping for the overview
-     *
-     * @param token The KeycloakAuthentication
-     * @param model The Website model
-     * @return The HTML file rendered as a String
-     */
-
-    /*@GetMapping("/uebersicht")
-    public String overview(final KeycloakAuthenticationToken token, final Model model) {
-        if (token != null) {
-            model.addAttribute("account", createAccountFromPrincipal(token));
-        }
-        return "applicationOverview";
-    }*/
 
     /**
      * The GetMapping for the edit form fot personal data
