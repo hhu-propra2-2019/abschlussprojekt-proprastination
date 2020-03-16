@@ -185,6 +185,13 @@ public class ApplicationController {
     public String weiteresModul (final KeycloakAuthenticationToken token,
                                  final Model model,
                                  @RequestParam("modules") final String modules,
+                                 @RequestParam("module") final String module,
+                                 @RequestParam("workload") final String workload,
+                                 @RequestParam("grade") final String grade,
+                                 @RequestParam("semesters") final String semester,
+                                 @RequestParam("lecturer") final String lecturer,
+                                 @RequestParam("tasks") final String tasks,
+                                 @RequestParam("priority") final String priority,
                                  @RequestParam("applicant") final String applicant) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
@@ -193,6 +200,14 @@ public class ApplicationController {
             model.addAttribute("modules", CSVService.getModules());
             model.addAttribute("applicant", applicant);
             ApplicantService applicantService = new ApplicantService();
+            Application application = applicantService.createApplication(token.getName(),
+                    module,
+                    lecturer,
+                    semester,
+                    null,
+                    Integer.parseInt(workload),
+                    Double.parseDouble(grade),
+                    Role.KORREKTOR);
             System.out.println(applicant);
         }
         return "applicationModule";
