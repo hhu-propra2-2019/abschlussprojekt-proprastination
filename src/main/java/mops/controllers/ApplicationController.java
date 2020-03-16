@@ -106,39 +106,24 @@ public class ApplicationController {
     }
 
 
-/*    /**
-     * The GetMapping for the module page
-     *
-     * @param token The KeycloakAuthentication
-     * @param model The Website model
-     * @return The HTML file rendered as a String
-     */
-
-   /* @GetMapping("/modul")
-    public String module(final KeycloakAuthenticationToken token, final Model model) {
-        if (token != null) {
-            model.addAttribute("account", createAccountFromPrincipal(token));
-        }
-        return "applicationModule";
-    }*/
 
     /**
-     * Post Mapping after Pers Data
-     * @param token
-     * @param model
-     * @param street
-     * @param place
-     * @param plz
-     * @param birthplace
-     * @param nationality
-     * @param birthday
-     * @param gender
-     * @param course
-     * @param status
-     * @param graduation
-     * @param diverse
-     * @param modules
-     * @return
+     * Post Mapping after Pers Data (saves the applicant and provides input for module)
+     * @param token keycloaktoken
+     * @param model model to use
+     * @param street street + number
+     * @param place place
+     * @param plz zipcode
+     * @param birthplace birthplace
+     * @param nationality nationality
+     * @param birthday birthday
+     * @param gender gender (weiblich or männlich)
+     * @param course course the student is currently enrolled in
+     * @param status employment status
+     * @param graduation highest certificate reached yet
+     * @param diverse commentary from applicant
+     * @param modules module the applicant wants to apply for
+     * @return module.html
      */
     @PostMapping("/modul")
     public String postModule(final KeycloakAuthenticationToken token, final Model model,
@@ -174,12 +159,19 @@ public class ApplicationController {
     }
 
     /**
-     * xxxx
-     * @param token
-     * @param model
-     * @param modules
-     * @param applicant
-     * @return xx
+     * website for more modules, saves the former module and provides input for the next one
+     * @param token keycloaktoken
+     * @param model model
+     * @param modules the module the applicant wants to apply for now
+     * @param module the module the applicant applied for
+     * @param workload hours the applicant may apply for
+     * @param grade the grade the applicant had in the module
+     * @param semester the semester the applicant completed the module
+     * @param lecturer the lecturer the applicant wrote his exam with
+     * @param tasks the role he wants to take
+     * @param priority his priority
+     * @param applicant probably not neccessary?
+     * @return the same applicationModule.html
      */
     @PostMapping("/weiteresModul")
     public String weiteresModul (final KeycloakAuthenticationToken token,
@@ -214,17 +206,18 @@ public class ApplicationController {
     }
 
     /**
-     *
-     * @param token
-     * @param model
-     * @param module
-     * @param workload
-     * @param grade
-     * @param semester
-     * @param lecturer
-     * @param tasks
-     * @param priority
-     * @return
+     * Overview, will be used to save the last module and shows the data the applicant filled in
+     * @param token keycloaktone
+     * @param model model
+     * @param applicant applicant (load from database?)
+     * @param module the module the applicant applied last for
+     * @param workload look above
+     * @param grade "
+     * @param semester "
+     * @param lecturer "
+     * @param tasks "
+     * @param priority "
+     * @return overview.html
      */
     @PostMapping("/uebersicht")
     public String postOverview(final KeycloakAuthenticationToken token,
