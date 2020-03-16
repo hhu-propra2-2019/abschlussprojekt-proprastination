@@ -55,6 +55,7 @@ dependencies {
     implementation 'com.c4-soft.springaddons:spring-security-test-keycloack-addons:1.2.0'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.19'
     implementation 'org.keycloak:keycloak-spring-boot-starter:9.0.0'
     implementation 'org.keycloak.bom:keycloak-adapter-bom:3.3.0.Final'
     compile group: 'org.webjars', name: 'jquery', version: '3.3.1'
