@@ -145,6 +145,7 @@ public class ApplicationController {
     public String editPersonalData(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("applicant", applicantServiceservice.findByUsername("has220"));
         }
         return "applicant/applicationEditPersonal";
     }
