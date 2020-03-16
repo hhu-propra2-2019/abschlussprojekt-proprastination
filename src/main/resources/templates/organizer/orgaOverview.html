@@ -27,8 +27,11 @@
                         {"name": "ProfPrio", "orderable": true, "orderDataType": "dom-select" },
                         {"name": "Unikennung", "orderable": true},
                         {"name": "Note", "orderable": true},
+                        {"name": "Rolle", "orderable": true},
+                        {"name": "Stunden", "orderable": true, "orderDataType": "dom-select" },
                         {"name": "AppPrio", "orderable": true},
-                        {"name": "Button", "orderable": false}
+                        {"name": "ButtonShow", "orderable": false},
+                        {"name": "ButtonComment", "orderable": false}
                     ]
                 } );
             } );
@@ -45,74 +48,108 @@
 </header>
 
 <main th:fragment="bodycontent">
-    <table id="table_id" class="display" style="width:100%">
-        <thead>
-        <tr>
-            <th class="text-center">Priorität des Organisators</th>
-            <th class="text-center">Unikennung</th>
-            <th class="text-center">Note</th>
-            <th class="text-center">Priorität des Bewerbers</th>
-            <th class="text-center">Ganze Bewerbung</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td class="text-center">
-                <select name="priority">
-                    <option value="1">++</option>
-                    <option value="2">+</option>
-                    <option value="3">o</option>
-                    <option value="4">-</option>
-                </select>
-            </td>
-            <td class="text-center">Mamus100</td>
-            <td class="text-center">2,7</td>
-            <td class="text-center">++</td>
-            <td class="text-center">
-                <button type="button" class="btn btn-outline-dark openBtn" data-toggle="modal" data-target="#modal_id">Bewerbung ansehen</button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <form th:action="@{./}" th:method="POST">
+        <table id="table_id" class="display" style="width:100%">
+            <thead>
+            <tr>
+                <th class="text-center">Ihre Priorität</th>
+                <th class="text-center">Unikennung</th>
+                <th class="text-center">Note</th>
+                <th class="text-center">Rolle</th>
+                <th class="text-center">Stundenanzahl</th>
+                <th class="text-center">Priorität des Bewerbers</th>
+                <th class="text-center">Ganze Bewerbung</th>
+                <th class="text-center">Anmerkung</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="text-center">
+                    <select name="priority" id="priority">
+                        <option value="1">++</option>
+                        <option value="2">+</option>
+                        <option value="3">o</option>
+                        <option value="4">-</option>
+                    </select>
+                </td>
+                <td class="text-center">Mamus100</td>
+                <td class="text-center">2,7</td>
+                <td class="text-center">Tutor</td>
+                <td class="text-center">
+                    <select name="hours" id="hours">
+                        <option value="7">7 Stunden</option>
+                        <option value="9">9 Stunden</option>
+                        <option value="17">17 Stunden</option>
+                    </select>
+                </td>
+                <td class="text-center">++</td>
+                <td class="text-center">
+                    <button type="button" class="btn btn-outline-dark openBtn" data-toggle="modal" data-target="#applicationModal">Bewerbung ansehen</button>
+                </td>
+                <td class="text-center">
+                    <button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#commentModal">Anmerkung hinzufügen</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
 
-    <div class="modal fade" id="modal_id" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 class="modal-title">Bewerbung Max Mustermann</h2>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <div class="modal fade" id="applicationModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title">Bewerbung Max Mustermann</h2>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body applicationModal">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+
+        <div class="modal fade" id="commentModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title">Anmerkung zu Max Mustermann</h2>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <textarea autofocus type="text" name="comment" id="comment" class="form-control" rows="5" placeholder="Anmerkung"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="text-center">
+            <button class="btn btn-outline-dark" th:type="submit">Speichern</button>
+        </div>
+
+    </form>
 
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script>
         $('.openBtn').on('click',function(){
-            $('.modal-body').load('/bewerbung2/organisator/modal',function(){
-                $('#modal_id').show(true);
+            $('.applicationModal').load('/bewerbung2/organisator/modal',function(){
+                $('#applicationModal').show(true);
             });
         });
     </script>
-    <!--<script>
-        $('#modal_id').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget) // Button that triggered the modal
-            var recipient = button.data('whatever') // Extract info from data-* attributes
-            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-            var modal = $(this)
-            modal.find('.modal-title').text('New message to ' + recipient)
-            modal.find('.modal-body input').val(recipient)
-        })
-    </script>-->
+    <script>
+        $(document).on('shown.bs.modal', function (e) {
+            $('[autofocus]', e.target).focus();
+        });
+    </script>
 </main>
 </body>
 </html>
