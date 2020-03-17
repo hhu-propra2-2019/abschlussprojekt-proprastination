@@ -44,7 +44,7 @@ public class DistributeController {
      */
 
     @GetMapping("/")
-    @PreAuthorize("hasRole('ROLE_orga') or hasRole('ROLE_studentin')")
+    @PreAuthorize("hasRole('ROLE_orga') or hasRole('ROLE_studentin') or hasRole('ROLE_verteiler')")
     public String index(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
@@ -54,9 +54,10 @@ public class DistributeController {
                 return "redirect:/bewerbung2/organisator/";
             } else if (auth.equals(new SimpleGrantedAuthority("ROLE_studentin"))) {
                 return "redirect:/bewerbung2/bewerber/";
+            } else if (auth.equals(new SimpleGrantedAuthority("ROLE_verteiler"))) {
+                return "redirect:/bewerbung2/verteiler/";
             }
         }
         return "redirect:/error";
     }
-
 }
