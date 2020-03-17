@@ -1,24 +1,21 @@
 package mops.model.classes;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.Data;
+import org.springframework.data.relational.core.mapping.Table;
 
-@Builder(builderClassName = "AddressBuilder", toBuilder = true)
-@Getter
-@ToString
-@EqualsAndHashCode
-@JsonDeserialize(builder = Address.AddressBuilder.class)
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Builder
+@Data
+@Entity
+@Table("ADDRESS")
 public class Address {
+    @Id
+    private final long id;
     private final String street;
     private final String city;
     private final String country;
     private final int zipcode;
-
-    @JsonPOJOBuilder(withPrefix = "")
-    public static class AddressBuilder {
-    }
 }

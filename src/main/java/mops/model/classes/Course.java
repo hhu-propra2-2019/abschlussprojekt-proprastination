@@ -10,10 +10,9 @@ import javax.persistence.Id;
 @Builder
 @Data
 @Entity
-@Table("CERTIFICATE")
-public class Certificate {
+@Table("COURSE")
+public class Course {
     @Id
     private final long id;
     private final String name;
-    private final String course;
 }

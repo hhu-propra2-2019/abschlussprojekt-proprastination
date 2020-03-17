@@ -1,21 +1,21 @@
 package mops.model.classes;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.Singular;
-import lombok.ToString;
+import org.springframework.data.relational.core.mapping.Table;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.List;
 
-@Builder(builderClassName = "ApplicantBuilder", toBuilder = true)
-@Getter
-@EqualsAndHashCode
-@ToString
-@JsonDeserialize(builder = Applicant.ApplicantBuilder.class)
+@Builder
+@Data
+@Entity
+@Table("APPLICANT")
 public class Applicant {
+    @Id
+    private final long id;
     private final String uniserial;
     private final String surename;
     private final String name;
@@ -24,24 +24,9 @@ public class Applicant {
     private final String birthday;
     private final String nationality;
     private final String course;
-    private final Status status;
+    private final String status;
     private final String comment;
     private final Certificate certs;
     @Singular
     private final List<Application> applications;
-
-    @JsonPOJOBuilder(withPrefix = "")
-    public static class ApplicantBuilder {
-
-    }
-
-    /**
-     * Returns Fullname
-     *
-     * @return String.
-     */
-    public String getFullName() {
-        return surename + " " + name;
-    }
-
 }

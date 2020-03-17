@@ -1,25 +1,21 @@
 package mops.model.classes;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.Data;
+import org.springframework.data.relational.core.mapping.Table;
 
-@Getter
-@EqualsAndHashCode
-@ToString
-@Builder(builderClassName = "EvaluationBuilder", toBuilder = true)
-@JsonDeserialize(builder = Evaluation.EvaluationBuilder.class)
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Data
+@Builder
+@Entity
+@Table("EVALUATION")
 public class Evaluation {
+    @Id
+    private final long id;
     private final Application application;
     private final Applicant applicant;
     private final String comment;
     private final int priority;
-
-    @JsonPOJOBuilder(withPrefix = "")
-    public static class EvaluationBuilder {
-
-    }
 }
