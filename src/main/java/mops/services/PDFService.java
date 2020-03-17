@@ -37,10 +37,10 @@ public class PDFService {
     }
 
     private void addApplicantInfoToPDF(final Applicant applicant) throws IOException {
-        document.setField("Vorname", applicant.getName());
-        document.setField("Name", applicant.getName());
-        document.setField("Vorsatzwort", applicant.getName());
-        document.setField("Namenszusatz", applicant.getName());
+        document.setField("Vorname", applicant.getFirstName());
+        document.setField("Name", applicant.getSurname());
+        document.setField("Vorsatzwort", applicant.getTitle());
+        document.setField("Namenszusatz", applicant.getFirstName());
         document.setField("Geburtsdatum", applicant.getBirthday());
         document.setField("Geburtsort", applicant.getBirthplace());
         document.setField("Staatsangehörigkeit", applicant.getNationality());
@@ -51,7 +51,7 @@ public class PDFService {
 
     private void addApplicantAdressInfoToPDF(final Address address) throws IOException {
         document.setField("Anschrift (Straße)", address.getStreet());
-        document.setField("Anschrift (Hausnummer)", address.getStreet());
+        document.setField("Anschrift (Hausnummer)", address.getHouseNumber());
         document.setField("Anschrift (PLZ)", String.valueOf(address.getZipcode()));
         document.setField("Anschrift (optionaler Adresszusatz)", address.getCity());
         document.setField("Anschrift (Ort)", address.getCity());
