@@ -21,9 +21,16 @@ public class PDFService {
     public void test() throws IOException {
         document = new DocumentWithBachelor();
         document.setField("Tutorentätigkeit", "On");
-        //addApplicantInfoToPDF();
-        //addApplicantAdressInfoToPDF();
-        //addApplicationInfoToPDF();
+    }
+
+    public void generatePDF(final Application application, final Applicant applicant) throws IOException {
+        addApplicationInfoToPDF(application);
+        addApplicantInfoToPDF(applicant);
+        addGeneralInfos();
+    }
+
+    private void addGeneralInfos() throws IOException {
+        document.setField("Tutorentätigkeit", "On");
     }
 
     private void addApplicationInfoToPDF(final Application application) throws IOException {
@@ -31,7 +38,7 @@ public class PDFService {
         document.setField("E-Mail", application.getApplicantusername() + "@hhu.de");
     }
 
-    public void addApplicantInfoToPDF(final Applicant applicant) throws IOException {
+    private void addApplicantInfoToPDF(final Applicant applicant) throws IOException {
         document.setField("Vorname", applicant.getName());
         document.setField("Name", applicant.getName());
         document.setField("Vorsatzwort", applicant.getName());
