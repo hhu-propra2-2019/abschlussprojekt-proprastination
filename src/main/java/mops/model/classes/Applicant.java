@@ -2,11 +2,7 @@ package mops.model.classes;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Singular;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 

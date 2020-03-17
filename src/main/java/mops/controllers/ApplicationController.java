@@ -2,6 +2,7 @@
 package mops.controllers;
 
 import mops.model.Account;
+import mops.model.classes.Applicant;
 import mops.services.ApplicantService;
 import mops.services.CSVService;
 import org.keycloak.KeycloakPrincipal;
@@ -11,6 +12,8 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.annotation.SessionScope;
 
@@ -120,6 +123,27 @@ public class ApplicationController {
      *
      * @param token The KeycloakAuthentication
      * @param model The Website model
+     * @param applicant1 new Applicant Data
+     * @return The HTML file rendered as a String
+     */
+
+    @PostMapping("/uebersicht")
+    public String saveOverview(final KeycloakAuthenticationToken token, final Model model,
+                               @ModelAttribute("applicant1") final Applicant applicant1) {
+        if (token != null) {
+            model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("applicant", applicantServiceservice.findByUsername("has220"));
+            Applicant applicant = applicantServiceservice.overrideApplicantWithoutApplications(applicant1, "has220");
+            applicantServiceservice.save(applicant, "has220");
+        }
+        return "applicant/applicationOverview";
+    }
+
+    /**
+     * The GetMapping for the overview
+     *
+     * @param token The KeycloakAuthentication
+     * @param model The Website model
      * @return The HTML file rendered as a String
      */
 
@@ -128,7 +152,6 @@ public class ApplicationController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("applicant", applicantServiceservice.findByUsername("has220"));
-            System.out.print("stop");
         }
         return "applicant/applicationOverview";
     }
@@ -146,6 +169,7 @@ public class ApplicationController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("applicant", applicantServiceservice.findByUsername("has220"));
+            model.addAttribute("applicant1", applicantServiceservice.findByUsername("has220"));
         }
         return "applicant/applicationEditPersonal";
     }
