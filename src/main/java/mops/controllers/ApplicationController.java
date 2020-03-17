@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.annotation.SessionScope;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -135,7 +136,7 @@ public class ApplicationController {
                              @RequestParam("street") final String street,
                              @RequestParam("place") final String place,
                              @RequestParam("plz") final String plz,
-                             @RequestParam("placeofbirth") final String birthplace,
+                             @RequestParam("placeofbirth") @Valid final String birthplace,
                              @RequestParam("nationality") final String nationality,
                              @RequestParam("birthday") final String birthday,
      //                        @RequestParam("gender") final String gender,
