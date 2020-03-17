@@ -74,7 +74,7 @@ class ApplicantServiceTest {
                 .address(address)
                 .nationality("US of A**")
                 .birthplace("Gotham")
-                .name("Batman")
+                .surname("Batman")
                 .certs(cert)
                 .build();
     }
