@@ -121,15 +121,16 @@ public class ApplicationController {
      * @param birthplace birthplace
      * @param nationality nationality
      * @param birthday birthday
-     * @param gender gender (weiblich or männlich)
+  //   * @param gender gender (weiblich or männlich)
      * @param course course the student is currently enrolled in
-     * @param status employment status
-     * @param graduation highest certificate reached yet
-     * @param diverse commentary from applicant
+ //    * @param status employment status
+  //   * @param graduation highest certificate reached yet
+   //  * @param diverse commentary from applicant
      * @param modules module the applicant wants to apply for
      * @return module.html
      */
     @PostMapping("/modul")
+    @SuppressWarnings("checkstyle:ParameterNumber")
     public String postModule(final KeycloakAuthenticationToken token, final Model model,
                              @RequestParam("street") final String street,
                              @RequestParam("place") final String place,
@@ -137,11 +138,11 @@ public class ApplicationController {
                              @RequestParam("placeofbirth") final String birthplace,
                              @RequestParam("nationality") final String nationality,
                              @RequestParam("birthday") final String birthday,
-                             @RequestParam("gender") final String gender,
+     //                        @RequestParam("gender") final String gender,
                              @RequestParam("courses") final String course,
-                             @RequestParam("status") final String status,
-                             @RequestParam("graduation") final String graduation,
-                             @RequestParam("diverse") final String diverse,
+       //                      @RequestParam("status") final String status,
+        //                     @RequestParam("graduation") final String graduation,
+        //                     @RequestParam("diverse") final String diverse,
                              @RequestParam("modules") final String modules) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
@@ -172,12 +173,13 @@ public class ApplicationController {
      * @param grade the grade the applicant had in the module
      * @param semester the semester the applicant completed the module
      * @param lecturer the lecturer the applicant wrote his exam with
-     * @param tasks the role he wants to take
-     * @param priority his priority
+ //    * @param tasks the role he wants to take
+ //    * @param priority his priority
      * @param applicant probably not neccessary?
      * @return the same applicationModule.html
      */
     @PostMapping("/weiteresModul")
+    @SuppressWarnings("checkstyle:ParameterNumber")
     public String weiteresModul(final KeycloakAuthenticationToken token,
                                  final Model model,
                                  @RequestParam("modules") final String modules,
@@ -186,8 +188,8 @@ public class ApplicationController {
                                  @RequestParam("grade") final String grade,
                                  @RequestParam("semesters") final String semester,
                                  @RequestParam("lecturer") final String lecturer,
-                                 @RequestParam("tasks") final String tasks,
-                                 @RequestParam("priority") final String priority,
+   //                              @RequestParam("tasks") final String tasks,
+   //                              @RequestParam("priority") final String priority,
                                  @RequestParam("applicant") final String applicant) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
@@ -206,6 +208,7 @@ public class ApplicationController {
                     Double.parseDouble(grade),
                     Role.KORREKTOR);
             System.out.println(applicant);
+            System.out.println(application);
         }
         return "applicationModule";
     }
@@ -220,11 +223,12 @@ public class ApplicationController {
      * @param grade "
      * @param semester "
      * @param lecturer "
-     * @param tasks "
-     * @param priority "
+   //  * @param tasks "
+   //  * @param priority "
      * @return overview.html
      */
     @PostMapping("/uebersicht")
+    @SuppressWarnings("checkstyle:ParameterNumber")
     public String postOverview(final KeycloakAuthenticationToken token,
                                final Model model,
                                @RequestParam("applicant") final String applicant,
@@ -232,9 +236,9 @@ public class ApplicationController {
                                @RequestParam("workload") final String workload,
                                @RequestParam("grade") final String grade,
                                @RequestParam("semesters") final String semester,
-                               @RequestParam("lecturer") final String lecturer,
-                               @RequestParam("tasks") final String tasks,
-                               @RequestParam("priority") final String priority
+                               @RequestParam("lecturer") final String lecturer
+    //                           @RequestParam("tasks") final String tasks,
+    //                           @RequestParam("priority") final String priority
                                ) {
         if (token != null) {
             System.out.println(applicant);
@@ -249,6 +253,7 @@ public class ApplicationController {
                     Integer.parseInt(workload),
                     Double.parseDouble(grade),
                     Role.KORREKTOR);
+            System.out.println(application);
         }
         return "applicant/applicationOverview";
     }

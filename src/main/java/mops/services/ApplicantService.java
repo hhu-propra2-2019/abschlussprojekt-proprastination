@@ -32,7 +32,7 @@ public class ApplicantService {
      * Returns an application from given the parameters.
      * Seems unnecessary tho!
      *
-     * @param username Username
+     * @param uniquename Username
      * @param module   Module as String.
      * @param lecturer Lecturer as String.
      * @param semester Semester as String.
