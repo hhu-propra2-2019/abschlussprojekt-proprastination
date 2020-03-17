@@ -48,14 +48,14 @@ public class ApplicantService {
                                          final String lecturer,
                                          final String semester,
                                          final String comment,
-                                         final int priority,
+                        //                 final int priority,
                                          final int hours,
                                          final double grade,
                                          final Role role) {
         return Application.builder()
                 .applicantusername(uniquename)
                 .module(module)
-                .priority(priority)
+      //          .priority(priority)
                 .comment(comment)
                 .hours(hours)
                 .grade(grade)
@@ -161,8 +161,6 @@ public class ApplicantService {
      * Returns allApplications as List<Application>
      * @return List
      * Returns all Applications as a list.
-     *
-     * @return List<Application>
      */
     public List<Application> getAllApplications() {
         ObjectMapper mapper = new ObjectMapper();

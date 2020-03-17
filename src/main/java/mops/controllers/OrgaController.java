@@ -15,11 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.annotation.SessionScope;
 
-import java.awt.desktop.AppReopenedListener;
-import java.sql.SQLException;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-
 @SessionScope
 @Controller
 @RequestMapping("/bewerbung2/organisator")

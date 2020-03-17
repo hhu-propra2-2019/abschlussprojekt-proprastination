@@ -178,7 +178,7 @@ public class ApplicationController {
      * @return the same applicationModule.html
      */
     @PostMapping("/weiteresModul")
-    public String weiteresModul (final KeycloakAuthenticationToken token,
+    public String weiteresModul(final KeycloakAuthenticationToken token,
                                  final Model model,
                                  @RequestParam("modules") final String modules,
                                  @RequestParam("module") final String module,
@@ -201,7 +201,7 @@ public class ApplicationController {
                     lecturer,
                     semester,
                     null,
-                    Integer.parseInt(priority),
+               //     Integer.parseInt(priority),
                     Integer.parseInt(workload),
                     Double.parseDouble(grade),
                     Role.KORREKTOR);
@@ -245,7 +245,7 @@ public class ApplicationController {
                     lecturer,
                     semester,
                     "",
-                    Integer.parseInt(priority),
+          //          Integer.parseInt(priority),
                     Integer.parseInt(workload),
                     Double.parseDouble(grade),
                     Role.KORREKTOR);

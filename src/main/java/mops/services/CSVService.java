@@ -57,7 +57,7 @@ public class CSVService {
         List<String> list = new ArrayList<>();
         List<String[]> modules = readFromCSV("src/main/resources/csv/module.csv");
         String[] strArr;
-        for(int i = 0; i < modules.size(); i++) {
+        for (int i = 0; i < modules.size(); i++) {
             strArr = modules.get(i);
             list.add(strArr[0]);
         }
@@ -72,7 +72,7 @@ public class CSVService {
         List<String> list = new ArrayList<>();
         List<String[]> courses = readFromCSV("src/main/resources/csv/courses.csv");
         String[] strArr;
-        for(int i = 0; i < courses.size(); i++) {
+        for (int i = 0; i < courses.size(); i++) {
             strArr = courses.get(i);
             list.add(strArr[0]);
         }
@@ -87,7 +87,7 @@ public class CSVService {
         List<String> list = new ArrayList<>();
         List<String[]> semester = readFromCSV("src/main/resources/csv/semester.csv");
         String[] strArr;
-        for(int i = 0; i < semester.size(); i++) {
+        for (int i = 0; i < semester.size(); i++) {
             strArr = semester.get(i);
             list.add(strArr[0]);
         }
