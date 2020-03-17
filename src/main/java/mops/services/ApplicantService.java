@@ -43,19 +43,15 @@ public class ApplicantService {
      * @return Application.
      */
     @SuppressWarnings({"checkstyle:ParameterNumber"})
-    public Application createApplication(final String username,
     public Application createApplication(final String uniquename,
                                          final String module,
                                          final String lecturer,
                                          final String semester,
                                          final String comment,
+                                         final int priority,
                                          final int hours,
                                          final double grade,
                                          final Role role) {
-        Application application = Application.builder()
-                .applicantusername(username)
-                                         final Role role,
-                                         final int priority) {
         return Application.builder()
                 .applicantusername(uniquename)
                 .module(module)
@@ -94,7 +90,6 @@ public class ApplicantService {
                                      final Status status,
                                      final Certificate certs,
                                      final List<Application> applications) {
-        Applicant applicant = Applicant.builder()
         return Applicant.builder()
                 .name(name)
                 .birthplace(birthplace)

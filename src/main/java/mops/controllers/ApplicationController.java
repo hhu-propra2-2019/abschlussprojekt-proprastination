@@ -201,6 +201,7 @@ public class ApplicationController {
                     lecturer,
                     semester,
                     null,
+                    Integer.parseInt(priority),
                     Integer.parseInt(workload),
                     Double.parseDouble(grade),
                     Role.KORREKTOR);
@@ -243,7 +244,8 @@ public class ApplicationController {
                     module,
                     lecturer,
                     semester,
-                    null,
+                    "",
+                    Integer.parseInt(priority),
                     Integer.parseInt(workload),
                     Double.parseDouble(grade),
                     Role.KORREKTOR);
