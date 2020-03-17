@@ -32,15 +32,14 @@ public class ApplicantService {
      * Returns an application from given the parameters.
      * Seems unnecessary tho!
      *
-     * @param uniquename unikennung
-     * @param priority   int prio.
-     * @param module     Module as String.
-     * @param lecturer   Lecturer as String.
-     * @param semester   Semester as String.
-     * @param comment    Comment as String.
-     * @param hours      Hours as Integer.
-     * @param grade      Grade as Double.
-     * @param role       Role as mops.classes.Role.
+     * @param uniquename Username
+     * @param module   Module as String.
+     * @param lecturer Lecturer as String.
+     * @param semester Semester as String.
+     * @param comment  Comment as String.
+     * @param hours    Hours as Integer.
+     * @param grade    Grade as Double.
+     * @param role     Role as mops.classes.Role.
      * @return Application.
      */
     @SuppressWarnings({"checkstyle:ParameterNumber"})
@@ -49,14 +48,14 @@ public class ApplicantService {
                                          final String lecturer,
                                          final String semester,
                                          final String comment,
+                        //                 final int priority,
                                          final int hours,
                                          final double grade,
-                                         final Role role,
-                                         final int priority) {
+                                         final Role role) {
         return Application.builder()
                 .applicantusername(uniquename)
                 .module(module)
-                .priority(priority)
+      //          .priority(priority)
                 .comment(comment)
                 .hours(hours)
                 .grade(grade)
@@ -67,7 +66,7 @@ public class ApplicantService {
     }
 
     /**
-     * Returns an Applicant given the input parameters.
+    * Returns an Applicant given the input parameters.
      * Seems unnecessary!
      *
      * @param name         String name.
@@ -128,6 +127,15 @@ public class ApplicantService {
     }
 
     /**
+     * Saves through DTO into Database
+     * @param dto The DTO used
+     */
+
+    public void save(final ApplicantDTO dto) {
+        repo.save(dto);
+    }
+
+    /**
      * Returns Applicant or null given the username;
      *
      * @param username username sould be equal to Keycloak-Username.
@@ -141,9 +149,18 @@ public class ApplicantService {
     }
 
     /**
+     * Find ApplicantDTO with username in Database
+     * @param username
+     * @return ApplicantDTO
+     */
+    public ApplicantDTO find(final String username) {
+        return repo.findDistinctByUsername(username);
+    }
+
+    /**
+     * Returns allApplications as List<Application>
+     * @return List
      * Returns all Applications as a list.
-     *
-     * @return List<Application>
      */
     public List<Application> getAllApplications() {
         ObjectMapper mapper = new ObjectMapper();
@@ -181,7 +198,6 @@ public class ApplicantService {
 
     /**
      * Returns all Applicants as a List,
-     *
      * @return List<Applicant>
      */
     public List<Applicant> getAll() {
@@ -190,6 +206,11 @@ public class ApplicantService {
         return applicants;
     }
 
+    /**
+     * Parses Object to JsonString
+     * @param object Object to parse
+     * @return String
+     */
     private String objectToJsonString(final Object object) {
         ObjectMapper mapper = new ObjectMapper();
         String output = null;
@@ -201,7 +222,11 @@ public class ApplicantService {
         return output;
 
     }
-
+    /**
+    * Parses DTO to Model
+    * @param dto Applicantdto
+    * @return the applicant
+    */
     private Applicant dtoToModel(final ApplicantDTO dto) {
         if (dto == null) {
             return null;

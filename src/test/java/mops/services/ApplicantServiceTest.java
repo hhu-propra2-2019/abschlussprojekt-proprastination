@@ -43,7 +43,7 @@ class ApplicantServiceTest {
 
         application = Application.builder()
                 .applicantusername("bob111")
-                .priority(2)
+                .priority(0)
                 .module("Hausbau")
                 .hours(17)
                 .comment("Boooob der Baumeister")
@@ -89,7 +89,7 @@ class ApplicantServiceTest {
     void createApplication() {
 
 
-        Application application1 = service.createApplication("bob111", "Hausbau", "Lala der Teletubby", "SS2020", "Boooob der Baumeister", 17, 1.3, Role.KORREKTOR, 2);
+        Application application1 = service.createApplication("bob111", "Hausbau", "Lala der Teletubby", "SS2020", "Boooob der Baumeister", 17, 1.3, Role.KORREKTOR);
 
         assertThat(application1).isEqualTo(application);
     }
