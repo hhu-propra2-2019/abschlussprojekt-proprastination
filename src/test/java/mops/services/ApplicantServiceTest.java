@@ -42,7 +42,8 @@ class ApplicantServiceTest {
                 .build();
 
         application = Application.builder()
-                .priority(2)
+                .applicantusername("bob111")
+                .priority(0)
                 .module("Hausbau")
                 .hours(17)
                 .grade(1.3)
@@ -73,7 +74,7 @@ class ApplicantServiceTest {
                 .address(address)
                 .nationality("US of A**")
                 .birthplace("Gotham")
-                .name("Batman")
+                .surname("Batman")
                 .certs(cert)
                 .build();
     }
@@ -84,6 +85,14 @@ class ApplicantServiceTest {
 
         var test = service.getApplicant(applicant.getUniserial());
 
+
+    @Test
+
+    void createApplication() {
+
+        Application application1 = service.createApplication("bob111", "Hausbau", "Lala der Teletubby", "SS2020", "Boooob der Baumeister", 17, 1.3, Role.KORREKTOR);
+
+        assertThat(application1).isEqualTo(application);
     }
 
     @Test

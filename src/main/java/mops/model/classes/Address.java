@@ -15,6 +15,7 @@ public class Address {
     @Id
     private final long id;
     private final String street;
+    private final String houseNumber;
     private final String city;
     private final String country;
     private final int zipcode;

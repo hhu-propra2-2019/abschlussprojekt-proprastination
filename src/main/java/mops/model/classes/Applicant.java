@@ -17,12 +17,15 @@ public class Applicant {
     @Id
     private final long id;
     private final String uniserial;
-    private final String surename;
-    private final String name;
     private final String birthplace;
+    private final String title;
+    private final String firstName;
+    private final String surname;
     private final Address address;
+    private final String gender;
     private final String birthday;
     private final String nationality;
+    private final String birthplace;
     private final String course;
     private final String status;
     private final String comment;
