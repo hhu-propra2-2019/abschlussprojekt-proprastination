@@ -13,7 +13,7 @@ public interface ApplicationRepository extends CrudRepository<ApplicationDTO, Lo
      * Returns all ApplicationDTOs for a given module.
      *
      * @param module
-     * @return
+     * @return List<ApplicationDTO>
      */
     @Query("SELECT * from application where module = :module")
     List<ApplicationDTO> findAllByModule(@Param("module") String module);

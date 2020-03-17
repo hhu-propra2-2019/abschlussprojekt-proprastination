@@ -12,7 +12,6 @@ import mops.model.classes.Address;
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
 import mops.model.classes.Certificate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +29,15 @@ public class ApplicantService {
 
     private transient ApplicationRepository applicationRepository;
 
-    public ApplicantService(final ApplicantRepository applicantRepository, final ApplicationRepository applicationRepository) {
+    /**
+     * Sets up the used repos.
+     *
+     * @param applicantRepository   Application repo.
+     * @param applicationRepository Applicant repo.
+     */
+    @SuppressWarnings("checkstyle:HiddenField")
+    public ApplicantService(final ApplicantRepository applicantRepository,
+                            final ApplicationRepository applicationRepository) {
         this.applicantRepository = applicantRepository;
         this.applicationRepository = applicationRepository;
     }
@@ -45,20 +52,6 @@ public class ApplicantService {
     }
 
     /**
-     * Returns Applicant or null given the username;
-     *
-     * @param username username sould be equal to Keycloak-Username.
-     * @return Applicant.
-     */
-    /*
-    public Applicant findByUsername(final String username) {
-        ApplicantDTO dto = repo.findDistinctByUsername(username);
-        Applicant applicant;
-        applicant = dtoToModel(dto);
-        return applicant;
-    }*/
-
-    /**
      * Returns all Applications as a list.
      *
      * @return List<Application>
@@ -71,11 +64,27 @@ public class ApplicantService {
         return all;
     }
 
+    /**
+     * Returns all Applicants.
+     *
+     * @return List<Applicant>
+     */
     public List<Applicant> getAllApplicants() {
         List<Applicant> all = new ArrayList<>();
         var iter = applicantRepository.findAll();
         iter.forEach(applicant -> all.add(applicantDTOToModel(applicant)));
         return all;
+    }
+
+    /**
+     * Returns the searhed Applicant.
+     *
+     * @param uniname String uniserial.
+     * @return Applicant.
+     */
+    public Applicant getApplicant(final String uniname) {
+        ApplicantDTO applicant = applicantRepository.findDistinctByUsername(uniname);
+        return applicantDTOToModel(applicant);
     }
 
     /**

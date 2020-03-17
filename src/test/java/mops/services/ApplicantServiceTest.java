@@ -82,7 +82,7 @@ class ApplicantServiceTest {
     void saveApplicant() {
         service.save(applicant);
 
-        var test = service.getAllApplicants();
+        var test = service.getApplicant(applicant.getUniserial());
 
     }
 
