@@ -217,6 +217,7 @@ public class ApplicantService {
     }
 
     /**
+<<<<<<< HEAD
      *
      * @param applicant
      * @param username
@@ -238,5 +239,27 @@ public class ApplicantService {
         return applicantNew;
     }
 
+=======
+     * overrides applicant data without the applications
+     *
+     * @param applicant
+     * @param username
+     * @return updated applicant data
+     */
+>>>>>>> develop
 
+    public Applicant overrideApplicantWithoutApplications(final Applicant applicant, final String username) {
+        Applicant applicant1 = findByUsername(username);
+        applicant.toBuilder()
+                .name(applicant1.getName())
+                .birthday(applicant1.getBirthplace())
+                .address(applicant1.getAddress())
+                .birthday(applicant1.getBirthday())
+                .nationality(applicant1.getNationality())
+                .course(applicant1.getCourse())
+                .status(applicant1.getStatus())
+                .certs(applicant1.getCerts())
+                .build();
+        return applicant1;
+    }
 }

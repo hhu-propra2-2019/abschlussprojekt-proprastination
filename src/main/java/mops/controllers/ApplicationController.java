@@ -146,6 +146,27 @@ public class ApplicationController {
      *
      * @param token The KeycloakAuthentication
      * @param model The Website model
+     * @param applicant1 new Applicant Data
+     * @return The HTML file rendered as a String
+     */
+
+    @PostMapping("/uebersicht")
+    public String saveOverview(final KeycloakAuthenticationToken token, final Model model,
+                               @ModelAttribute("applicant1") final Applicant applicant1) {
+        if (token != null) {
+            model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("applicant", applicantServiceservice.findByUsername("has220"));
+            Applicant applicant = applicantServiceservice.overrideApplicantWithoutApplications(applicant1, "has220");
+            applicantServiceservice.save(applicant, "has220");
+        }
+        return "applicant/applicationOverview";
+    }
+
+    /**
+     * The GetMapping for the overview
+     *
+     * @param token The KeycloakAuthentication
+     * @param model The Website model
      * @return The HTML file rendered as a String
      */
 
@@ -170,6 +191,8 @@ public class ApplicationController {
     public String editPersonalData(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("applicant", applicantServiceservice.findByUsername("has220"));
+            model.addAttribute("applicant1", applicantServiceservice.findByUsername("has220"));
         }
         return "applicant/applicationEditPersonal";
     }
