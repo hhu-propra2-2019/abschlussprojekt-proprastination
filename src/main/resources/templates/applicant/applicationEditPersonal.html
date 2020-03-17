@@ -30,7 +30,7 @@
 </header>
 <main th:fragment="bodycontent">
     <div style="text-align: center;">
-        <form action="#" th:action="@{uebersicht}" method="post" th:object="${applicant1}">
+        <form action="#" th:action="@{uebersichtBearbeitet}" method="post" th:object="${applicant1}">
             <div class="card bg-light mb-3 border-primary">
                 <div class="card-header">
                     <label><h2>Persönliche Daten</h2></label>
@@ -40,13 +40,13 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-5">
-                            <input type="text" name="adress1" id="adress1"
+                            <input type="text" name="address1" id="address1"
                                    class="form-control" placeholder="Straße und Hausnummer"
                                    th:value="${applicant.address.street}"> <br>
                             <br>
                         </div>
                         <div class="col-5">
-                            <input type="text" name="adress2" id="adress2"
+                            <input type="text" name="address2" id="address2"
                                    class="form-control" placeholder="Ort" th:value="${applicant.address.city}"> <br>
                         </div>
                         <div class="col-2">
@@ -58,7 +58,6 @@
                         <div class="col-5">
                             <input type="text" name="placeofbirth" id="placeofbirth"
                                    class="form-control" placeholder="Geburtsort, Land"
-                                   th:field="${applicant1.birthplace}" th:attr="value = ${applicant1.birthplace}"
                                    th:value="${applicant.birthplace}"> <br>
                         </div>
                         <div class="col-5">

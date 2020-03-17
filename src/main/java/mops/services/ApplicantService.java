@@ -227,7 +227,6 @@ public class ApplicantService {
     public Applicant overrideApplicantWithoutApplications(final Applicant applicant, final String username) {
         Applicant applicant1 = findByUsername(username);
         applicant.toBuilder()
-                .name(applicant1.getName())
                 .birthday(applicant1.getBirthplace())
                 .address(applicant1.getAddress())
                 .birthday(applicant1.getBirthday())

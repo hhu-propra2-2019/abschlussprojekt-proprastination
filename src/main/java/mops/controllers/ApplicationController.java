@@ -2,7 +2,7 @@
 package mops.controllers;
 
 import mops.model.Account;
-import mops.model.classes.Applicant;
+import mops.model.classes.*;
 import mops.services.ApplicantService;
 import mops.services.CSVService;
 import org.keycloak.KeycloakPrincipal;
@@ -11,11 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.SessionScope;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @SessionScope
@@ -119,21 +119,61 @@ public class ApplicationController {
     }
 
 
-
     /**
-     * The GetMapping for the overview
      *
-     * @param token The KeycloakAuthentication
-     * @param applicant new Applicant data
-     * @param model The Website model
-     * @return The HTML file rendered as a String
+     * @param token
+     * @param model
+     * @param street
+     * @param city
+     * @param plz
+     * @param birthplace
+     * @param nationality
+     * @param birthday
+     * @param subject
+     * @param status
+     * @param graduation
+     * @param graduationsubject
+     * @param diverse
+     * @return overview formular as String
      */
 
-    @PostMapping
-    public String saveOverview(final KeycloakAuthenticationToken token,
-                               @ModelAttribute("applicant") final Applicant applicant, final Model model) {
+    @SuppressWarnings("checkstyle:ParameterNumber")
+    @PostMapping("/uebersichtBearbeitet")
+    public String saveOverview(final KeycloakAuthenticationToken token, final Model model,
+                               @RequestParam("address1") final String street,
+                               @RequestParam("address2") final String city,
+                               @RequestParam("plz") final String plz,
+                               @RequestParam("placeofbirth") final String birthplace,
+                               @RequestParam("nationality") final String nationality,
+                               @RequestParam("birthday") final String birthday,
+                               @RequestParam("subject") final String subject,
+                               @RequestParam("status") final String status,
+                               @RequestParam("graduation") final String graduation,
+                               @RequestParam("graduationsubject") final String graduationsubject,
+                               @RequestParam("diverse") final String diverse) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
+            Address address = Address.builder().
+                    street(street).
+                    city(city).
+                    zipcode(Integer.parseInt(plz)).
+                    build();
+            Certificate cert = Certificate.builder()
+                    .name(graduation)
+                    .university(graduationsubject)
+                    .build();
+            List<Application> appls = new ArrayList<>();
+            Applicant applicant = applicantServiceservice.createApplicant(
+                    "",
+                    birthplace,
+                    address,
+                    birthday,
+                    nationality,
+                    subject,
+                    Status.NEW,
+                    cert,
+                    appls);
+            applicant.toBuilder().birthplace(birthplace);
             Applicant applicant1 = applicantServiceservice.overrideApplicantWithoutApplications(applicant,
                     "has220");
             applicantServiceservice.save(applicant1, "has220");
@@ -192,7 +232,6 @@ public class ApplicationController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("applicant", applicantServiceservice.findByUsername("has220"));
-            model.addAttribute("applicant1", applicantServiceservice.findByUsername("has220"));
         }
         return "applicant/applicationEditPersonal";
     }
