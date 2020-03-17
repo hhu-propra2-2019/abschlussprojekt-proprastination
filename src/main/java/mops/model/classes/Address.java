@@ -14,6 +14,7 @@ import lombok.ToString;
 @JsonDeserialize(builder = Address.AddressBuilder.class)
 public class Address {
     private final String street;
+    private final String houseNumber;
     private final String city;
     private final String country;
     private final int zipcode;
