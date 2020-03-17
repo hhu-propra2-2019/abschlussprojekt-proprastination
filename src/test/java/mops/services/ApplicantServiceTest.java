@@ -37,16 +37,14 @@ class ApplicantServiceTest {
                 .build();
 
         cert = Certificate.builder()
-                .university("Batcave")
+                .course("Batcave")
                 .name("Basic Training")
                 .build();
 
         application = Application.builder()
-                .applicantusername("bob111")
                 .priority(2)
                 .module("Hausbau")
                 .hours(17)
-                .comment("Boooob der Baumeister")
                 .grade(1.3)
                 .lecturer("Lala der Teletubby")
                 .role(Role.KORREKTOR)
@@ -54,11 +52,9 @@ class ApplicantServiceTest {
                 .build();
 
         application2 = Application.builder()
-                .applicantusername("bob111")
                 .priority(1)
                 .module("Rächer")
                 .hours(99)
-                .comment("Ich bin Batman")
                 .grade(1.0)
                 .lecturer("Ich selbst?")
                 .role(Role.BOTH)
@@ -70,6 +66,7 @@ class ApplicantServiceTest {
                 .application(application2)
                 .status(Status.NEW)
                 .course("Hausbau")
+                .comment("WOW!")
                 .birthday("11.11.1111")
                 .address(address)
                 .nationality("US of A**")
@@ -81,24 +78,14 @@ class ApplicantServiceTest {
 
     @Test
     void saveApplicant() {
+        service.save(applicant);
 
-    }
+        var test = service.getAllApplicants();
 
-
-    @Test
-    void createApplication() {
-
-
-        Application application1 = service.createApplication("bob111", "Hausbau", "Lala der Teletubby", "SS2020", "Boooob der Baumeister", 17, 1.3, Role.KORREKTOR, 2);
-
-        assertThat(application1).isEqualTo(application);
     }
 
     @Test
     void createApplicant() {
-        Applicant applicant1 = service.createApplicant("Batman", "Gotham", address, "11.11.1111", "US of A**", "Hausbau", Status.NEW, cert, Arrays.asList(application, application2));
-
-        assertThat(applicant1).isEqualTo(applicant);
     }
 
     @Test

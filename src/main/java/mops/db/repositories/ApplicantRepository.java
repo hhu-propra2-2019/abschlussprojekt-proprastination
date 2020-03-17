@@ -10,7 +10,7 @@ import java.util.Optional;
 
 
 @Repository
-public interface ApplicantRepository extends CrudRepository<ApplicantDTO, String> {
+public interface ApplicantRepository extends CrudRepository<ApplicantDTO, Long> {
 
     /**
      * Search by Username.
@@ -18,7 +18,7 @@ public interface ApplicantRepository extends CrudRepository<ApplicantDTO, String
      * @param username username.
      * @return JSON String.
      */
-    @Query("SELECT * FROM applicant where username = :username;")
+    @Query("SELECT * FROM applicant where uniserial = :username;")
     ApplicantDTO findDistinctByUsername(@Param("username") String username);
 
     /**
@@ -27,26 +27,8 @@ public interface ApplicantRepository extends CrudRepository<ApplicantDTO, String
      * @param username username.
      * @return int id;
      */
-    @Query("SELECT id FROM applicant where username = :user")
-    Optional<Integer> getIdByUsername(@Param("user") String username);
-
-    /**
-     * Returns all Applications as JSON-String list.
-     *
-     * @return List<String> , String in JSON format.
-     */
-    @Query("select y.x FROM applicant app, Lateral (select json_array_elements(details -> 'applications') as x)as y;")
-    List<String> findAllApplications();
-
-    /**
-     * Returns all Applications machting @moduleName as JSON-String list.
-     *
-     * @param moduleName String of the modulename.
-     * @return List<Application>
-     */
-    @Query("SELECT y.x FROM applicant, Lateral (SELECT json_array_elements(details -> 'applications')"
-            + " AS x)AS y WHERE y.x->>'module' = :module;")
-    List<String> findAllApplicationsByModuleName(@Param("module") String moduleName);
+    @Query("SELECT id FROM applicant where uniserial = :user")
+    Optional<Long> getIdByUsername(@Param("user") String username);
 
 
 }

@@ -1,31 +1,51 @@
-DROP TABLE if exists applicant, priorization, distribution;
-
-create table applicant
+DROP TABLE IF EXISTS APPLICANT, ADDRESS, APPLICATION, CERTIFICATE;
+create table APPLICANT
 (
-	id serial
-		constraint applicant_pk
-			primary key,
-	username varchar,
-	details json
+    id          identity primary key,
+    uniserial   varchar,
+    refname     varchar,
+    surname     VARCHAR,
+    name        VARCHAR,
+    BIRTHPLACE  VARCHAR,
+    BIRTHDAY    VARCHAR,
+    NATIONALITY VARCHAR,
+    COMMENT     VARCHAR,
+    COURSE      VARCHAR,
+    STATUS      VARCHAR
 );
 
-create unique index applicant_username_uindex
-	on applicant (username);
 
 
-
-create table priorization
+create table ADDRESS
 (
-    id int not null
-        constraint priorization_pk
-            primary key,
-    application json,
-    priority int
+    APPLICANT integer references APPLICANT (id),
+    STREET    varchar,
+    CITY      varchar,
+    COUNTRY   varchar,
+    ZIPCODE   integer
 );
-create table distribution
+
+create table CERTIFICATE
 (
-    module varchar not null
-        constraint distribution_pk
-            primary key,
-    applicants json
+    APPLICANT int references APPLICANT (id),
+    NAME      varchar,
+    COURSE    varchar
 );
+
+create table APPLICATION
+(
+    ID        identity,
+    APPLICANT INT references APPLICANT (id),
+    HOURS     INT,
+    MODULE    VARCHAR,
+    PRIORITY  INT,
+    GRADE     DOUBLE,
+    LECTURER  VARCHAR,
+    SEMESTER  VARCHAR,
+
+    ROLE      ENUM ('TUTOR', 'KORREKTOR', 'BOTH')
+);
+
+
+
+

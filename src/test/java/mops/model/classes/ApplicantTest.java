@@ -17,11 +17,11 @@ class ApplicantTest {
 
     @BeforeEach
     void init() {
-        Application application = Application.builder().module("Divination").applicantusername("hans222").build();
+        Application application = Application.builder().module("Divination").build();
         applicationList = Arrays.asList(application);
         certs = Certificate.builder()
                 .name("Bachelor")
-                .university("Harvard")
+                .course("Harvard")
                 .build();
         address = Address.builder()
                 .street("Baker Street 21B")

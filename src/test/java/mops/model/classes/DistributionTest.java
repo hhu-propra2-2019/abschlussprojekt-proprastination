@@ -14,12 +14,12 @@ class DistributionTest {
 
     @BeforeEach
     void init(){
-        Application application = Application.builder().module("Divination").applicantusername("ident").build();
+        Application application = Application.builder().module("Divination").build();
         List<Application> applicationList = Arrays.asList(application);
 
         Certificate cert = Certificate.builder()
                 .name("Bachelor")
-                .university("Harvard")
+                .course("Harvard")
                 .build();
         Address address = Address.builder()
                 .street("Baker Street 21B")

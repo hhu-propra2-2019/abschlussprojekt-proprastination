@@ -50,7 +50,6 @@ dependencies {
     implementation 'mops:styleguide:2.2.0'
     testCompile("org.assertj:assertj-core:3.15.0")
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'com.c4-soft.springaddons:spring-security-test-keycloack-addons:1.2.0'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -71,7 +70,7 @@ dependencies {
     testCompile("org.assertj:assertj-core:3.11.1")
     compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5:3.0.4.RELEASE'
     implementation 'junit:junit:4.12'
-    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.10'
+    compile group: 'com.h2database', name: 'h2', version: '1.4.200'
 }
 
 test {

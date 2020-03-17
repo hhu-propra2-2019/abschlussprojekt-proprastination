@@ -15,8 +15,7 @@ import lombok.ToString;
 @Builder(builderClassName = "ApplicationBuilder", toBuilder = true)
 @JsonDeserialize(builder = Application.ApplicationBuilder.class)
 public class Application {
-    @NonNull
-    private final String applicantusername;
+    private final Long id;
     private final int hours;
     @NonNull
     private final String module;
@@ -24,7 +23,6 @@ public class Application {
     private final double grade;
     private final String lecturer;
     private final String semester;
-    private final String comment;
     private final Role role;
 
     @JsonPOJOBuilder(withPrefix = "")

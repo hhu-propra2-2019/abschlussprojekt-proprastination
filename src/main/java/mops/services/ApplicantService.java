@@ -2,129 +2,53 @@ package mops.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import mops.db.dto.AddressDTO;
 import mops.db.dto.ApplicantDTO;
+import mops.db.dto.ApplicationDTO;
 import mops.db.repositories.ApplicantRepository;
+import mops.db.repositories.ApplicationRepository;
 import mops.model.classes.Address;
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
 import mops.model.classes.Certificate;
-import mops.model.classes.Role;
-import mops.model.classes.Status;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
+@EnableAutoConfiguration
 public class ApplicantService {
 
+    private ApplicantRepository applicantRepository;
+
+    private ApplicationRepository applicationRepository;
+
+
     @Autowired
-    private ApplicantRepository repo;
-
-    @SuppressWarnings("checkstyle:HiddenField")
-    private void setRepo(final ApplicantRepository repo) {
-        this.repo = repo;
+    @SuppressWarnings({"checkstyle:MissingJavadocMethod", "checkstyle:HiddenField"})
+    public void setApplicationRepository(final ApplicationRepository applicationRepository) {
+        this.applicationRepository = applicationRepository;
     }
 
-    /**
-     * Returns an application from given the parameters.
-     * Seems unnecessary tho!
-     *
-     * @param uniquename unikennung
-     * @param priority   int prio.
-     * @param module     Module as String.
-     * @param lecturer   Lecturer as String.
-     * @param semester   Semester as String.
-     * @param comment    Comment as String.
-     * @param hours      Hours as Integer.
-     * @param grade      Grade as Double.
-     * @param role       Role as mops.classes.Role.
-     * @return Application.
-     */
-    @SuppressWarnings({"checkstyle:ParameterNumber"})
-    public Application createApplication(final String uniquename,
-                                         final String module,
-                                         final String lecturer,
-                                         final String semester,
-                                         final String comment,
-                                         final int hours,
-                                         final double grade,
-                                         final Role role,
-                                         final int priority) {
-        return Application.builder()
-                .applicantusername(uniquename)
-                .module(module)
-                .priority(priority)
-                .comment(comment)
-                .hours(hours)
-                .grade(grade)
-                .lecturer(lecturer)
-                .semester(semester)
-                .role(role)
-                .build();
+    @Autowired
+    @SuppressWarnings({"checkstyle:MissingJavadocMethod", "checkstyle:HiddenField"})
+    public void setApplicantRepository(final ApplicantRepository applicantRepository) {
+        this.applicantRepository = applicantRepository;
     }
-
-    /**
-     * Returns an Applicant given the input parameters.
-     * Seems unnecessary!
-     *
-     * @param name         String name.
-     * @param birthplace   String birthplace.
-     * @param address      Address address.
-     * @param birthday     String birthday.
-     * @param nationality  String nationality.
-     * @param course       String course.
-     * @param status       String status.
-     * @param certs        Certificate cert.
-     * @param applications List<Application>
-     * @return Applicant.
-     */
-    @SuppressWarnings("checkstyle:ParameterNumber")
-    public Applicant createApplicant(final String name,
-                                     final String birthplace,
-                                     final Address address,
-                                     final String birthday,
-                                     final String nationality,
-                                     final String course,
-                                     final Status status,
-                                     final Certificate certs,
-                                     final List<Application> applications) {
-        return Applicant.builder()
-                .name(name)
-                .birthplace(birthplace)
-                .address(address)
-                .birthday(birthday)
-                .nationality(nationality)
-                .course(course)
-                .status(status)
-                .certs(certs)
-                .applications(applications)
-                .build();
-    }
-
 
     /**
      * Saves Applicant.
      *
      * @param applicant Applicant.
-     * @param username  Keycloak-name/Uni-Kennung.
      */
-    public void save(final Applicant applicant, final String username) {
-        String jsonString = objectToJsonString(applicant);
-        ApplicantDTO dto = new ApplicantDTO();
-        dto.setUsername(username);
-        dto.setDetails(jsonString);
-
-        Optional<Integer> opt = repo.getIdByUsername(username);
-        opt.ifPresent(dto::setId);
-
-        try {
-            repo.save(dto);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void save(final Applicant applicant) {
+        applicantRepository.save(applicantModelToDTO(applicant));
     }
 
     /**
@@ -133,12 +57,13 @@ public class ApplicantService {
      * @param username username sould be equal to Keycloak-Username.
      * @return Applicant.
      */
+    /*
     public Applicant findByUsername(final String username) {
         ApplicantDTO dto = repo.findDistinctByUsername(username);
         Applicant applicant;
         applicant = dtoToModel(dto);
         return applicant;
-    }
+    }*/
 
     /**
      * Returns all Applications as a list.
@@ -146,17 +71,18 @@ public class ApplicantService {
      * @return List<Application>
      */
     public List<Application> getAllApplications() {
-        ObjectMapper mapper = new ObjectMapper();
-        List<Application> result = new ArrayList<>();
-        for (String s : repo.findAllApplications()) {
-            try {
-                result.add(mapper.readValue(s, Application.class));
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-        }
+        List<Application> all = new ArrayList<>();
+        var iter = applicationRepository.findAll();
+        iter.forEach(application -> all.add(applicationDTOtoModel(application)));
 
-        return result;
+        return all;
+    }
+
+    public List<Applicant> getAllApplicants() {
+        List<Applicant> all = new ArrayList<>();
+        var iter = applicantRepository.findAll();
+        iter.forEach(applicant -> all.add(applicantDTOToModel(applicant)));
+        return all;
     }
 
     /**
@@ -166,29 +92,12 @@ public class ApplicantService {
      * @return List<Application>
      */
     public List<Application> getAllApplicationsByModule(final String module) {
-        ObjectMapper mapper = new ObjectMapper();
         List<Application> result = new ArrayList<>();
-        for (String s : repo.findAllApplicationsByModuleName(module)) {
-            try {
-                result.add(mapper.readValue(s, Application.class));
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-        }
-
+        var iter = applicationRepository.findAllByModule(module);
+        iter.forEach(application -> result.add(applicationDTOtoModel(application)));
         return result;
     }
 
-    /**
-     * Returns all Applicants as a List,
-     *
-     * @return List<Applicant>
-     */
-    public List<Applicant> getAll() {
-        List<Applicant> applicants = new ArrayList<>();
-        repo.findAll().forEach(applicantDTO -> applicants.add(dtoToModel(applicantDTO)));
-        return applicants;
-    }
 
     private String objectToJsonString(final Object object) {
         ObjectMapper mapper = new ObjectMapper();
@@ -202,18 +111,102 @@ public class ApplicantService {
 
     }
 
-    private Applicant dtoToModel(final ApplicantDTO dto) {
-        if (dto == null) {
-            return null;
-        }
-        ObjectMapper mapper = new ObjectMapper();
-        Applicant applicant = null;
-        try {
-            applicant = mapper.readValue(dto.getDetails(), Applicant.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+    private Applicant applicantDTOToModel(final ApplicantDTO dto) {
+
+        Set<ApplicationDTO> applications = dto.getApplications();
+        Set<Application> newapplications = new HashSet<>();
+
+        applications.iterator().forEachRemaining(application -> {
+            Application app = Application.builder()
+                    .priority(application.getPriority())
+                    .id(dto.getId())
+                    .semester(application.getSemester())
+                    .role(application.getRole())
+                    .lecturer(application.getLecturer())
+                    .grade(application.getGrade())
+                    .hours(application.getHours())
+                    .module(application.getModule())
+                    .build();
+            newapplications.add(app);
+        });
+
+        Applicant applicant = Applicant.builder()
+                .name(dto.getName())
+                .birthplace(dto.getBirthplace())
+                .birthday(dto.getBirthday())
+                .comment(dto.getComment())
+                .status(dto.getStatus())
+                .surename(dto.getSurname())
+                .nationality(dto.getNationality())
+                .uniserial(dto.getUniserial())
+                .address(Address.builder()
+                        .city(dto.getAddress().getCity())
+                        .country(dto.getAddress().getCountry())
+                        .street(dto.getAddress().getStreet())
+                        .zipcode(dto.getAddress().getZipcode())
+                        .build())
+                .certs(Certificate.builder()
+                        .name(dto.getCertificate().getName())
+                        .course(dto.getCertificate().getCourse())
+                        .build())
+                .applications(newapplications)
+                .build();
+
         return applicant;
+
+
+    }
+
+    private Application applicationDTOtoModel(final ApplicationDTO dto) {
+        return Application.builder()
+                .priority(dto.getPriority())
+                .id(dto.getId())
+                .semester(dto.getSemester())
+                .role(dto.getRole())
+                .lecturer(dto.getLecturer())
+                .grade(dto.getGrade())
+                .hours(dto.getHours())
+                .module(dto.getModule())
+                .build();
+    }
+
+    private ApplicationDTO applicationModelToDTO(final Application model) {
+        return new ApplicationDTO(model.getId(),
+                model.getHours(),
+                model.getModule(),
+                model.getPriority(),
+                model.getGrade(),
+                model.getLecturer(),
+                model.getSemester(),
+                model.getRole());
+    }
+
+    private ApplicantDTO applicantModelToDTO(final Applicant applicant) {
+        Optional<Long> id = applicantRepository.getIdByUsername(applicant.getUniserial());
+
+        Address oldAddress = applicant.getAddress();
+        AddressDTO address = new AddressDTO(oldAddress.getStreet(), oldAddress.getCity(),
+                oldAddress.getCountry(), oldAddress.getZipcode());
+
+        Set<ApplicationDTO> applicationDTOS = new HashSet<>();
+        applicant.getApplications().forEach(application -> applicationDTOS.add(applicationModelToDTO(application)));
+
+
+        ApplicantDTO app = new ApplicantDTO();
+        app.setBirthday(applicant.getBirthday());
+        app.setComment(applicant.getComment());
+        id.ifPresent(app::setId);
+        app.setCourse(applicant.getCourse());
+        app.setBirthplace(applicant.getBirthplace());
+        app.setName(applicant.getName());
+        app.setSurname(applicant.getSurename());
+        app.setNationality(applicant.getNationality());
+        app.setStatus(applicant.getStatus());
+        app.setAddress(address);
+        app.setApplications(applicationDTOS);
+
+        return app;
+
     }
 
 

@@ -14,7 +14,7 @@ import lombok.ToString;
 @JsonDeserialize(builder = Certificate.CertificateBuilder.class)
 public class Certificate {
     private final String name;
-    private final String university;
+    private final String course;
 
     @JsonPOJOBuilder(withPrefix = "")
     public static class CertificateBuilder {

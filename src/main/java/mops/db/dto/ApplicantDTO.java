@@ -1,20 +1,47 @@
 package mops.db.dto;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import mops.model.classes.Address;
+import mops.model.classes.Application;
+import mops.model.classes.Certificate;
+import mops.model.classes.Status;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.relational.core.mapping.Embedded;
+import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.util.List;
+import java.util.Set;
+
 @Data
-@SuppressFBWarnings(value = "RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE", justification = "not gonna change Lombok")
-@Table("applicant")
+@NoArgsConstructor
+@AllArgsConstructor(onConstructor = @__(@PersistenceConstructor))
+@Table("APPLICANT")
 public class ApplicantDTO {
-    //@SuppressFBWarnings(value = "SS_SHOULD_BE_STATIC", justification = "no, it shouldn't be static")
+
     @Id
-    private int id;
-    @Column("username")
-    private String username;
-    @Column("details")
-    private String details;
+    private Long id;
+    private String uniserial;
+    private String surname;
+    private String name;
+    private String birthplace;
+
+    @MappedCollection(idColumn = "applicant")
+    private AddressDTO address;
+
+    private String birthday;
+    private String nationality;
+    private String course;
+    private Status status;
+    private String comment;
+
+    @MappedCollection(idColumn = "applicant")
+    private CertificateDTO certificate;
+
+    @MappedCollection(idColumn = "applicant", keyColumn = "id")
+    private Set<ApplicationDTO> applications;
 }

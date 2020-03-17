@@ -11,7 +11,6 @@ class ApplicationTest {
     @BeforeEach
     void setup() {
         application = Application.builder()
-                .applicantusername("user")
                 .hours(2)
                 .grade(1.3)
                 .priority(1)
@@ -19,7 +18,6 @@ class ApplicationTest {
                 .role(Role.KORREKTOR)
                 .semester("WS2020")
                 .module("ProPra")
-                .comment("")
                 .build();
 
     }
@@ -45,7 +43,6 @@ class ApplicationTest {
     @Test
     void testEquals() {
         Application application1 = Application.builder()
-                .applicantusername("user")
                 .hours(2)
                 .grade(1.3)
                 .priority(1)
@@ -53,11 +50,9 @@ class ApplicationTest {
                 .role(Role.KORREKTOR)
                 .semester("WS2020")
                 .module("ProPra")
-                .comment("")
                 .build();
 
         Application application2 = Application.builder()
-                .applicantusername("user")
                 .hours(2)
                 .grade(1.3)
                 .priority(1)
@@ -65,7 +60,6 @@ class ApplicationTest {
                 .role(Role.KORREKTOR)
                 .semester("WS2020")
                 .module("ProPra")
-                .comment("")
                 .build();
 
         assertThat(application1).isEqualTo(application2);

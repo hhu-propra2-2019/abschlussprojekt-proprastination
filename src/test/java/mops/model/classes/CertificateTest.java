@@ -10,7 +10,7 @@ class CertificateTest {
     void builder() {
         Certificate cert = Certificate.builder()
                 .name("Blau")
-                .university("HHU")
+                .course("HHU")
                 .build();
 
         assertThat(cert)
@@ -22,12 +22,12 @@ class CertificateTest {
     void testEquals() {
         Certificate cert1 = Certificate.builder()
                 .name("Blau")
-                .university("HHU")
+                .course("HHU")
                 .build();
 
         Certificate cert2 = Certificate.builder()
                 .name("Blau")
-                .university("HHU")
+                .course("HHU")
                 .build();
 
         assertThat(cert1).isEqualTo(cert2);
@@ -37,7 +37,7 @@ class CertificateTest {
     void testToString() {
         Certificate cert = Certificate.builder()
                 .name("Tom")
-                .university("HHU")
+                .course("HHU")
                 .build();
         assertThat(cert.toString()).isEqualTo("Certificate(name=Tom, university=HHU)");
     }
@@ -46,7 +46,7 @@ class CertificateTest {
     void testToBuilder() {
         Certificate cert = Certificate.builder()
                 .name("Blau")
-                .university("HHU")
+                .course("HHU")
                 .build();
 
         Certificate.CertificateBuilder certificateBuilder = cert.toBuilder();

@@ -18,7 +18,6 @@ class EvaluationTest {
 
         application = Application.builder()
                 .module("ProPra2")
-                .applicantusername("hans111")
                 .build();
     }
 
