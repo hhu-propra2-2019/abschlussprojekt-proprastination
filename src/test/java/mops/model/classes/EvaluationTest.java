@@ -66,7 +66,7 @@ class EvaluationTest {
 
         String evalString = evaluation.toString();
         String expected = "Evaluation(application=Application(applicantusername=hans111, hours=0, module=ProPra2, priority=0, grade=0.0, "
-                + "lecturer=null, semester=null, comment=null, role=null), applicant=Applicant(title=null, firstName=null, surname=Hans, address=null, gender=null, birthday=null, nationality=null, birthplace=null, course=null, status=null, certs=null, applications=[]), comment=He is not awesome!, priority=3)";
+                + "lecturer=null, semester=null, comment=null, role=null), applicant=Applicant(title=null, firstName=null, surname=Hans, nameSuffix=null, address=null, gender=null, birthday=null, nationality=null, birthplace=null, course=null, status=null, certs=null, applications=[]), comment=He is not awesome!, priority=3)";
         assertThat(evalString).isEqualTo(expected);
     }
 
