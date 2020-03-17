@@ -1,21 +1,42 @@
-
 package mops.controllers;
 
 import mops.model.Account;
+import mops.model.classes.Address;
+import mops.model.classes.Applicant;
+import mops.model.classes.Application;
+import mops.services.ApplicantService;
 import mops.services.CSVService;
+import mops.services.CourseService;
+import mops.services.ModuleService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.annotation.SessionScope;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @SessionScope
 @RequestMapping("/bewerbung2/bewerber")
 public class ApplicationController {
+
+    private final ApplicantService applicantService;
+    private final CourseService courseService;
+    private final ModuleService moduleService;
+
+    public ApplicationController(final ApplicantService applicantServiceservice, final CourseService courseService,
+                                 final ModuleService moduleService) {
+        this.applicantService = applicantServiceservice;
+        this.courseService = courseService;
+        this.moduleService = moduleService;
+    }
 
     private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
         KeycloakPrincipal principal = (KeycloakPrincipal) token.getPrincipal();
@@ -57,6 +78,8 @@ public class ApplicationController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("countries", CSVService.getCountries());
+            model.addAttribute("courses", courseService.getCourses());
+            model.addAttribute("modules", moduleService.getModules());
         }
         return "applicant/applicationPersonal";
     }
@@ -95,36 +118,151 @@ public class ApplicationController {
 
 
     /**
-     * The GetMapping for the module page
+     * Post Mapping after Pers Data (saves the applicant and provides input for module)
      *
-     * @param token The KeycloakAuthentication
-     * @param model The Website model
-     * @return The HTML file rendered as a String
+     * @param token       keycloaktoken
+     * @param model       model to use
+     * @param street      street + number
+     * @param place       place
+     * @param plz         zipcode
+     * @param birthplace  birthplace
+     * @param nationality nationality
+     * @param birthday    birthday
+     *                    //   * @param gender gender (weiblich or männlich)
+     * @param course      course the student is currently enrolled in
+     *                    //    * @param status employment status
+     *                    //   * @param graduation highest certificate reached yet
+     *                    //  * @param diverse commentary from applicant
+     * @param modules     module the applicant wants to apply for
+     * @return module.html
      */
-
-    @GetMapping("/modul")
-    public String module(final KeycloakAuthenticationToken token, final Model model) {
+    @PostMapping("/modul")
+    @SuppressWarnings("checkstyle:ParameterNumber")
+    public String postModule(final KeycloakAuthenticationToken token, final Model model,
+                             @RequestParam("street") final String street,
+                             @RequestParam("place") final String place,
+                             @RequestParam("plz") final String plz,
+                             @RequestParam("placeofbirth") final String birthplace,
+                             @RequestParam("nationality") final String nationality,
+                             @RequestParam("birthday") final String birthday,
+                             //@RequestParam("gender") final String gender,
+                             @RequestParam("courses") final String course,
+                             //@RequestParam("status") final String status,
+                             //@RequestParam("graduation") final String graduation,
+                             //@RequestParam("diverse") final String diverse,
+                             @RequestParam("modules") final String modules) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("module", modules);
+            model.addAttribute("semesters", CSVService.getSemester());
+            model.addAttribute("modules", CSVService.getModules());
+            Address address = Address.builder()
+                    .street(street)
+                    .city(place)
+                    .zipcode(Integer.parseInt(plz))
+                    .build();
+            List<Application> applications = new ArrayList<>();
+            model.addAttribute("applicant", Applicant.builder()
+                    .name(token.getName())
+                    .surename(token.getName())
+                    .address(address)
+                    .birthday(birthday)
+                    .birthplace(birthplace)
+                    .course(course)
+                    .nationality(nationality)
+                    .applications(applications)
+                    .build());
         }
         return "applicant/applicationModule";
     }
 
     /**
-     * The GetMapping for the overview
+     * website for more modules, saves the former module and provides input for the next one
      *
-     * @param token The KeycloakAuthentication
-     * @param model The Website model
-     * @return The HTML file rendered as a String
+     * @param token     keycloaktoken
+     * @param model     model
+     * @param modules   the module the applicant wants to apply for now
+     * @param module    the module the applicant applied for
+     * @param workload  hours the applicant may apply for
+     * @param grade     the grade the applicant had in the module
+     * @param semester  the semester the applicant completed the module
+     * @param lecturer  the lecturer the applicant wrote his exam with
+     *                  //    * @param tasks the role he wants to take
+     *                  //    * @param priority his priority
+     * @param applicant probably not neccessary?
+     * @return the same applicationModule.html
      */
-
-    @GetMapping("/uebersicht")
-    public String overview(final KeycloakAuthenticationToken token, final Model model) {
+    @PostMapping("/weiteresModul")
+    @SuppressWarnings("checkstyle:ParameterNumber")
+    public String weiteresModul(final KeycloakAuthenticationToken token,
+                                final Model model,
+                                @RequestParam("modules") final String modules,
+                                @RequestParam("module") final String module,
+                                @RequestParam("workload") final String workload,
+                                @RequestParam("grade") final String grade,
+                                @RequestParam("semesters") final String semester,
+                                @RequestParam("lecturer") final String lecturer,
+                                //                              @RequestParam("tasks") final String tasks,
+                                //                              @RequestParam("priority") final String priority,
+                                @RequestParam("applicant") final String applicant) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("module", modules);
+            model.addAttribute("semesters", CSVService.getSemester());
+            model.addAttribute("modules", CSVService.getModules());
+            model.addAttribute("applicant", applicant);
+            Application.builder()
+                    .module(module)
+                    .lecturer(lecturer)
+                    .semester(semester)
+                    .grade(Double.parseDouble(grade))
+                    .hours(Integer.parseInt(workload))
+                    .build();
+        }
+        return "applicationModule";
+    }
+
+    /**
+     * Overview, will be used to save the last module and shows the data the applicant filled in
+     *
+     * @param token     keycloaktone
+     * @param model     model
+     * @param applicant applicant (load from database?)
+     * @param module    the module the applicant applied last for
+     * @param workload  look above
+     * @param grade     "
+     * @param semester  "
+     * @param lecturer  "
+     *                  //  * @param tasks "
+     *                  //  * @param priority "
+     * @return overview.html
+     */
+    @PostMapping("/uebersicht")
+    @SuppressWarnings("checkstyle:ParameterNumber")
+    public String postOverview(final KeycloakAuthenticationToken token,
+                               final Model model,
+                               @RequestParam("applicant") final String applicant,
+                               @RequestParam("module") final String module,
+                               @RequestParam("workload") final String workload,
+                               @RequestParam("grade") final String grade,
+                               @RequestParam("semesters") final String semester,
+                               @RequestParam("lecturer") final String lecturer
+                               //                           @RequestParam("tasks") final String tasks,
+                               //                           @RequestParam("priority") final String priority
+    ) {
+        if (token != null) {
+            model.addAttribute("account", createAccountFromPrincipal(token));
+            Application.builder()
+                    .hours(Integer.parseInt(workload))
+                    .module(module)
+                    .lecturer(lecturer)
+                    .semester(semester)
+                    .grade(Double.parseDouble(grade))
+                    .build();
         }
         return "applicant/applicationOverview";
     }
+
 
     /**
      * The GetMapping for the edit form fot personal data
@@ -138,6 +276,7 @@ public class ApplicationController {
     public String editPersonalData(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("applicant", applicantService.findByUsername("has220"));
         }
         return "applicant/applicationEditPersonal";
     }
