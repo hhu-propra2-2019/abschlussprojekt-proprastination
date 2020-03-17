@@ -44,7 +44,7 @@ public class DistributeController {
      */
 
     @GetMapping("/")
-    @PreAuthorize("hasRole('ROLE_orga') or hasRole('ROLE_studentin') or hasRole('ROLE_verteiler')")
+    @PreAuthorize("hasRole('ROLE_orga') or hasRole('ROLE_studentin') or hasRole('ROLE_verteiler') or hasRole('ROLE_setup')")
     public String index(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
