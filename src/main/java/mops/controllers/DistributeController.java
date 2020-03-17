@@ -52,10 +52,10 @@ public class DistributeController {
         for (GrantedAuthority auth : Objects.requireNonNull(token).getAuthorities()) {
             if (auth.equals(new SimpleGrantedAuthority("ROLE_orga"))) {
                 return "redirect:/bewerbung2/organisator/";
-            } else if (auth.equals(new SimpleGrantedAuthority("ROLE_studentin"))) {
-                return "redirect:/bewerbung2/bewerber/";
             } else if (auth.equals(new SimpleGrantedAuthority("ROLE_verteiler"))) {
                 return "redirect:/bewerbung2/verteiler/";
+            } else if (auth.equals(new SimpleGrantedAuthority("ROLE_studentin"))) {
+                return "redirect:/bewerbung2/bewerber/";
             }
         }
         return "redirect:/error";
