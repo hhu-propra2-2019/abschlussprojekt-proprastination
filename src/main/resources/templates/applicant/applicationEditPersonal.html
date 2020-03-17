@@ -40,31 +40,34 @@
                 <div class="row">
                     <div class="col-5">
                         <input type="text" name="adress1" id="adress1"
-                               class="form-control" placeholder="Straße und Hausnummer"> <br>
+                               class="form-control" placeholder="Straße und Hausnummer"
+                               th:value="${applicant.address.street}"> <br>
                         <br>
                     </div>
                     <div class="col-5">
                         <input type="text" name="adress2" id="adress2"
-                               class="form-control" placeholder="Ort"> <br>
+                               class="form-control" placeholder="Ort" th:value="${applicant.address.city}"> <br>
                     </div>
                     <div class="col-2">
-                        <input type="text" name="plz" id="plz" class="form-control" placeholder="Postleitzahl"> <br>
+                        <input type="text" name="plz" id="plz" class="form-control" placeholder="Postleitzahl"
+                               th:value="${applicant.address.zipcode}"> <br>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-5">
                         <input type="text" name="placeofbirth" id="placeofbirth"
-                               class="form-control" placeholder="Geburtsort, Land"> <br>
+                               class="form-control" placeholder="Geburtsort, Land" th:value="${applicant.birthplace}"> <br>
                     </div>
                     <div class="col-5">
                         <select name="nationality" id="nationality" class="form-control">
-                            <option value="" disabled selected hidden>Nationalität</option>
+                            <option th:value="${applicant.nationality}" selected th:text="${applicant.nationality}">Nationalität</option>
                             <option th:each="country:${countries}" th:text="${country}"></option>
                         </select> <br>
                     </div>
                     <div class="col-2">
                         <input type="text" name="birthday" id="birthday" onfocus="(this.type='date')"
-                               onblur="(this.type='text')" class="form-control" placeholder="Geburtstag"> <br><br>
+                               onblur="(this.type='text')" class="form-control" placeholder="Geburtstag"
+                               th:value="${applicant.birthday}"> <br><br>
                     </div>
 
                 </div>
@@ -79,7 +82,9 @@
 
                     </div>
                     <div class="col-6">
-                        <select name="subject" id="subject" class="form-control"></select> <br> <br>
+                        <select name="subject" id="subject" class="form-control">
+                            <option value="" selected th:text="${applicant.course}"></option>
+                        </select> <br> <br>
                     </div>
                 </div>
                 <div class="row">
@@ -92,6 +97,7 @@
                     </div>
                     <div class="col-6">
                         <select name="status" id="status" class="form-control">
+                            <option value ="" selected th:text="${applicant.status}"></option>
                             <option value="neueinstellung">
                                 Neueinstellung (bisher keine Anstellung an der HHU)
                             </option>
@@ -117,6 +123,7 @@
                 <div class="row">
                     <div class="col-6">
                         <select name="graduation" id="graduation" class="form-control">
+                            <option value="" selected th:text="${applicant.certs.name}"></option>
                             <option value="bachelor">Bachelor</option>
                             <option value="master">Master</option>
                             <option value="diplom">Diplom</option>
@@ -127,7 +134,8 @@
                     </div>
                     <div class="col-6">
                         <input type="text" name="graduationsubject" id="graduationsubject"
-                               class="form-control" placeholder="Abschlussfach"> <br>
+                               class="form-control" placeholder="Abschlussfach"
+                               th:value="${applicant.certs.university}"> <br>
                     </div>
                 </div>
                 <div class="row">
