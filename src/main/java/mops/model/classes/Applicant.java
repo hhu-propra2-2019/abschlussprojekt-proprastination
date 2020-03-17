@@ -35,6 +35,11 @@ public class Applicant {
 
     }
 
+    /**
+     * Returns Fullname
+     *
+     * @return String.
+     */
     public String getFullName() {
         return surename + " " + name;
     }

@@ -65,6 +65,8 @@ class ApplicantServiceTest {
                 .application(application)
                 .application(application2)
                 .status(Status.NEW)
+                .surename("dumm")
+                .uniserial("sss111")
                 .course("Hausbau")
                 .comment("WOW!")
                 .birthday("11.11.1111")

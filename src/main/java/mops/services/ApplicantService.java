@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import mops.db.dto.AddressDTO;
 import mops.db.dto.ApplicantDTO;
 import mops.db.dto.ApplicationDTO;
+import mops.db.dto.CertificateDTO;
 import mops.db.repositories.ApplicantRepository;
 import mops.db.repositories.ApplicationRepository;
 import mops.model.classes.Address;
@@ -135,6 +136,7 @@ public class ApplicantService {
                 .birthplace(dto.getBirthplace())
                 .birthday(dto.getBirthday())
                 .comment(dto.getComment())
+                .course(dto.getCourse())
                 .status(dto.getStatus())
                 .surename(dto.getSurname())
                 .nationality(dto.getNationality())
@@ -191,12 +193,16 @@ public class ApplicantService {
         Set<ApplicationDTO> applicationDTOS = new HashSet<>();
         applicant.getApplications().forEach(application -> applicationDTOS.add(applicationModelToDTO(application)));
 
+        Certificate oldCert = applicant.getCerts();
+        CertificateDTO cert = new CertificateDTO(oldCert.getName(), oldCert.getCourse());
+
 
         ApplicantDTO app = new ApplicantDTO();
         app.setBirthday(applicant.getBirthday());
         app.setComment(applicant.getComment());
         id.ifPresent(app::setId);
         app.setCourse(applicant.getCourse());
+        app.setUniserial(applicant.getUniserial());
         app.setBirthplace(applicant.getBirthplace());
         app.setName(applicant.getName());
         app.setSurname(applicant.getSurename());
@@ -204,6 +210,7 @@ public class ApplicantService {
         app.setStatus(applicant.getStatus());
         app.setAddress(address);
         app.setApplications(applicationDTOS);
+        app.setCertificate(cert);
 
         return app;
 
