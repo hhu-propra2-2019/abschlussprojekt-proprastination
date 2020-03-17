@@ -26,21 +26,13 @@ import java.util.Set;
 @EnableAutoConfiguration
 public class ApplicantService {
 
-    private ApplicantRepository applicantRepository;
+    private transient ApplicantRepository applicantRepository;
 
-    private ApplicationRepository applicationRepository;
+    private transient ApplicationRepository applicationRepository;
 
-
-    @Autowired
-    @SuppressWarnings({"checkstyle:MissingJavadocMethod", "checkstyle:HiddenField"})
-    public void setApplicationRepository(final ApplicationRepository applicationRepository) {
-        this.applicationRepository = applicationRepository;
-    }
-
-    @Autowired
-    @SuppressWarnings({"checkstyle:MissingJavadocMethod", "checkstyle:HiddenField"})
-    public void setApplicantRepository(final ApplicantRepository applicantRepository) {
+    public ApplicantService(final ApplicantRepository applicantRepository, final ApplicationRepository applicationRepository) {
         this.applicantRepository = applicantRepository;
+        this.applicationRepository = applicationRepository;
     }
 
     /**

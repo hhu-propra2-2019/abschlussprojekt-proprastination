@@ -1,20 +1,13 @@
 package mops.db.dto;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import mops.model.classes.Address;
-import mops.model.classes.Application;
-import mops.model.classes.Certificate;
 import mops.model.classes.Status;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
-import org.springframework.data.relational.core.mapping.Embedded;
 import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
-
-import java.util.List;
 import java.util.Set;
 
 @Data

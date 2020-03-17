@@ -1,6 +1,5 @@
 package mops.db.dto;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import mops.model.classes.Role;
