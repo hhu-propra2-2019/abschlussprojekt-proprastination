@@ -8,5 +8,9 @@ public interface Document {
 
     void setField(String fieldName, String fieldContent) throws IOException;
 
-    void setGender(final String gender) throws IOException;
+    void setGender(String gender) throws IOException;
+
+    void debug();
+
+    void addGeneralInfos() throws IOException;
 }

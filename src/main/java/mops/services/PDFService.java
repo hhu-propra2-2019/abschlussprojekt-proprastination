@@ -2,7 +2,6 @@ package mops.services;
 
 import mops.model.Document;
 import mops.model.DocumentWithBachelor;
-import mops.model.DocumentWithoutBachelor;
 import mops.model.classes.Address;
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
@@ -20,17 +19,16 @@ public class PDFService {
     @PostConstruct
     public void test() throws IOException {
         document = new DocumentWithBachelor();
-        document.setField("Tutorentätigkeit", "On");
+        document.debug();
+        document.addGeneralInfos();
+        document.save(new File("/home/sotga/Schreibtisch/test.pdf"));
     }
 
     public void generatePDF(final Application application, final Applicant applicant) throws IOException {
+        document = new DocumentWithBachelor();
         addApplicationInfoToPDF(application);
         addApplicantInfoToPDF(applicant);
-        addGeneralInfos();
-    }
-
-    private void addGeneralInfos() throws IOException {
-        document.setField("Tutorentätigkeit", "On");
+        document.addGeneralInfos();
     }
 
     private void addApplicationInfoToPDF(final Application application) throws IOException {
