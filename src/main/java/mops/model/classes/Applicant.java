@@ -19,6 +19,7 @@ public class Applicant {
     private final String title;
     private final String firstName;
     private final String surname;
+    private final String nameSuffix;
     private final Address address;
     private final String gender;
     private final String birthday;
