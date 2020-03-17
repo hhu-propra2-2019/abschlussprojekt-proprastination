@@ -1,6 +1,5 @@
 package mops.db.dto;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.Data;
 import org.springframework.data.annotation.Id;

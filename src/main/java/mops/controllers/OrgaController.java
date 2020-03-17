@@ -1,11 +1,7 @@
 package mops.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import mops.db.dto.ApplicantDTO;
 import mops.model.Account;
-import mops.model.classes.Applicant;
 import mops.services.ApplicantService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
@@ -14,11 +10,15 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.annotation.SessionScope;
 
 import java.awt.desktop.AppReopenedListener;
 import java.sql.SQLException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 
 @SessionScope
 @Controller
@@ -51,33 +51,56 @@ public class OrgaController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
-        Applicant applicant = Applicant.builder().name("Rot").birthday("01.01.2020").course("ProPra").build();
+        return "organizer/orgaMain";
+    }
 
-        ObjectMapper mapper = new ObjectMapper();
-        ApplicantDTO dto = new ApplicantDTO();
-        dto.setUsername("Tom");
-        dto.setDetails(mapper.writeValueAsString(applicant));
-        applicantService.save(dto);
-        System.out.println(dto.getUsername());
-
-        //Iterable<ApplicantDTO> iter = applicantService.getAllIterable();
-        System.out.println(applicantService.getAll());
-
-
-        Applicant applicant1 = applicantService.findByUsername(dto.getUsername());
-        System.out.println(applicant1);
-        applicantService.save(applicant1, dto.getUsername());
-        applicantService.save(applicant1, null);
-        dto = applicantService.find(dto.getUsername());
-
-        /*for (ApplicantDTO s : iter) {
-            System.out.println(s);
-        }*/
-
-
-        return "orgaMain";
+    /**
+     * PostMapping to save changes
+     * @param token
+     * @param model
+     * @param priority
+     * @param hours
+     * @param comment
+     * @return orgaMain.html rendered as a String
+     * @throws JsonProcessingException
+     */
+    @PostMapping("/")
+    //@Secured("ROLE orga")
+    public String save(final KeycloakAuthenticationToken token, final Model model,
+                       @RequestParam("priority") final String priority,
+                       @RequestParam("hours") final String hours,
+                       @RequestParam("comment") final String comment) throws JsonProcessingException {
+        if (token != null) {
+            model.addAttribute("account", createAccountFromPrincipal(token));
+        }
+        return "organizer/orgaMain";
     }
 
 
+    /**
+     * Shows overview of applications for a module.
+     * @param token
+     * @param model
+     * @return orgaOverview.html as String
+     */
+    @GetMapping("/overview")
+    @Secured("ROLE_orga")
+    public String overview(final KeycloakAuthenticationToken token, final Model model) {
+        if (token != null) {
+            model.addAttribute("account", createAccountFromPrincipal(token));
+        }
+        return "organizer/orgaOverview";
+    }
+
+    /**
+     * Needed to display additional information about each application on the overview page.
+     * (Inside a modal / popup window.)
+     * @return "applicationModalContent", the HTML file with the modal content.
+     */
+    @GetMapping("/modal")
+    @Secured("ROLE_orga")
+    public String applicationInfo() {
+        return "organizer/applicationModalContent";
+    }
 
 }

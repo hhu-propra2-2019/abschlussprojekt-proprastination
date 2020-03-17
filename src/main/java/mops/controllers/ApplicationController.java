@@ -10,6 +10,7 @@ import mops.services.ApplicantService;
 import mops.services.CSVService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +27,9 @@ import java.util.List;
 @SessionScope
 @RequestMapping("/bewerbung2/bewerber")
 public class ApplicationController {
+
+    @Autowired
+    private ApplicantService applicantServiceservice;
 
     private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
         KeycloakPrincipal principal = (KeycloakPrincipal) token.getPrincipal();
@@ -50,7 +54,7 @@ public class ApplicationController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
-        return "applicantMain";
+        return "applicant/applicantMain";
     }
 
     /**
@@ -70,7 +74,7 @@ public class ApplicationController {
             model.addAttribute("courses", CSVService.getCourses());
             model.addAttribute("modules", CSVService.getModules());
         }
-        return "applicationPersonal";
+        return "applicant/applicationPersonal";
     }
 
     /**
@@ -86,7 +90,7 @@ public class ApplicationController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
-        return "openAppl";
+        return "applicant/openAppl";
     }
 
     /**
@@ -102,7 +106,7 @@ public class ApplicationController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
-        return "personal";
+        return "applicant/personal";
     }
 
 
@@ -155,7 +159,7 @@ public class ApplicationController {
                     address, birthday, nationality, course, null, null, applications);
             model.addAttribute("applicant", applicant);
         }
-        return "applicationModule";
+        return "applicant/applicationModule";
     }
 
     /**
@@ -243,9 +247,8 @@ public class ApplicationController {
                     Integer.parseInt(workload),
                     Double.parseDouble(grade),
                     Role.KORREKTOR);
-           // applicant.getApplications().add(application);
         }
-        return "applicationOverview";
+        return "applicant/applicationOverview";
     }
 
 
@@ -262,7 +265,7 @@ public class ApplicationController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
-        return "applicationEditPersonal";
+        return "applicant/applicationEditPersonal";
     }
 
     /**
@@ -278,6 +281,6 @@ public class ApplicationController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
-        return "applicationEditPersonal";
+        return "applicant/applicationEditPersonal";
     }
 }

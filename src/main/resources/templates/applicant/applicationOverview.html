@@ -46,7 +46,7 @@
                         <div class="col-6">
                             <div class="row">
                                 <label for="name">Name:&nbsp;</label>
-                                <label id="name">Max Mustermann</label>
+                                <label id="name" th:text="${applicant.name}">Max Mustermann</label>
                             </div>
                             <div class="row">
                                 <label for="email">E-Mail:&nbsp;</label>
@@ -54,33 +54,33 @@
                             </div>
                             <div class="row">
                                 <label for="streetplusnumber">Straße und Hausnummer:&nbsp;</label>
-                                <label id="streetplusnumber">Musterstraße 1</label>
+                                <label id="streetplusnumber" th:text="${applicant.address.street}">Musterstraße 1</label>
                             </div>
                             <div class="row">
                                 <label for="place">Ort:&nbsp;</label>
-                                <label id="place">Musterhausen</label>
+                                <label id="place" th:text="${applicant.address.city}">Musterhausen</label>
                             </div>
                             <div class="row">
                                 <label for="plz">Postleitzahl:&nbsp;</label>
-                                <label id="plz">12345</label>
+                                <label id="plz" th:text="${applicant.address.zipcode}">12345</label>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="row">
                                 <label for="subject">Studienfach:&nbsp;</label>
-                                <label id="subject">Informatik</label>
+                                <label id="subject" th:text="${applicant.course}">Informatik</label>
                             </div>
                             <div class="row">
                                 <label for="status">Angestelltenstatus:&nbsp;</label>
-                                <label id="status">Neueinstellung</label>
+                                <label id="status" th:text="${applicant.status}">Neueinstellung</label>
                             </div>
                             <div class="row">
                                 <label for="graduation">Bereits erreichter Universitätsabschluss:&nbsp;</label>
-                                <label id="graduation">Bachelor</label>
+                                <label id="graduation" th:text="${applicant.certs.name}">Bachelor</label>
                             </div>
                             <div class="row">
                                 <label for="graduationsubject">Berreits Abgeschlossenes Fach:&nbsp;</label>
-                                <label id="graduationsubject">BWL</label>
+                                <label id="graduationsubject" th:text="${applicant.certs.university}">BWL</label>
                             </div>
                             <div class="row">
                                 <label for="information">Ihre sonstigen Angaben:&nbsp;</label>
@@ -94,37 +94,40 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-4">
-                <div class="card bg-light mb-3 border-primary">
+            <div class="col-sm-4" th:each="appl: ${applicant.applications}">
+                <div class="card bg-light mb-3 border-primary" >
                     <div class="card-header">
-                        <label><h3>[Modulname]</h3></label>
+                        <label class="" th:title="${appl.module}" th:text="${appl.module}"
+                               style="text-overflow: ellipsis; overflow: hidden; width: 60%; white-space: nowrap">
+                            Programmierung (Früher: Grundlagen der Informatik)
+                        </label>
                         <a th:href="@{bearbeiteModulDaten}" class="btn btn-outline-primary" style="float: right;"> Bearbeiten </a>
                     </div>
                     <div class="card-body">
                         <div class="col-auto">
                             <div class="row">
                                 <label for="worktime">Arbeitszeit:&nbsp;</label>
-                                <label id="worktime">24/7</label>
+                                <label id="worktime" th:text="${appl.hours}">24/7</label>
                             </div>
                             <div class="row">
                                 <label for="grade">Note:&nbsp;</label>
-                                <label id="grade">1,0</label>
+                                <label id="grade" th:text="${appl.grade}">1,0</label>
                             </div>
                             <div class="row">
                                 <label for="semester">Semester:&nbsp;</label>
-                                <label id="semester">SoSe20</label>
+                                <label id="semester" th:text="${appl.semester}">SoSe20</label>
                             </div>
                             <div class="row">
                                 <label for="lecturer">Dozent:&nbsp;</label>
-                                <label id="lecturer">Musterprof</label>
+                                <label id="lecturer" th:text="${appl.lecturer}">Musterprof</label>
                             </div>
                             <div class="row">
                                 <label for="task">Aufgabe:&nbsp;</label>
-                                <label id="task">Korrektor</label>
+                                <label id="task" th:text="${appl.role}">Korrektor</label>
                             </div>
                             <div class="row">
                                 <label for="priority">Priorität:&nbsp;</label>
-                                <label id="priority">++</label>
+                                <label id="priority" th:text="${appl.priority}">++</label>
                             </div>
                         </div>
                     </div>
