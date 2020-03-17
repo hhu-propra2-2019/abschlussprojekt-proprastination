@@ -10,26 +10,29 @@ class AddressTest {
     void testToString() {
         Address address = Address.builder()
                 .city("Düsseldorf")
-                .street("Universitätsstraße 1")
+                .street("Universitätsstraße")
+                .houseNumber("1")
                 .zipcode(40225)
                 .country("Germany")
                 .build();
 
-        assertThat(address.toString()).isEqualTo("Address(street=Universitätsstraße 1, city=Düsseldorf, country=Germany, zipcode=40225)");
+        assertThat(address.toString()).isEqualTo("Address(street=Universitätsstraße, houseNumber=1, city=Düsseldorf, country=Germany, zipcode=40225)");
     }
 
     @Test
     void testBuilder() {
         Address address = Address.builder()
                 .city("Düsseldorf")
-                .street("Universitätsstraße 1")
+                .street("Universitätsstraße")
+                .houseNumber("1")
                 .zipcode(40225)
                 .country("Germany")
                 .build();
 
         assertThat(address)
                 .hasFieldOrPropertyWithValue("city", "Düsseldorf")
-                .hasFieldOrPropertyWithValue("street", "Universitätsstraße 1")
+                .hasFieldOrPropertyWithValue("street", "Universitätsstraße")
+                .hasFieldOrPropertyWithValue("houseNumber", "1")
                 .hasFieldOrPropertyWithValue("zipcode", 40225)
                 .hasFieldOrPropertyWithValue("country", "Germany");
     }
@@ -38,14 +41,16 @@ class AddressTest {
     void testEquals() {
         Address address1 = Address.builder()
                 .city("Düsseldorf")
-                .street("Universitätsstraße 1")
+                .street("Universitätsstraße")
+                .houseNumber("1")
                 .zipcode(40225)
                 .country("Germany")
                 .build();
 
         Address address2 = Address.builder()
                 .city("Düsseldorf")
-                .street("Universitätsstraße 1")
+                .street("Universitätsstraße")
+                .houseNumber("1")
                 .zipcode(40225)
                 .country("Germany")
                 .build();

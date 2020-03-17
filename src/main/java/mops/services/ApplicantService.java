@@ -91,7 +91,7 @@ public class ApplicantService {
                                      final Certificate certs,
                                      final List<Application> applications) {
         return Applicant.builder()
-                .name(name)
+                .surname(name)
                 .birthplace(birthplace)
                 .address(address)
                 .birthday(birthday)

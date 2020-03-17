@@ -16,11 +16,14 @@ import java.util.List;
 @ToString
 @JsonDeserialize(builder = Applicant.ApplicantBuilder.class)
 public class Applicant {
-    private final String name;
-    private final String birthplace;
+    private final String title;
+    private final String firstName;
+    private final String surname;
     private final Address address;
+    private final String gender;
     private final String birthday;
     private final String nationality;
+    private final String birthplace;
     private final String course;
     private final Status status;
     private final Certificate certs;
