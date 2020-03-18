@@ -1,6 +1,7 @@
 package mops.services;
 
 import org.junit.After;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -13,7 +14,7 @@ class CSVServiceTest{
     @Autowired
     CSVService service;
 
-    @After
+    @AfterEach
     void cleanTestCSV(){
         try {
             new FileWriter("src/test/java/mops/test.csv").close();
