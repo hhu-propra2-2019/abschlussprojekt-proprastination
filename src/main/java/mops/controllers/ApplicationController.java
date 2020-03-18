@@ -69,12 +69,16 @@ public class ApplicationController {
     @Secured("ROLE_studentin")
     public String newAppl(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
+            Applicant applicant = Applicant.builder().build();
+            Address address = Address.builder().build();
+            model.addAttribute("applicant", applicant);
+            model.addAttribute("address", address);
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("countries", CSVService.getCountries());
             model.addAttribute("courses", CSVService.getCourses());
             model.addAttribute("modules", CSVService.getModules());
         }
-        return "applicant/applicationPersonal";
+        return "applicant/applicationPersonalThymeleaf";
     }
 
     /**
