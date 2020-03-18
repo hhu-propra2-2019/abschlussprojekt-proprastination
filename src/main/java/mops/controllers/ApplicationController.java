@@ -2,7 +2,12 @@
 package mops.controllers;
 
 import mops.model.Account;
-import mops.model.classes.*;
+import mops.model.classes.Address;
+import mops.model.classes.Applicant;
+import mops.model.classes.Application;
+import mops.model.classes.Certificate;
+import mops.model.classes.Role;
+import mops.model.classes.Status;
 import mops.services.ApplicantService;
 import mops.services.CSVService;
 import org.keycloak.KeycloakPrincipal;
@@ -11,7 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.ArrayList;
@@ -191,7 +200,7 @@ public class ApplicationController {
      * @return The HTML file rendered as a String
      */
 
-    @PostMapping("/uebersicht")
+    @PostMapping("/uebersichtDashboard")
     public String saveOverview(final KeycloakAuthenticationToken token, final Model model,
                                @ModelAttribute("applicant1") final Applicant applicant1) {
         if (token != null) {
