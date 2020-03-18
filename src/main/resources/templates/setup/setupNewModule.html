@@ -27,8 +27,8 @@
                 </a>
             </li>
             <li>
-                <a th:href="@{setupNewModule}">
-                    Neues Modul
+                <a th:href="@{setupMain}">
+                    Dashboard
                 </a>
             </li>
         </ul>
@@ -38,12 +38,10 @@
 <main th:fragment="bodycontent">
     <div class="card">
         <div class="card-header">
-            Modul #0
+            Neues Modul
         </div>
         <div class="card-body">
-            <h2 class="card-title">Modulname</h2>
-            <p class="card-text">Hier müssen die Module mit Thymeleaf eingesetzt werden.</p>
-            <a th:href="@{setupNewModule}" class="btn btn-primary">Neues Modul</a>
+            <button class="btn btn-primary">Speichern</button>
         </div>
     </div>
     <div th:replace="${content} ? ${content}: ~{}"></div>

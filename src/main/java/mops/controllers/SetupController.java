@@ -41,4 +41,34 @@ public class SetupController {
         }
         return "setup/setupMain";
     }
+
+    /**
+     * Get Mapping for the creating a new module
+     * @param token The KeycloakAuthentication
+     * @param model The Website model
+     * @return The HTML file rendered as a String
+     */
+    @GetMapping("/setupMain")
+    @Secured("ROLE_setup")
+    public String dashboard(final KeycloakAuthenticationToken token, final Model model) {
+        if (token != null) {
+            model.addAttribute("account", createAccountFromPrincipal(token));
+        }
+        return "setup/setupMain";
+    }
+
+    /**
+     * Get Mapping for the creating a new module
+     * @param token The KeycloakAuthentication
+     * @param model The Website model
+     * @return The HTML file rendered as a String
+     */
+ @GetMapping("/setupNewModule")
+ @Secured("ROLE_setup")
+    public String newModule(final KeycloakAuthenticationToken token, final Model model) {
+        if (token != null) {
+            model.addAttribute("account", createAccountFromPrincipal(token));
+        }
+        return "setup/setupNewModule";
+    }
 }
