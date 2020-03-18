@@ -305,7 +305,7 @@ public class ApplicationController {
     public String dashboardOverview(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
-            model.addAttribute("applicant", applicantServiceservice.findByUsername("has220"));
+            model.addAttribute("applicant", applicantService.findByUniserial("has220"));
         }
         return "applicant/applicationOverview";
     }
