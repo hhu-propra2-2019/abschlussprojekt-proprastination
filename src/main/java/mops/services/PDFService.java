@@ -5,6 +5,8 @@ import mops.model.DocumentWithBachelor;
 import mops.model.classes.Address;
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -14,6 +16,8 @@ import java.util.UUID;
 @Service
 public class PDFService {
 
+    private Logger logger = LoggerFactory.getLogger(PDFService.class);
+
     private Document document;
 
     /**
@@ -22,16 +26,22 @@ public class PDFService {
      * @param application Application.
      * @param applicant   Applicant.
      * @return filepath to file.
-     * @throws IOException If Document could not be generated.
      */
-    public String generatePDF(final Application application, final Applicant applicant) throws IOException {
+    public String generatePDF(final Application application, final Applicant applicant) {
         UUID uuid = UUID.randomUUID();
         String filepath = "/tmp" + uuid.toString() + ".pdf";
-        document = new DocumentWithBachelor();
-        addApplicationInfoToPDF(application);
-        addApplicantInfoToPDF(applicant);
-        document.addGeneralInfos();
-        document.save(new File(filepath));
+
+        try {
+            document = new DocumentWithBachelor();
+            addApplicationInfoToPDF(application);
+            addApplicantInfoToPDF(applicant);
+            document.addGeneralInfos();
+            document.save(new File(filepath));
+            logger.debug("Saved PDF to:" + filepath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            logger.error("Saving PDF failed to path: " + filepath);
+        }
         return filepath;
     }
 
