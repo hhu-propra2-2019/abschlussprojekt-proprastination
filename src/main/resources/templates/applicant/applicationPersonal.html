@@ -46,7 +46,8 @@
                                    class="form-control" placeholder="Ort" required> <br>
                         </div>
                         <div class="col-2">
-                            <input type="text" name="plz" id="plz" class="form-control" placeholder="Postleitzahl" required> <br>
+                            <input type="text" name="plz" id="plz" class="form-control" placeholder="Postleitzahl"
+                                   pattern="^\d{5}$" minlength="5" maxlength="5" required> <br>
                         </div>
                     </div>
                     <div class="row">
@@ -145,7 +146,7 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <textarea name="diverse" id="diverse" class="form-control" rows="6"></textarea> <br>
+                            <textarea name="diverse" id="diverse" class="form-control" rows="6" maxlength="1000"></textarea> <br>
                         </div>
                     </div>
                 </div>
