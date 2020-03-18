@@ -37,7 +37,8 @@ public class SetupController {
     public String index(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
-            //model.addAttribute("modules", CSVService.)
+            model.addAttribute("modules", CSVService.getModules());
+            model.addAttribute("limits", CSVService.getLimits());
         }
         return "setup/setupMain";
     }
