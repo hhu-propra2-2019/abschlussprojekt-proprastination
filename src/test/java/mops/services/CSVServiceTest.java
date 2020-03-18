@@ -5,6 +5,7 @@ import com.opencsv.exceptions.CsvException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.w3c.dom.ls.LSInput;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -139,20 +140,60 @@ class CSVServiceTest{
         assertThat(profs.get(1)).isEqualTo("Christian Meter");
         assertThat(profs.get(2)).isEqualTo("Anna Wintour");
     }
-
     @Test
-    void getProfForModuleTest() {
+    void getProfForModuleTestNotFail() {
+        String prof;
+
+        prof = service.getProfForModule("RDB");
+
+        assertThat(prof).isEqualTo("Jens Bendisposto");
     }
 
     @Test
-    void getModuleForProfTest() {
+    void getProfForModuleTestFail() {
+        String prof;
+
+        prof = service.getProfForModule("RDBBBB");
+
+        assertThat(prof).isEqualTo("Not found");
+    }
+
+    @Test
+    void getModulesForProfTest() {
+        List<String> modules;
+
+        modules = service.getModulesForProf("Anna Wintour");
+
+        assertThat(modules.get(0)).isEqualTo("Theoretische Informatik");
     }
 
     @Test
     void getCourses() {
+        List<String> courses;
+        String csvname = "src/main/resources/csv/courses.csv";
+        List<String[]> data = service.readFromCSV(csvname);
+
+        courses = service.getCourses();
+
+        assertThat(courses.size()).isEqualTo(60);
+        for (int i = 0; i<courses.size();i++) {
+            String[] tmp = data.get(i);
+            assertThat(courses.get(i)).isEqualTo(tmp[0]);
+        }
     }
 
     @Test
-    void getSemester() {
+    void getSemesterTest() {
+        List<String> semester;
+        String csvname = "src/main/resources/csv/semester.csv";
+        List<String[]> data = service.readFromCSV(csvname);
+
+        semester = service.getSemester();
+
+        assertThat(semester.size()).isEqualTo(29);
+        for (int i = 0; i<semester.size();i++) {
+            String[] tmp = data.get(i);
+            assertThat(semester.get(i)).isEqualTo(tmp[0]);
+        }
     }
 }

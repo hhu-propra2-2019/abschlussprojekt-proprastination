@@ -153,7 +153,7 @@ public class CSVService {
      * @param profName name of the professor/organizer
      */
 
-    public static List<String> getModuleForProf(final String profName) {
+    public static List<String> getModulesForProf(final String profName) {
         List<String> list = new ArrayList<>();
         List<String[]> profs = readFromCSV("src/main/resources/csv/module.csv");
         String[] strArr;
