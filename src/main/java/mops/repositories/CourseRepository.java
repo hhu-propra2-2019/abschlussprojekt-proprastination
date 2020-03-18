@@ -1,4 +1,4 @@
-package mops.db.repositories;
+package mops.repositories;
 
 import mops.model.classes.Course;
 import org.springframework.data.repository.CrudRepository;
