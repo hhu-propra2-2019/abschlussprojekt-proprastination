@@ -241,5 +241,25 @@ public class ApplicantService {
         return applicant;
     }
 
+    /**
+     * overrides applicant data without the applications
+     *
+     * @param applicant
+     * @param username
+     * @return updated applicant data
+     */
 
+    public Applicant overrideApplicantWithoutApplications(final Applicant applicant, final String username) {
+        Applicant.ApplicantBuilder applicantBuilder = applicant.toBuilder();
+        Applicant applicant1 = applicantBuilder
+                .birthday(applicant.getBirthplace())
+                .address(applicant.getAddress())
+                .birthday(applicant.getBirthday())
+                .nationality(applicant.getNationality())
+                .course(applicant.getCourse())
+                .status(applicant.getStatus())
+                .certs(applicant.getCerts())
+                .build();
+        return applicant1;
+    }
 }
