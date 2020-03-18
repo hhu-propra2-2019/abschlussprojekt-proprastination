@@ -109,6 +109,25 @@ public class ApplicationController {
         return "applicant/personal";
     }
 
+    /**
+     *
+     * @param token
+     * @param model
+     * @return dummyhtml
+     */
+    @GetMapping("/dummy")
+    public String getDummy(final KeycloakAuthenticationToken token, final Model model) {
+        Applicant applicant = Applicant.builder().build();
+        model.addAttribute("applicant", applicant);
+        return "applicant/dummy";
+    }
+
+    @PostMapping("/postdummy")
+    public String postdummy(final Applicant applicant, final Model model) {
+        model.addAttribute("applicant", applicant);
+        return "applicant/postdummy";
+    }
+
 
     /**
      * Post Mapping after Pers Data (saves the applicant and provides input for module)
