@@ -16,14 +16,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.hamcrest.collection.IsEmptyCollection;
-
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
-import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 class CSVServiceTest{
     @Autowired
     CSVService service;
@@ -67,6 +59,13 @@ class CSVServiceTest{
 
     @Test
     void readLimitsFromCSV() {
+        List<String> limits;
 
+        limits = service.getHourLimits();
+
+        assertThat(limits.size()).isEqualTo(3);
+        assertThat(limits.get(0)).isEqualTo("40");
+        assertThat(limits.get(1)).isEqualTo("0");
+        assertThat(limits.get(2)).isEqualTo("80");
     }
 }

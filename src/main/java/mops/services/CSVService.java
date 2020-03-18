@@ -84,16 +84,84 @@ public class CSVService {
     }
 
     /**
-     * return hour or person limit for modules
+     * return hour limit for modules
      * @return List of all limits
      */
-    public static List<String> getLimits() {
+    public static List<String> getHourLimits() {
         List<String> list = new ArrayList<>();
         List<String[]> limits = readFromCSV("src/main/resources/csv/module.csv");
         String[] strArr;
         for (int i = 0; i < limits.size(); i++) {
             strArr = limits.get(i);
+            list.add(strArr[2]);
+        }
+        return list;
+    }
+
+    /**
+     * get the limit of workers allowed on a module
+     * @return limit of workers as list
+     */
+
+    public static List<String> getPersonLimits() {
+        List<String> list = new ArrayList<>();
+        List<String[]> limits = readFromCSV("src/main/resources/csv/module.csv");
+        String[] strArr;
+        for (int i = 0; i < limits.size(); i++) {
+            strArr = limits.get(i);
+            list.add(strArr[3]);
+        }
+        return list;
+    }
+
+    /**
+     * Get persons responsible for modules
+     * @return responsible persons as list
+     */
+
+    public static List<String> getModuleProfs() {
+        List<String> list = new ArrayList<>();
+        List<String[]> profs = readFromCSV("src/main/resources/csv/module.csv");
+        String[] strArr;
+        for (int i = 0; i < profs.size(); i++) {
+            strArr = profs.get(i);
             list.add(strArr[1]);
+        }
+        return list;
+    }
+    /**
+     * Get person responsible for single module
+     * @return responsible person as String
+     * @param moduleName name of the module
+     */
+
+    public static String getProfForModule(final String moduleName) {
+        List<String> list = new ArrayList<>();
+        List<String[]> data = readFromCSV("src/main/resources/csv/module.csv");
+        String[] strArr;
+        for (int i = 0; i < data.size(); i++) {
+            strArr = data.get(i);
+            if (strArr[0].equals(moduleName)) {
+                return strArr[1];
+            }
+        }
+        return "Not found";
+    }
+    /**
+     * Get modules asserted to prof/organizer
+     * @return modules as list
+     * @param profName name of the professor/organizer
+     */
+
+    public static List<String> getModuleForProf(final String profName) {
+        List<String> list = new ArrayList<>();
+        List<String[]> profs = readFromCSV("src/main/resources/csv/module.csv");
+        String[] strArr;
+        for (int i = 0; i < profs.size(); i++) {
+            strArr = profs.get(i);
+            if (strArr[1].equals(profName)) {
+                list.add(strArr[0]);
+            }
         }
         return list;
     }

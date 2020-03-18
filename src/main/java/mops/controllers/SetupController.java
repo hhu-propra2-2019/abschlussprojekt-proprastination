@@ -38,7 +38,9 @@ public class SetupController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("modules", CSVService.getModules());
-            model.addAttribute("limits", CSVService.getLimits());
+            model.addAttribute("profs", CSVService.getModuleProfs());
+            model.addAttribute("hourLimits", CSVService.getHourLimits());
+            model.addAttribute("personLimits", CSVService.getPersonLimits());
         }
         return "setup/setupMain";
     }
