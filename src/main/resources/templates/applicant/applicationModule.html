@@ -41,7 +41,8 @@
                             <label for="workload">
                                 Geben Sie bitte an wie viele Stunden pro Woche sie arbeiten möchten
                             </label> <br>
-                            <select name="workload" id="workload" class="form-control">
+                            <select name="workload" id="workload" class="form-control" required>
+                                <option value="" disabled selected hidden>Arbeitszeit</option>
                                 <option value="7">7 Stunden/Woche</option>
                                 <option value="9">9 Stunden/Woche</option>
                                 <option value="17">17 Stunden/Woche</option>
@@ -49,7 +50,8 @@
                         </div>
                         <div class="col">
                             <label for="grade">Geben die von Ihnen in diesem Modul erreichte Note an</label> <br>
-                            <select name="grade" id="grade" class="form-control">
+                            <select name="grade" id="grade" class="form-control" required>
+                                <option value="" disabled selected hidden>Note</option>
                                 <option value="10">1,0</option>
                                 <option value="13">1,3</option>
                                 <option value="17">1,7</option>
@@ -67,21 +69,24 @@
                     <div class="row">
                         <div class="col">
                             <label for="semesters">In welchem Semester haben Sie dieses Modul bestanden</label> <br>
-                            <select name="semesters" id="semesters" class="form-control">
+                            <select name="semesters" id="semesters" class="form-control" required>
+                                <option disabled selected hidden>Semester</option>
                                 <option th:each="semester:${semesters}" th:text="${semester}"></option>
                             </select>
                             <br>
                         </div>
                         <div class="col">
                             <label for="lecturer">Bei welchem Dozent haben Sie dieses Modul bestanden</label> <br>
-                            <input type="text" name="lecturer" id="lecturer" class="form-control" placeholder="Dozent">
+                            <input type="text" name="lecturer" id="lecturer" class="form-control" placeholder="Dozent"
+                            required>
                             <br>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
                             <label for="tasks">Welche Aufgaben möchten Sie übernehmen</label> <br> <br>
-                            <select name="tasks" id="tasks" class="form-control">
+                            <select name="tasks" id="tasks" class="form-control" required>
+                                <option value="" disabled selected hidden>Aufgaben</option>
                                 <option value="corrctor">Korrektor</option>
                                 <option value="correctorandtutor">Korrektor und Tutor</option>
                                 <option value="nomatter">Ist mir egal</option>
@@ -92,10 +97,12 @@
                                 Geben Sie bitte hier ihre Priorität für dieses Modul an,
                                 falls sie vor haben sich noch bei anderen Modulen zu bewerben
                             </label> <br>
-                            <select name="priority" id="priority" class="form-control">
+                            <select name="priority" id="priority" class="form-control" required>
+                                <option value="" disabled selected hidden>Priorität</option>
                                 <option value="1">++</option>
                                 <option value="2">+</option>
                                 <option value="3">o</option>
+                                <option value="3">-</option>
                             </select> <br>
                         </div>
                     </div>
@@ -112,6 +119,7 @@
                         </div>
                         <div class="col-4">
                             <select name="modules" id="modules" class="form-control">
+                                <option value="" disabled selected hidden>Modulname</option>
                                 <option th:each="module:${modules}" th:text="${module}"></option>
                             </select>
                         </div>
