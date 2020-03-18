@@ -250,9 +250,10 @@ public class ApplicantService {
      */
 
     public Applicant overrideApplicantWithoutApplications(final Applicant applicant, final String username) {
-        Applicant.ApplicantBuilder applicantBuilder = applicant.toBuilder();
+        Applicant applicant0 = findByUsername(username);
+        Applicant.ApplicantBuilder applicantBuilder = applicant0.toBuilder();
         Applicant applicant1 = applicantBuilder
-                .birthday(applicant.getBirthplace())
+                .birthplace(applicant.getBirthplace())
                 .address(applicant.getAddress())
                 .birthday(applicant.getBirthday())
                 .nationality(applicant.getNationality())
