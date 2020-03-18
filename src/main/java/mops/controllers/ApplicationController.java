@@ -4,6 +4,7 @@ import mops.model.Account;
 import mops.model.classes.Address;
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
+import mops.model.classes.Certificate;
 import mops.services.ApplicantService;
 import mops.services.CSVService;
 import org.keycloak.KeycloakPrincipal;
@@ -171,7 +172,6 @@ public class ApplicationController {
 
 
     /**
-     *
      * @param token
      * @param model
      * @param street
@@ -211,24 +211,22 @@ public class ApplicationController {
                     build();
             Certificate cert = Certificate.builder()
                     .name(graduation)
-                    .university(graduationsubject)
+                    .course(graduationsubject)
                     .build();
-            List<Application> appls = new ArrayList<>();
-            Applicant applicant = applicantServiceservice.createApplicant(
-                    "",
-                    birthplace,
-                    address,
-                    birthday,
-                    nationality,
-                    subject,
-                    Status.NEW,
-                    cert,
-                    appls);
-            applicant.toBuilder().birthplace(birthplace);
-            Applicant applicant1 = applicantServiceservice.overrideApplicantWithoutApplications(applicant,
-                    "has220");
-            applicantServiceservice.save(applicant1, "has220");
-            model.addAttribute("applicant", applicantServiceservice.findByUsername("has220"));
+            Set<Application> appls = new HashSet<>();
+            Applicant applicant = Applicant.builder()
+                    .birthplace(birthplace)
+                    .address(address)
+                    .birthday(birthday)
+                    .nationality(nationality)
+                    .course(subject)
+                    .status("New")
+                    .certs(cert)
+                    .uniserial("has220")
+                    .applications(appls)
+                    .build();
+            applicantService.updateApplicantWithouChangingApplications(applicant);
+            model.addAttribute("applicant", applicantService.findByUsername("has220"));
         }
         return "applicant/applicationOverview";
     }
@@ -236,8 +234,8 @@ public class ApplicationController {
     /**
      * The GetMapping for the overview
      *
-     * @param token The KeycloakAuthentication
-     * @param model The Website model
+     * @param token      The KeycloakAuthentication
+     * @param model      The Website model
      * @param applicant1 new Applicant Data
      * @return The HTML file rendered as a String
      */
@@ -247,9 +245,8 @@ public class ApplicationController {
                                @ModelAttribute("applicant1") final Applicant applicant1) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
-            model.addAttribute("applicant", applicantServiceservice.findByUsername("has220"));
-            Applicant applicant = applicantServiceservice.overrideApplicantWithoutApplications(applicant1, "has220");
-            applicantServiceservice.save(applicant, "has220");
+            model.addAttribute("applicant", applicantService.findByUsername("has220"));
+            applicantService.updateApplicantWithouChangingApplications(applicant1);
         }
         return "applicant/applicationOverview";
     }
