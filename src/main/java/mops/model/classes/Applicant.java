@@ -8,8 +8,6 @@ import lombok.Getter;
 import lombok.Singular;
 import lombok.ToString;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.List;
 
 @Builder(builderClassName = "ApplicantBuilder", toBuilder = true)
@@ -19,8 +17,6 @@ import java.util.List;
 @JsonDeserialize(builder = Applicant.ApplicantBuilder.class)
 public class Applicant {
     private final String name;
-    @NotNull
-    @Size(min = 1, message = "Geburtsort ist leer")
     private final String birthplace;
     private final Address address;
     private final String birthday;
