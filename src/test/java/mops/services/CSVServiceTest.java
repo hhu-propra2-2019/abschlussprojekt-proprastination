@@ -2,7 +2,6 @@ package mops.services;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
-import org.junit.After;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,25 @@ class CSVServiceTest{
 
     @Test
     void readFromCSVTest() {
+        String csvName = "src/test/java/mops/test.csv";
+        String[] module1 = {"propra","21"};
+        List<String[]> data = new ArrayList<>();
+        data.add(module1);
+        List<String[]> readData = new ArrayList<>();
+        final Charset charset = Charset.forName("UTF-8");
 
+        service.writeInCSV(csvName,data);
+        readData = service.readFromCSV(csvName);
+
+        try {
+            CSVReader csvReader = new CSVReader(new FileReader(csvName, charset));
+            readData = csvReader.readAll();
+            csvReader.close();
+        } catch (IOException | CsvException e) {
+            e.printStackTrace();
+        }
+        assertThat(readData.size()).isEqualTo(1);
+        assertThat(readData.get(0)).isEqualTo(data.get(0));
     }
 
     @Test
@@ -58,6 +75,36 @@ class CSVServiceTest{
     }
 
     @Test
+    void getCountries() {
+        List<String> countries;
+        String csvname = "src/main/resources/csv/countries.csv";
+        List<String[]> data = service.readFromCSV(csvname);
+
+        countries = service.getCountries();
+
+        assertThat(countries.size()).isEqualTo(197);
+        for (int i = 0; i<countries.size();i++) {
+            String[] tmp = data.get(i);
+            assertThat(countries.get(i)).isEqualTo(tmp[0]);
+        }
+    }
+
+    @Test
+    void getModules() {
+        List<String> modules;
+        String csvname = "src/main/resources/csv/module.csv";
+        List<String[]> data = service.readFromCSV(csvname);
+
+        modules = service.getModules();
+
+        assertThat(modules.size()).isEqualTo(3);
+        for (int i = 0; i<modules.size();i++) {
+            String[] tmp = data.get(i);
+            assertThat(modules.get(i)).isEqualTo(tmp[0]);
+        }
+    }
+
+    @Test
     void readLimitsFromCSV() {
         List<String> limits;
 
@@ -67,5 +114,29 @@ class CSVServiceTest{
         assertThat(limits.get(0)).isEqualTo("40");
         assertThat(limits.get(1)).isEqualTo("0");
         assertThat(limits.get(2)).isEqualTo("80");
+    }
+
+    @Test
+    void getPersonLimits() {
+    }
+
+    @Test
+    void getModuleProfs() {
+    }
+
+    @Test
+    void getProfForModule() {
+    }
+
+    @Test
+    void getModuleForProf() {
+    }
+
+    @Test
+    void getCourses() {
+    }
+
+    @Test
+    void getSemester() {
     }
 }
