@@ -225,15 +225,16 @@ public class ApplicantService {
      */
 
     public Applicant overrideApplicantWithoutApplications(final Applicant applicant, final String username) {
-        Applicant applicant1 = findByUsername(username);
-        applicant.toBuilder()
-                .birthday(applicant1.getBirthplace())
-                .address(applicant1.getAddress())
-                .birthday(applicant1.getBirthday())
-                .nationality(applicant1.getNationality())
-                .course(applicant1.getCourse())
-                .status(applicant1.getStatus())
-                .certs(applicant1.getCerts())
+        Applicant.ApplicantBuilder applicantBuilder = applicant.toBuilder();
+        Applicant applicant1 = applicantBuilder.build();
+        applicantBuilder
+                .birthday(applicant.getBirthplace())
+                .address(applicant.getAddress())
+                .birthday(applicant.getBirthday())
+                .nationality(applicant.getNationality())
+                .course(applicant.getCourse())
+                .status(applicant.getStatus())
+                .certs(applicant.getCerts())
                 .build();
         return applicant1;
     }

@@ -177,6 +177,7 @@ public class ApplicationController {
             Applicant applicant1 = applicantServiceservice.overrideApplicantWithoutApplications(applicant,
                     "has220");
             applicantServiceservice.save(applicant1, "has220");
+            model.addAttribute("applicant", applicantServiceservice.findByUsername("has220"));
         }
         return "applicant/applicationOverview";
     }
