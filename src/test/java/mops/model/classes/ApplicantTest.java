@@ -24,14 +24,15 @@ class ApplicantTest {
                 .university("Harvard")
                 .build();
         address = Address.builder()
-                .street("Baker Street 21B")
+                .street("Baker Street")
+                .houseNumber("21B")
                 .city("London")
                 .country("England")
                 .zipcode(20394)
                 .build();
 
         applicant = Applicant.builder()
-                .name("J")
+                .surname("J")
                 .address(address)
                 .birthday("01.01.2001")
                 .birthplace("Wakanda")
@@ -47,7 +48,7 @@ class ApplicantTest {
     void testBuilder() {
 
         assertThat(applicant)
-                .hasFieldOrPropertyWithValue("name", "J")
+                .hasFieldOrPropertyWithValue("surname", "J")
                 .hasFieldOrPropertyWithValue("birthday", "01.01.2001")
                 .hasFieldOrPropertyWithValue("birthplace", "Wakanda")
                 .hasFieldOrPropertyWithValue("course", "Arts")
@@ -70,7 +71,7 @@ class ApplicantTest {
 
     @Test
     void testToString() {
-        assertThat(applicant.toString()).isEqualTo("Applicant(name=J, birthplace=Wakanda, address=Address(street=Baker Street 21B, city=London, country=England, zipcode=20394), birthday=01.01.2001, nationality=English, course=Arts, status=Status.NEW, certs=Certificate(name=Bachelor, university=Harvard), applications=[Application(applicantusername=hans222, hours=0, module=Divination, priority=0, grade=0.0, lecturer=null, semester=null, comment=null, role=null)])");
+        assertThat(applicant.toString()).isEqualTo("Applicant(title=null, firstName=null, surname=J, nameSuffix=null, address=Address(street=Baker Street, houseNumber=21B, city=London, addressSuffix=null, country=England, zipcode=20394), gender=null, birthday=01.01.2001, nationality=English, birthplace=Wakanda, course=Arts, status=Status.NEW, certs=Certificate(name=Bachelor, university=Harvard), applications=[Application(applicantusername=hans222, hours=0, module=Divination, priority=0, grade=0.0, lecturer=null, semester=null, comment=null, role=null)])");
     }
 
     @Test
