@@ -16,7 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-@Builder
+@Builder(toBuilder = true)
 @EqualsAndHashCode
 @Getter
 @ToString(exclude = "id")

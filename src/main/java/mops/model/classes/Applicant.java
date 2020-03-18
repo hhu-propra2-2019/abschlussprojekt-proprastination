@@ -18,7 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.util.Set;
 
-@Builder
+@Builder(toBuilder = true)
 @EqualsAndHashCode
 @Getter
 @ToString(exclude = "id")
