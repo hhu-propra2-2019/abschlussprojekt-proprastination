@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en"
+      th:replace="~{mopslayout :: html(name='Erstellen der Module', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <th:block th:fragment="headcontent">
+
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+
+        <link href="../static/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"
+              th:href="@{node_modules/bootstrap/dist/css/bootstrap.min.css}">
+
+    </th:block>
+    <title>Organize Applications</title>
+</head>
+
+<body>
+<header>
+    <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
+        <ul>
+            <li>
+                <a th:href="@{/}">
+                    Startseite
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/details}">
+                    Details
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<main th:fragment="bodycontent">
+    <!-- TODO: Check-->
+
+    <!--/*@thymesVar id="content" type="mops"*/-->
+    <div th:replace="${content} ? ${content}: ~{}"></div>
+</main>
+
+</body>
+</html>
