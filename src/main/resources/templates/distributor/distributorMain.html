@@ -18,6 +18,8 @@
 
             function drop(ev) {
                 ev.preventDefault();
+                if (!ev.target.getAttribute("ondrop"))
+                    return false;
                 var data = ev.dataTransfer.getData("text");
                 ev.target.appendChild(document.getElementById(data));
             }
