@@ -9,10 +9,20 @@ import java.util.List;
 
 @Repository
 public interface ApplicantRepository extends CrudRepository<Applicant, Long> {
-    Applicant findByFirstName(String name);
 
+    /**
+     * Finds all Applicants
+     *
+     * @return List of Applicants
+     */
     @Override
     List<Applicant> findAll();
 
+    /**
+     * Finds all Applicants with give uniserial
+     *
+     * @param uniserial Unikennung
+     * @return List of Applicants
+     */
     List<Applicant> findByUniserial(String uniserial);
 }

@@ -11,10 +11,21 @@ public class CourseService {
 
     private final CourseRepository courseRepository;
 
+    /**
+     * Injects the Repository
+     *
+     * @param courseRepository the injected Repository
+     */
+    @SuppressWarnings("checkstyle:HiddenField")
     public CourseService(final CourseRepository courseRepository) {
         this.courseRepository = courseRepository;
     }
 
+    /**
+     * Returns all Courses
+     *
+     * @return List of all courses
+     */
     public List<Course> getCourses() {
         return courseRepository.findAll();
     }
