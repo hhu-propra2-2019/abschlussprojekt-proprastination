@@ -72,5 +72,4 @@ class ApplicantTest {
                 "course=Harvard), applications=[Application(hours=0, module=Divination, priority=0, grade=0.0, lecturer=null, " +
                 "semester=null, role=null, comment=null)])");
     }
-
 }

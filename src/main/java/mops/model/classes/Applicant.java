@@ -1,5 +1,6 @@
 package mops.model.classes;
 
+
 import lombok.*;
 import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.data.relational.core.mapping.Table;
@@ -17,6 +18,7 @@ import java.util.Set;
 @Entity
 @Table
 public class Applicant {
+  
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -24,9 +26,7 @@ public class Applicant {
     private String birthplace;
     private String title;
     private String firstName;
-
     private String surname;
-
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Address address;
     private String gender;
