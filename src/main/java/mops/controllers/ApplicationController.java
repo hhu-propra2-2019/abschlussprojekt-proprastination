@@ -210,7 +210,7 @@ public class ApplicationController {
             System.out.println(applicant);
             System.out.println(application);
         }
-        return "applicationModule";
+        return "applicant/applicationModule";
     }
 
     /**
