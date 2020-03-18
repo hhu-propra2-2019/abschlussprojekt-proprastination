@@ -16,7 +16,7 @@ class AddressTest {
                 .country("Germany")
                 .build();
 
-        assertThat(address.toString()).isEqualTo("Address(street=Universitätsstraße, houseNumber=1, city=Düsseldorf, addressSuffix=null, country=Germany, zipcode=40225)");
+        assertThat(address.toString()).isEqualTo("Address(street=Universitätsstraße, houseNumber=1, city=Düsseldorf, country=Germany, zipcode=40225)");
     }
 
     @Test

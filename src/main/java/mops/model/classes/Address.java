@@ -16,7 +16,6 @@ public class Address {
     private final String street;
     private final String houseNumber;
     private final String city;
-    private final String addressSuffix;
     private final String country;
     private final int zipcode;
 
