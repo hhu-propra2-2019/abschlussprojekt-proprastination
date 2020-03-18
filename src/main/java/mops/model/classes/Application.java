@@ -1,27 +1,36 @@
 package mops.model.classes;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NonNull;
+import lombok.*;
 import org.springframework.data.relational.core.mapping.Table;
 
+
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-
-@Data
 @Builder
+@EqualsAndHashCode
+@Getter
+@ToString(exclude = "id")
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table("APPLICATION")
+@Table
 public class Application {
     @Id
-    private final long id;
-    private final int hours;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+    private int hours;
     @NonNull
-    private final String module;
-    private final int priority;
-    private final double grade;
-    private final String lecturer;
-    private final String semester;
-    private final String role;
+    private String module;
+    private int priority;
+    private double grade;
+    private String lecturer;
+    private String semester;
+    private String role;
+    private String comment;
+
 }
+
+

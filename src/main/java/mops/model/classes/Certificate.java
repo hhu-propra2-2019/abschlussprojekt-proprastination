@@ -1,19 +1,27 @@
 package mops.model.classes;
 
-import lombok.Builder;
-import lombok.Data;
+
+import lombok.*;
 import org.springframework.data.relational.core.mapping.Table;
 
+
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Builder
-@Data
+@EqualsAndHashCode
+@Getter
+@ToString(exclude = "id")
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table("CERTIFICATE")
+@Table
 public class Certificate {
     @Id
-    private final long id;
-    private final String name;
-    private final String course;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+    private String name;
+    private String course;
 }

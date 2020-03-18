@@ -1,20 +1,25 @@
 package mops.model.classes;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import org.springframework.data.relational.core.mapping.Table;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.List;
 
 @Builder
-@Data
+@EqualsAndHashCode
+@Getter
+@ToString(exclude = "id")
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table("DISTRIBUTION")
+@Table
 public class Distribution {
     @Id
-    private final long id;
-    private final String module;
-    private final List<Applicant> employees;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+    private String module;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Applicant> employees;
+
 }

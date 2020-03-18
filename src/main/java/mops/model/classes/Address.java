@@ -1,22 +1,30 @@
 package mops.model.classes;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import org.springframework.data.relational.core.mapping.Table;
 
+
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+
 @Builder
-@Data
+@EqualsAndHashCode
+@Getter
+@ToString(exclude = "id")
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table("ADDRESS")
+@Table
 public class Address {
     @Id
-    private final long id;
-    private final String street;
-    private final String houseNumber;
-    private final String city;
-    private final String country;
-    private final int zipcode;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+    private String street;
+    private String houseNumber;
+    private String city;
+    private String country;
+    private int zipcode;
 }
