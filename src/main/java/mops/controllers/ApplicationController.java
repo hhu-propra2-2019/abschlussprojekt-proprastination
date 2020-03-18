@@ -160,6 +160,7 @@ public class ApplicationController {
                     .surname(token.getName())
                     .birthplace(birthplace)
                     .birthday(birthday)
+                    .address(address)
                     .nationality(nationality)
                     .course(course)
                     .applications(applications)

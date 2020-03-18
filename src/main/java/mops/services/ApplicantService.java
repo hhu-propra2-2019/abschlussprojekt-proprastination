@@ -60,7 +60,7 @@ public class ApplicantService {
      */
     public void updateApplicantWithouChangingApplications(final Applicant newApplicant) {
         Applicant oldApplicant = findByUniserial(newApplicant.getUniserial());
-        Applicant generatedApplicant = Applicant.builder()
+        saveApplicant(Applicant.builder()
                 .applications(oldApplicant.getApplications())
                 .uniserial(newApplicant.getUniserial())
                 .certs(newApplicant.getCerts())
@@ -75,6 +75,6 @@ public class ApplicantService {
                 .surname(newApplicant.getSurname())
                 .firstName(newApplicant.getFirstName())
                 .gender(newApplicant.getGender())
-                .build();
+                .build());
     }
 }
