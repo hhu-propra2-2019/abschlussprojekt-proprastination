@@ -32,7 +32,6 @@ checkstyle {
     toolVersion '8.28'
     checkstyleTest.enabled = false
     configFile file("$configDir/checkstyle/proprastination_checks.xml")
-    checkstyleTest.enabled = false
 }
 
 tasks.withType(com.github.spotbugs.SpotBugsTask) {
