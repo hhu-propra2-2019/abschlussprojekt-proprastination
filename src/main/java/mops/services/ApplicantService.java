@@ -13,28 +13,53 @@ public class ApplicantService {
 
     private final ApplicantRepository applicantRepository;
 
+    /**
+     * Lets Spring inject the Repository
+     *
+     * @param applicantRepository the injected Repository
+     */
+    @SuppressWarnings("checkstyle:HiddenField")
     public ApplicantService(final ApplicantRepository applicantRepository) {
         this.applicantRepository = applicantRepository;
     }
 
-    public Applicant findByUsername(final String username) {
-        return applicantRepository.findByFirstName(username);
-    }
-
+    /**
+     * Saves or Updates Applicant to Repository
+     *
+     * @param applicant the new Applicant
+     */
     public void saveApplicant(final Applicant applicant) {
         applicantRepository.save(applicant);
     }
 
+    /**
+     * Finds all Applicants
+     *
+     * @return List of Applicants
+     */
     public List<Applicant> findAll() {
         return applicantRepository.findAll();
     }
 
+    /**
+     * Finds first applicant with give uniserial
+     * uniserial should be unique, so only the
+     * first result is returned
+     *
+     * @param uniserial Unikennung
+     * @return the Applicant found
+     */
     public Applicant findByUniserial(final String uniserial) {
         return applicantRepository.findByUniserial(uniserial).get(0);
     }
 
+    /**
+     * Updates Applicant without changing his applications
+     *
+     * @param newApplicant The Object containing the new information
+     */
     public void updateApplicantWithouChangingApplications(final Applicant newApplicant) {
-        Applicant oldApplicant = findByUsername(newApplicant.getUniserial());
+        Applicant oldApplicant = findByUniserial(newApplicant.getUniserial());
         Applicant generatedApplicant = Applicant.builder()
                 .applications(oldApplicant.getApplications())
                 .uniserial(newApplicant.getUniserial())

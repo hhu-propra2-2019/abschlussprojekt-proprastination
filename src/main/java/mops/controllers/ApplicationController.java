@@ -20,9 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.context.annotation.SessionScope;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -226,7 +224,7 @@ public class ApplicationController {
                     .applications(appls)
                     .build();
             applicantService.updateApplicantWithouChangingApplications(applicant);
-            model.addAttribute("applicant", applicantService.findByUsername("has220"));
+            model.addAttribute("applicant", applicantService.findByUniserial("has220"));
         }
         return "applicant/applicationOverview";
     }
@@ -245,7 +243,7 @@ public class ApplicationController {
                                @ModelAttribute("applicant1") final Applicant applicant1) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
-            model.addAttribute("applicant", applicantService.findByUsername("has220"));
+            model.addAttribute("applicant", applicantService.findByUniserial("has220"));
             applicantService.updateApplicantWithouChangingApplications(applicant1);
         }
         return "applicant/applicationOverview";
@@ -351,7 +349,7 @@ public class ApplicationController {
     public String editPersonalData(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
-            model.addAttribute("applicant", applicantService.findByUsername("has220"));
+            model.addAttribute("applicant", applicantService.findByUniserial("has220"));
         }
         return "applicant/applicationEditPersonal";
     }
