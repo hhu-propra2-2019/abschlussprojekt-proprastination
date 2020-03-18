@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.Entity;
+
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
 public class ClassesAreInRightPackage {
@@ -25,22 +27,12 @@ public class ClassesAreInRightPackage {
     }
 
     @Test
-    public void dtosAreInDto() {
-        JavaClasses importedClasses = new ClassFileImporter().importPackages("mops");
-
-        ArchRule rule = classes()
-                .that().haveSimpleNameContaining("DTO")
-                .should().resideInAPackage("mops.db.dto");
-        rule.check(importedClasses);
-    }
-
-    @Test
     public void repositorysAreInRepositorys() {
         JavaClasses importedClasses = new ClassFileImporter().importPackages("mops");
 
         ArchRule rule = classes()
-                .that().haveSimpleNameContaining("Repository")
-                .should().resideInAPackage("mops.db.repositories")
+                .that().haveSimpleNameEndingWith("Repository")
+                .should().resideInAPackage("mops.repositories")
                 .andShould().beAnnotatedWith(Repository.class);
         rule.check(importedClasses);
     }
