@@ -1,7 +1,7 @@
 package mops.services;
 
-import mops.db.repositories.ModuleRepository;
 import mops.model.classes.Module;
+import mops.repositories.ModuleRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

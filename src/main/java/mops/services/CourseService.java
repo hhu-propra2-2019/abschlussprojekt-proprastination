@@ -1,7 +1,7 @@
 package mops.services;
 
-import mops.db.repositories.CourseRepository;
 import mops.model.classes.Course;
+import mops.repositories.CourseRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
