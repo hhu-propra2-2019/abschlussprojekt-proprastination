@@ -84,6 +84,21 @@ public class CSVService {
     }
 
     /**
+     * return hour or person limit for modules
+     * @return List of all limits
+     */
+    public static List<String> getLimits() {
+        List<String> list = new ArrayList<>();
+        List<String[]> limits = readFromCSV("src/main/resources/csv/module.csv");
+        String[] strArr;
+        for (int i = 0; i < limits.size(); i++) {
+            strArr = limits.get(i);
+            list.add(strArr[1]);
+        }
+        return list;
+    }
+
+    /**
      * returns courses from courses.csv
      * @return List of all courses
      */
