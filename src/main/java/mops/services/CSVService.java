@@ -1,10 +1,12 @@
 package mops.services;
 
 import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvException;
 import org.springframework.stereotype.Service;
 
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -32,6 +34,23 @@ public class CSVService {
             e.printStackTrace();
         }
         return list;
+    }
+
+    /**
+     * Write in existing CSV file
+     * @param csvName file name
+     * @param input lines to write into the file
+     */
+    public static void writeInCSV(final String csvName, final List<String[]> input) {
+        try {
+            CSVWriter writer = new CSVWriter(new FileWriter(csvName, true));
+            for (String[] s: input) {
+                writer.writeNext(s);
+            }
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
