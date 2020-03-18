@@ -26,7 +26,7 @@ public class PDFService {
      */
     public String generatePDF(final Application application, final Applicant applicant) throws IOException {
         UUID uuid = UUID.randomUUID();
-        String filepath = "/tmp/pdf/" + uuid.toString() + ".pdf";
+        String filepath = "/tmp" + uuid.toString() + ".pdf";
         document = new DocumentWithBachelor();
         addApplicationInfoToPDF(application);
         addApplicantInfoToPDF(applicant);
