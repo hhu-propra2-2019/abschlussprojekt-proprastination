@@ -7,8 +7,8 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,11 +18,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ApplicantServiceTest {
 
     @Autowired
-    ApplicantService service;
-
+    ApplicantService applicantService;
 
     Applicant applicant;
-    Application application;
+    Application application1;
     Application application2;
     Certificate cert;
     Address address;
@@ -41,14 +40,13 @@ class ApplicantServiceTest {
                 .name("Basic Training")
                 .build();
 
-        application = Application.builder()
-                .applicantusername("bob111")
+        application1 = Application.builder()
                 .priority(0)
                 .module("Hausbau")
                 .hours(17)
                 .grade(1.3)
                 .lecturer("Lala der Teletubby")
-                .role(Role.KORREKTOR)
+                .role("Korrektor")
                 .semester("SS2020")
                 .build();
 
@@ -58,15 +56,18 @@ class ApplicantServiceTest {
                 .hours(99)
                 .grade(1.0)
                 .lecturer("Ich selbst?")
-                .role(Role.BOTH)
+                .role("Both")
                 .semester("Immer")
                 .build();
 
+        Set<Application> applications = new HashSet<>();
+        applications.add(application1);
+        applications.add(application2);
+
         applicant = Applicant.builder()
-                .application(application)
-                .application(application2)
-                .status(Status.NEW)
-                .surename("dumm")
+                .applications(applications)
+                .status("New")
+                .surname("dumm")
                 .uniserial("sss111")
                 .course("Hausbau")
                 .comment("WOW!")
@@ -81,18 +82,23 @@ class ApplicantServiceTest {
 
     @Test
     void saveApplicant() {
-        service.save(applicant);
+        applicantService.saveApplicant(applicant);
 
-        var test = service.getApplicant(applicant.getUniserial());
-
+        var test = applicantService.findByUniserial(applicant.getUniserial());
+    }
 
     @Test
-
     void createApplication() {
+        Application.builder()
+                .grade(1.3)
+                .hours(17)
+                .semester("SS2020")
+                .lecturer("Lala der Teletubby")
+                .module("Hausbau")
+                .role("Korrektor")
+                .build();
 
-        Application application1 = service.createApplication("bob111", "Hausbau", "Lala der Teletubby", "SS2020", "Boooob der Baumeister", 17, 1.3, Role.KORREKTOR);
-
-        assertThat(application1).isEqualTo(application);
+        assertThat(application1).isEqualTo(application1);
     }
 
     @Test

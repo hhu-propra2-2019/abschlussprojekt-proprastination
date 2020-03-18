@@ -15,9 +15,10 @@ class ApplicationTest {
                 .grade(1.3)
                 .priority(1)
                 .lecturer("Tester")
-                .role(Role.KORREKTOR)
+                .role("Korrektor")
                 .semester("WS2020")
                 .module("ProPra")
+                .comment("")
                 .build();
 
     }
@@ -27,12 +28,11 @@ class ApplicationTest {
         //Arrange in BeforeEach
 
         assertThat(application)
-                .hasFieldOrPropertyWithValue("applicantusername", "user")
                 .hasFieldOrPropertyWithValue("hours", 2)
                 .hasFieldOrPropertyWithValue("priority", 1)
                 .hasFieldOrPropertyWithValue("grade", 1.3)
                 .hasFieldOrPropertyWithValue("lecturer", "Tester")
-                .hasFieldOrPropertyWithValue("role", Role.KORREKTOR)
+                .hasFieldOrPropertyWithValue("role", "Korrektor")
                 .hasFieldOrPropertyWithValue("semester", "WS2020")
                 .hasFieldOrPropertyWithValue("module", "ProPra")
                 .hasFieldOrPropertyWithValue("comment", "");
@@ -47,7 +47,7 @@ class ApplicationTest {
                 .grade(1.3)
                 .priority(1)
                 .lecturer("Tester")
-                .role(Role.KORREKTOR)
+                .role("Korrektor")
                 .semester("WS2020")
                 .module("ProPra")
                 .build();
@@ -57,7 +57,7 @@ class ApplicationTest {
                 .grade(1.3)
                 .priority(1)
                 .lecturer("Tester")
-                .role(Role.KORREKTOR)
+                .role("Korrektor")
                 .semester("WS2020")
                 .module("ProPra")
                 .build();
@@ -79,19 +79,9 @@ class ApplicationTest {
     void testToString() {
         //Arrange in BeforeEach
 
-        assertThat(application.toString()).isEqualTo("Application(applicantusername=user, hours=2, module=ProPra, priority=1, grade=1.3, lecturer=Tester, semester=WS2020, comment=, role=KORREKTOR)");
+        assertThat(application.toString()).isEqualTo(
+                "Application(hours=2, module=ProPra, priority=1, grade=1.3, lecturer=Tester, semester=WS2020, role=Korrektor, comment=)");
 
     }
 
-    @Test
-    void testToBuilder() {
-        //Arrange in BeforeEach
-
-        Application.ApplicationBuilder applicationBuilder = application.toBuilder();
-        Application application2 = applicationBuilder.build();
-
-        assertThat(application2).isEqualTo(application);
-
-
-    }
 }

@@ -15,7 +15,7 @@ class CertificateTest {
 
         assertThat(cert)
                 .hasFieldOrPropertyWithValue("name", "Blau")
-                .hasFieldOrPropertyWithValue("university", "HHU");
+                .hasFieldOrPropertyWithValue("course", "HHU");
     }
 
     @Test
@@ -39,20 +39,7 @@ class CertificateTest {
                 .name("Tom")
                 .course("HHU")
                 .build();
-        assertThat(cert.toString()).isEqualTo("Certificate(name=Tom, university=HHU)");
+        assertThat(cert.toString()).isEqualTo("Certificate(name=Tom, course=HHU)");
     }
 
-    @Test
-    void testToBuilder() {
-        Certificate cert = Certificate.builder()
-                .name("Blau")
-                .course("HHU")
-                .build();
-
-        Certificate.CertificateBuilder certificateBuilder = cert.toBuilder();
-        Certificate cert2 = certificateBuilder.build();
-
-        assertThat(cert2).isEqualTo(cert);
-
-    }
 }
