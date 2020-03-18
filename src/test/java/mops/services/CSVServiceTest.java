@@ -75,7 +75,7 @@ class CSVServiceTest{
     }
 
     @Test
-    void getCountries() {
+    void getCountriesTest() {
         List<String> countries;
         String csvname = "src/main/resources/csv/countries.csv";
         List<String[]> data = service.readFromCSV(csvname);
@@ -90,7 +90,7 @@ class CSVServiceTest{
     }
 
     @Test
-    void getModules() {
+    void getModulesTest() {
         List<String> modules;
         String csvname = "src/main/resources/csv/module.csv";
         List<String[]> data = service.readFromCSV(csvname);
@@ -117,19 +117,35 @@ class CSVServiceTest{
     }
 
     @Test
-    void getPersonLimits() {
+    void getPersonLimitsTest() {
+        List<String> limits;
+
+        limits = service.getPersonLimits();
+
+        assertThat(limits.size()).isEqualTo(3);
+        assertThat(limits.get(0)).isEqualTo("0");
+        assertThat(limits.get(1)).isEqualTo("4");
+        assertThat(limits.get(2)).isEqualTo("2");
     }
 
     @Test
-    void getModuleProfs() {
+    void getModuleProfsTest() {
+        List<String> profs;
+
+        profs = service.getModuleProfs();
+
+        assertThat(profs.size()).isEqualTo(3);
+        assertThat(profs.get(0)).isEqualTo("Jens Bendisposto");
+        assertThat(profs.get(1)).isEqualTo("Christian Meter");
+        assertThat(profs.get(2)).isEqualTo("Anna Wintour");
     }
 
     @Test
-    void getProfForModule() {
+    void getProfForModuleTest() {
     }
 
     @Test
-    void getModuleForProf() {
+    void getModuleForProfTest() {
     }
 
     @Test
