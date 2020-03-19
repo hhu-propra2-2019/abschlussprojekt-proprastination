@@ -9,7 +9,9 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.ArrayList;
@@ -59,12 +61,38 @@ public class SetupController {
      * @param model The Website model
      * @return The HTML file rendered as a String
      */
- @GetMapping("/setupNewModule")
- @Secured("ROLE_setup")
+    @GetMapping("/neuesModul")
+    @Secured("ROLE_setup")
     public String newModule(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
-        return "setup/setupNewModule";
+        return "setup/neuesModul";
+    }
+    /**
+     * Post mapping for saving a new module
+     * @param token The KeycloakAuthentication
+     * @param model The Website model
+     * @return The HTML file rendered as a String
+     * @param name module name
+     * @param shortName module short name
+     * @param prof responsible person
+     * @param hourLimit maximum hours of work required
+     * @param personLimit maximum people of work required
+     */
+
+    @PostMapping("/neuesModul")
+    @Secured("ROLE_setup")
+    public String postNewModule(final KeycloakAuthenticationToken token, final Model model,
+                                @RequestParam("name") final String name,
+                                @RequestParam("shortName") final String shortName,
+                                @RequestParam("prof") final String prof,
+                                @RequestParam("hourLimit") final String hourLimit,
+                                @RequestParam("personLimit") final String personLimit) {
+        List<String[]> input = new ArrayList<>();
+        String[] s1 = {name, shortName, prof, hourLimit, personLimit};
+        input.add(s1);
+        CSVService.writeInCSV("src/main/resources/csv/module.csv", input);
+        return "setup/setupMain";
     }
 }
