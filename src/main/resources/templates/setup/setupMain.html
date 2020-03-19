@@ -54,6 +54,9 @@
         <div class="card">
             <div class="card-header">
                 <h3 style="margin-bottom: .0rem" class="card-title" th:text="${module.name}">Nothing Here</h3>
+                <div class="text-right">
+                    <a th:href="" class="btn btn-primary col">Modul bearbeiten</a>
+                </div>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -61,9 +64,6 @@
                     <p>Zugeordnete Person: <div class="col-2" th:text="${module.profName}">Nothing Here</div></p>
                     <p>Stundenlimit: <div class="col-1" th:text="${module.hourLimit}">Nothing Here</div></p>
                     <p>Personenlimit: <div class="col" th:text="${module.personLimit}">Nothing Here</div></p>
-                    <div class="text-right">
-                        <!--a th:href="" class="btn btn-primary col">Neues Modul</a-->
-                    </div>
                 </div>
             </div>
         </div><br>
