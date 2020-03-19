@@ -5,6 +5,8 @@ import mops.model.classes.Address;
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
 import mops.model.classes.Certificate;
+import mops.model.classes.webclasses.WebAddress;
+import mops.model.classes.webclasses.WebApplicant;
 import mops.services.ApplicantService;
 import mops.services.CSVService;
 import org.keycloak.KeycloakPrincipal;
@@ -69,9 +71,14 @@ public class ApplicationController {
     @Secured("ROLE_studentin")
     public String newAppl(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
+            WebApplicant webApplicant = WebApplicant.builder()
+                    .build();
+            WebAddress webAddress = WebAddress.builder().build();
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("countries", CSVService.getCountries());
             model.addAttribute("courses", CSVService.getCourses());
+            model.addAttribute("webApplicant", webApplicant);
+            model.addAttribute("webAddress", webAddress);
             model.addAttribute("modules", CSVService.getModules());
         }
         return "applicant/applicationPersonal";
@@ -109,62 +116,49 @@ public class ApplicationController {
         return "applicant/personal";
     }
 
-
     /**
-     * Post Mapping after Pers Data (saves the applicant and provides input for module)
-     *
-     * @param token       keycloaktoken
-     * @param model       model to use
-     * @param street      street + number
-     * @param place       place
-     * @param plz         zipcode
-     * @param birthplace  birthplace
-     * @param nationality nationality
-     * @param birthday    birthday
-     *                    //   * @param gender gender (weiblich or männlich)
-     * @param course      course the student is currently enrolled in
-     *                    //    * @param status employment status
-     *                    //   * @param graduation highest certificate reached yet
-     *                    //  * @param diverse commentary from applicant
-     * @param modules     module the applicant wants to apply for
-     * @return module.html
+     * saves Applicant into database and waits for moduleinformation
+     * @param token Keycloaktoken
+     * @param webApplicant webApplicant and its data
+     * @param webAddress webAddress and its data
+     * @param model Model
+     * @param modules the module the Applicant wants to apply for
+     * @return applicationModule.html
      */
     @PostMapping("/modul")
-    @SuppressWarnings("checkstyle:ParameterNumber")
-    public String postModule(final KeycloakAuthenticationToken token, final Model model,
-                             @RequestParam("street") final String street,
-                             @RequestParam("place") final String place,
-                             @RequestParam("plz") final String plz,
-                             @RequestParam("placeofbirth") final String birthplace,
-                             @RequestParam("nationality") final String nationality,
-                             @RequestParam("birthday") final String birthday,
-                             //                        @RequestParam("gender") final String gender,
-                             @RequestParam("courses") final String course,
-                             //                      @RequestParam("status") final String status,
-                             //                     @RequestParam("graduation") final String graduation,
-                             //                     @RequestParam("diverse") final String diverse,
-                             @RequestParam("modules") final String modules) {
+    @Secured("ROLE_studentin")
+    public String modul(final KeycloakAuthenticationToken token, final WebApplicant webApplicant,
+                            final WebAddress webAddress, final Model model,
+                            @RequestParam("modules") final String modules) {
+
         if (token != null) {
+            String street = webAddress.getStreet();
+            Address address = Address.builder()
+                    .street(street.substring(0, street.indexOf(' ')))
+                    .houseNumber(street.substring(street.indexOf(' ') + 1))
+                    .city(webAddress.getCity())
+                    .zipcode(webAddress.getZipcode())
+                    .build();
+            Applicant applicant = Applicant.builder()
+                    .firstName("Paulin")
+                    .surname("Dürwald")
+                    .address(address)
+                    .birthday(webApplicant.getBirthday())
+                    .birthplace(webApplicant.getBirthplace())
+                    .gender(webApplicant.getGender())
+                    .nationality(webApplicant.getNationality())
+                    .course(webApplicant.getCourse())
+                    .status(webApplicant.getStatus())
+                    .comment(webApplicant.getComment())
+                    .build();
+            applicantService.saveApplicant(applicant);
+            applicantService.findAll().forEach(System.out::println);
+            model.addAttribute("webApplicant", webApplicant);
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("module", modules);
             model.addAttribute("semesters", CSVService.getSemester());
             model.addAttribute("modules", CSVService.getModules());
-            Address address = Address.builder()
-                    .street(street)
-                    .city(place)
-                    .zipcode(Integer.parseInt(plz))
-                    .build();
-            Set<Application> applications = new HashSet<>();
-            model.addAttribute("applicant", Applicant.builder()
-                    .firstName(token.getName())
-                    .surname(token.getName())
-                    .birthplace(birthplace)
-                    .birthday(birthday)
-                    .address(address)
-                    .nationality(nationality)
-                    .course(course)
-                    .applications(applications)
-                    .build());
+            model.addAttribute("webAddress", webAddress);
         }
         return "applicant/applicationModule";
     }
