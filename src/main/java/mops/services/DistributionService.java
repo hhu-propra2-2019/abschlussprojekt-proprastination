@@ -4,7 +4,6 @@ import mops.model.classes.Distribution;
 import mops.repositories.DistributionRepository;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Service
