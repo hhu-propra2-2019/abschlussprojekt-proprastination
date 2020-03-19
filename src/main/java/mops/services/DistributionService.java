@@ -4,6 +4,7 @@ import mops.model.classes.Distribution;
 import mops.repositories.DistributionRepository;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Service
@@ -31,7 +32,6 @@ public class DistributionService {
     /**
      * Dummy functions that assignes applicants to Distributions
      */
-    @SuppressWarnings("checkstyle:MagicNumber")
     public void assign() {
         distributionRepository.save(Distribution.builder()
                 .employees(applicantService.findAll())
