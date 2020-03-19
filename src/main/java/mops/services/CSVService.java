@@ -69,6 +69,15 @@ public class CSVService {
     }
 
     /**
+     * get modules with all details
+     * @return return module with details as list of string arrays
+     */
+    public static List<String[]> getModulesWithDetails() {
+        List<String[]> modules = readFromCSV("src/main/resources/csv/module.csv");
+        return modules;
+    }
+
+    /**
      * return Module from module.csv
      * @return List of all modules
      */

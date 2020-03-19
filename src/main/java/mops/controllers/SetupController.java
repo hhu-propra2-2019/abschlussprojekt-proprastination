@@ -39,13 +39,12 @@ public class SetupController {
     @Secured("ROLE_setup")
     public String index(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
-            List<String> moduleName = CSVService.getModules();
-            List<String> profs = CSVService.getModuleProfs();
-            List<String> hourLimits = CSVService.getHourLimits();
-            List<String> personLimits = CSVService.getPersonLimits();
+            List<String[]> modules = CSVService.getModulesWithDetails();
             List<Module> moduleList = new ArrayList<Module>();
-            for (int i = 0; i < CSVService.getModules().size(); i++) {
-                Module newModule = new Module(moduleName.get(i), profs.get(i), hourLimits.get(i), personLimits.get(i));
+            String[] tmp;
+            for (int i = 0; i < modules.size(); i++) {
+                tmp = modules.get(i);
+                Module newModule = new Module(tmp[0], tmp[1], tmp[2], tmp[3]);
                 moduleList.add(newModule);
             }
             model.addAttribute("modules", moduleList);
@@ -63,13 +62,12 @@ public class SetupController {
     @GetMapping("/setupMain")
     @Secured("ROLE_setup")
     public String dashboard(final KeycloakAuthenticationToken token, final Model model) {
-        List<String> moduleName = CSVService.getModules();
-        List<String> profs = CSVService.getModuleProfs();
-        List<String> hourLimits = CSVService.getHourLimits();
-        List<String> personLimits = CSVService.getPersonLimits();
+        List<String[]> modules = CSVService.getModulesWithDetails();
         List<Module> moduleList = new ArrayList<Module>();
-        for (int i = 0; i < CSVService.getModules().size(); i++) {
-            Module newModule = new Module(moduleName.get(i), profs.get(i), hourLimits.get(i), personLimits.get(i));
+        String[] tmp;
+        for (int i = 0; i < modules.size(); i++) {
+            tmp = modules.get(i);
+            Module newModule = new Module(tmp[0], tmp[1], tmp[2], tmp[3]);
             moduleList.add(newModule);
         }
         model.addAttribute("modules", moduleList);
