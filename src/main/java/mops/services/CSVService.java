@@ -78,6 +78,36 @@ public class CSVService {
     }
 
     /**
+     * deltes module line from module.csv
+     * @param moduleName
+     */
+    public static void deleteModule(final String moduleName) {
+        List<String[]> readData = getModulesWithDetails();
+        List<String[]> writeData = new ArrayList<>();
+        String[] tmp;
+        for (int i = 0; i < readData.size(); i++) {
+            tmp = readData.get(i);
+            if (tmp[0].equals(moduleName)) {
+                continue;
+            } else {
+                writeData.add(tmp);
+            }
+        }
+        writeInCSV("src/main/resources/csv/module.csv", writeData);
+    }
+
+    /**
+     * Empty out module.csv
+     */
+    public static void cleanModules() {
+        try {
+            new FileWriter("src/main/resources/csv/module.csv").close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * return Module from module.csv
      * @return List of all modules
      */
@@ -94,7 +124,7 @@ public class CSVService {
 
     /**
      * Get short name for modules
-     * @return List of shortName's
+     * @return list of short names
      */
     public  static List<String> getShortModuleNames() {
         List<String> list = new ArrayList<>();
@@ -160,7 +190,6 @@ public class CSVService {
      */
 
     public static String getProfForModule(final String moduleName) {
-        List<String> list = new ArrayList<>();
         List<String[]> data = readFromCSV("src/main/resources/csv/module.csv");
         String[] strArr;
         for (int i = 0; i < data.size(); i++) {

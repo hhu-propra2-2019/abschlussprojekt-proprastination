@@ -217,4 +217,12 @@ class CSVServiceTest{
             assertThat(semester.get(i)).isEqualTo(tmp[0]);
         }
     }
+
+    @Test
+    void deleteModule() {
+    }
+
+    @Test
+    void cleanModules() {
+    }
 }
