@@ -126,6 +126,7 @@ public class ApplicationController {
      * saves Applicant into database and waits for moduleinformation
      * @param token Keycloaktoken
      * @param webApplicant webApplicant and its data
+     * @param bindingResult the result of validating webApplicant
      * @param webAddress webAddress and its data
      * @param model Model
      * @param modules the module the Applicant wants to apply for
@@ -134,7 +135,7 @@ public class ApplicationController {
     @PostMapping("/modul")
     @Secured("ROLE_studentin")
     public String modul(final KeycloakAuthenticationToken token, @Valid final WebApplicant webApplicant,
-                            BindingResult bindingResult,
+                            final BindingResult bindingResult,
                             final WebAddress webAddress, final Model model,
                             @RequestParam("modules") final String modules) {
 
@@ -143,7 +144,7 @@ public class ApplicationController {
                 LOGGER.info("ERROR {}", err.getDefaultMessage());
             });
             model.addAttribute("webApplicant", webApplicant);
-            return "applicationEditPersonal";
+            return "redirect:/bewerbung2/bewerber/neueBewerbung";
         }
 
         if (token != null) {

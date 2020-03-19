@@ -5,24 +5,24 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder(toBuilder = true)
 public class WebApplicant {
-    @NotNull
+    @NotBlank
     private String birthplace;
-    @NotNull
+    @NotBlank
     private String gender;
-    @NotNull
+    @NotBlank
     private String birthday;
-    @NotNull
+    @NotBlank
     private String nationality;
-    @NotNull
+    @NotBlank
     private String course;
-    @NotNull
+    @NotBlank
     private String status;
     private String comment;
 }
