@@ -47,7 +47,6 @@ public class Applicant {
     private String comment;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Certificate certs;
-    @Singular
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Singular
     private Set<Application> applications;

@@ -47,7 +47,7 @@ public class PDFService {
 
     private void addApplicationInfoToPDF(final Application application) throws IOException {
         document.setField("Stunden", String.valueOf(application.getHours()));
-        document.setField("Vertragsart", "Neueinstellung");
+        document.setField("Vertragsart", "Einstellung");
     }
 
     private void addApplicantInfoToPDF(final Applicant applicant) throws IOException {
@@ -55,7 +55,6 @@ public class PDFService {
         document.setField("Vorname", applicant.getFirstName());
         document.setField("Name", applicant.getSurname());
         document.setField("Vorsatzwort", applicant.getTitle());
-        document.setField("Namenszusatz", applicant.getFirstName());
         document.setField("Geburtsdatum", applicant.getBirthday());
         document.setField("Geburtsort", applicant.getBirthplace());
         document.setField("Staatsangehörigkeit", applicant.getNationality());

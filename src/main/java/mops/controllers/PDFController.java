@@ -7,7 +7,12 @@ import mops.services.ApplicantService;
 import mops.services.PDFService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
-import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,9 +21,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.annotation.SessionScope;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.FileInputStream;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -58,7 +65,6 @@ public class PDFController {
      * Returns a FileStream of the requested PDF.
      *
      * @param module   module name of the application.
-     * @param response http response.
      * @param token    Keycloak token.
      * @param model    Model.
      * @return InputStreamResource
@@ -66,30 +72,42 @@ public class PDFController {
      */
     @Secured("ROLE_studentin")
     @RequestMapping(value = "download", method = RequestMethod.GET)
-    public InputStreamResource fileSystemResource(
-            @RequestParam(value = "module") final String module,
-            final HttpServletResponse response, final KeycloakAuthenticationToken token,
+    public ResponseEntity<Resource> fileSystemResource(
+            @RequestParam(value = "module") final String module, final KeycloakAuthenticationToken token,
             final Model model) throws IOException, NoSuchElementException {
-        InputStreamResource resource = null;
-        String filepath;
+
         if (token != null) {
             Account account = createAccountFromPrincipal(token);
+            model.addAttribute("account", account);
 
+
+            HttpHeaders header = new HttpHeaders();
             Applicant applicant = applicantService.findByUniserial(account.getName());
+
             Optional<Application> application = applicant.getApplications().stream()
                     .filter(p -> p.getModule().equals(module)).findFirst();
 
-            if (application.isPresent()) {
-                filepath = pdfService.generatePDF(application.get(), applicant);
-
-                response.setContentType("application/pdf");
-                response.setHeader("Content-Disposition", "Ihre Bewerbung");
-                resource = new InputStreamResource(new FileInputStream(filepath));
-            } else {
-                throw new NoSuchElementException("No such application!");
+            if (application.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }
+            String filepath = pdfService.generatePDF(application.get(), applicant);
+            File file = new File(filepath);
+            Path path = Paths.get(file.getAbsolutePath());
+            ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+
+
+            header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Bewerbung.pdf");
+            header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+            header.add("Pragma", "no-cache");
+            header.add("Expires", "0");
+
+            return ResponseEntity.ok()
+                    .headers(header)
+                    .contentLength(file.length())
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .body(resource);
         }
-        return resource;
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
 }
