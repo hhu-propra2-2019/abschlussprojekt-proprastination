@@ -26,9 +26,19 @@
     </nav>
 </header>
 <main th:fragment="bodycontent">
-    <div th:object="${dumm}">
-        unser Applicant heißt:
-        <h1 th:text="${dumm.firstName}"></h1>
+    <div th:object="${webApplicant}">
+        <div th:object="${webAddress}">
+            <h1 th:text="${webApplicant.birthplace}"></h1>
+            <h1 th:text="${webApplicant.gender}"></h1>
+            <h1 th:text="${webApplicant.nationality}"></h1>
+            <h1 th:text="${webApplicant.birthday}"></h1>
+            <h1 th:text="${webApplicant.course}"></h1>
+            <h1 th:text="${webApplicant.status}"></h1>
+            <h1 th:text="${webApplicant.comment}"></h1>
+            <p th:text="${webAddress.street}"></p>
+            <p th:text="${webAddress.city}"></p>
+            <p th:text="${webAddress.zipcode}"></p>
+        </div>
     </div>
 </main>
 </body>

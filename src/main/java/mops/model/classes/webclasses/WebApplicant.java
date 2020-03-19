@@ -1,13 +1,15 @@
 package mops.model.classes.webclasses;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Builder(toBuilder = true)
 public class WebApplicant {
-    private String firstName;
-    private String surname;
     private String birthplace;
     private String gender;
     private String birthday;

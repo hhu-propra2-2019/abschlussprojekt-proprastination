@@ -1,7 +1,12 @@
 package mops.controllers;
 
 import mops.model.Account;
-import mops.model.classes.*;
+import mops.model.classes.Address;
+import mops.model.classes.Applicant;
+import mops.model.classes.Application;
+import mops.model.classes.Certificate;
+import mops.model.classes.webclasses.WebAddress;
+import mops.model.classes.webclasses.WebApplicant;
 import mops.services.ApplicantService;
 import mops.services.CSVService;
 import org.keycloak.KeycloakPrincipal;
@@ -17,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.context.annotation.SessionScope;
 
-import javax.persistence.PreUpdate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -119,22 +123,32 @@ public class ApplicationController {
      */
     @GetMapping("/dummy")
     public String getDummy(final KeycloakAuthenticationToken token, final Model model) {
-        Dumm dumm = new Dumm("hallo");
-        model.addAttribute("dumm", dumm);
-        return "applicant/dummy";
+  //      WebApplicant webApplicant = new WebApplicant("hallo","hallo","hallo","weiblich",
+    //            "11111","Deutschland","ahhhhh","ahhhhhh","ahhhhh");
+     //   WebAddress webAddress = new WebAddress("street", "city",1001);
+        WebApplicant webApplicant = WebApplicant.builder()
+                .build();
+        WebAddress webAddress = WebAddress.builder().build();
+        model.addAttribute("countries", CSVService.getCountries());
+        model.addAttribute("courses", CSVService.getCourses());
+        model.addAttribute("modules", CSVService.getModules());
+        model.addAttribute("webApplicant", webApplicant);
+        model.addAttribute("webAddress", webAddress);
+        return "applicant/applicationPersonalThymeleaf";
     }
 
     /**
-     * xxx
-     * @param applicant xx
-     * @param model xx
-     * @return xx
+     *
+     * @param webApplicant
+     * @param webAddress
+     * @param model
+     * @return  xxx
      */
 
     @PostMapping("/postdummy")
-    public String postdummy(final Dumm dumm, final Model model) {
-        System.out.println(dumm.getFirstName());
-        model.addAttribute("dumm", dumm);
+    public String postdummy(final WebApplicant webApplicant, final WebAddress webAddress, final Model model) {
+        model.addAttribute("webApplicant", webApplicant);
+        model.addAttribute("webAddress", webAddress);
         return "applicant/postdummy";
     }
 
