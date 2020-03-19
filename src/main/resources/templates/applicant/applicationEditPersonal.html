@@ -30,48 +30,48 @@
 </header>
 <main th:fragment="bodycontent">
     <div style="text-align: center;">
-        <form action="#" th:action="@{uebersichtBearbeitet}" method="post" th:object="${applicant1}">
-            <div class="card bg-light mb-3 border-primary">
-                <div class="card-header">
-                    <label><h2>Persönliche Daten</h2></label>
-                    <!--a th:href="@{uebersicht}" class="btn btn-outline-primary" style="float: right;"> Speichern </a-->
-                    <button type="submit" th:action="@{uebersichtBearbeitet}"></button>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-5">
-                            <input type="text" name="address1" id="address1"
-                                   class="form-control" placeholder="Straße und Hausnummer"
-                                   th:value="${applicant.address.street}"> <br>
-                            <br>
-                        </div>
-                        <div class="col-5">
-                            <input type="text" name="address2" id="address2"
-                                   class="form-control" placeholder="Ort" th:value="${applicant.address.city}"> <br>
-                        </div>
-                        <div class="col-2">
-                            <input type="text" name="plz" id="plz" class="form-control" placeholder="Postleitzahl"
-                                   th:value="${applicant.address.zipcode}"> <br>
-                        </div>
+        <!-- Restlichen Inhalt hier einfügen! -->
+        <div class="card bg-light mb-3 border-primary">
+            <div class="card-header">
+                <label><h2>Persönliche Daten</h2></label>
+                <a th:href="@{uebersicht}" class="btn btn-outline-primary" style="float: right;"> Speichern </a>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-5">
+                        <input type="text" name="adress1" id="adress1"
+                               required
+                               class="form-control" placeholder="Straße und Hausnummer"
+                               th:value="${applicant.address.street}"> <br>
+                        <br>
                     </div>
-                    <div class="row">
-                        <div class="col-5">
-                            <input type="text" name="placeofbirth" id="placeofbirth"
-                                   class="form-control" placeholder="Geburtsort, Land"
-                                   th:value="${applicant.birthplace}"> <br>
-                        </div>
-                        <div class="col-5">
-                            <select name="nationality" id="nationality" class="form-control">
-                                <option th:value="${applicant.nationality}" selected th:text="${applicant.nationality}">Nationalität</option>
-                                <option th:each="country:${countries}" th:text="${country}"></option>
-                            </select> <br>
-                        </div>
-                        <div class="col-2">
-                            <input type="text" name="birthday" id="birthday" onfocus="(this.type='date')"
-                                   onblur="(this.type='text')" class="form-control" placeholder="Geburtstag"
-                                   th:value="${applicant.birthday}"> <br><br>
-                        </div>
-
+                    <div class="col-5">
+                        <input type="text" name="adress2" id="adress2"
+                               required
+                               class="form-control" placeholder="Ort" th:value="${applicant.address.city}"> <br>
+                    </div>
+                    <div class="col-2">
+                        <input type="text" name="plz" id="plz" class="form-control" placeholder="Postleitzahl"
+                               required pattern="^\d{5}$" minlength="5" maxlength="5"
+                               th:value="${applicant.address.zipcode}"> <br>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-5">
+                        <input type="text" name="placeofbirth" id="placeofbirth" required
+                               class="form-control" placeholder="Geburtsort, Land" th:value="${applicant.birthplace}"> <br>
+                    </div>
+                    <div class="col-5">
+                        <select name="nationality" id="nationality" class="form-control">
+                            <option th:value="${applicant.nationality}" selected th:text="${applicant.nationality}">Nationalität</option>
+                            <option th:each="country:${countries}" th:text="${country}"></option>
+                        </select> <br>
+                    </div>
+                    <div class="col-2">
+                        <input type="text" name="birthday" id="birthday" onfocus="(this.type='date')"
+                               required
+                               onblur="(this.type='text')" class="form-control" placeholder="Geburtstag"
+                               th:value="${applicant.birthday}"> <br><br>
                     </div>
                     <div class="row">
                         <div class="col-6">
