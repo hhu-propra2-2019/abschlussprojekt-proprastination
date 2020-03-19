@@ -25,7 +25,8 @@ public class Module {
      * @param pPersonLimits
      */
 
-    public Module(final String pName, final String pShortName, final String pProfName, final String phourLimit, final String pPersonLimits) {
+    public Module(final String pName, final String pShortName, final String pProfName,
+                  final String phourLimit, final String pPersonLimits) {
         this.name = pName;
         this.shortName = pShortName;
         this.profName = pProfName;
