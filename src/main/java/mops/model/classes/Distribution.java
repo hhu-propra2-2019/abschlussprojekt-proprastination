@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Singular;
 import lombok.ToString;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -31,6 +32,7 @@ public class Distribution {
     private long id;
     private String module;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Singular
     private List<Applicant> employees;
 
 }
