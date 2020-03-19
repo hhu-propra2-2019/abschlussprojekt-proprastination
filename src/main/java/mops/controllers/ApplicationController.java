@@ -71,16 +71,17 @@ public class ApplicationController {
     @Secured("ROLE_studentin")
     public String newAppl(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
-            Applicant applicant = Applicant.builder().build();
-            Address address = Address.builder().build();
-            model.addAttribute("applicant", applicant);
-            model.addAttribute("address", address);
+            WebApplicant webApplicant = WebApplicant.builder()
+                    .build();
+            WebAddress webAddress = WebAddress.builder().build();
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("countries", CSVService.getCountries());
             model.addAttribute("courses", CSVService.getCourses());
+            model.addAttribute("webApplicant", webApplicant);
+            model.addAttribute("webAddress", webAddress);
             model.addAttribute("modules", CSVService.getModules());
         }
-        return "applicant/applicationPersonalThymeleaf";
+        return "applicant/applicationPersonal";
     }
 
     /**
@@ -116,98 +117,47 @@ public class ApplicationController {
     }
 
     /**
-     * xx
-     * @param token xx
-     * @param model xx
-     * @return dummyhtml
-     */
-    @GetMapping("/dummy")
-    public String getDummy(final KeycloakAuthenticationToken token, final Model model) {
-  //      WebApplicant webApplicant = new WebApplicant("hallo","hallo","hallo","weiblich",
-    //            "11111","Deutschland","ahhhhh","ahhhhhh","ahhhhh");
-     //   WebAddress webAddress = new WebAddress("street", "city",1001);
-        WebApplicant webApplicant = WebApplicant.builder()
-                .build();
-        WebAddress webAddress = WebAddress.builder().build();
-        model.addAttribute("countries", CSVService.getCountries());
-        model.addAttribute("courses", CSVService.getCourses());
-        model.addAttribute("modules", CSVService.getModules());
-        model.addAttribute("webApplicant", webApplicant);
-        model.addAttribute("webAddress", webAddress);
-        return "applicant/applicationPersonalThymeleaf";
-    }
-
-    /**
      *
+     * @param token
      * @param webApplicant
      * @param webAddress
      * @param model
-     * @return  xxx
+     * @param modules
+     * @return
      */
 
-    @PostMapping("/postdummy")
-    public String postdummy(final WebApplicant webApplicant, final WebAddress webAddress, final Model model) {
-        model.addAttribute("webApplicant", webApplicant);
-        model.addAttribute("webAddress", webAddress);
-        return "applicant/postdummy";
-    }
-
-
-    /**
-     * Post Mapping after Pers Data (saves the applicant and provides input for module)
-     *
-     * @param token       keycloaktoken
-     * @param model       model to use
-     * @param street      street + number
-     * @param place       place
-     * @param plz         zipcode
-     * @param birthplace  birthplace
-     * @param nationality nationality
-     * @param birthday    birthday
-     *                    //   * @param gender gender (weiblich or männlich)
-     * @param course      course the student is currently enrolled in
-     *                    //    * @param status employment status
-     *                    //   * @param graduation highest certificate reached yet
-     *                    //  * @param diverse commentary from applicant
-     * @param modules     module the applicant wants to apply for
-     * @return module.html
-     */
     @PostMapping("/modul")
-    @SuppressWarnings("checkstyle:ParameterNumber")
-    public String postModule(final KeycloakAuthenticationToken token, final Model model,
-                             @RequestParam("street") final String street,
-                             @RequestParam("place") final String place,
-                             @RequestParam("plz") final String plz,
-                             @RequestParam("placeofbirth") final String birthplace,
-                             @RequestParam("nationality") final String nationality,
-                             @RequestParam("birthday") final String birthday,
-                             //                        @RequestParam("gender") final String gender,
-                             @RequestParam("courses") final String course,
-                             //                      @RequestParam("status") final String status,
-                             //                     @RequestParam("graduation") final String graduation,
-                             //                     @RequestParam("diverse") final String diverse,
-                             @RequestParam("modules") final String modules) {
+    public String modul(final KeycloakAuthenticationToken token, final WebApplicant webApplicant,
+                            final WebAddress webAddress, final Model model,
+                            @RequestParam("modules") final String modules) {
+
         if (token != null) {
+            String street = webAddress.getStreet();
+            Address address = Address.builder()
+                    .street(street.substring(0, street.indexOf(' ')))
+                    .houseNumber(street.substring(street.indexOf(' '), street.length()))
+                    .city(webAddress.getCity())
+                    .zipcode(webAddress.getZipcode())
+                    .build();
+            Applicant applicant = Applicant.builder()
+                    .firstName("Paulin")
+                    .surname("Dürwald")
+                    .address(address)
+                    .birthday(webApplicant.getBirthday())
+                    .birthplace(webApplicant.getBirthplace())
+                    .gender(webApplicant.getGender())
+                    .nationality(webApplicant.getNationality())
+                    .course(webApplicant.getCourse())
+                    .status(webApplicant.getStatus())
+                    .comment(webApplicant.getComment())
+                    .build();
+            applicantService.saveApplicant(applicant);
+            model.addAttribute("webApplicant", webApplicant);
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("module", modules);
             model.addAttribute("semesters", CSVService.getSemester());
             model.addAttribute("modules", CSVService.getModules());
-            Address address = Address.builder()
-                    .street(street)
-                    .city(place)
-                    .zipcode(Integer.parseInt(plz))
-                    .build();
-            Set<Application> applications = new HashSet<>();
-            model.addAttribute("applicant", Applicant.builder()
-                    .firstName(token.getName())
-                    .surname(token.getName())
-                    .birthplace(birthplace)
-                    .birthday(birthday)
-                    .address(address)
-                    .nationality(nationality)
-                    .course(course)
-                    .applications(applications)
-                    .build());
+            model.addAttribute("webAddress", webAddress);
         }
         return "applicant/applicationModule";
     }
