@@ -1,6 +1,7 @@
 package mops.controllers;
 
 import mops.model.Account;
+import mops.model.classes.Module;
 import mops.services.CSVService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
@@ -10,6 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.annotation.SessionScope;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @SessionScope
@@ -35,11 +39,17 @@ public class SetupController {
     @Secured("ROLE_setup")
     public String index(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
+            List<String> moduleName = CSVService.getModules();
+            List<String> profs = CSVService.getModuleProfs();
+            List<String> hourLimits = CSVService.getHourLimits();
+            List<String> personLimits = CSVService.getPersonLimits();
+            List<Module> moduleList = new ArrayList<Module>();
+            for (int i = 0; i < CSVService.getModules().size(); i++) {
+                Module newModule = new Module(moduleName.get(i), profs.get(i), hourLimits.get(i), personLimits.get(i));
+                moduleList.add(newModule);
+            }
+            model.addAttribute("modules", moduleList);
             model.addAttribute("account", createAccountFromPrincipal(token));
-            model.addAttribute("modules", CSVService.getModules());
-            model.addAttribute("profs", CSVService.getModuleProfs());
-            model.addAttribute("hourLimits", CSVService.getHourLimits());
-            model.addAttribute("personLimits", CSVService.getPersonLimits());
         }
         return "setup/setupMain";
     }
@@ -53,9 +63,17 @@ public class SetupController {
     @GetMapping("/setupMain")
     @Secured("ROLE_setup")
     public String dashboard(final KeycloakAuthenticationToken token, final Model model) {
-        if (token != null) {
-            model.addAttribute("account", createAccountFromPrincipal(token));
+        List<String> moduleName = CSVService.getModules();
+        List<String> profs = CSVService.getModuleProfs();
+        List<String> hourLimits = CSVService.getHourLimits();
+        List<String> personLimits = CSVService.getPersonLimits();
+        List<Module> moduleList = new ArrayList<Module>();
+        for (int i = 0; i < CSVService.getModules().size(); i++) {
+            Module newModule = new Module(moduleName.get(i), profs.get(i), hourLimits.get(i), personLimits.get(i));
+            moduleList.add(newModule);
         }
+        model.addAttribute("modules", moduleList);
+        model.addAttribute("account", createAccountFromPrincipal(token));
         return "setup/setupMain";
     }
 

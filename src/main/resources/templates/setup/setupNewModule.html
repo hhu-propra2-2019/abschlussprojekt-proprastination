@@ -6,7 +6,6 @@
 <head>
     <!-- Required meta tags -->
     <th:block th:fragment="headcontent">
-
         <meta charset="utf-8">
         <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
 
@@ -36,12 +35,40 @@
 </header>
 
 <main th:fragment="bodycontent">
-    <div class="card">
-        <div class="card-header">
-            Neues Modul
+    <div class="card bg-light mb-3 border-primary">
+        <div class="card-header d-flex justify-content-between align-items-start">
+                <h2 style="margin-bottom: .0rem" class="card-text col">Neues Modul</h2>
+                <button class="btn btn-link btn-sm">
+                    <a href="">Speichern</a>
+                </button>
         </div>
-        <div class="card-body">
-            <button class="btn btn-primary">Speichern</button>
+        <div class="card-body flex-column h-100">
+            <form th:action="@{module.csv}" th:method="POST">
+                <div class="row">
+                    <div class="col-md-4">
+                        <input type="text" name="modulName" id="moduleName"
+                               class="form-control" placeholder="Name des Moduls">
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" name="profName" id="profName"
+                               class="form-control" placeholder="Name des Professors">
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" name="maxHours" id="maxHours"
+                               class="form-control" placeholder="Stundenlimit">
+                    </div>
+
+                    <div class="col-md-2">
+                        <input type="number" name="maxEmployees" id="maxEmployees"
+                               class="form-control" placeholder="Tutorenlimit"><br>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="btn-sm btn-outline-primary col">
+                        <a href="">Speichern</a>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
     <div th:replace="${content} ? ${content}: ~{}"></div>

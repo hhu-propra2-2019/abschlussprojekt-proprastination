@@ -36,6 +36,14 @@
 </header>
 
 <main th:fragment="bodycontent">
+    <table>
+        <th:block th:each="module : ${modules}">
+            <tr>
+                <td th:text="${module.name}">...</td>
+                <td th:text="${module.profName}">...</td>
+            </tr>
+        </th:block>
+    </table>
     <div class="card">
         <div class="card-header">
             Modul #0
