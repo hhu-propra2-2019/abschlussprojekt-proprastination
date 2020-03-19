@@ -26,9 +26,10 @@
     </nav>
 </header>
 <main th:fragment="bodycontent">
-    <form th:object="${applicant}">
-        <h1 th:text="${applicant.firstName}"></h1>
-    </form>
+    <div th:object="${dumm}">
+        unser Applicant heißt:
+        <h1 th:text="${dumm.firstName}"></h1>
+    </div>
 </main>
 </body>
 </html>

@@ -1,10 +1,7 @@
 package mops.controllers;
 
 import mops.model.Account;
-import mops.model.classes.Address;
-import mops.model.classes.Applicant;
-import mops.model.classes.Application;
-import mops.model.classes.Certificate;
+import mops.model.classes.*;
 import mops.services.ApplicantService;
 import mops.services.CSVService;
 import org.keycloak.KeycloakPrincipal;
@@ -20,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.context.annotation.SessionScope;
 
+import javax.persistence.PreUpdate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -114,21 +112,29 @@ public class ApplicationController {
     }
 
     /**
-     *
-     * @param token
-     * @param model
+     * xx
+     * @param token xx
+     * @param model xx
      * @return dummyhtml
      */
     @GetMapping("/dummy")
     public String getDummy(final KeycloakAuthenticationToken token, final Model model) {
-        Applicant applicant = Applicant.builder().build();
-        model.addAttribute("applicant", applicant);
+        Dumm dumm = new Dumm("hallo");
+        model.addAttribute("dumm", dumm);
         return "applicant/dummy";
     }
 
+    /**
+     * xxx
+     * @param applicant xx
+     * @param model xx
+     * @return xx
+     */
+
     @PostMapping("/postdummy")
-    public String postdummy(final Applicant applicant, final Model model) {
-        model.addAttribute("applicant", applicant);
+    public String postdummy(final Dumm dumm, final Model model) {
+        System.out.println(dumm.getFirstName());
+        model.addAttribute("dumm", dumm);
         return "applicant/postdummy";
     }
 

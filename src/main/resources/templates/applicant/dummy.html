@@ -26,9 +26,8 @@
     </nav>
 </header>
 <main th:fragment="bodycontent">
-    <form th:action="@{postdummy}" th:method="POST" th:object="${applicant}">
-        <p th:text="${applicant.firstName}"></p>
-        <input th:type="text" th:name="firstName" th:field="*{firstName}" th:attr="value = ${applicant.firstName}"/>
+    <form th:action="@{postdummy}" th:method="POST" th:object="${dumm}">
+        <input th:type="text" th:name="firstName" th:field="*{firstName}" th:attr="value = ${dumm.firstName}"/>
         <button th:type="submit">submit</button>
     </form>
 </main>
