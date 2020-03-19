@@ -3,6 +3,7 @@ package mops.services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -16,6 +17,9 @@ import java.io.File;
 public class EMailService {
 
     private Logger logger = LoggerFactory.getLogger(EMailService.class);
+
+    @Value("${spring.mail.username}")
+    private String senderEmail;
 
     private JavaMailSender emailSender;
 
@@ -43,6 +47,7 @@ public class EMailService {
             MimeMessage message = emailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setSubject("Tutorenbewerbung von " + sender);
+            helper.setFrom(senderEmail);
             helper.setTo(mainReceiver);
             helper.setCc(emailCCrecievers);
             helper.setText("Anbei erhalten Sie die Tutorenbewerbung von " + sender);
@@ -67,12 +72,13 @@ public class EMailService {
         try {
             MimeMessage message = emailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom(senderEmail);
             helper.setSubject("Deine Tutorenbewerbung");
             helper.setTo(recipient);
             helper.setText("Anbei erhalten Sie Ihre automatisch generierte Tutorenbewerbung");
 
             FileSystemResource file = new FileSystemResource(new File(filepath));
-            helper.addAttachment("Anhang", file);
+            helper.addAttachment("Tutorenbewerbung.pdf", file);
             emailSender.send(message);
         } catch (MessagingException e) {
             e.printStackTrace();

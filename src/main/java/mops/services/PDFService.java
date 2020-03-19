@@ -29,7 +29,7 @@ public class PDFService {
      */
     public String generatePDF(final Application application, final Applicant applicant) {
         UUID uuid = UUID.randomUUID();
-        String filepath = "/tmp" + uuid.toString() + ".pdf";
+        String filepath = "/tmp/" + uuid.toString() + ".pdf";
 
         try {
             document = new DocumentWithBachelor();
