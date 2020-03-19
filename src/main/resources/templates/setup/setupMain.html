@@ -37,33 +37,38 @@
 
 <main th:fragment="bodycontent">
     <div th:if="${modules.empty}">
-        <div class="card">
-            <div class="card-header">
-                <h3 cstyle="margin-bottom: .0rem "lass="card-title">Erstelle ein neues Modul</h3>
+        <div class="card bg-light mb-3 border-primary">
+            <div class="card-header d-flex justify-content-between align-items-start">
+                <h3 style="margin-bottom: .0rem " class="card-title">Erstelle ein neues Modul</h3>
             </div>
             <div class="card-body">
                 <div class="row">
                     <p class="card-text">Bisher sind noch keine Module vorhanden.
                         Es sollten bis zum Bewerbungsbeginn Module eingetragen werden. mit dem Button können sie ein neues Modul erstellen.</p>
-                    <a class="btn btn-primary text-left" th:href="@{neuesModul}">Neues Modul</a>
+                    <a class="btn btn-primary" th:href="@{neuesModul}">Neues Modul</a>
                 </div>
             </div>
         </div>
     </div>
     <div th:each="module : ${modules}">
-        <div class="card">
-            <div class="card-header">
-                <h3 style="margin-bottom: .0rem" class="card-title" th:text="${module.name}">Nothing Here</h3>
-                <div class="text-right">
-                    <a th:href="" class="btn btn-primary col">Modul bearbeiten</a>
-                </div>
+        <div class="card bg-light mb-3 border-primary">
+            <div class="card-header d-flex justify-content-between align-items-start">
+                <h3 style="margin-bottom: .0rem" class="card-title" th:text="${module.name}"></h3>
+                <form th:action="@{modulBearbeiten}" th:method="POST">
+                    <input id="name" name="name" type="hidden" th:value="${module.name}">
+                    <input id="shortName" name="shortName" type="hidden" th:value="${module.shortName}">
+                    <input id="prof" name="prof" type="hidden" th:value="${module.profName}">
+                    <input id="hourLimit" name="hourLimit" type="hidden" th:value="${module.hourLimit}">
+                    <input id="personLimit" name="personLimit" type="hidden" th:value="${module.personLimit}">
+                    <button class="btn btn-outline-primary btn-sm" type="submit">Bearbeiten</button>
+                </form>
             </div>
             <div class="card-body">
                 <div class="row">
                     <p>Kurzform: <div class="col-2" th:text="${module.shortName}"></div></p>
-                    <p>Zugeordnete Person: <div class="col-2" th:text="${module.profName}">Nothing Here</div></p>
-                    <p>Stundenlimit: <div class="col-1" th:text="${module.hourLimit}">Nothing Here</div></p>
-                    <p>Personenlimit: <div class="col" th:text="${module.personLimit}">Nothing Here</div></p>
+                    <p>Zugeordnete Person: <div class="col-2" th:text="${module.profName}"></div></p>
+                    <p>Stundenlimit: <div class="col-1" th:text="${module.hourLimit}"></div></p>
+                    <p>Personenlimit: <div class="col" th:text="${module.personLimit}"></div></p>
                 </div>
             </div>
         </div><br>

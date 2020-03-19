@@ -8,10 +8,7 @@ import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.ArrayList;
@@ -82,7 +79,6 @@ public class SetupController {
      */
 
     @PostMapping("/neuesModul")
-    @Secured("ROLE_setup")
     public String postNewModule(final KeycloakAuthenticationToken token, final Model model,
                                 @RequestParam("name") final String name,
                                 @RequestParam("shortName") final String shortName,
@@ -94,5 +90,30 @@ public class SetupController {
         input.add(s1);
         CSVService.writeInCSV("src/main/resources/csv/module.csv", input);
         return index(token, model);
+    }
+
+    /**
+     * Postmapping for editing the selected module
+     * @param token
+     * @param model
+     * @param name
+     * @param shortName
+     * @param prof
+     * @param hourLimit
+     * @param personLimit
+     * @return setup/modulBearbeiten
+     */
+
+    @PostMapping("/modulBearbeiten")
+    public String postEditModule(final KeycloakAuthenticationToken token, final Model model,
+                                 @RequestParam("name") final String name,
+                                 @RequestParam("shortName") final String shortName,
+                                 @RequestParam("prof") final String prof,
+                                 @RequestParam("hourLimit") final String hourLimit,
+                                 @RequestParam("personLimit") final String personLimit) {
+        Module oldModul = new Module(name, shortName, prof, hourLimit, personLimit);
+        model.addAttribute("module", oldModul);
+        model.addAttribute("account", createAccountFromPrincipal(token));
+        return "/setup/modulBearbeiten";
     }
 }

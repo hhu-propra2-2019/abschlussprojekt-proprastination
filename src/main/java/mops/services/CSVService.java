@@ -94,6 +94,7 @@ public class CSVService {
 
     /**
      * Get short name for modules
+     * @return List of shortName's
      */
     public  static List<String> getShortModuleNames() {
         List<String> list = new ArrayList<>();

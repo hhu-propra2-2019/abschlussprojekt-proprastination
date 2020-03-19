@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en"
+      th:replace="~{mopslayout :: html(name='Bewerbungs Organisation', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <th:block th:fragment="headcontent">
+
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+
+        <link href="../static/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"
+              th:href="@{node_modules/bootstrap/dist/css/bootstrap.min.css}">
+
+    </th:block>
+    <title>Organize Applications</title>
+</head>
+
+<body>
+<header>
+    <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
+        <ul>
+            <li>
+                <a th:href="@{/}">
+                    Startseite
+                </a>
+            </li>
+            <li>
+                <a th:href="@{./}">
+                    Zurück
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<main th:fragment="bodycontent">
+    <th:block>
+        <div class="card bg-light mb-3 border-primary">
+            <div class="card-header d-flex justify-content-between align-items-start" th:object="${module}">
+                <h3 style="margin-bottom: .0rem" class="card-title" th:text="${module.name}"></h3>
+                <!--form th:action="@{setupMain}" th:method="POST">
+                    <button class="btn btn-outline-primary btn-sm" type="submit">Speichern</button>
+                </form-->
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <p>Kurzform: <div class="col-2" th:text="${module.shortName}"></div></p>
+                    <p>Zugeordnete Person: <div class="col-2" th:text="${module.profName}"></div></p>
+                    <p>Stundenlimit: <div class="col-1" th:text="${module.hourLimit}"></div></p>
+                    <p>Personenlimit: <div class="col" th:text="${module.personLimit}"></div></p>
+                </div>
+            </div>
+        </div>
+    </th:block>
+    <div th:replace="${content} ? ${content}: ~{}"></div>
+</main>
+
+</body>
+</html>
