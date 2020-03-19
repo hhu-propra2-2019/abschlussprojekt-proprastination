@@ -11,10 +11,13 @@ import mops.services.ApplicantService;
 import mops.services.CSVService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.context.annotation.SessionScope;
 
+import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,6 +33,8 @@ import java.util.Set;
 @SessionScope
 @RequestMapping("/bewerbung2/bewerber")
 public class ApplicationController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationController.class);
 
     @Autowired
     private ApplicantService applicantService;
@@ -127,9 +133,18 @@ public class ApplicationController {
      */
     @PostMapping("/modul")
     @Secured("ROLE_studentin")
-    public String modul(final KeycloakAuthenticationToken token, final WebApplicant webApplicant,
+    public String modul(final KeycloakAuthenticationToken token, @Valid final WebApplicant webApplicant,
+                            BindingResult bindingResult,
                             final WebAddress webAddress, final Model model,
                             @RequestParam("modules") final String modules) {
+
+        if (bindingResult.hasErrors()) {
+            bindingResult.getAllErrors().forEach(err -> {
+                LOGGER.info("ERROR {}", err.getDefaultMessage());
+            });
+            model.addAttribute("webApplicant", webApplicant);
+            return "applicationEditPersonal";
+        }
 
         if (token != null) {
             String street = webAddress.getStreet();
