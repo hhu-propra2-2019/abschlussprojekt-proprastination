@@ -93,6 +93,7 @@ public class CSVService {
                 writeData.add(tmp);
             }
         }
+        cleanModules();
         writeInCSV("src/main/resources/csv/module.csv", writeData);
     }
 

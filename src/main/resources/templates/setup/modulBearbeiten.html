@@ -40,19 +40,22 @@
         <div class="card bg-light mb-3 border-primary">
             <div class="card-header d-flex justify-content-between align-items-start" th:object="${module}">
                 <h3 style="margin-bottom: .0rem" class="card-title" th:text="${module.name}"></h3>
-                <!--form th:action="@{setupMain}" th:method="POST">
-                    <button class="btn btn-outline-primary btn-sm" type="submit">Speichern</button>
-                </form-->
             </div>
             <div class="card-body">
                 <div class="row">
-                    <p>Kurzform: <div class="col-2" th:text="${module.shortName}"></div></p>
-                    <p>Zugeordnete Person: <div class="col-2" th:text="${module.profName}"></div></p>
-                    <p>Stundenlimit: <div class="col-1" th:text="${module.hourLimit}"></div></p>
-                    <p>Personenlimit: <div class="col" th:text="${module.personLimit}"></div></p>
+                    <form th:action="@{setupMain}" th:method="POST">
+                        <input id="oldName" name="oldName" type="hidden" th:value="${module.name}">
+                        <input id="name" name="name" th:value="${module.name}" th:placeholder="${module.name}">
+                        <input id="shortName" name="shortName" th:value="${module.shortName}" th:placeholder="${module.shortName}">
+                        <input id="profName" name="profName" th:value="${module.profName}" th:placeholder="${module.profName}">
+                        <input id="hourLimit" name="hourLimit" th:value="${module.hourLimit}" th:placeholder="${module.hourLimit}">
+                        <input id="personLimit" name="personLimit" th:value="${module.personLimit}" th:placeholder="${module.personLimit}">
+                        <button class="btn btn-outline-primary btn-sm" type="submit">Speichern</button>
+                    </form>
                 </div>
             </div>
         </div>
+        </form>
     </th:block>
     <div th:replace="${content} ? ${content}: ~{}"></div>
 </main>
