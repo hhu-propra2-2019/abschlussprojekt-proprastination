@@ -125,7 +125,7 @@
                         </div>
                         <div class="col-2">
               <!--              <a th:href="@{modul}" class="btn btn-outline-primary form-control"> Bestätige </a>-->
-                            <button th:type="submit" th:formaction="@{weiteresModul}">Weiteres Modul</button>
+                            <button th:type="submit" th:formaction="@{weiteresModul} "class="btn btn-outline-primary form-control">Weiteres Modul</button>
                         </div>
                     </div>
                 </div>
@@ -143,7 +143,8 @@
                             -->
                             <input th:type="hidden" th:name="module" th:value="${module}">
                             <input th:type="hidden" th:name="applicant" th:value="${applicant}">
-                            <button th:type="submit" th:formaction="@{uebersicht}">Einreichen</button>
+                            <button th:type="submit" th:formaction="@{uebersicht}" class="btn btn-outline-primary form-control">
+                                Einreichen </button>
                         </div>
                    </div>
                 </div>

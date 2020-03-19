@@ -126,6 +126,7 @@ public class ApplicationController {
      * @return applicationModule.html
      */
     @PostMapping("/modul")
+    @Secured("ROLE_studentin")
     public String modul(final KeycloakAuthenticationToken token, final WebApplicant webApplicant,
                             final WebAddress webAddress, final Model model,
                             @RequestParam("modules") final String modules) {
@@ -134,7 +135,7 @@ public class ApplicationController {
             String street = webAddress.getStreet();
             Address address = Address.builder()
                     .street(street.substring(0, street.indexOf(' ')))
-                    .houseNumber(street.substring(street.indexOf(' '), street.length()))
+                    .houseNumber(street.substring(street.indexOf(' ') + 1))
                     .city(webAddress.getCity())
                     .zipcode(webAddress.getZipcode())
                     .build();
@@ -151,6 +152,7 @@ public class ApplicationController {
                     .comment(webApplicant.getComment())
                     .build();
             applicantService.saveApplicant(applicant);
+            applicantService.findAll().forEach(System.out::println);
             model.addAttribute("webApplicant", webApplicant);
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("module", modules);
