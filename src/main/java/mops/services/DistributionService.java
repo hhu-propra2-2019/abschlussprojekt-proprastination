@@ -32,6 +32,7 @@ public class DistributionService {
     /**
      * Dummy functions that assignes applicants to Distributions
      */
+    @SuppressWarnings("checkstyle:MagicNumber")
     public void assign() {
         distributionRepository.save(Distribution.builder()
                 .employees(applicantService.findAll())
