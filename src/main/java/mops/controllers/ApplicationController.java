@@ -117,15 +117,14 @@ public class ApplicationController {
     }
 
     /**
-     *
-     * @param token
-     * @param webApplicant
-     * @param webAddress
-     * @param model
-     * @param modules
-     * @return
+     * saves Applicant into database and waits for moduleinformation
+     * @param token Keycloaktoken
+     * @param webApplicant webApplicant and its data
+     * @param webAddress webAddress and its data
+     * @param model Model
+     * @param modules the module the Applicant wants to apply for
+     * @return applicationModule.html
      */
-
     @PostMapping("/modul")
     public String modul(final KeycloakAuthenticationToken token, final WebApplicant webApplicant,
                             final WebAddress webAddress, final Model model,
