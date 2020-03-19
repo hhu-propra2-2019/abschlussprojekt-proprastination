@@ -47,10 +47,11 @@ public class PDFService {
 
     private void addApplicationInfoToPDF(final Application application) throws IOException {
         document.setField("Stunden", String.valueOf(application.getHours()));
-        document.setField("E-Mail", application.getApplicantusername() + "@hhu.de");
+        document.setField("Vertragsart", "Neueinstellung");
     }
 
     private void addApplicantInfoToPDF(final Applicant applicant) throws IOException {
+        document.setField("E-Mail", applicant.getUniserial() + "@hhu.de");
         document.setField("Vorname", applicant.getFirstName());
         document.setField("Name", applicant.getSurname());
         document.setField("Vorsatzwort", applicant.getTitle());

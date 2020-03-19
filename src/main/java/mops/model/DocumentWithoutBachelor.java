@@ -10,21 +10,39 @@ import java.util.Date;
 
 public class DocumentWithoutBachelor implements Document {
 
-    private final String ORIGINAL_DOCUMENT = "321_Antrag_Beschaeftigung_stud_Hilfskraefte.pdf";
+    private final String originalDocument = "321_Antrag_Beschaeftigung_stud_Hilfskraefte.pdf";
     private final PDDocument document;
     private final PDAcroForm acroForm;
 
+    /**
+     * Initializes Document.
+     *
+     * @throws IOException IOException.
+     */
     public DocumentWithoutBachelor() throws IOException {
-        document = PDDocument.load(new File(System.getProperty("user.dir") + File.separator + ORIGINAL_DOCUMENT));
+        document = PDDocument.load(new File(System.getProperty("user.dir") + File.separator + originalDocument));
         document.setAllSecurityToBeRemoved(true);
         acroForm = document.getDocumentCatalog().getAcroForm();
     }
 
+    /**
+     * Saves File.
+     *
+     * @param newFile FIle to save.
+     * @throws IOException IOException.
+     */
     @Override
     public void save(final File newFile) throws IOException {
         document.save(newFile);
     }
 
+    /**
+     * Sets field given the parameters.
+     *
+     * @param fieldName    Name of field.
+     * @param fieldContent Fieldcontent.
+     * @throws IOException IOException.
+     */
     @Override
     public void setField(final String fieldName, final String fieldContent) throws IOException {
         acroForm.getField(fieldName).setValue(fieldContent);
@@ -45,6 +63,11 @@ public class DocumentWithoutBachelor implements Document {
         }
     }
 
+    /**
+     * Adds gerneral that is same for all applicants.
+     *
+     * @throws IOException IOException.
+     */
     @Override
     public void addGeneralInfos() throws IOException {
         setField("Tutorentätigkeit", "On");
@@ -57,6 +80,9 @@ public class DocumentWithoutBachelor implements Document {
         return new SimpleDateFormat("dd/MM/yyyy").format(new Date());
     }
 
+    /**
+     * Prints out all Fieldvalues.
+     */
     @Override
     public void debug() {
         acroForm.getFields().forEach(System.out::println);

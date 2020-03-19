@@ -75,7 +75,7 @@ public class PDFController {
         if (token != null) {
             Account account = createAccountFromPrincipal(token);
 
-            Applicant applicant = applicantService.findByUsername(account.getName());
+            Applicant applicant = applicantService.findByUniserial(account.getName());
             Optional<Application> application = applicant.getApplications().stream()
                     .filter(p -> p.getModule().equals(module)).findFirst();
 
