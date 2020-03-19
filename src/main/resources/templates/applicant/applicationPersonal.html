@@ -30,7 +30,6 @@
 </header>
 <main th:fragment="bodycontent">
     <div style="text-align: center;">
-    <!-- Restlichen Inhalt hier einfügen! -->
         <form th:action="@{modul}" th:method="POST">
             <div class="card bg-light mb-3 border-primary">
                 <div class="card-header"><h2>Persönliche Daten</h2></div>
@@ -65,7 +64,8 @@
                             <input type="text" name="birthday" id="birthday" onfocus="(this.type='date')" required
                                    onblur="(this.type='text')" class="form-control" placeholder="Geburtstag"> <br><br>
                         </div>
-                   <div class="row">
+                    </div>
+                    <div class="row">
                         <div class="col-2">
                             <select name="gender" id="gender" class="form-control" required>
                                 <option value="" disabled selected hidden>Geschlecht</option>
@@ -151,7 +151,6 @@
                     </div>
                 </div>
             </div>
-            <br>
             <div class="card bg-light mb-3 border-primary">
                 <div class="card-body">
                     <div class="row">
@@ -166,15 +165,13 @@
                             </select>
                         </div>
                         <div class="col-2">
-                            <!--
-                            <a th:href="@{modul}" class="btn btn-outline-primary form-control"> Bestätige </a>
-                            -->
-                            <input th:type="submit" th:text="bestätige" th:value="submit">
+                            <button th:type="submit" class="btn btn-outline-primary form-control"> Bestätige </button>
                         </div>
-                   </div>
+                    </div>
                 </div>
             </div>
-        </form>
+        </form>>
+
     </div>
 </main>
 </body>

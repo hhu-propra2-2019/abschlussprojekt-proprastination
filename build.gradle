@@ -1,3 +1,5 @@
+import com.github.spotbugs.SpotBugsTask
+
 plugins {
     id 'org.springframework.boot' version '2.2.5.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
@@ -32,10 +34,11 @@ checkstyle {
     toolVersion '8.28'
     checkstyleTest.enabled = false
     configFile file("$configDir/checkstyle/proprastination_checks.xml")
-    checkstyleTest.enabled = false
 }
 
-tasks.withType(com.github.spotbugs.SpotBugsTask) {
+spotbugsTest.enabled = false
+
+tasks.withType(SpotBugsTask) {
     reports {
         xml.enabled = false
         html.enabled = true
@@ -46,14 +49,16 @@ tasks.withType(com.github.spotbugs.SpotBugsTask) {
 dependencies {
     compileOnly 'com.github.spotbugs:spotbugs-annotations:4.0.0-RC1'
     compile group: 'org.json', name: 'json', version: '20190722'
+    implementation 'com.github.javafaker:javafaker:1.0.2'
     compile 'com.opencsv:opencsv:5.1'
     implementation 'mops:styleguide:2.2.0'
     testCompile("org.assertj:assertj-core:3.15.0")
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'com.c4-soft.springaddons:spring-security-test-keycloack-addons:1.2.0'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.keycloak:keycloak-spring-boot-starter:9.0.0'
     implementation 'org.keycloak.bom:keycloak-adapter-bom:3.3.0.Final'
@@ -71,7 +76,7 @@ dependencies {
     testCompile("org.assertj:assertj-core:3.11.1")
     compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5:3.0.4.RELEASE'
     implementation 'junit:junit:4.12'
-    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.10'
+    compile group: 'com.h2database', name: 'h2', version: '1.4.200'
 }
 
 test {

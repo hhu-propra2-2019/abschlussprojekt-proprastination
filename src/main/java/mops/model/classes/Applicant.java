@@ -1,35 +1,53 @@
 package mops.model.classes;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Singular;
 import lombok.ToString;
+import org.springframework.data.relational.core.mapping.Table;
 
-import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import java.util.Set;
 
-@Builder(builderClassName = "ApplicantBuilder", toBuilder = true)
-@Getter
+@Builder(toBuilder = true)
 @EqualsAndHashCode
-@ToString
-@JsonDeserialize(builder = Applicant.ApplicantBuilder.class)
+@Getter
+@ToString(exclude = "id")
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table
 public class Applicant {
-    private final String name;
-    private final String birthplace;
-    private final Address address;
-    private final String birthday;
-    private final String nationality;
-    private final String course;
-    private final Status status;
-    private final Certificate certs;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+    private String uniserial;
+    private String birthplace;
+    private String title;
+    private String firstName;
+    private String surname;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Address address;
+    private String gender;
+    private String birthday;
+    private String nationality;
+    private String course;
+    private String status;
+    private String comment;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Certificate certs;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Singular
-    private final List<Application> applications;
-
-    @JsonPOJOBuilder(withPrefix = "")
-    public static class ApplicantBuilder {
-
-    }
-
+    private Set<Application> applications;
 }

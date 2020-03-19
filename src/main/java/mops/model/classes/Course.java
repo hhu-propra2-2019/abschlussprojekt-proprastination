@@ -8,13 +8,10 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.relational.core.mapping.Table;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 @Builder(toBuilder = true)
 @EqualsAndHashCode
@@ -24,12 +21,9 @@ import javax.persistence.OneToOne;
 @NoArgsConstructor
 @Entity
 @Table
-public class Evaluation {
+public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Application application;
-    private String comment;
-    private int priority;
+    private String name;
 }

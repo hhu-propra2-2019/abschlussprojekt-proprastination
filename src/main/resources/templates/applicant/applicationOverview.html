@@ -38,7 +38,8 @@
         <div class="card bg-light mb-3 border-primary">
             <div class="card-header">
                 <label><h3>Persönliche Daten</h3></label>
-                <a th:href="@{bearbeitePersoenlicheDaten}" class="btn btn-outline-primary" style="float: right;"> Bearbeiten </a>
+                <a th:href="@{bearbeitePersoenlicheDaten}" class="btn btn-outline-primary" style="float: right;">
+                    Bearbeiten </a>
             </div>
             <div class="card-body">
                 <div class="col-auto">
@@ -46,7 +47,7 @@
                         <div class="col-6">
                             <div class="row">
                                 <label for="name">Name:&nbsp;</label>
-                                <label id="name" th:text="${applicant.name}">Max Mustermann</label>
+                                <label id="name" th:text="${applicant.surname}">Max Mustermann</label>
                             </div>
                             <div class="row">
                                 <label for="email">E-Mail:&nbsp;</label>
@@ -54,7 +55,8 @@
                             </div>
                             <div class="row">
                                 <label for="streetplusnumber">Straße und Hausnummer:&nbsp;</label>
-                                <label id="streetplusnumber" th:text="${applicant.address.street}">Musterstraße 1</label>
+                                <label id="streetplusnumber" th:text="${applicant.address.street}">Musterstraße
+                                    1</label>
                             </div>
                             <div class="row">
                                 <label for="place">Ort:&nbsp;</label>
@@ -99,13 +101,14 @@
         </div>
         <div class="row">
             <div class="col-sm-4" th:each="appl: ${applicant.applications}">
-                <div class="card bg-light mb-3 border-primary" >
+                <div class="card bg-light mb-3 border-primary">
                     <div class="card-header">
                         <label class="" th:title="${appl.module}" th:text="${appl.module}"
                                style="text-overflow: ellipsis; overflow: hidden; width: 60%; white-space: nowrap">
                             Programmierung (Früher: Grundlagen der Informatik)
                         </label>
-                        <a th:href="@{bearbeiteModulDaten}" class="btn btn-outline-primary" style="float: right;"> Bearbeiten </a>
+                        <a th:href="@{bearbeiteModulDaten}" class="btn btn-outline-primary" style="float: right;">
+                            Bearbeiten </a>
                     </div>
                     <div class="card-body">
                         <div class="col-auto">
