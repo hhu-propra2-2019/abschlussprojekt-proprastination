@@ -39,7 +39,7 @@
     <div th:if="${modules.empty}">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Erstelle ein neues Modul</h3>
+                <h3 cstyle="margin-bottom: .0rem "lass="card-title">Erstelle ein neues Modul</h3>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -53,16 +53,18 @@
     <div th:each="module : ${modules}">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title" th:text="${module.name}">Nothing Here</h3>
+                <h3 style="margin-bottom: .0rem" class="card-title" th:text="${module.name}">Nothing Here</h3>
             </div>
             <div class="card-body">
                 <div class="row">
-                    <p class="card-text col-2" th:text="${module.shortName}">Nothing Here</p>
-                    <p class="card-text col-2" th:text="${module.profName}">Nothing Here</p>
-                    <p class="card-text col-2" th:text="${module.hourLimit}">Nothing Here</p>
-                    <p class="card-text col-2" th:text="${module.personLimit}">Nothing Here</p>
+                    <p>Kurzform: <div class="col-2" th:text="${module.shortName}"></div></p>
+                    <p>Zugeordnete Person: <div class="col-2" th:text="${module.profName}">Nothing Here</div></p>
+                    <p>Stundenlimit: <div class="col-1" th:text="${module.hourLimit}">Nothing Here</div></p>
+                    <p>Personenlimit: <div class="col" th:text="${module.personLimit}">Nothing Here</div></p>
+                    <div class="text-right">
+                        <a th:href="" class="btn btn-primary col">Neues Modul</a>
+                    </div>
                 </div>
-                <!--a th:href="@{setupNewModule}" class="btn btn-primary">Neues Modul</a-->
             </div>
         </div><br>
     </div>
