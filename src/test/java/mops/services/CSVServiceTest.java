@@ -91,6 +91,27 @@ class CSVServiceTest{
     }
 
     @Test
+    void getModulesWithDetailsTest() {
+        List<String[]> data = service.getModulesWithDetails();
+        String[] s1 = {"Rechnernetze Datenbanken und Betriebssysteme","RDB", "Jens Bendisposto", "40", "0"};
+        String[] s2 = {"Rechnerarchitektur","RA", "Christian Meter", "0", "4"};
+        String[] s3 = {"Theoretische Informatik", "Theo Info", "Anna Wintour", "80", "2"};
+
+        assertThat(data.get(0)).isEqualTo(s1);
+        assertThat(data.get(1)).isEqualTo(s2);
+        assertThat(data.get(2)).isEqualTo(s3);
+    }
+
+    @Test
+    void getModuleShortNamesTest() {
+        List<String> data = service.getShortModuleNames();
+
+        assertThat(data.get(0)).isEqualTo("RDB");
+        assertThat(data.get(1)).isEqualTo("RA");
+        assertThat(data.get(2)).isEqualTo("Theo Info");
+    }
+
+    @Test
     void getModulesTest() {
         List<String> modules;
         String csvname = "src/main/resources/csv/module.csv";
@@ -144,7 +165,7 @@ class CSVServiceTest{
     void getProfForModuleTestNotFail() {
         String prof;
 
-        prof = service.getProfForModule("RDB");
+        prof = service.getProfForModule("Rechnernetze Datenbanken und Betriebssysteme");
 
         assertThat(prof).isEqualTo("Jens Bendisposto");
     }

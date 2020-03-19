@@ -93,6 +93,20 @@ public class CSVService {
     }
 
     /**
+     * Get short name for modules
+     */
+    public  static List<String> getShortModuleNames() {
+        List<String> list = new ArrayList<>();
+        List<String[]> moduleNames = readFromCSV("src/main/resources/csv/module.csv");
+        String[] strArr;
+        for (int i = 0; i < moduleNames.size(); i++) {
+            strArr = moduleNames.get(i);
+            list.add(strArr[1]);
+        }
+        return list;
+    }
+
+    /**
      * return hour limit for modules
      * @return List of all limits
      */
@@ -102,7 +116,7 @@ public class CSVService {
         String[] strArr;
         for (int i = 0; i < limits.size(); i++) {
             strArr = limits.get(i);
-            list.add(strArr[2]);
+            list.add(strArr[3]);
         }
         return list;
     }
@@ -118,7 +132,7 @@ public class CSVService {
         String[] strArr;
         for (int i = 0; i < limits.size(); i++) {
             strArr = limits.get(i);
-            list.add(strArr[3]);
+            list.add(strArr[4]);
         }
         return list;
     }
@@ -134,7 +148,7 @@ public class CSVService {
         String[] strArr;
         for (int i = 0; i < profs.size(); i++) {
             strArr = profs.get(i);
-            list.add(strArr[1]);
+            list.add(strArr[2]);
         }
         return list;
     }
@@ -151,7 +165,7 @@ public class CSVService {
         for (int i = 0; i < data.size(); i++) {
             strArr = data.get(i);
             if (strArr[0].equals(moduleName)) {
-                return strArr[1];
+                return strArr[2];
             }
         }
         return "Not found";
@@ -168,7 +182,7 @@ public class CSVService {
         String[] strArr;
         for (int i = 0; i < profs.size(); i++) {
             strArr = profs.get(i);
-            if (strArr[1].equals(profName)) {
+            if (strArr[2].equals(profName)) {
                 list.add(strArr[0]);
             }
         }

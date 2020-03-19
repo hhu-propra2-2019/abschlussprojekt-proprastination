@@ -44,34 +44,12 @@ public class SetupController {
             String[] tmp;
             for (int i = 0; i < modules.size(); i++) {
                 tmp = modules.get(i);
-                Module newModule = new Module(tmp[0], tmp[1], tmp[2], tmp[3]);
+                Module newModule = new Module(tmp[0], tmp[1], tmp[2], tmp[3], tmp[4]);
                 moduleList.add(newModule);
             }
             model.addAttribute("modules", moduleList);
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
-        return "setup/setupMain";
-    }
-
-    /**
-     * Get Mapping for the creating a new module
-     * @param token The KeycloakAuthentication
-     * @param model The Website model
-     * @return The HTML file rendered as a String
-     */
-    @GetMapping("/setupMain")
-    @Secured("ROLE_setup")
-    public String dashboard(final KeycloakAuthenticationToken token, final Model model) {
-        List<String[]> modules = CSVService.getModulesWithDetails();
-        List<Module> moduleList = new ArrayList<Module>();
-        String[] tmp;
-        for (int i = 0; i < modules.size(); i++) {
-            tmp = modules.get(i);
-            Module newModule = new Module(tmp[0], tmp[1], tmp[2], tmp[3]);
-            moduleList.add(newModule);
-        }
-        model.addAttribute("modules", moduleList);
-        model.addAttribute("account", createAccountFromPrincipal(token));
         return "setup/setupMain";
     }
 
