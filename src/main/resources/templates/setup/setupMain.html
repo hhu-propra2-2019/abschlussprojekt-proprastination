@@ -36,24 +36,21 @@
 </header>
 
 <main th:fragment="bodycontent">
-    <table>
-        <th:block th:each="module : ${modules}">
-            <tr>
-                <td th:text="${module.name}">...</td>
-                <td th:text="${module.profName}">...</td>
-            </tr>
-        </th:block>
-    </table>
-    <div class="card">
-        <div class="card-header">
-            Modul #0
+    <th:block th:each="module : ${modules}">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title" th:text="${module.name}">Nothing Here</h2>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <p class="card-text" th:text="${module.profName}">Nothing Here</p>
+                    <p class="card-text" th:text="${module.hourLimit}">Nothing Here</p>
+                    <p class="card-text" th:text="${module.personLimit}">Nothing Here</p>
+                </div>
+                <!--a th:href="@{setupNewModule}" class="btn btn-primary">Neues Modul</a-->
+            </div>
         </div>
-        <div class="card-body">
-            <h2 class="card-title">Modulname</h2>
-            <p class="card-text">Hier müssen die Module mit Thymeleaf eingesetzt werden.</p>
-            <a th:href="@{setupNewModule}" class="btn btn-primary">Neues Modul</a>
-        </div>
-    </div>
+    </th:block>
     <div th:replace="${content} ? ${content}: ~{}"></div>
 </main>
 
