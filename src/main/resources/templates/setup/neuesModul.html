@@ -38,35 +38,34 @@
     <div class="card bg-light mb-3 border-primary">
         <div class="card-header d-flex justify-content-between align-items-start">
                 <h2 style="margin-bottom: .0rem" class="card-text col">Neues Modul</h2>
-                <button class="btn btn-link btn-sm">
-                    <a href="">Speichern</a>
-                </button>
         </div>
         <div class="card-body flex-column h-100">
-            <form th:action="@{module.csv}" th:method="POST">
+            <form th:action="@{neuesModul}" th:method="POST">
                 <div class="row">
-                    <div class="col-md-4">
-                        <input type="text" name="modulName" id="moduleName"
+                    <div class="col-md-3">
+                        <input type="text" name="name" id="name"
                                class="form-control" placeholder="Name des Moduls">
                     </div>
-                    <div class="col-md-4">
-                        <input type="text" name="profName" id="profName"
+                    <div class="col-md-2">
+                        <input type="text" name="shortName" id="shortName"
+                               class="form-control" placeholder="Kurzform des Moduls">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" name="prof" id="prof"
                                class="form-control" placeholder="Name des Professors">
                     </div>
                     <div class="col-md-2">
-                        <input type="number" name="maxHours" id="maxHours"
+                        <input type="number" name="hourLimit" id="hourLimit"
                                class="form-control" placeholder="Stundenlimit">
                     </div>
 
                     <div class="col-md-2">
-                        <input type="number" name="maxEmployees" id="maxEmployees"
+                        <input type="number" name="personLimit" id="personLimit"
                                class="form-control" placeholder="Tutorenlimit"><br>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="btn-sm btn-outline-primary col">
-                        <a href="">Speichern</a>
-                    </div>
+                    <input th:type="submit" th:value="submit">
                 </div>
             </form>
         </div>

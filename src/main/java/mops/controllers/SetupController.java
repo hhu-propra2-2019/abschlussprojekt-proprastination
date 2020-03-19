@@ -93,6 +93,6 @@ public class SetupController {
         String[] s1 = {name, shortName, prof, hourLimit, personLimit};
         input.add(s1);
         CSVService.writeInCSV("src/main/resources/csv/module.csv", input);
-        return "setup/setupMain";
+        return index(token, model);
     }
 }

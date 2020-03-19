@@ -27,7 +27,7 @@
                 </a>
             </li>
             <li>
-                <a th:href="@{setupNewModule}">
+                <a th:href="@{neuesModul}">
                     Neues Modul
                 </a>
             </li>
@@ -45,7 +45,7 @@
                 <div class="row">
                     <p class="card-text">Bisher sind noch keine Module vorhanden.
                         Es sollten bis zum Bewerbungsbeginn Module eingetragen werden. mit dem Button können sie ein neues Modul erstellen.</p>
-                    <button type="button" class="btn btn-primary"><a th:href="@{setupNewModule}">Neues Modul</a></button>
+                    <a class="btn btn-primary text-left" th:href="@{neuesModul}">Neues Modul</a>
                 </div>
             </div>
         </div>
@@ -62,7 +62,7 @@
                     <p>Stundenlimit: <div class="col-1" th:text="${module.hourLimit}">Nothing Here</div></p>
                     <p>Personenlimit: <div class="col" th:text="${module.personLimit}">Nothing Here</div></p>
                     <div class="text-right">
-                        <a th:href="" class="btn btn-primary col">Neues Modul</a>
+                        <!--a th:href="" class="btn btn-primary col">Neues Modul</a-->
                     </div>
                 </div>
             </div>
