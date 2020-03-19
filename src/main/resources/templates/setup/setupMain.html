@@ -36,21 +36,36 @@
 </header>
 
 <main th:fragment="bodycontent">
-    <th:block th:each="module : ${modules}">
+    <div th:if="${modules.empty}">
         <div class="card">
             <div class="card-header">
-                <h2 class="card-title" th:text="${module.name}">Nothing Here</h2>
+                <h3 class="card-title">Erstelle ein neues Modul</h3>
             </div>
             <div class="card-body">
                 <div class="row">
-                    <p class="card-text" th:text="${module.profName}">Nothing Here</p>
-                    <p class="card-text" th:text="${module.hourLimit}">Nothing Here</p>
-                    <p class="card-text" th:text="${module.personLimit}">Nothing Here</p>
+                    <p class="card-text">Bisher sind noch keine Module vorhanden.
+                        Es sollten bis zum Bewerbungsbeginn Module eingetragen werden. mit dem Button können sie ein neues Modul erstellen.</p>
+                    <button type="button" class="btn btn-primary"><a th:href="@{setupNewModule}">Neues Modul</a></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:each="module : ${modules}">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title" th:text="${module.name}">Nothing Here</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <p class="card-text col-2" th:text="${module.shortName}">Nothing Here</p>
+                    <p class="card-text col-2" th:text="${module.profName}">Nothing Here</p>
+                    <p class="card-text col-2" th:text="${module.hourLimit}">Nothing Here</p>
+                    <p class="card-text col-2" th:text="${module.personLimit}">Nothing Here</p>
                 </div>
                 <!--a th:href="@{setupNewModule}" class="btn btn-primary">Neues Modul</a-->
             </div>
-        </div>
-    </th:block>
+        </div><br>
+    </div>
     <div th:replace="${content} ? ${content}: ~{}"></div>
 </main>
 
