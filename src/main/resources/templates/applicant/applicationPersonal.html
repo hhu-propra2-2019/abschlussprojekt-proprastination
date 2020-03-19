@@ -30,48 +30,54 @@
 </header>
 <main th:fragment="bodycontent">
     <div style="text-align: center;">
-        <form th:action="@{modul}" th:method="POST">
+        <form th:action="@{modul}" th:method="POST" th:object="${webApplicant}">
             <div class="card bg-light mb-3 border-primary">
                 <div class="card-header"><h2>Persönliche Daten</h2></div>
                 <div class="card-body">
-                    <div class="row">
+                    <div class="row" th:object="${webAddress}">
                         <div class="col-5">
-                            <input type="text" name="street" id="street"
+                            <input th:type="text" th:name="street"
+                                   th:field="*{street}" th:attr="value = ${webAddress.street}"
                                    class="form-control" placeholder="Straße und Hausnummer" required> <br>
                             <br>
                         </div>
                         <div class="col-5">
-                            <input type="text" name="place" id="place"
-                                   class="form-control" placeholder="Ort" required> <br>
+                            <input th:type="text" th:name="city" th:id="city"
+                                   th:field="*{city}" th:attr="value = ${webAddress.city}"
+                                   th:class="form-control" placeholder="Ort" required> <br>
                         </div>
                         <div class="col-2">
-                            <input type="text" name="plz" id="plz" class="form-control" placeholder="Postleitzahl"
-                                   pattern="^\d{5}$" minlength="5" maxlength="5" required> <br>
+                            <input th:type="text" th:name="zipcode" th:id="zipcode" th:field="*{zipcode}"
+                                   th:attr="value = ${webAddress.zipcode}"
+                                   th:class="form-control" placeholder="Postleitzahl" required> <br>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-5">
-                            <input type="text" name="placeofbirth" id="placeofbirth"
-                                   class="form-control" placeholder="Geburtsort, Land" required> <br>
+                            <input th:type="text" th:name="birthplace" th:id="birthplace"
+                                   th:field="*{birthplace}"  th:attr="value = ${webApplicant.birthplace}"
+                                   th:class="form-control" placeholder="Geburtsort, Land" required> <br>
                         </div>
                         <div class="col-5">
-                            <select name="nationality" id="nationality" class="form-control" required>
+                            <select th:name="nationality" th:id="nationality" th:class="form-control"
+                                    th:field="*{nationality}" th:attr="value = ${webApplicant.nationality}" required>
                                 <option value="" disabled selected hidden>Nationalität</option>
-                                <option th:each="country:${countries}" th:text="${country}"></option>
+                                <option th:each="country:${countries}" th:text="${country}" th:value="${country}"></option>
                             </select> <br>
                         </div>
                         <div class="col-2">
-                            <input type="text" name="birthday" id="birthday" onfocus="(this.type='date')" required
-                                   onblur="(this.type='text')" class="form-control" placeholder="Geburtstag"> <br><br>
+                            <input type="text" name="birthday" id="birthday" onfocus="(this.type='date')"
+                                   th:field="*{birthday}" th:attr="value = ${webApplicant.birthday}"
+                                   onblur="(this.type='text')" class="form-control" placeholder="Geburtstag" required> <br><br>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-2">
-                            <select name="gender" id="gender" class="form-control" required>
+                            <select name="gender" id="gender" class="form-control"
+                                    th:field="*{gender}" th:attr="value = ${webApplicant.gender}" required>
                                 <option value="" disabled selected hidden>Geschlecht</option>
                                 <option value="male">männlich</option>
                                 <option value="female">weiblich</option>
-                                <option value="diverse">divers</option>
                             </select>
                         </div>
                         <div class="col-4">
@@ -84,28 +90,31 @@
 
                         </div>
                         <div class="col-6">
-                            <select name="courses" id="courses" class="form-control">
-                                <option th:each="course:${courses}" th:text="${course}"></option>
+                            <select name="courses" id="courses" class="form-control"
+                                    th:field="*{course}" th:attr="value=${webApplicant.course}">
+                                <option th:each="cours:${courses}" th:text="${cours}" th:value="${cours}"></option>
                             </select> <br> <br>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-6">
                             <div align="right">
-                                <label for="status">
+                                <label>
                                     Wählen sie bitte Ihren aktuellen Angestelltenstatus
                                 </label> <br>
                             </div>
                         </div>
                         <div class="col-6">
-                            <select name="status" id="status" class="form-control">
-                                <option value="neueinstellung">
+                            <select th:name="status" th:id="status" th:class="form-control"
+                                    th:field="*{status}" th:attr="value = ${webApplicant.status}"
+                            >
+                                <option th:value="neueinstellung">
                                     Neueinstellung (bisher keine Anstellung an der HHU)
                                 </option>
-                                <option value="weiterbeschaeftigung">
+                                <option th:value="weiterbeschaeftigung">
                                     Weiterbeschäftigung (bestehender Vertrag bis zum DD.MM.YYYY)
                                 </option>
-                                <option value="wiedereinstellung">
+                                <option th:value="wiedereinstellung">
                                     Wiedereinstellung (KEIN bestehender Vertrag bis zum DD.MM.YYYY)
                                 </option>
                             </select>
@@ -124,12 +133,12 @@
                     <div class="row">
                         <div class="col-6">
                             <select name="graduation" id="graduation" class="form-control">
+                                <option value="none">kein Universitätsabschluss</option>
                                 <option value="bachelor">Bachelor</option>
                                 <option value="master">Master</option>
                                 <option value="diplom">Diplom</option>
                                 <option value="staatsexamen">Staatsexamen</option>
                                 <option value="else">Anderes</option>
-                                <option value="none">kein Universitätsabschluss</option>
                             </select> <br>
                         </div>
                         <div class="col-6">
@@ -139,14 +148,16 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <label for="diverse">
+                            <label>
                                 Beschreiben Sie hier kurz Ihre bisherigen Erfahrungen und sonstige Anmerkungen:
                             </label> <br>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
-                            <textarea name="diverse" id="diverse" class="form-control" rows="6" maxlength="1000"></textarea> <br>
+                            <textarea th:name="comment" th:id="comment" th:class="form-control" rows="6" maxlength="1000"
+                                      th:field="*{comment}" th:attr="value = ${webApplicant.comment}"
+                            ></textarea> <br>
                         </div>
                     </div>
                 </div>
@@ -165,14 +176,12 @@
                             </select>
                         </div>
                         <div class="col-2">
-                            <button class="btn btn-outline-primary form-control" th:type="submit"> Bestätige</button>
+                            <button th:type="submit" class="btn btn-outline-primary form-control"> Bestätige </button>
                         </div>
                     </div>
                 </div>
             </div>
-        </form>
-        >
-
+        </form>>
     </div>
 </main>
 </body>

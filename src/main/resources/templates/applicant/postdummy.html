@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{mopslayout :: html(name='Persönliche Ansicht', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}">
+<head>
+    <meta charset="utf-8">
+    <th:block th:fragment="headcontent">
+        <link href="../static/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"
+              th:href="@{node_modules/bootstrap/dist/css/bootstrap.min.css}">
+    </th:block>
+</head>
+<body>
+<header>
+    <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
+        <ul>
+            <li>
+                <a th:href="@{/}">
+                    Startseite
+                </a>
+            </li>
+            <li>
+                <a th:href="@{..}">
+                    Dashboard
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main th:fragment="bodycontent">
+    <div th:object="${webApplicant}">
+        <div th:object="${webAddress}">
+            <h1 th:text="${webApplicant.birthplace}"></h1>
+            <h1 th:text="${webApplicant.gender}"></h1>
+            <h1 th:text="${webApplicant.nationality}"></h1>
+            <h1 th:text="${webApplicant.birthday}"></h1>
+            <h1 th:text="${webApplicant.course}"></h1>
+            <h1 th:text="${webApplicant.status}"></h1>
+            <h1 th:text="${webApplicant.comment}"></h1>
+            <p th:text="${webAddress.street}"></p>
+            <p th:text="${webAddress.city}"></p>
+            <p th:text="${webAddress.zipcode}"></p>
+        </div>
+    </div>
+</main>
+</body>
+</html>
