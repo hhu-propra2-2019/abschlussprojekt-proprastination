@@ -49,5 +49,6 @@ public class Applicant {
     private Certificate certs;
     @Singular
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Singular
     private Set<Application> applications;
 }

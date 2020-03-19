@@ -296,6 +296,21 @@ public class ApplicationController {
     }
 
     /**
+     * getmapping for overview
+     * @param token
+     * @param model
+     * @return overview html as string
+     */
+    @GetMapping("bewerbungsUebersicht")
+    public String dashboardOverview(final KeycloakAuthenticationToken token, final Model model) {
+        if (token != null) {
+            model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("applicant", applicantService.findByUniserial("has220"));
+        }
+        return "applicant/applicationOverview";
+    }
+
+    /**
      * Overview, will be used to save the last module and shows the data the applicant filled in
      *
      * @param token     keycloaktone

@@ -37,36 +37,37 @@
                     <div class="row">
                         <div class="col-5">
                             <input type="text" name="street" id="street"
-                                   class="form-control" placeholder="Straße und Hausnummer"> <br>
+                                   class="form-control" placeholder="Straße und Hausnummer" required> <br>
                             <br>
                         </div>
                         <div class="col-5">
                             <input type="text" name="place" id="place"
-                                   class="form-control" placeholder="Ort"> <br>
+                                   class="form-control" placeholder="Ort" required> <br>
                         </div>
                         <div class="col-2">
-                            <input type="text" name="plz" id="plz" class="form-control" placeholder="Postleitzahl"> <br>
+                            <input type="text" name="plz" id="plz" class="form-control" placeholder="Postleitzahl"
+                                   pattern="^\d{5}$" minlength="5" maxlength="5" required> <br>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-5">
                             <input type="text" name="placeofbirth" id="placeofbirth"
-                                   class="form-control" placeholder="Geburtsort, Land"> <br>
+                                   class="form-control" placeholder="Geburtsort, Land" required> <br>
                         </div>
                         <div class="col-5">
-                            <select name="nationality" id="nationality" class="form-control">
+                            <select name="nationality" id="nationality" class="form-control" required>
                                 <option value="" disabled selected hidden>Nationalität</option>
                                 <option th:each="country:${countries}" th:text="${country}"></option>
                             </select> <br>
                         </div>
                         <div class="col-2">
-                            <input type="text" name="birthday" id="birthday" onfocus="(this.type='date')"
+                            <input type="text" name="birthday" id="birthday" onfocus="(this.type='date')" required
                                    onblur="(this.type='text')" class="form-control" placeholder="Geburtstag"> <br><br>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-2">
-                            <select name="gender" id="gender" class="form-control">
+                            <select name="gender" id="gender" class="form-control" required>
                                 <option value="" disabled selected hidden>Geschlecht</option>
                                 <option value="male">männlich</option>
                                 <option value="female">weiblich</option>
@@ -145,7 +146,7 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <textarea name="diverse" id="diverse" class="form-control" rows="6"></textarea> <br>
+                            <textarea name="diverse" id="diverse" class="form-control" rows="6" maxlength="1000"></textarea> <br>
                         </div>
                     </div>
                 </div>

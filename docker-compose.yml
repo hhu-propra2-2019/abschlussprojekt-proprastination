@@ -1,17 +1,17 @@
 version: '3.3'
 services:
   db:
-    image: postgres
-    ports:
-      - '5432:5432'
+    image: mysql:8
     environment:
-      - POSTGRES_USER=mops
-      - POSTGRES_PASSWORD=mops
-      - POSTGRES_DB=moepsinnen
+      - MYSQL_DATABASE=moepsinnen
+      - MYSQL_USER=mops
+      - MYSQL_PASSWORD=mops
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
     volumes:
-      - postgres:/var/lib/postgresql/data
-    expose:
-      - 5432
+      - ./mysql/db/entrypoint:/docker-entrypoint-initdb.d/
+      - ./mysql/db/config.cnf:/etc/mysql/conf.d/config.cnf
+    ports:
+      - 3306:3306
   mops:
     depends_on:
       - db
@@ -22,5 +22,3 @@ services:
       dockerfile: Dockerfile
     ports:
       - '8080:8080'
-volumes:
-  postgres:
