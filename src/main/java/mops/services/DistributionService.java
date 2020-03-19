@@ -26,7 +26,6 @@ public class DistributionService {
         this.distributionRepository = distributionRepository;
         this.moduleService = moduleService;
         this.applicantService = applicantService;
-        assign();
     }
 
     /**
