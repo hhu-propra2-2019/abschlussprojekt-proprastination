@@ -34,7 +34,6 @@ public class Applicant {
     private long id;
     private String uniserial;
     private String birthplace;
-    private String title;
     private String firstName;
     private String surname;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

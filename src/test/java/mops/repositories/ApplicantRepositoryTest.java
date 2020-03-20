@@ -56,7 +56,6 @@ class ApplicantRepositoryTest {
                 .uniserial("ask111")
                 .firstName("Hans")
                 .surname("Anders")
-                .title("Baumgarten")
                 .address(address)
                 .birthday("20.20.2020")
                 .course("Hausbau")

@@ -32,7 +32,6 @@ class ApplicationTest {
                 .gender("male")
                 .firstName("Angelo")
                 .surname("Merkel")
-                .title("Frau")
                 .comment("Moin")
                 .nationality("Russian")
                 .birthplace("Deutschland")
@@ -115,7 +114,7 @@ class ApplicationTest {
         assertThat(application.toString()).isEqualTo(
                 "Application(hours=2, module=ProPra, priority=1, grade=1.3, lecturer=Tester," +
                         " semester=WS2020, role=Korrektor, comment=, applicant=Applicant(uniserial=lolol420," +
-                        " birthplace=Deutschland, title=Frau, firstName=Angelo, surname=Merkel," +
+                        " birthplace=Deutschland, firstName=Angelo, surname=Merkel," +
                         " address=Address(street=Street, houseNumber=999, city=Düsseldorf, country=USA," +
                         " zipcode=12345), gender=male, birthday=32.32.9999, nationality=Russian," +
                         " course=Trivial, status=irelevant, comment=Moin, certs=Certificate(name=Bachelor," +
