@@ -59,7 +59,7 @@ class DistributionTest {
 
     @Test
     void testToString() {
-        assertThat(dist.toString()).isEqualTo("Distribution(hours=0, module=ProPra, " +
+        assertThat(dist.toString()).isEqualTo("Distribution(module=ProPra, " +
                 "employees=[Applicant(uniserial=null, birthplace=Wakanda, " +
                 "firstName=null, surname=J, address=Address(street=Baker Street, " +
                 "houseNumber=21B, city=London, country=England, zipcode=20394), " +
