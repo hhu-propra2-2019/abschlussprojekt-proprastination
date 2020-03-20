@@ -157,7 +157,7 @@ public class ApplicationController {
                     .build();
             applicantService.saveApplicant(applicant);
             model.addAttribute("account", createAccountFromPrincipal(token));
-            model.addAttribute("module", modules);
+            model.addAttribute("modul", modules);
             model.addAttribute("semesters", CSVService.getSemester());
             model.addAttribute("modules", CSVService.getModules());
             model.addAttribute("webApplication", WebApplication.builder().build());
@@ -179,6 +179,7 @@ public class ApplicationController {
                               @RequestParam("modules") final String module) {
         Applicant applicant = applicantService.findByUniserial(token.getName());
         Application application = Application.builder()
+                //Module wird irgendwie nicht eingelesen? Mach ich später >_>
                 .module(webApplication.getModule())
                 .hours(webApplication.getWorkload())
                 .priority(webApplication.getPriority())
@@ -190,9 +191,11 @@ public class ApplicationController {
                 .build();
         Set<Application> applications = applicant.getApplications();
         applications.add(application);
-        //muss zum Applicant hinzugefügt werden und dann in Datenbank eingespeichert werden
+        applicant.toBuilder().applications(applications);
+        applicantService.saveApplicant(applicant);
+        System.out.println(applicant);
         model.addAttribute("account", createAccountFromPrincipal(token));
-        model.addAttribute("module", module);
+        model.addAttribute("modul", module);
         model.addAttribute("semesters", CSVService.getSemester());
         model.addAttribute("modules", CSVService.getModules());
         model.addAttribute("webApplication", webApplication);
