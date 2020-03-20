@@ -23,9 +23,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.context.annotation.SessionScope;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Set;
 
 @Controller
@@ -136,6 +136,7 @@ public class ApplicationController {
 
         if (token != null) {
             String street = webAddress.getStreet();
+            Set<Application> applications = new HashSet<>();
             Address address = Address.builder()
                     .street(street.substring(0, street.indexOf(' ')))
                     .houseNumber(street.substring(street.indexOf(' ') + 1))
@@ -144,8 +145,6 @@ public class ApplicationController {
                     .build();
             Applicant applicant = Applicant.builder()
                     .uniserial(token.getName())
-                    .firstName("Paulin")
-                    .surname("Dürwald")
                     .address(address)
                     .birthday(webApplicant.getBirthday())
                     .birthplace(webApplicant.getBirthplace())
@@ -154,6 +153,7 @@ public class ApplicationController {
                     .course(webApplicant.getCourse())
                     .status(webApplicant.getStatus())
                     .comment(webApplicant.getComment())
+                    .applications(applications)
                     .build();
             applicantService.saveApplicant(applicant);
             model.addAttribute("account", createAccountFromPrincipal(token));
