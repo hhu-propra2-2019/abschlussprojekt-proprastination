@@ -33,7 +33,9 @@
         <!-- Restlichen Inhalt hier einfügen! -->
         <form th:action="${weiteresModul}" th:method="POST" th:object="${webApplication}">
             <div class="card bg-light mb-3 border-primary">
-                <div class="card-header"><h2 th:text="${module}"></h2>
+                <div class="card-header"><h2 th:text="${modul}"></h2>
+                    <input th:type="hidden" th:value="${modul}"
+                           th:field="*{module}" th:attr="value = ${webApplication.module}">
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -130,9 +132,7 @@
                             </select>
                         </div>
                         <div class="col-2">
-                            <input th:type="hidden" th:name="module" th:value="${module}"
-                                   th:field="*{module}" th:attr="value = ${webApplication.module}">
-                            <button th:type="submit" th:formaction="@{weiteresModul} "class="btn btn-outline-primary form-control">Weiteres Modul</button>
+                           <button th:type="submit" th:formaction="@{weiteresModul} "class="btn btn-outline-primary form-control">Weiteres Modul</button>
                         </div>
                     </div>
                 </div>
