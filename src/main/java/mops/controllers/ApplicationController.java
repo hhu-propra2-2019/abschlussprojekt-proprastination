@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.context.annotation.SessionScope;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -141,6 +143,7 @@ public class ApplicationController {
                     .zipcode(webAddress.getZipcode())
                     .build();
             Applicant applicant = Applicant.builder()
+                    .uniserial(token.getName())
                     .firstName("Paulin")
                     .surname("Dürwald")
                     .address(address)
@@ -174,6 +177,7 @@ public class ApplicationController {
     public String weiteresModul(final KeycloakAuthenticationToken token,
                               final WebApplication webApplication, final Model model,
                               @RequestParam("modules") final String module) {
+        Applicant applicant = applicantService.findByUniserial(token.getName());
         Application application = Application.builder()
                 .module(webApplication.getModule())
                 .hours(webApplication.getWorkload())
@@ -184,6 +188,8 @@ public class ApplicationController {
                 .role(webApplication.getRole())
                 .comment(webApplication.getComment())
                 .build();
+        List<Application> applications = new ArrayList<>();
+
         System.out.println(application);
         model.addAttribute("account", createAccountFromPrincipal(token));
         model.addAttribute("module", module);
