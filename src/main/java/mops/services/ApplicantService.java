@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 @Service
 @EnableAutoConfiguration
 public class ApplicantService {
