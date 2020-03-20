@@ -134,6 +134,7 @@ public class ApplicationController {
 
         if (token != null) {
             String street = webAddress.getStreet();
+            Set<Application> applications = new HashSet<>();
             Address address = Address.builder()
                     .street(street.substring(0, street.indexOf(' ')))
                     .houseNumber(street.substring(street.indexOf(' ') + 1))
@@ -141,8 +142,7 @@ public class ApplicationController {
                     .zipcode(webAddress.getZipcode())
                     .build();
             Applicant applicant = Applicant.builder()
-                    .firstName("Paulin")
-                    .surname("Dürwald")
+                    .uniserial(token.getName())
                     .address(address)
                     .birthday(webApplicant.getBirthday())
                     .birthplace(webApplicant.getBirthplace())
@@ -151,10 +151,11 @@ public class ApplicationController {
                     .course(webApplicant.getCourse())
                     .status(webApplicant.getStatus())
                     .comment(webApplicant.getComment())
+                    .applications(applications)
                     .build();
             applicantService.saveApplicant(applicant);
             model.addAttribute("account", createAccountFromPrincipal(token));
-            model.addAttribute("module", modules);
+            model.addAttribute("modul", modules);
             model.addAttribute("semesters", CSVService.getSemester());
             model.addAttribute("modules", CSVService.getModules());
             model.addAttribute("webApplication", WebApplication.builder().build());
@@ -174,7 +175,9 @@ public class ApplicationController {
     public String weiteresModul(final KeycloakAuthenticationToken token,
                               final WebApplication webApplication, final Model model,
                               @RequestParam("modules") final String module) {
+        Applicant applicant = applicantService.findByUniserial(token.getName());
         Application application = Application.builder()
+                //Module wird irgendwie nicht eingelesen? Mach ich später >_>
                 .module(webApplication.getModule())
                 .hours(webApplication.getWorkload())
                 .priority(webApplication.getPriority())
@@ -184,9 +187,13 @@ public class ApplicationController {
                 .role(webApplication.getRole())
                 .comment(webApplication.getComment())
                 .build();
-        System.out.println(application);
+        Set<Application> applications = applicant.getApplications();
+        applications.add(application);
+        applicant.toBuilder().applications(applications);
+        applicantService.saveApplicant(applicant);
+        System.out.println(applicant);
         model.addAttribute("account", createAccountFromPrincipal(token));
-        model.addAttribute("module", module);
+        model.addAttribute("modul", module);
         model.addAttribute("semesters", CSVService.getSemester());
         model.addAttribute("modules", CSVService.getModules());
         model.addAttribute("webApplication", webApplication);
