@@ -11,6 +11,7 @@ import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -33,25 +34,25 @@ class EMailServiceTest {
     }
 
     @Test
-    void checkMethodCallToD3() {
+    void checkMethodCallToRecipient() {
         String file = System.getProperty("user.dir") + File.separator + "323_Antrag_Beschaeftigung_wiss_Hilfskraefte_mit_BA.pdf";
 
         eMailService.sendEmailToRecipient("test@example.com", file);
 
-        verify(javaMailSender, times(1)).send((MimeMessage) any());
+        verify(javaMailSender, atLeastOnce()).send((MimeMessage) any());
 
 
     }
 
     @Test
-    void checkMethodCallTorecipient() {
+    void checkMethodCallToD3() {
 
         String file = System.getProperty("user.dir") + File.separator + "323_Antrag_Beschaeftigung_wiss_Hilfskraefte_mit_BA.pdf";
 
         String[] array = {"test@example.com", "test2@example.com"};
         eMailService.sendEmailToD3(array, "itsme@example.com", file);
 
-        verify(javaMailSender, times(1)).send((MimeMessage) any());
+        verify(javaMailSender, atLeastOnce()).send((MimeMessage) any());
 
     }
 }

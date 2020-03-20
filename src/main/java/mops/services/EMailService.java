@@ -19,7 +19,7 @@ public class EMailService {
     private Logger logger = LoggerFactory.getLogger(EMailService.class);
 
     @Value("${spring.mail.username}")
-    private String senderEmail;
+    private String senderEmail = "dummy@example.com";
 
     private JavaMailSender emailSender;
 
@@ -82,7 +82,7 @@ public class EMailService {
             emailSender.send(message);
         } catch (MessagingException e) {
             e.printStackTrace();
-            logger.error("Email-Versand selbstversand fehlgeschlagen an " + recipient);
+            logger.error("Email-Selbstversand fehlgeschlagen an " + recipient);
         }
         logger.info("Email an " + recipient + " erfolgreich versendet.");
     }
