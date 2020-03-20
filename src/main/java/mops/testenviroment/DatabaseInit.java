@@ -210,7 +210,9 @@ public class DatabaseInit implements ServletContextInitializer {
 
         Application application1 = Application.builder()
                 .module("Rechnerarchitektur")
-                .hours(faker.number().numberBetween(1, 17))
+                .finalHours(faker.number().numberBetween(1, 17))
+                .minHours(faker.number().numberBetween(1, 10))
+                .maxHours(faker.number().numberBetween(10, 17))
                 .lecturer(faker.name().fullName())
                 .grade(faker.number().randomDouble(1, 1, 5))
                 .semester("SS2020")
@@ -221,7 +223,9 @@ public class DatabaseInit implements ServletContextInitializer {
 
         Application application2 = Application.builder()
                 .module("Theoretische Informatik")
-                .hours(faker.number().numberBetween(1, 17))
+                .finalHours(faker.number().numberBetween(1, 17))
+                .minHours(faker.number().numberBetween(1, 10))
+                .maxHours(faker.number().numberBetween(10, 17))
                 .lecturer(faker.name().fullName())
                 .grade(faker.number().randomDouble(1, 1, 5))
                 .semester("SS2020")
