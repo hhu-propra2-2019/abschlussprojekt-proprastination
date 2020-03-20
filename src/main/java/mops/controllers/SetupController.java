@@ -55,7 +55,6 @@ public class SetupController {
         return "setup/setupMain";
     }
 
-
     /**
      * Post mapping for saving an edited module
      * @param token The KeycloakAuthentication
@@ -68,7 +67,6 @@ public class SetupController {
      * @param personLimit maximum people of work required
      * @return redirects to index
      */
-
     @SuppressWarnings("checkstyle:ParameterNumber")
     @PostMapping("/setupMain")
     public String postEditedModule(final KeycloakAuthenticationToken token, final Model model,
@@ -100,6 +98,7 @@ public class SetupController {
         }
         return "setup/neuesModul";
     }
+
     /**
      * Post mapping for saving a new module
      * @param token The KeycloakAuthentication
@@ -111,7 +110,6 @@ public class SetupController {
      * @param hourLimit maximum hours of work required
      * @param personLimit maximum people of work required
      */
-
     @PostMapping("/neuesModul")
     public String postNewModule(final KeycloakAuthenticationToken token, final Model model,
                                 @RequestParam("name") final String name,
@@ -137,7 +135,6 @@ public class SetupController {
      * @param personLimit
      * @return setup/modulBearbeiten
      */
-
     @PostMapping("/modulBearbeiten")
     public String postEditModule(final KeycloakAuthenticationToken token, final Model model,
                                  @RequestParam("name") final String name,
@@ -149,5 +146,19 @@ public class SetupController {
         model.addAttribute("module", oldModul);
         model.addAttribute("account", createAccountFromPrincipal(token));
         return "/setup/modulBearbeiten";
+    }
+
+    /**
+     * Post mapping for saving a new module
+     * @param token The KeycloakAuthentication
+     * @param model The Website model
+     * @return The HTML file rendered as a String
+     * @param name module name
+     */
+    @PostMapping("/deleteModule")
+    public String postDeleteModule(final KeycloakAuthenticationToken token, final Model model,
+                                @RequestParam("nameDelete") final String name) {
+        CSVService.deleteModule(name);
+        return index(token, model);
     }
 }

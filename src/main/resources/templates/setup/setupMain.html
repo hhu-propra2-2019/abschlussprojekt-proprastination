@@ -52,16 +52,26 @@
     </div>
     <div th:each="module : ${modules}">
         <div class="card bg-light mb-3 border-primary">
-            <div class="card-header d-flex justify-content-between align-items-start">
-                <h3 style="margin-bottom: .0rem" class="card-title" th:text="${module.name}"></h3>
-                <form th:action="@{modulBearbeiten}" th:method="POST">
-                    <input id="name" name="name" type="hidden" th:value="${module.name}">
-                    <input id="shortName" name="shortName" type="hidden" th:value="${module.shortName}">
-                    <input id="prof" name="prof" type="hidden" th:value="${module.profName}">
-                    <input id="hourLimit" name="hourLimit" type="hidden" th:value="${module.hourLimit}">
-                    <input id="personLimit" name="personLimit" type="hidden" th:value="${module.personLimit}">
-                    <button class="btn btn-outline-primary btn-sm" type="submit">Bearbeiten</button>
-                </form>
+            <div class="card-header container-fluid">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h3 style="margin-bottom: .0rem" class="card-title" th:text="${module.name}"></h3>
+                    </div>
+                    <div class="col-md-4">
+                        <form th:action="@{deleteModule}" th:method="POST">
+                            <input id="nameDelete" name="nameDelete" type="hidden" th:value="${module.name}">
+                            <button class="btn btn-outline-danger btn-sm float-right" style="margin-left: 10px" type="submit">Löschen</button>
+                        </form>
+                        <form th:action="@{modulBearbeiten}" th:method="POST">
+                            <input id="name" name="name" type="hidden" th:value="${module.name}">
+                            <input id="shortName" name="shortName" type="hidden" th:value="${module.shortName}">
+                            <input id="prof" name="prof" type="hidden" th:value="${module.profName}">
+                            <input id="hourLimit" name="hourLimit" type="hidden" th:value="${module.hourLimit}">
+                            <input id="personLimit" name="personLimit" type="hidden" th:value="${module.personLimit}">
+                            <button class="btn btn-outline-primary btn-sm float-right" type="submit">Bearbeiten</button>
+                        </form>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <div class="row">
