@@ -1,6 +1,7 @@
 package mops.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.AllArgsConstructor;
 import mops.model.Account;
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
@@ -30,8 +31,8 @@ import java.util.List;
 public class DistributorController {
 
     @Autowired
-    private ApplicantService applicantService;
     private DistributionService distributionService;
+    @Autowired
     private ApplicationService applicationService;
 
     private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
@@ -43,6 +44,7 @@ public class DistributorController {
                 token.getAccount().getRoles());
     }
 
+
     /**
      * The GepMapping for the main page
      *
@@ -50,11 +52,10 @@ public class DistributorController {
      * @param model The Website model
      * @return The HTML file rendered as a String
      */
-
     @SuppressWarnings("checkstyle:MagicNumber")
     @GetMapping("/")
     @Secured("ROLE_verteiler")
-    public String index(final KeycloakAuthenticationToken token, final Model model) throws JsonProcessingException {
+    public String index1(final KeycloakAuthenticationToken token, final Model model) throws JsonProcessingException {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
             List<WebDistribution> webDistributionList = new ArrayList<>();
