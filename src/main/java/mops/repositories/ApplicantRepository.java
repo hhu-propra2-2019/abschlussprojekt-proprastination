@@ -24,5 +24,5 @@ public interface ApplicantRepository extends CrudRepository<Applicant, Long> {
      * @param uniserial Unikennung
      * @return List of Applicants
      */
-    List<Applicant> findByUniserial(String uniserial);
+    Applicant findByUniserial(String uniserial);
 }

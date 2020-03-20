@@ -10,7 +10,7 @@ import java.util.Date;
 
 public class DocumentWithoutBachelor implements Document {
 
-    private final String originalDocument = "321_Antrag_Beschaeftigung_stud_Hilfskraefte.pdf";
+    private static final String ORIGINAL_DOCUMENT = "321_Antrag_Beschaeftigung_stud_Hilfskraefte.pdf";
     private final PDDocument document;
     private final PDAcroForm acroForm;
 
@@ -20,7 +20,7 @@ public class DocumentWithoutBachelor implements Document {
      * @throws IOException IOException.
      */
     public DocumentWithoutBachelor() throws IOException {
-        document = PDDocument.load(new File(System.getProperty("user.dir") + File.separator + originalDocument));
+        document = PDDocument.load(new File(System.getProperty("user.dir") + File.separator + ORIGINAL_DOCUMENT));
         document.setAllSecurityToBeRemoved(true);
         acroForm = document.getDocumentCatalog().getAcroForm();
     }

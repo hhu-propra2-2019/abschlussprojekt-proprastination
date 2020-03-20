@@ -82,11 +82,17 @@ public class PDFController {
 
 
             HttpHeaders header = new HttpHeaders();
-            Applicant applicant = applicantService.findByUniserial(account.getName());
 
-            Optional<Application> application = applicant.getApplications().stream()
-                    .filter(p -> p.getModule().equals(module)).findFirst();
-
+            Applicant applicant;
+            Optional<Application> application;
+            try {
+                applicant = applicantService.findByUniserial(account.getName());
+                application = applicant.getApplications().stream()
+                        .filter(p -> p.getModule().equals(module)).findFirst();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
             if (application.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }

@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 @Service
 @EnableAutoConfiguration
 public class ApplicantService {
@@ -50,7 +49,7 @@ public class ApplicantService {
      * @return the Applicant found
      */
     public Applicant findByUniserial(final String uniserial) {
-        return applicantRepository.findByUniserial(uniserial).get(0);
+        return applicantRepository.findByUniserial(uniserial);
     }
 
     /**
