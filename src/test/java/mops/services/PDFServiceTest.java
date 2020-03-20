@@ -47,7 +47,6 @@ class PDFServiceTest {
                 .uniserial("wau")
                 .surname("J")
                 .firstName("WAUWAU")
-                .title("")
                 .address(address)
                 .birthday("01.01.2001")
                 .birthplace("Wakanda")

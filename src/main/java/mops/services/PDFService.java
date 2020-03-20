@@ -54,7 +54,6 @@ public class PDFService {
         document.setField("E-Mail", applicant.getUniserial() + "@hhu.de");
         document.setField("Vorname", applicant.getFirstName());
         document.setField("Name", applicant.getSurname());
-        document.setField("Vorsatzwort", applicant.getTitle());
         document.setField("Geburtsdatum", applicant.getBirthday());
         document.setField("Geburtsort", applicant.getBirthplace());
         document.setField("Staatsangehörigkeit", applicant.getNationality());
