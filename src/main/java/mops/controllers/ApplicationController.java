@@ -145,18 +145,30 @@ public class ApplicationController {
             applicantBindingResult.getAllErrors().forEach(err -> {
                 LOGGER.info("ERROR {}", err.getDefaultMessage());
             });
-            model.addAttribute("webApplicant", webApplicant);
-            model.addAttribute("webAddress", webAddress);
-            return "redirect:/bewerbung2/bewerber/neueBewerbung";
+            if (token != null) {
+                model.addAttribute("account", createAccountFromPrincipal(token));
+                model.addAttribute("countries", CSVService.getCountries());
+                model.addAttribute("courses", CSVService.getCourses());
+                model.addAttribute("webApplicant", webApplicant);
+                model.addAttribute("webAddress", webAddress);
+                model.addAttribute("modules", CSVService.getModules());
+            }
+            return "applicant/applicationPersonal";
         }
 
         if (addressBindingResult.hasErrors()) {
             addressBindingResult.getAllErrors().forEach(err -> {
                 LOGGER.info("ERROR {}", err.getDefaultMessage());
             });
-            model.addAttribute("webApplicant", webApplicant);
-            model.addAttribute("webAddress", webAddress);
-            return "redirect:/bewerbung2/bewerber/neueBewerbung";
+            if (token != null) {
+                model.addAttribute("account", createAccountFromPrincipal(token));
+                model.addAttribute("countries", CSVService.getCountries());
+                model.addAttribute("courses", CSVService.getCourses());
+                model.addAttribute("webApplicant", webApplicant);
+                model.addAttribute("webAddress", webAddress);
+                model.addAttribute("modules", CSVService.getModules());
+            }
+            return "applicant/applicationPersonal";
         }
 
         if (token != null) {
