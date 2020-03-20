@@ -10,6 +10,7 @@ import mops.model.classes.webclasses.WebDistribution;
 import mops.model.classes.webclasses.WebDistributorApplicant;
 import mops.services.ApplicationService;
 import mops.services.DistributionService;
+import mops.services.EvaluationService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.security.access.annotation.Secured;
@@ -29,18 +30,22 @@ public class DistributorController {
 
     private final DistributionService distributionService;
     private final ApplicationService applicationService;
+    private final EvaluationService evaluationService;
 
 
     /**
      * Constructor
      * @param distributionService
      * @param applicationService
+     * @param evaluationService
      */
     @SuppressWarnings("checkstyle:HiddenField")
     public DistributorController(final DistributionService distributionService,
-                                 final ApplicationService applicationService) {
+                                 final ApplicationService applicationService,
+                                 final EvaluationService evaluationService) {
         this.distributionService = distributionService;
         this.applicationService = applicationService;
+        this.evaluationService = evaluationService;
     }
 
     private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
@@ -75,13 +80,7 @@ public class DistributorController {
                     Application application = applicationService.findApplicatonByUniserialAndModule(
                             applicant.getUniserial(),
                             distribution.getModule());
-                    //Evaluation evaluation = evaluationService.findByApplication(application);
-                    Evaluation evaluation = Evaluation.builder()
-                            .application(application)
-                            .comment("blablabla")
-                            .id(1)
-                            .priority(1)
-                            .build();
+                    Evaluation evaluation = evaluationService.findByApplication(application);
                     WebDistributorApplicant webDistributorApplicant = WebDistributorApplicant.builder()
                             .username(applicant.getUniserial())
                             .applicantPriority(application.getPriority() + "")
