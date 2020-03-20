@@ -60,7 +60,7 @@ public class DistributionService {
      */
     private List<Applicant> distribute(final Module module) {
         List<Applicant> result = new LinkedList<>();
-        List<Application> applications = applicationService.findApplicationByModuleAndHours(module.getName(), 7);
+        List<Application> applications = applicationService.findApplicationsByModuleAndHours(module.getName(), 7);
         Map<Application, Integer> sortedApplications = new LinkedHashMap<>();
         int count = 0;
 
@@ -80,7 +80,7 @@ public class DistributionService {
             count++;
         }
 
-        applications = applicationService.findApplicationByModuleAndHours(module.getName(), 9);
+        applications = applicationService.findApplicationsByModuleAndHours(module.getName(), 9);
         sortedApplications = new LinkedHashMap<>();
         count = 0;
 
@@ -93,14 +93,14 @@ public class DistributionService {
                 .sorted(Map.Entry.comparingByValue())
                 .forEachOrdered(x -> sortedApplications.put(x.getKey(), x.getValue()));
         for (Application application : applications) {
-            if (count >= module.getMax7()) {
+            if (count >= module.getMax9()) {
                 break;
             }
             result.add(application.getApplicant());
             count++;
         }
 
-        applications = applicationService.findApplicationByModuleAndHours(module.getName(), 17);
+        applications = applicationService.findApplicationsByModuleAndHours(module.getName(), 17);
         sortedApplications = new LinkedHashMap<>();
         count = 0;
 
@@ -113,7 +113,7 @@ public class DistributionService {
                 .sorted(Map.Entry.comparingByValue())
                 .forEachOrdered(x -> sortedApplications.put(x.getKey(), x.getValue()));
         for (Application application : applications) {
-            if (count >= module.getMax7()) {
+            if (count >= module.getMax17()) {
                 break;
             }
             result.add(application.getApplicant());
