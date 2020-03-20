@@ -47,44 +47,45 @@
             <div class="card bg-light mb-3 border-primary">
                 <div class="card-header d-flex justify-content-start align-items-start" th:text="${distribution.module}">Propra</div>
                 <div class="card-body" id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
-                    <div class="card w-100 bg-light mb-1 border-primary" id="drag1" draggable="true" ondragstart="drag(event)"
-                         th:each="applicant: ${distribution.webDistributorApplicants}">
-                        <div class="card-header container-fluid">
-                            <div class="row">
-                                <div class="col">
-                                    <button class="btn" data-toggle="collapse" data-target="#collapse1"
-                                            aria-expanded="false" aria-controls="collapse1" th:text="${applicant.username}">
-                                        Mamus100
-                                    </button>
-                                </div>
-                                <div class="col">
-                                    <div>
-                                        <input type="text" size="1">
-                                        <label>Stunden</label>
+                    <div th:each="applicant: ${distribution.webDistributorApplicants}">
+                        <div class="card w-100 bg-light mb-1 border-primary" id="drag1" draggable="true" ondragstart="drag(event)">
+                            <div class="card-header container-fluid">
+                                <div class="row">
+                                    <div class="col">
+                                        <button class="btn" data-toggle="collapse" data-target="#collapse1"
+                                                aria-expanded="false" aria-controls="collapse1" th:text="${applicant.username}">
+                                            Mamus100
+                                        </button>
                                     </div>
-                                </div>
-                                <div class="col">
-                                    <div class="float-right">
-                                        <input type="checkbox">
+                                    <div class="col">
+                                        <div>
+                                            <input type="text" size="1">
+                                            <label>Stunden</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="float-right">
+                                            <input type="checkbox">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div id="collapse1" class="collapse" aria-labelledby="headingOne">
-                            <div class="container text-center">
-                                <div class="row border font-weight-bold">
-                                    <div class="col" title="Modul" style="text-overflow: ellipsis; overflow: hidden; width: 20%; white-space: nowrap">Modul</div>
-                                    <div class="col" title="Priorität des Bewerbers" style="text-overflow: ellipsis; overflow: hidden; width: 20%; white-space: nowrap">Bewerber-Prio</div>
-                                    <div class="col" title="Priorität des Organisators" style="text-overflow: ellipsis; overflow: hidden; width: 20%; white-space: nowrap">Orga-Prio</div>
-                                    <div class="col" title="Stundenwunsch des Organisators" style="text-overflow: ellipsis; overflow: hidden; width: 20%; white-space: nowrap">Orga-Stunden</div>
-                                    <div class="col" title="Stundenwunsch des Bewerbers" style="text-overflow: ellipsis; overflow: hidden; width: 20%; white-space: nowrap">Stunden</div>
-                                </div>
-                                <div class="row border" th:each="appl: ${applicant.webDistributorApplications}">
-                                    <div class="col" th:text="${appl.module}">Modul1</div>
-                                    <div class="col" th:text="${appl.applicantPriority}">++</div>
-                                    <div class="col" th:text="${appl.organizerPriority}">+</div>
-                                    <div class="col" th:text="${appl.organizerHours}">9</div>
-                                    <div class="col" th:text="${appl.minHours} - ${appl.maxHours}">10 - 17</div>
+                            <div id="collapse1" class="collapse" aria-labelledby="headingOne">
+                                <div class="container text-center">
+                                    <div class="row border font-weight-bold">
+                                        <div class="col" title="Modul" style="text-overflow: ellipsis; overflow: hidden; width: 20%; white-space: nowrap">Modul</div>
+                                        <div class="col" title="Priorität des Bewerbers" style="text-overflow: ellipsis; overflow: hidden; width: 20%; white-space: nowrap">Bewerber-Prio</div>
+                                        <div class="col" title="Priorität des Organisators" style="text-overflow: ellipsis; overflow: hidden; width: 20%; white-space: nowrap">Orga-Prio</div>
+                                        <div class="col" title="Stundenwunsch des Organisators" style="text-overflow: ellipsis; overflow: hidden; width: 20%; white-space: nowrap">Orga-Stunden</div>
+                                        <div class="col" title="Stundenwunsch des Bewerbers" style="text-overflow: ellipsis; overflow: hidden; width: 20%; white-space: nowrap">Stunden</div>
+                                    </div>
+                                    <div class="row border" th:each="appl: ${applicant.webDistributorApplications}">
+                                        <div class="col" th:text="${appl.module}">Modul1</div>
+                                        <div class="col" th:text="${appl.applicantPriority}">++</div>
+                                        <div class="col" th:text="${appl.organizerPriority}">+</div>
+                                        <div class="col" th:text="${appl.organizerHours}">9</div>
+                                        <div class="col" th:text="${appl.minHours} + '-' + ${appl.maxHours}">10 - 17</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
