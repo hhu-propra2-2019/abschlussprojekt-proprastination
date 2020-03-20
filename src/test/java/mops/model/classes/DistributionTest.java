@@ -63,6 +63,6 @@ class DistributionTest {
                 " title=null, firstName=null, surname=J, address=Address(street=Baker Street, houseNumber=21B, city=London, country=England," +
                 " zipcode=20394), gender=null, birthday=01.01.2001, nationality=English, course=Arts, status=New, comment=null," +
                 " certs=Certificate(name=Bachelor, course=Harvard), applications=[Application(hours=0, module=Divination, priority=0," +
-                " grade=0.0, lecturer=null, semester=null, role=null, comment=null)])])");
+                " grade=0.0, lecturer=null, semester=null, role=null, comment=null, applicant=null)])])");
     }
 }
