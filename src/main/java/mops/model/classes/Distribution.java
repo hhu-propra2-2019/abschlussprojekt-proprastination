@@ -29,7 +29,6 @@ public class Distribution {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private int hours;
     private String module;
     @OneToMany(fetch = FetchType.EAGER)
     @Singular
