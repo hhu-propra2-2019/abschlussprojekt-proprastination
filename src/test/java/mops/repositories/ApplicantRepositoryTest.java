@@ -40,7 +40,8 @@ class ApplicantRepositoryTest {
                 .course("Hauskunde")
                 .build();
         application = Application.builder()
-                .hours(17)
+                .minHours(7)
+                .maxHours(17)
                 .module("Info")
                 .priority(1)
                 .grade(1.3)

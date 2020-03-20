@@ -179,7 +179,8 @@ public class ApplicationController {
         Application application = Application.builder()
                 //Module wird irgendwie nicht eingelesen? Mach ich später >_>
                 .module(webApplication.getModule())
-                .hours(webApplication.getWorkload())
+                .minHours(webApplication.getWorkload())//HTML anpassen
+                .maxHours(webApplication.getWorkload())//HTML anpassen
                 .priority(webApplication.getPriority())
                 .grade(webApplication.getGrade())
                 .lecturer(webApplication.getLecturer())
@@ -333,7 +334,8 @@ public class ApplicationController {
                     .module(module)
                     .lecturer(lecturer)
                     .semester(semester)
-                    .hours(Integer.parseInt(workload))
+                    .minHours(Integer.parseInt(workload))
+                    .maxHours(Integer.parseInt(workload))
                     .grade(Double.parseDouble(grade))
                     .build();
         }

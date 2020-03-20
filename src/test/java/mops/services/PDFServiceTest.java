@@ -33,7 +33,8 @@ class PDFServiceTest {
                 .role("Tutor")
                 .comment("asd")
                 .semester("SS2020")
-                .hours(17)
+                .minHours(7)
+                .maxHours(17)
                 .build();
         Address address = Address.builder()
                 .street("Baker Street")
@@ -66,7 +67,7 @@ class PDFServiceTest {
         assertThat(acroForm.getField("Vorname").getValueAsString()).isEqualTo("WAUWAU");
         assertThat(acroForm.getField("Name").getValueAsString()).isEqualTo("J");
         assertThat(acroForm.getField("Anschrift (Straße)").getValueAsString()).isEqualTo("Baker Street");
-        assertThat(acroForm.getField("Stunden").getValueAsString()).isEqualTo("17");
+        assertThat(acroForm.getField("Stunden").getValueAsString()).isEqualTo("0");
         assertThat(acroForm.getField("Studiengang").getValueAsString()).isEqualTo("Arts");
 
     }

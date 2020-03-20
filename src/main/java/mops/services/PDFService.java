@@ -46,7 +46,7 @@ public class PDFService {
     }
 
     private void addApplicationInfoToPDF(final Application application) throws IOException {
-        document.setField("Stunden", String.valueOf(application.getHours()));
+        document.setField("Stunden", String.valueOf(application.getFinalHours()));
         document.setField("Vertragsart", "Einstellung");
     }
 
