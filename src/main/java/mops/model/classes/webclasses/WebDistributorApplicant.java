@@ -12,9 +12,5 @@ import lombok.NoArgsConstructor;
 public class WebDistributorApplicant {
 
     private String username;
-    private String applicantPriority;
-    private String organizerPriority;
-    private String minHours;
-    private String maxHours;
-    private String organizerHours;
+
 }

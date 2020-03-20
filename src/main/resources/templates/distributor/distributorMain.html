@@ -43,15 +43,16 @@
 <main th:fragment="bodycontent">
     <!-- Restlichen Inhalt hier einfügen! -->
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-6" th:each="distribution: ${distributions}">
             <div class="card bg-light mb-3 border-primary">
-                <div class="card-header d-flex justify-content-start align-items-start">Propra</div>
+                <div class="card-header d-flex justify-content-start align-items-start" th:text="${distribution.module}">Propra</div>
                 <div class="card-body" id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
-                    <div class="card w-100 bg-light mb-1 border-primary" id="drag1" draggable="true" ondragstart="drag(event)">
+                    <div class="card w-100 bg-light mb-1 border-primary" id="drag1" draggable="true" ondragstart="drag(event)"
+                         th:each="applicant: ${distribution.webDistributorApplicants}">
                         <div class="card-header container-fluid">
                             <div class="row">
                                 <div class="col">
-                                    <button class="btn" data-toggle="collapse" data-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
+                                    <button class="btn" data-toggle="collapse" data-target="#collapse1" aria-expanded="false" aria-controls="collapse1" th:text="applicant.username">
                                         Mamus100
                                     </button>
                                 </div>
@@ -157,13 +158,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="card bg-light mb-3 border-primary">
-                <div class="card-header d-flex justify-content-start align-items-start">RDB</div>
-                <div class="card-body" id="div2" ondrop="drop(event)" ondragover="allowDrop(event)">
                 </div>
             </div>
         </div>

@@ -97,7 +97,7 @@ public class DistributorController {
                         .build();
                 webDistributionList.add(webDistribution);
             }
-            model.addAttribute(webDistributionList);
+            model.addAttribute("distributions", webDistributionList);
         }
         return "distributor/distributorMain";
     }
