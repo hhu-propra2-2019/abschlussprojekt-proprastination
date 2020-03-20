@@ -28,10 +28,20 @@ import java.util.List;
 @RequestMapping("/bewerbung2/verteiler")
 public class DistributorController {
 
-    @Autowired
-    private DistributionService distributionService;
-    @Autowired
-    private ApplicationService applicationService;
+    private final DistributionService distributionService;
+    private final ApplicationService applicationService;
+
+
+    /**
+     * Constructor
+     * @param distributionService
+     * @param applicationService
+     */
+    @SuppressWarnings("checkstyle:HiddenField")
+    public DistributorController(final DistributionService distributionService, final ApplicationService applicationService) {
+        this.distributionService = distributionService;
+        this.applicationService = applicationService;
+    }
 
     private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
         KeycloakPrincipal principal = (KeycloakPrincipal) token.getPrincipal();
