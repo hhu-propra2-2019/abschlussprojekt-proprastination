@@ -7,6 +7,7 @@ import mops.model.classes.Application;
 import mops.model.classes.Certificate;
 import mops.model.classes.webclasses.WebAddress;
 import mops.model.classes.webclasses.WebApplicant;
+import mops.model.classes.webclasses.WebApplication;
 import mops.services.ApplicantService;
 import mops.services.CSVService;
 import org.keycloak.KeycloakPrincipal;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.context.annotation.SessionScope;
 
+import java.security.Key;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -153,16 +155,49 @@ public class ApplicationController {
                     .build();
             applicantService.saveApplicant(applicant);
             applicantService.findAll().forEach(System.out::println);
-            model.addAttribute("webApplicant", webApplicant);
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("module", modules);
             model.addAttribute("semesters", CSVService.getSemester());
             model.addAttribute("modules", CSVService.getModules());
-            model.addAttribute("webAddress", webAddress);
+            model.addAttribute("webApplication", WebApplication.builder().build());
         }
-        return "applicant/applicationModule";
+        return "applicant/applicationModuleThymeleaf";
     }
 
+    /**
+     *
+     * @param token
+     * @param webApplication
+     * @param model
+     * @param module
+     * @return
+     */
+    @PostMapping("weiteresModul")
+    public String weiteresModul(final KeycloakAuthenticationToken token,
+                              final WebApplication webApplication, final Model model,
+                              @RequestParam("modules") final String module) {
+        System.out.println(webApplication);
+        System.out.println("Modul: " + module);
+        Application application = Application.builder()
+                .module(webApplication.getModule())
+                .hours(webApplication.getWorkload())
+                .priority(webApplication.getPriority())
+                .grade(webApplication.getGrade())
+                .lecturer(webApplication.getLecturer())
+                .semester(webApplication.getSemester())
+                .role(webApplication.getRole())
+                .comment(webApplication.getComment())
+                .build();
+        System.out.println(application);
+        model.addAttribute("webApplicant", WebApplicant.builder().build());
+        model.addAttribute("webAddress", WebAddress.builder().build());
+        model.addAttribute("account", createAccountFromPrincipal(token));
+        model.addAttribute("module", module);
+        model.addAttribute("semesters", CSVService.getSemester());
+        model.addAttribute("modules", CSVService.getModules());
+        model.addAttribute("webApplication", webApplication);
+        return "applicant/applicationModuleThymeleaf";
+    }
 
     /**
      * @param token
@@ -224,6 +259,7 @@ public class ApplicationController {
         return "applicant/applicationOverview";
     }
 
+
     /**
      * The GetMapping for the overview
      *
@@ -260,9 +296,9 @@ public class ApplicationController {
      * @param applicant probably not neccessary?
      * @return the same applicationModule.html
      */
-    @PostMapping("/weiteresModul")
+    @PostMapping("/weiteresModulxx")
     @SuppressWarnings("checkstyle:ParameterNumber")
-    public String weiteresModul(final KeycloakAuthenticationToken token,
+    public String weiteresModulxx(final KeycloakAuthenticationToken token,
                                 final Model model,
                                 @RequestParam("modules") final String modules,
                                 @RequestParam("module") final String module,

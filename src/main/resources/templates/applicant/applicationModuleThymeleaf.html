@@ -43,7 +43,7 @@
                             </label> <br>
                             <select th:name="workload" th:id="workload" class="form-control" required
                             th:field="*{workload}" th:attr="value = ${webApplication.workload}">
-                                <option th:value="" disabled selected hidden>Arbeitszeit</optionth>
+                                <option value="0" disabled selected hidden>Arbeitszeit</optionth>
                                 <option th:value="7">7 Stunden/Woche</option>
                                 <option th:value="9">9 Stunden/Woche</option>
                                 <option th:value="17">17 Stunden/Woche</option>
@@ -53,7 +53,7 @@
                             <label th:for="grade">Geben die von Ihnen in diesem Modul erreichte Note an</label> <br>
                             <select th:name="grade" th:id="grade" class="form-control" required
                             th:field="*{grade}" th:attr="value = ${webApplication.grade}">
-                                <option th:value="" disabled selected hidden>Note</option>
+                                <option th:value="0" disabled selected hidden>Note</option>
                                 <option th:value="10">1,0</option>
                                 <option th:value="13">1,3</option>
                                 <option th:value="17">1,7</option>
@@ -73,8 +73,8 @@
                             <label th:for="semesters">In welchem Semester haben Sie dieses Modul bestanden</label> <br>
                             <select th:name="semesters" th:id="semesters" class="form-control" required
                             th:field="*{semester}" th:attr="value = ${webApplication.semester}">
-                                <option disabled selected hidden>Semester</option>
-                                <option th:each="semester:${semesters}" th:text="${semester}"></option>
+                                <option value="" disabled selected hidden>Semester</option>
+                                <option th:each="semester:${semesters}" th:text="${semester}" th:value="${semester}"></option>
                             </select>
                             <br>
                         </div>
@@ -92,9 +92,9 @@
                             <select th:name="role" th:id="role" class="form-control" required
                             th:field="*{role}" th:attr="value = ${webApplication.role}">
                                 <option value="" disabled selected hidden>Aufgaben</option>
-                                <option value="corrctor">Korrektor</option>
-                                <option value="correctorandtutor">Korrektor und Tutor</option>
-                                <option value="nomatter">Ist mir egal</option>
+                                <option th:value="corrctor">Korrektor</option>
+                                <option th:value="correctorandtutor">Korrektor und Tutor</option>
+                                <option th:value="nomatter">Ist mir egal</option>
                             </select>
                         </div>
                         <div class="col">
@@ -104,7 +104,7 @@
                             </label> <br>
                             <select th:name="priority" th:id="priority" class="form-control" required
                             th:field="*{priority}" th:attr="value = ${webApplication.priority}">
-                                <option th:value="" disabled selected hidden>Priorität</option>
+                                <option value="0" disabled selected hidden>Priorität</option>
                                 <option th:value="1">++</option>
                                 <option th:value="2">+</option>
                                 <option th:value="3">o</option>
@@ -119,18 +119,19 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-6">
-                            <label for="modules">
+                            <label th:for="modules">
                                 Falls Sie sich bei einem weiteren Modul bewerben möchten können Sie dieses hier auswählen
                             </label>
                         </div>
                         <div class="col-4">
-                            <select name="modules" id="modules" class="form-control">
+                            <select th:name="modules" th:id="modules" class="form-control">
                                 <option value="" disabled selected hidden>Modulname</option>
-                                <option th:each="module:${modules}" th:text="${module}"></option>
+                                <option th:each="module:${modules}" th:text="${module}" th:value="${module}"></option>
                             </select>
                         </div>
                         <div class="col-2">
-                            <!--              <a th:href="@{modul}" class="btn btn-outline-primary form-control"> Bestätige </a>-->
+                            <input th:type="hidden" th:name="module" th:value="${module}"
+                                   th:field="*{module}" th:attr="value = ${webApplication.module}">
                             <button th:type="submit" th:formaction="@{weiteresModul} "class="btn btn-outline-primary form-control">Weiteres Modul</button>
                         </div>
                     </div>
@@ -147,9 +148,7 @@
                         <div class="col-2">
                             <!--<a th:href="@{uebersicht}" class="btn btn-outline-primary form-control"> Einreichen </a>
                             -->
-                            <input th:type="hidden" th:name="module" th:value="${module}"
-                                   th:field="*{module}" th:attr="value = ${webApplication.module}">
-                            <button th:type="submit" th:formaction="@{uebersicht}" class="btn btn-outline-primary form-control">
+                           <button th:type="submit" th:formaction="@{overview}" class="btn btn-outline-primary form-control">
                                 Einreichen </button>
                         </div>
                     </div>
