@@ -64,17 +64,18 @@ public class PDFController {
     /**
      * Returns a FileStream of the requested PDF.
      *
-     * @param module   module name of the application.
-     * @param token    Keycloak token.
-     * @param model    Model.
+     * @param module  module name of the application.
+     * @param student student uniserial.
+     * @param token   Keycloak token.
+     * @param model   Model.
      * @return InputStreamResource
      * @throws IOException NoSuchElementException
      */
-    @Secured("ROLE_studentin")
+    @Secured({"ROLE_studentin", "ROLE_orga"})
     @RequestMapping(value = "download", method = RequestMethod.GET)
     public ResponseEntity<Resource> fileSystemResource(
-            @RequestParam(value = "module") final String module, final KeycloakAuthenticationToken token,
-            final Model model) throws IOException, NoSuchElementException {
+            @RequestParam(value = "module") final String module, @RequestParam(value = "student") final String student,
+            final KeycloakAuthenticationToken token, final Model model) throws IOException, NoSuchElementException {
 
         if (token != null) {
             Account account = createAccountFromPrincipal(token);
@@ -86,7 +87,7 @@ public class PDFController {
             Applicant applicant;
             Optional<Application> application;
             try {
-                applicant = applicantService.findByUniserial(account.getName());
+                applicant = applicantService.findByUniserial(student);
                 application = applicant.getApplications().stream()
                         .filter(p -> p.getModule().equals(module)).findFirst();
             } catch (Exception e) {

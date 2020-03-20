@@ -80,7 +80,7 @@ class PDFControllerTest {
 
         //mvc.perform(get("/bewerbung2/bewerber/pdf/download?module=test")).andExpect(status().isOk());
 
-        mvc.perform(get("/bewerbung2/bewerber/pdf/download?module=test")).andExpect(status().is4xxClientError());
+        mvc.perform(get("/bewerbung2/bewerber/pdf/download?module=test?student=name")).andExpect(status().is4xxClientError());
 
         verify(appService, times(1)).findByUniserial(any(String.class));
         verify(service, times(1)).generatePDF(any(Application.class), any(Applicant.class));
@@ -97,7 +97,7 @@ class PDFControllerTest {
         when(appService.findByUniserial(any(String.class))).thenReturn(applicant);
         when(service.generatePDF(any(Application.class), any(Applicant.class))).thenReturn("NO");
 
-        mvc.perform(get("/bewerbung2/bewerber/pdf/download?module=Baum")).andExpect(status().isBadRequest());
+        mvc.perform(get("/bewerbung2/bewerber/pdf/download?module=Baum?student=baum")).andExpect(status().isBadRequest());
 
     }
 
