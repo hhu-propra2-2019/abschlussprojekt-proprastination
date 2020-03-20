@@ -8,6 +8,7 @@ import mops.model.classes.Distribution;
 import mops.model.classes.Evaluation;
 import mops.model.classes.webclasses.WebDistribution;
 import mops.model.classes.webclasses.WebDistributorApplicant;
+import mops.model.classes.webclasses.WebDistributorApplication;
 import mops.services.ApplicationService;
 import mops.services.DistributionService;
 import mops.services.EvaluationService;
@@ -22,6 +23,7 @@ import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @SessionScope
 @Controller
@@ -65,7 +67,6 @@ public class DistributorController {
      * @param model The Website model
      * @return The HTML file rendered as a String
      */
-    @SuppressWarnings("checkstyle:MagicNumber")
     @GetMapping("/")
     @Secured("ROLE_verteiler")
     public String index1(final KeycloakAuthenticationToken token, final Model model) throws JsonProcessingException {
@@ -75,19 +76,28 @@ public class DistributorController {
             List<Distribution> distributionList = distributionService.findAll();
             for (Distribution distribution : distributionList) {
                 List<WebDistributorApplicant> webDistributorApplicantList = new ArrayList<>();
-                List<Applicant> applicantList = new ArrayList<>();
+                List<Applicant> applicantList = distribution.getEmployees();
                 for (Applicant applicant : applicantList) {
-                    Application application = applicationService.findApplicatonByUniserialAndModule(
-                            applicant.getUniserial(),
-                            distribution.getModule());
-                    Evaluation evaluation = evaluationService.findByApplication(application);
+                    List<WebDistributorApplication> webDistributorApplicationList = new ArrayList<>();
+                    Set<Application> applicationList = applicant.getApplications();
+                    for (Application value : applicationList) {
+                        Application application = applicationService.findApplicatonByUniserialAndModule(
+                                applicant.getUniserial(),
+                                distribution.getModule());
+                        Evaluation evaluation = evaluationService.findByApplication(application);
+                        WebDistributorApplication webDistributorApplication = WebDistributorApplication.builder()
+                                .applicantPriority(value.getPriority() + "")
+                                .minHours(value.getHours() + "")
+                                .maxHours(value.getHours() + "")
+                                .module(value.getModule())
+                                .organizerHours(evaluation.getHours() + "")
+                                .organizerPriority(evaluation.getPriority() + "")
+                                .build();
+                        webDistributorApplicationList.add(webDistributorApplication);
+                    }
                     WebDistributorApplicant webDistributorApplicant = WebDistributorApplicant.builder()
                             .username(applicant.getUniserial())
-                            .applicantPriority(application.getPriority() + "")
-                            .minHours(application.getHours() + "")
-                            .maxHours(application.getHours() + "")
-                            .organizerPriority(evaluation.getPriority() + "")
-                            .organizerHours(evaluation.getHours() + "")
+                            .webDistributorApplications(webDistributorApplicationList)
                             .build();
                     webDistributorApplicantList.add(webDistributorApplicant);
                 }
