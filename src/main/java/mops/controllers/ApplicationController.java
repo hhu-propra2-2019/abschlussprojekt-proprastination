@@ -184,6 +184,7 @@ public class ApplicationController {
                 .role(webApplication.getRole())
                 .comment(webApplication.getComment())
                 .build();
+        System.out.println(application);
         model.addAttribute("account", createAccountFromPrincipal(token));
         model.addAttribute("module", module);
         model.addAttribute("semesters", CSVService.getSemester());
