@@ -19,10 +19,10 @@ public interface ApplicantRepository extends CrudRepository<Applicant, Long> {
     List<Applicant> findAll();
 
     /**
-     * Finds all Applicants with give uniserial
+     * Finds Applicant with given uniserial
      *
      * @param uniserial Unikennung
-     * @return List of Applicants
+     * @return the applicant
      */
     Applicant findByUniserial(String uniserial);
 }

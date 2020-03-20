@@ -49,63 +49,54 @@
                 <div class="card-body" id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
                     <div class="card w-100 bg-light mb-1 border-primary" id="drag1" draggable="true" ondragstart="drag(event)">
                         <div class="card-header container-fluid">
-                            <button class="btn" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                Mamus100
-                            </button>
-                            <div class="float-right">
-                                <input type="checkbox">
-                            </div>
-                            <div class="float-right">
-                                17 Std.&nbsp;&nbsp;
+                            <div class="row">
+                                <div class="col">
+                                    <button class="btn" data-toggle="collapse" data-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
+                                        Mamus100
+                                    </button>
+                                </div>
+                                <div class="col">
+                                    <div>
+                                        <input type="text" size="1">
+                                        <label>Stunden</label>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="float-right">
+                                        <input type="checkbox">
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div id="collapseOne" class="collapse" aria-labelledby="headingOne">
+                        <div id="collapse1" class="collapse" aria-labelledby="headingOne">
                             <div class="container text-center">
                                 <div class="row border font-weight-bold">
                                     <div class="col" title="Modul" style="text-overflow: ellipsis; overflow: hidden; width: 20%; white-space: nowrap">Modul</div>
                                     <div class="col" title="Priorität des Bewerbers" style="text-overflow: ellipsis; overflow: hidden; width: 20%; white-space: nowrap">Bewerber-Prio</div>
                                     <div class="col" title="Priorität des Organisators" style="text-overflow: ellipsis; overflow: hidden; width: 20%; white-space: nowrap">Orga-Prio</div>
                                     <div class="col" title="Stundenwunsch des Organisators" style="text-overflow: ellipsis; overflow: hidden; width: 20%; white-space: nowrap">Orga-Stunden</div>
-                                    <div class="col" title="Endgültige Stundenanzahl" style="text-overflow: ellipsis; overflow: hidden; width: 20%; white-space: nowrap">Stunden</div>
+                                    <div class="col" title="Stundenwunsch des Bewerbers" style="text-overflow: ellipsis; overflow: hidden; width: 20%; white-space: nowrap">Stunden</div>
                                 </div>
                                 <div class="row border">
                                     <div class="col">Modul1</div>
                                     <div class="col">++</div>
                                     <div class="col">+</div>
                                     <div class="col">9</div>
-                                    <div class="col">
-                                        <select>
-                                            <option>9 Std.</option>
-                                            <option selected="selected">10 Std.</option>
-                                            <option>17 Std.</option>
-                                        </select>
-                                    </div>
+                                    <div class="col">10 - 17</div>
                                 </div>
                                 <div class="row border">
                                     <div class="col">Modul2</div>
                                     <div class="col">o</div>
                                     <div class="col">-</div>
                                     <div class="col">17</div>
-                                    <div class="col">
-                                        <select>
-                                            <option selected="selected">9 Std.</option>
-                                            <option>10 Std.</option>
-                                            <option>17 Std.</option>
-                                        </select>
-                                    </div>
+                                    <div class="col">9 - 17</div>
                                 </div>
                                 <div class="row border">
                                     <div class="col">Modul3</div>
                                     <div class="col">-</div>
                                     <div class="col">+</div>
                                     <div class="col">7</div>
-                                    <div class="col">
-                                        <select>
-                                            <option>9 Std.</option>
-                                            <option>10 Std.</option>
-                                            <option selected="selected">17 Std.</option>
-                                        </select>
-                                    </div>
+                                    <div class="col">9 - 9</div>
                                 </div>
                             </div>
                         </div>
@@ -114,14 +105,23 @@
 
                     <div class="card w-100 bg-light mb-1 border-primary" id="drag2" draggable="true" ondragstart="drag(event)">
                         <div class="card-header container-fluid">
-                            <button class="btn" data-toggle="collapse" data-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
-                                Mamus100
-                            </button>
-                            <div class="float-right">
-                                <input type="checkbox">
-                            </div>
-                            <div class="float-right">
-                                9 Std.&nbsp;&nbsp;
+                            <div class="row">
+                                <div class="col">
+                                    <button class="btn" data-toggle="collapse" data-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
+                                        Mamus100
+                                    </button>
+                                </div>
+                                <div class="col">
+                                    <div>
+                                        <input type="text" size="1">
+                                        <label>Stunden</label>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="float-right">
+                                        <input type="checkbox">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div id="collapse2" class="collapse" aria-labelledby="headingTwo">
@@ -131,46 +131,28 @@
                                     <div class="col" title="Priorität des Bewerbers" style="text-overflow: ellipsis; overflow: hidden; width: 20%; white-space: nowrap">Bewerber-Prio</div>
                                     <div class="col" title="Priorität des Organisators" style="text-overflow: ellipsis; overflow: hidden; width: 20%; white-space: nowrap">Orga-Prio</div>
                                     <div class="col" title="Stundenwunsch des Organisators" style="text-overflow: ellipsis; overflow: hidden; width: 20%; white-space: nowrap">Orga-Stunden</div>
-                                    <div class="col" title="Endgültige Stundenanzahl" style="text-overflow: ellipsis; overflow: hidden; width: 20%; white-space: nowrap">Stunden</div>
+                                    <div class="col" title="Stundenwunsch des Bewerbers" style="text-overflow: ellipsis; overflow: hidden; width: 20%; white-space: nowrap">Stunden</div>
                                 </div>
                                 <div class="row border">
                                     <div class="col">Modul1</div>
                                     <div class="col">++</div>
                                     <div class="col">+</div>
                                     <div class="col">9</div>
-                                    <div class="col">
-                                        <select>
-                                            <option>9 Std.</option>
-                                            <option selected="selected">10 Std.</option>
-                                            <option>17 Std.</option>
-                                        </select>
-                                    </div>
+                                    <div class="col">10 - 17</div>
                                 </div>
                                 <div class="row border">
                                     <div class="col">Modul2</div>
                                     <div class="col">o</div>
                                     <div class="col">-</div>
                                     <div class="col">17</div>
-                                    <div class="col">
-                                        <select>
-                                            <option selected="selected">9 Std.</option>
-                                            <option>10 Std.</option>
-                                            <option>17 Std.</option>
-                                        </select>
-                                    </div>
+                                    <div class="col">9 - 17</div>
                                 </div>
                                 <div class="row border">
                                     <div class="col">Modul3</div>
                                     <div class="col">-</div>
                                     <div class="col">+</div>
                                     <div class="col">7</div>
-                                    <div class="col">
-                                        <select>
-                                            <option>9 Std.</option>
-                                            <option>10 Std.</option>
-                                            <option selected="selected">17 Std.</option>
-                                        </select>
-                                    </div>
+                                    <div class="col">9 - 9</div>
                                 </div>
                             </div>
                         </div>
@@ -189,9 +171,9 @@
         <script>
             $("input[type='checkbox']").change(function(){
                 if($(this).is(":checked")){
-                    $(this).parent().parent().addClass("doneBackground");
+                    $(this).parent().parent().parent().parent().addClass("doneBackground");
                 }else{
-                    $(this).parent().parent().removeClass("doneBackground");
+                    $(this).parent().parent().parent().parent().removeClass("doneBackground");
                 }
             });
         </script>

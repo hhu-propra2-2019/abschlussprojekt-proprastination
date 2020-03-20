@@ -28,16 +28,26 @@
 <main th:fragment="bodycontent">
     <div th:object="${webApplicant}">
         <div th:object="${webAddress}">
-            <h1 th:text="${webApplicant.birthplace}"></h1>
-            <h1 th:text="${webApplicant.gender}"></h1>
-            <h1 th:text="${webApplicant.nationality}"></h1>
-            <h1 th:text="${webApplicant.birthday}"></h1>
-            <h1 th:text="${webApplicant.course}"></h1>
-            <h1 th:text="${webApplicant.status}"></h1>
-            <h1 th:text="${webApplicant.comment}"></h1>
-            <p th:text="${webAddress.street}"></p>
-            <p th:text="${webAddress.city}"></p>
-            <p th:text="${webAddress.zipcode}"></p>
+            birthplace : <p th:text="${webApplicant.birthplace}"></p> </br>
+            gender: <p th:text="${webApplicant.gender}"></p></br>
+            nationality: <p th:text="${webApplicant.nationality}"></p></br>
+            birthday: <p th:text="${webApplicant.birthday}"></p></br>
+            course: <p th:text="${webApplicant.course}"></p></br>
+            status: <p th:text="${webApplicant.status}"></p></br>
+            comment: <p th:text="${webApplicant.comment}"></p></br>
+            street: <p th:text="${webAddress.street}"></p></br>
+            city: <p th:text="${webAddress.city}"></p></br>
+            zipcode: <p th:text="${webAddress.zipcode}"></p></br>
+        </div>
+        <div th:object="${webApplication}">
+            module: <p th:text="${webApplication.module}"></p></br>
+            workload: <p th:text="${webApplication.workload}"></p></br>
+            priority: <p th:text="${webApplication.priority}"></p></br>
+            grade: <p th:text="${webApplication.grade}"></p></br>
+            lecturer: <p th:text="${webApplication.lecturer}"></p></br>
+            semester: <p th:text="${webApplication.semester}"></p></br>
+            role: <p th:text="${webApplication.role}"></p></br>
+            comment: <p th:text="${webApplication.comment}"></p></br>
         </div>
     </div>
 </main>
