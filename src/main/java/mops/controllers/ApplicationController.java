@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.context.annotation.SessionScope;
 
-import java.security.Key;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -165,12 +164,12 @@ public class ApplicationController {
     }
 
     /**
-     *
-     * @param token
-     * @param webApplication
-     * @param model
-     * @param module
-     * @return
+     * saves the current module application + calls for information for another module
+     * @param token security token
+     * @param webApplication the Application with its information
+     * @param model model
+     * @param module the module the applicant wants to apply for next
+     * @return html for another Modul
      */
     @PostMapping("weiteresModul")
     public String weiteresModul(final KeycloakAuthenticationToken token,
