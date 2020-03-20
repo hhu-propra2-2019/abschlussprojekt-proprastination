@@ -153,7 +153,6 @@ public class ApplicationController {
                     .comment(webApplicant.getComment())
                     .build();
             applicantService.saveApplicant(applicant);
-            applicantService.findAll().forEach(System.out::println);
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("module", modules);
             model.addAttribute("semesters", CSVService.getSemester());
@@ -175,8 +174,6 @@ public class ApplicationController {
     public String weiteresModul(final KeycloakAuthenticationToken token,
                               final WebApplication webApplication, final Model model,
                               @RequestParam("modules") final String module) {
-        System.out.println(webApplication);
-        System.out.println("Modul: " + module);
         Application application = Application.builder()
                 .module(webApplication.getModule())
                 .hours(webApplication.getWorkload())
@@ -187,9 +184,6 @@ public class ApplicationController {
                 .role(webApplication.getRole())
                 .comment(webApplication.getComment())
                 .build();
-        System.out.println(application);
-        model.addAttribute("webApplicant", WebApplicant.builder().build());
-        model.addAttribute("webAddress", WebAddress.builder().build());
         model.addAttribute("account", createAccountFromPrincipal(token));
         model.addAttribute("module", module);
         model.addAttribute("semesters", CSVService.getSemester());
