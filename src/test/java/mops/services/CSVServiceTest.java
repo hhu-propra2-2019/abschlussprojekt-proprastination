@@ -93,9 +93,9 @@ class CSVServiceTest{
     @Test
     void getModulesWithDetailsTest() {
         List<String[]> data = service.getModulesWithDetails();
-        String[] s1 = {"Rechnernetze Datenbanken und Betriebssysteme","RDB", "Jens Bendisposto", "40", "0"};
-        String[] s2 = {"Rechnerarchitektur","RA", "Christian Meter", "0", "4"};
-        String[] s3 = {"Theoretische Informatik", "Theo Info", "Anna Wintour", "80", "2"};
+        String[] s1 = {"Rechnernetze Datenbanken und Betriebssysteme","RDB", "Jens Bendisposto", "10", "0", "0", "80"};
+        String[] s2 = {"Rechnerarchitektur","RA", "Christian Meter", "3", "5", "2", "120"};
+        String[] s3 = {"Theoretische Informatik", "Theo Info", "Anna Wintour", "5", "1", "1", "60"};
 
         assertThat(data.get(0)).isEqualTo(s1);
         assertThat(data.get(1)).isEqualTo(s2);
@@ -133,21 +133,9 @@ class CSVServiceTest{
         limits = service.getHourLimits();
 
         assertThat(limits.size()).isEqualTo(3);
-        assertThat(limits.get(0)).isEqualTo("40");
-        assertThat(limits.get(1)).isEqualTo("0");
-        assertThat(limits.get(2)).isEqualTo("80");
-    }
-
-    @Test
-    void getPersonLimitsTest() {
-        List<String> limits;
-
-        limits = service.getPersonLimits();
-
-        assertThat(limits.size()).isEqualTo(3);
-        assertThat(limits.get(0)).isEqualTo("0");
-        assertThat(limits.get(1)).isEqualTo("4");
-        assertThat(limits.get(2)).isEqualTo("2");
+        assertThat(limits.get(0)).isEqualTo("80");
+        assertThat(limits.get(1)).isEqualTo("120");
+        assertThat(limits.get(2)).isEqualTo("60");
     }
 
     @Test

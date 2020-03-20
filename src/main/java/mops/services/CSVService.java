@@ -148,23 +148,7 @@ public class CSVService {
         String[] strArr;
         for (int i = 0; i < limits.size(); i++) {
             strArr = limits.get(i);
-            list.add(strArr[3]);
-        }
-        return list;
-    }
-
-    /**
-     * get the limit of workers allowed on a module
-     * @return limit of workers as list
-     */
-
-    public static List<String> getPersonLimits() {
-        List<String> list = new ArrayList<>();
-        List<String[]> limits = readFromCSV("src/main/resources/csv/module.csv");
-        String[] strArr;
-        for (int i = 0; i < limits.size(); i++) {
-            strArr = limits.get(i);
-            list.add(strArr[4]);
+            list.add(strArr[6]);
         }
         return list;
     }

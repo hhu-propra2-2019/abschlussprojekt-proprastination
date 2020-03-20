@@ -103,22 +103,27 @@ public class SetupController {
      * Post mapping for saving a new module
      * @param token The KeycloakAuthentication
      * @param model The Website model
-     * @return The HTML file rendered as a String
      * @param name module name
      * @param shortName module short name
      * @param prof responsible person
-     * @param hourLimit maximum hours of work required
-     * @param personLimit maximum people of work required
+     * @param hourLimit maximum people of work required
+     * @param pAmountSevenHours Amount of people with 7 hour jobs
+     * @param pAmountNineHours Amount of people with 9 hour jobs
+     * @param pAmountSeventeenHours Amount of people with 17 hour jobs
+     * @return The HTML file rendered as a String
      */
+    @SuppressWarnings("checkstyle:ParameterNumber")
     @PostMapping("/neuesModul")
     public String postNewModule(final KeycloakAuthenticationToken token, final Model model,
                                 @RequestParam("name") final String name,
                                 @RequestParam("shortName") final String shortName,
                                 @RequestParam("prof") final String prof,
-                                @RequestParam("hourLimit") final String hourLimit,
-                                @RequestParam("personLimit") final String personLimit) {
+                                @RequestParam("pAmountSevenHours") final String pAmountSevenHours,
+                                @RequestParam("pAmountNineHours") final String pAmountNineHours,
+                                @RequestParam("pAmountSeventeenHours") final String pAmountSeventeenHours,
+                                @RequestParam("hourLimit") final String hourLimit) {
         List<String[]> input = new ArrayList<>();
-        String[] s1 = {name, shortName, prof, hourLimit, personLimit};
+        String[] s1 = {name, shortName, prof, hourLimit, pAmountSevenHours, pAmountNineHours, pAmountSeventeenHours};
         input.add(s1);
         CSVService.writeInCSV("src/main/resources/csv/module.csv", input);
         return index(token, model);

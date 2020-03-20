@@ -35,38 +35,60 @@
 </header>
 
 <main th:fragment="bodycontent">
-    <div class="card bg-light mb-3 border-primary">
-        <div class="card-header d-flex justify-content-between align-items-start">
-                <h2 style="margin-bottom: .0rem" class="card-text col">Neues Modul</h2>
-        </div>
-        <div class="card-body">
-            <form th:action="@{neuesModul}" th:method="POST">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div class="col-3">
+    <form th:action="@{neuesModul}" th:method="POST">
+        <div class="card bg-light mb-3 border-primary">
+            <div class="card-header container-fluid">
+                <div class="row">
+                    <h2 style="margin-bottom: .0rem" class="card-text col-6 float-left">Neues Modul</h2>
+                    <div class="col-6">
+                        <button class="btn btn-outline-primary btn-sm float-right" th:type="submit">Speichern</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row container-fluid">
+                    <div class="col float-left">
                         <input type="text" name="name" id="name"
                                class="form-control" placeholder="Name des Moduls">
                     </div>
-                    <div class="col-1">
+                    <div class="col">
                         <input type="text" name="shortName" id="shortName"
-                               class="form-control" placeholder="Abkürzung">
+                               class="form-control" placeholder="Abkürzung des Moduls">
                     </div>
-                    <div class="col-3">
+                    <div class="col float-right">
                         <input type="text" name="prof" id="prof"
-                               class="form-control" placeholder="Name des Professors">
+                               class="form-control" placeholder="Name des Professors/Leiters">
                     </div>
-                    <div class="col-sm-2">
+                </div><br><br>
+                <div class="row">
+                    <div class="card-text col">
+                        Füllen Sie bitte alle unteren Felder aus. Geben
+                        Sie für das jeweilige Feld die Anzahl an Personen
+                        an, welche für die ausgewählte Stundenanzahl eingestellt
+                        werden sollen.
+                    </div>
+                </div><br>
+                <div class="row">
+                    <div class="col">
+                        <input type="number" name="pAmountSevenHours" id="pAmountSevenHours"
+                               class="form-control" placeholder="Tutoren mit 7 Stunden">
+                    </div>
+                    <div class="col">
+                        <input type="number" name="pAmountNineHours" id="pAmountNineHours"
+                               class="form-control" placeholder="Tutoren mit 9 Stunden">
+                    </div>
+                    <div class="col">
+                        <input type="number" name="pAmountSeventeenHours" id="pAmountSeventeenHours"
+                               class="form-control" placeholder="Tutoren mit 17 Stunden">
+                    </div>
+                    <div class="col">
                         <input type="number" name="hourLimit" id="hourLimit"
                                class="form-control" placeholder="Stundenlimit">
                     </div>
-                    <div class="col-sm-2">
-                        <input type="number" name="personLimit" id="personLimit"
-                               class="form-control" placeholder="Tutorenlimit"><br>
-                    </div>
-                    <button class="btn btn-outline-primary btn-sm" th:type="submit">Speichern</button>
                 </div>
-            </form>
+            </div>
         </div>
-    </div>
+    </form>
     <div th:replace="${content} ? ${content}: ~{}"></div>
 </main>
 
