@@ -40,8 +40,10 @@ class EvaluationTest {
                 .build();
 
         String evalString = evaluation.toString();
-        String expected = "Evaluation(application=Application(hours=0, module=ProPra2, priority=0, grade=0.0,"
-                + " lecturer=null, semester=null, role=null, comment=null, applicant=null), hours=0, comment=He is not awesome!, priority=3)";
+        String expected = "Evaluation(application=Application(minHours=0, " +
+                "finalHours=0, maxHours=0, module=ProPra2, priority=0, grade=0.0, " +
+                "lecturer=null, semester=null, role=null, comment=null, " +
+                "applicant=null), hours=0, comment=He is not awesome!, priority=3)";
         assertThat(evalString).isEqualTo(expected);
     }
 

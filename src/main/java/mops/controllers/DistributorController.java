@@ -85,8 +85,8 @@ public class DistributorController {
                     WebDistributorApplicant webDistributorApplicant = WebDistributorApplicant.builder()
                             .username(applicant.getUniserial())
                             .applicantPriority(application.getPriority() + "")
-                            .minHours(application.getHours() + "")
-                            .maxHours(application.getHours() + "")
+                            .minHours(application.getMinHours() + "")
+                            .maxHours(application.getMaxHours() + "")
                             .organizerPriority(evaluation.getPriority() + "")
                             .organizerHours(evaluation.getHours() + "")
                             .build();
