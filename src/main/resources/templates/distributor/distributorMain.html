@@ -48,12 +48,12 @@
                 <div class="card-header d-flex justify-content-start align-items-start" th:text="${distribution.module}">Propra</div>
                 <div class="card-body" id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
                     <div th:each="applicant: ${distribution.webDistributorApplicants}">
-                        <div class="card w-100 bg-light mb-1 border-primary" id="drag1" draggable="true" ondragstart="drag(event)">
+                        <div class="card w-100 bg-light mb-1 border-primary" th:id="drag + ${applicant.username}" id="drag1" draggable="true" ondragstart="drag(event)">
                             <div class="card-header container-fluid">
                                 <div class="row">
                                     <div class="col">
-                                        <button class="btn" data-toggle="collapse" data-target="#collapse1"
-                                                aria-expanded="false" aria-controls="collapse1" th:text="${applicant.username}">
+                                        <button class="btn" data-toggle="collapse" th:attr="data-target='#collapse'+${applicant.username}" data-target="#collapse1"
+                                                aria-expanded="false" th:text="${applicant.username}">
                                             Mamus100
                                         </button>
                                     </div>
@@ -70,7 +70,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="collapse1" class="collapse" aria-labelledby="headingOne">
+                            <div th:id="collapse + ${applicant.username}" id="collapse1" class="collapse">
                                 <div class="container text-center">
                                     <div class="row border font-weight-bold">
                                         <div class="col" title="Modul" style="text-overflow: ellipsis; overflow: hidden; width: 20%; white-space: nowrap">Modul</div>
