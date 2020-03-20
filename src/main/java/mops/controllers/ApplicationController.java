@@ -291,8 +291,10 @@ public class ApplicationController {
     @GetMapping("bewerbungsUebersicht")
     public String dashboardOverview(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
-            model.addAttribute("account", createAccountFromPrincipal(token));
-            model.addAttribute("applicant", applicantService.findByUniserial("has220"));
+            Account account = createAccountFromPrincipal(token);
+            model.addAttribute("account", account);
+            model.addAttribute("applicant", applicantService.findByUniserial(account.getName()));
+
         }
         return "applicant/applicationOverview";
     }
