@@ -81,8 +81,6 @@ public class DistributorController {
                     List<WebDistributorApplication> webDistributorApplicationList = new ArrayList<>();
                     Set<Application> applicationList = applicant.getApplications();
                     for (Application value : applicationList) {
-                        //Application application = applicationService.findApplicatonByUniserialAndModule(
-                        //       applicant.getUniserial(), value.getModule());
                         Evaluation evaluation = evaluationService.findByApplication(value);
                         WebDistributorApplication webDistributorApplication = WebDistributorApplication.builder()
                                 .applicantPriority(value.getPriority() + "")
