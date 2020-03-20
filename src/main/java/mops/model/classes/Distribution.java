@@ -9,7 +9,6 @@ import lombok.Singular;
 import lombok.ToString;
 import org.springframework.data.relational.core.mapping.Table;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -32,7 +31,7 @@ public class Distribution {
     private long id;
     private int stunden;
     private String module;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     @Singular
     private List<Applicant> employees;
 
