@@ -38,48 +38,74 @@
                         <div class="col-5">
                             <input th:type="text" th:name="street"
                                    th:field="*{street}" th:attr="value = ${webAddress.street}"
-                                   class="form-control" placeholder="Straße und Hausnummer" required> <br>
+                                   class="form-control" placeholder="Straße und Hausnummer">
+                            <div th:if="${#fields.hasErrors('street')}" th:errors="*{street}" class="text-danger">
+                                ungültige Straße und Hausnummer
+                            </div>
+                            <br>
                             <br>
                         </div>
                         <div class="col-5">
                             <input th:type="text" th:name="city" th:id="city"
                                    th:field="*{city}" th:attr="value = ${webAddress.city}"
-                                   th:class="form-control" placeholder="Ort" required> <br>
+                                   th:class="form-control" placeholder="Ort">
+                            <div th:if="${#fields.hasErrors('city')}" th:errors="*{city}" class="text-danger">
+                                ungültige Stadt
+                            </div>
+                            <br>
                         </div>
                         <div class="col-2">
                             <input th:type="text" th:name="zipcode" th:id="zipcode" th:field="*{zipcode}"
                                    th:attr="value = ${webAddress.zipcode}"
-                                   th:class="form-control" placeholder="Postleitzahl"
-                                   required pattern="^\d{5}$" minlength="5" maxlength="5"> <br>
+                                   th:class="form-control" placeholder="Postleitzahl">
+                            <div th:if="${#fields.hasErrors('zipcode')}" th:errors="*{zipcode}" class="text-danger">
+                                ungültige Postleitzahl
+                            </div>
+                            <br>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-5">
                             <input th:type="text" th:name="birthplace" th:id="birthplace"
                                    th:field="*{birthplace}"  th:attr="value = ${webApplicant.birthplace}"
-                                   th:class="form-control" placeholder="Geburtsort, Land" required> <br>
+                                   th:class="form-control" placeholder="Geburtsort, Land">
+                            <div th:if="${#fields.hasErrors('birthplace')}" th:errors="*{birthplace}" class="text-danger">
+                                ungültiger Geburtsort
+                            </div>
+                            <br>
                         </div>
                         <div class="col-5">
                             <select th:name="nationality" th:id="nationality" th:class="form-control"
-                                    th:field="*{nationality}" th:attr="value = ${webApplicant.nationality}" required>
+                                    th:field="*{nationality}" th:attr="value = ${webApplicant.nationality}">
                                 <option value="" disabled selected hidden>Nationalität</option>
                                 <option th:each="country:${countries}" th:text="${country}" th:value="${country}"></option>
-                            </select> <br>
+                            </select>
+                            <div th:if="${#fields.hasErrors('nationality')}" th:errors="*{nationality}" class="text-danger">
+                                ungültige Nationalitätsangabe
+                            </div>
+                            <br>
                         </div>
                         <div class="col-2">
                             <input type="text" name="birthday" id="birthday" onfocus="(this.type='date')"
                                    th:field="*{birthday}" th:attr="value = ${webApplicant.birthday}"
-                                   onblur="(this.type='text')" class="form-control" placeholder="Geburtstag" required> <br><br>
+                                   onblur="(this.type='text')" class="form-control" placeholder="Geburtstag">
+                            <div th:if="${#fields.hasErrors('birthday')}" th:errors="*{birthday}" class="text-danger">
+                                ungültiges Geburtsdatum
+                            </div>
+                            <br><br>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-2">
                             <select name="gender" id="gender" class="form-control"
-                                    th:field="*{gender}" th:attr="value = ${webApplicant.gender}" required>
+                                    th:field="*{gender}" th:attr="value = ${webApplicant.gender}">
                                 <option value="" disabled selected hidden>Geschlecht</option>
                                 <option value="male">männlich</option>
                                 <option value="female">weiblich</option>
                             </select>
+                            <div th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}" class="text-danger">
+                                ungültige Geschlechtsangabe
+                            </div>
                         </div>
                         <div class="col-4">
                             <div align="right">
