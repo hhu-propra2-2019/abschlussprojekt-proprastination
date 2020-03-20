@@ -89,7 +89,6 @@ public class DatabaseInit implements ServletContextInitializer {
                     .uniserial(truncate(faker.animal().name(), 5) + faker.number().digits(3))
                     .firstName(faker.name().firstName())
                     .surname(faker.name().lastName())
-                    .title(faker.name().prefix())
                     .comment(truncate(faker.yoda().quote(), 255))
                     .course(faker.educator().course())
                     .nationality(faker.nation().nationality())

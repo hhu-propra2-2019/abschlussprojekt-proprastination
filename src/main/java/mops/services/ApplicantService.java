@@ -71,7 +71,6 @@ public class ApplicantService {
                 .address(newApplicant.getAddress())
                 .birthplace(newApplicant.getBirthplace())
                 .comment(newApplicant.getComment())
-                .title(newApplicant.getTitle())
                 .surname(newApplicant.getSurname())
                 .firstName(newApplicant.getFirstName())
                 .gender(newApplicant.getGender())
