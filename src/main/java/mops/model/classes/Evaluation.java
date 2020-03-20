@@ -29,6 +29,7 @@ public class Evaluation {
     private long id;
     @OneToOne(fetch = FetchType.EAGER)
     private Application application;
+    private int hours;
     private String comment;
     private int priority;
 }
