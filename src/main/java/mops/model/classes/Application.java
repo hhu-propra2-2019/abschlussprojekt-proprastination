@@ -28,7 +28,9 @@ public class Application {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private int hours;
+    private int minHours;
+    private int finalHours;
+    private int maxHours;
     @NonNull
     private String module;
     private int priority;
