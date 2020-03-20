@@ -86,8 +86,8 @@ public class DistributorController {
                         Evaluation evaluation = evaluationService.findByApplication(value);
                         WebDistributorApplication webDistributorApplication = WebDistributorApplication.builder()
                                 .applicantPriority(value.getPriority() + "")
-                                .minHours(value.getHours() + "")
-                                .maxHours(value.getHours() + "")
+                                .minHours(value.getMinHours() + "")
+                                .maxHours(value.getMaxHours() + "")
                                 .module(value.getModule())
                                 .organizerHours(evaluation.getHours() + "")
                                 .organizerPriority(evaluation.getPriority() + "")

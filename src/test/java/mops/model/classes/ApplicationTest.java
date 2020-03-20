@@ -43,7 +43,8 @@ class ApplicationTest {
                 .build();
 
         application = Application.builder()
-                .hours(2)
+                .minHours(2)
+                .maxHours(4)
                 .grade(1.3)
                 .priority(1)
                 .lecturer("Tester")
@@ -60,7 +61,8 @@ class ApplicationTest {
         //Arrange in BeforeEach
 
         assertThat(application)
-                .hasFieldOrPropertyWithValue("hours", 2)
+                .hasFieldOrPropertyWithValue("minHours", 2)
+                .hasFieldOrPropertyWithValue("maxHours", 4)
                 .hasFieldOrPropertyWithValue("priority", 1)
                 .hasFieldOrPropertyWithValue("grade", 1.3)
                 .hasFieldOrPropertyWithValue("lecturer", "Tester")
@@ -75,7 +77,8 @@ class ApplicationTest {
     @Test
     void testEquals() {
         Application application1 = Application.builder()
-                .hours(2)
+                .minHours(5)
+                .maxHours(10)
                 .grade(1.3)
                 .priority(1)
                 .lecturer("Tester")
@@ -85,7 +88,8 @@ class ApplicationTest {
                 .build();
 
         Application application2 = Application.builder()
-                .hours(2)
+                .minHours(5)
+                .maxHours(10)
                 .grade(1.3)
                 .priority(1)
                 .lecturer("Tester")
@@ -101,7 +105,8 @@ class ApplicationTest {
     void testBuilderFailsWithMissingArgument() {
         assertThatThrownBy(() -> {
                     Application application = Application.builder()
-                            .hours(2)
+                            .minHours(10)
+                            .maxHours(20)
                             .build();
                 }
         ).isInstanceOf(NullPointerException.class);
@@ -112,13 +117,14 @@ class ApplicationTest {
         //Arrange in BeforeEach
 
         assertThat(application.toString()).isEqualTo(
-                "Application(hours=2, module=ProPra, priority=1, grade=1.3, lecturer=Tester," +
-                        " semester=WS2020, role=Korrektor, comment=, applicant=Applicant(uniserial=lolol420," +
-                        " birthplace=Deutschland, firstName=Angelo, surname=Merkel," +
-                        " address=Address(street=Street, houseNumber=999, city=Düsseldorf, country=USA," +
-                        " zipcode=12345), gender=male, birthday=32.32.9999, nationality=Russian," +
-                        " course=Trivial, status=irelevant, comment=Moin, certs=Certificate(name=Bachelor," +
-                        " course=Informatik), applications=[null]))");
+                "Application(minHours=2, finalHours=0, maxHours=4, module=ProPra, " +
+                        "priority=1, grade=1.3, lecturer=Tester, semester=WS2020, " +
+                        "role=Korrektor, comment=, applicant=Applicant(uniserial=lolol420, " +
+                        "birthplace=Deutschland, firstName=Angelo, surname=Merkel, " +
+                        "address=Address(street=Street, houseNumber=999, city=Düsseldorf, " +
+                        "country=USA, zipcode=12345), gender=male, birthday=32.32.9999, " +
+                        "nationality=Russian, course=Trivial, status=irelevant, comment=Moin, " +
+                        "certs=Certificate(name=Bachelor, course=Informatik), applications=[null]))");
 
     }
 

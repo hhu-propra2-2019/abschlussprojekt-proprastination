@@ -179,7 +179,8 @@ public class ApplicationController {
         Application application = Application.builder()
                 //Module wird irgendwie nicht eingelesen? Mach ich später >_>
                 .module(webApplication.getModule())
-                .hours(webApplication.getWorkload())
+                .minHours(webApplication.getWorkload())//HTML anpassen
+                .maxHours(webApplication.getWorkload())//HTML anpassen
                 .priority(webApplication.getPriority())
                 .grade(webApplication.getGrade())
                 .lecturer(webApplication.getLecturer())
@@ -290,8 +291,10 @@ public class ApplicationController {
     @GetMapping("bewerbungsUebersicht")
     public String dashboardOverview(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
-            model.addAttribute("account", createAccountFromPrincipal(token));
-            model.addAttribute("applicant", applicantService.findByUniserial("has220"));
+            Account account = createAccountFromPrincipal(token);
+            model.addAttribute("account", account);
+            model.addAttribute("applicant", applicantService.findByUniserial(account.getName()));
+
         }
         return "applicant/applicationOverview";
     }
@@ -331,7 +334,8 @@ public class ApplicationController {
                     .module(module)
                     .lecturer(lecturer)
                     .semester(semester)
-                    .hours(Integer.parseInt(workload))
+                    .minHours(Integer.parseInt(workload))
+                    .maxHours(Integer.parseInt(workload))
                     .grade(Double.parseDouble(grade))
                     .build();
         }

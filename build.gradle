@@ -60,6 +60,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.19'
     implementation 'org.keycloak:keycloak-spring-boot-starter:9.0.0'
     implementation 'org.keycloak.bom:keycloak-adapter-bom:3.3.0.Final'
     compile group: 'org.webjars', name: 'jquery', version: '3.3.1'
@@ -75,6 +76,7 @@ dependencies {
     testImplementation("org.assertj:assertj-core:3.15.0")
     testCompile("org.assertj:assertj-core:3.11.1")
     compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5:3.0.4.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-mail:2.2.5.RELEASE'
     implementation 'junit:junit:4.12'
     compile group: 'com.h2database', name: 'h2', version: '1.4.200'
 }
