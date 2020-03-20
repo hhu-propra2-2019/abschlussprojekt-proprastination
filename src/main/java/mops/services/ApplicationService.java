@@ -31,7 +31,7 @@ public class ApplicationService {
      * @param module the module he applied in
      * @return the application
      */
-    public Application findApplicatinByUniserialAndModule(final String uniserial, final String module) {
+    public Application findApplicatonByUniserialAndModule(final String uniserial, final String module) {
         return applicationRepository.findByApplicantAndModule(applicantService.findByUniserial(uniserial), module);
     }
 
