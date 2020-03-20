@@ -188,9 +188,9 @@ public class ApplicationController {
                 .role(webApplication.getRole())
                 .comment(webApplication.getComment())
                 .build();
-        List<Application> applications = new ArrayList<>();
-
-        System.out.println(application);
+        Set<Application> applications = applicant.getApplications();
+        applications.add(application);
+        //muss zum Applicant hinzugefügt werden und dann in Datenbank eingespeichert werden
         model.addAttribute("account", createAccountFromPrincipal(token));
         model.addAttribute("module", module);
         model.addAttribute("semesters", CSVService.getSemester());
