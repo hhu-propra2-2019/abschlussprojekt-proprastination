@@ -103,6 +103,8 @@ public class DatabaseInit implements ServletContextInitializer {
                     .build();
             applicantRepository.save(applicant);
         }
+        applicantRepository.save(createMainRole("studentin", faker));
+
     }
 
     private String nextModule() {
@@ -160,5 +162,60 @@ public class DatabaseInit implements ServletContextInitializer {
                 break;
         }
         return ret;
+    }
+
+    @SuppressWarnings("checkstyle:MagicNumber")
+    private Applicant createMainRole(final String role, final Faker faker) {
+        Address address = Address.builder()
+                .street(faker.address().streetName())
+                .houseNumber(faker.address().buildingNumber())
+                .city(faker.address().city())
+                .country(faker.address().country())
+                .zipcode(faker.number().numberBetween(10000, 99999))
+                .build();
+
+        Certificate certificate = Certificate.builder()
+                .course(faker.educator().course())
+                .name("Bachelor")
+                .build();
+
+        Application application1 = Application.builder()
+                .module("Rechnerarchitektur")
+                .hours(faker.number().numberBetween(1, 17))
+                .lecturer(faker.name().fullName())
+                .grade(faker.number().randomDouble(1, 1, 5))
+                .semester("SS2020")
+                .comment(truncate(faker.rickAndMorty().quote(), 255))
+                .role(getRole())
+                .priority(faker.number().numberBetween(1, 4))
+                .build();
+
+        Application application2 = Application.builder()
+                .module("Theoretische Informatik")
+                .hours(faker.number().numberBetween(1, 17))
+                .lecturer(faker.name().fullName())
+                .grade(faker.number().randomDouble(1, 1, 5))
+                .semester("SS2020")
+                .comment(truncate(faker.rickAndMorty().quote(), 255))
+                .role(getRole())
+                .priority(faker.number().numberBetween(1, 4))
+                .build();
+
+        return Applicant.builder()
+                .uniserial(role)
+                .firstName(role)
+                .surname(role)
+                .comment(truncate(faker.yoda().quote(), 255))
+                .course("Informatik")
+                .nationality(faker.nation().nationality())
+                .birthday(getDate(faker.date().birthday()))
+                .status("Einstellung")
+                .application(application1)
+                .application(application2)
+                .birthplace(faker.address().country())
+                .gender(nextGender())
+                .certs(certificate)
+                .address(address)
+                .build();
     }
 }
