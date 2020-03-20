@@ -12,7 +12,6 @@ import mops.services.ApplicationService;
 import mops.services.DistributionService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,7 +37,8 @@ public class DistributorController {
      * @param applicationService
      */
     @SuppressWarnings("checkstyle:HiddenField")
-    public DistributorController(final DistributionService distributionService, final ApplicationService applicationService) {
+    public DistributorController(final DistributionService distributionService,
+                                 final ApplicationService applicationService) {
         this.distributionService = distributionService;
         this.applicationService = applicationService;
     }
