@@ -80,7 +80,7 @@ public class DistributorController {
                             .minHours(application.getHours() + "")
                             .maxHours(application.getHours() + "")
                             .organizerPriority(evaluation.getPriority() + "")
-                            //.organizerHours(evaluation.getHours + "")
+                            .organizerHours(evaluation.getHours() + "")
                             .build();
                     webDistributorApplicantList.add(webDistributorApplicant);
                 }
