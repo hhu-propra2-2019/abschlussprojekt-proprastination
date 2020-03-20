@@ -280,51 +280,6 @@ public class ApplicationController {
     }
 
     /**
-     * website for more modules, saves the former module and provides input for the next one
-     *
-     * @param token     keycloaktoken
-     * @param model     model
-     * @param modules   the module the applicant wants to apply for now
-     * @param module    the module the applicant applied for
-     * @param workload  hours the applicant may apply for
-     * @param grade     the grade the applicant had in the module
-     * @param semester  the semester the applicant completed the module
-     * @param lecturer  the lecturer the applicant wrote his exam with
-     *                  //    * @param tasks the role he wants to take
-     *                  //    * @param priority his priority
-     * @param applicant probably not neccessary?
-     * @return the same applicationModule.html
-     */
-    @PostMapping("/weiteresModulxx")
-    @SuppressWarnings("checkstyle:ParameterNumber")
-    public String weiteresModulxx(final KeycloakAuthenticationToken token,
-                                final Model model,
-                                @RequestParam("modules") final String modules,
-                                @RequestParam("module") final String module,
-                                @RequestParam("workload") final String workload,
-                                @RequestParam("grade") final String grade,
-                                @RequestParam("semesters") final String semester,
-                                @RequestParam("lecturer") final String lecturer,
-                                //                              @RequestParam("tasks") final String tasks,
-                                //                              @RequestParam("priority") final String priority,
-                                @RequestParam("applicant") final String applicant) {
-        if (token != null) {
-            model.addAttribute("account", createAccountFromPrincipal(token));
-            model.addAttribute("module", modules);
-            model.addAttribute("semesters", CSVService.getSemester());
-            model.addAttribute("modules", CSVService.getModules());
-            model.addAttribute("applicant", applicant);
-            Application.builder()
-                    .module(module)
-                    .lecturer(lecturer)
-                    .semester(semester)
-                    .grade(Double.parseDouble(grade))
-                    .build();
-        }
-        return "applicant/applicationModule";
-    }
-
-    /**
      * getmapping for overview
      * @param token
      * @param model
