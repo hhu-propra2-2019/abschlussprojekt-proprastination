@@ -10,6 +10,7 @@ import lombok.ToString;
 import org.springframework.data.relational.core.mapping.Table;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,7 +31,7 @@ public class Distribution {
     private long id;
     private int stunden;
     private String module;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @Singular
     private List<Applicant> employees;
 
