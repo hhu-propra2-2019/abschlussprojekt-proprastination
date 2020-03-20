@@ -1,7 +1,6 @@
 package mops.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import lombok.AllArgsConstructor;
 import mops.model.Account;
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
@@ -9,7 +8,6 @@ import mops.model.classes.Distribution;
 import mops.model.classes.Evaluation;
 import mops.model.classes.webclasses.WebDistribution;
 import mops.model.classes.webclasses.WebDistributorApplicant;
-import mops.services.ApplicantService;
 import mops.services.ApplicationService;
 import mops.services.DistributionService;
 import org.keycloak.KeycloakPrincipal;
