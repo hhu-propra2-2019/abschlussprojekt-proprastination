@@ -246,7 +246,7 @@ public class ApplicationController {
                     .uniserial("has220")
                     .applications(appls)
                     .build();
-            applicantService.updateApplicantWithouChangingApplications(applicant);
+            applicantService.updateApplicantWithoutChangingApplications(applicant);
             model.addAttribute("applicant", applicantService.findByUniserial("has220"));
         }
         return "applicant/applicationOverview";
@@ -268,7 +268,7 @@ public class ApplicationController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("applicant", applicantService.findByUniserial("has220"));
-            applicantService.updateApplicantWithouChangingApplications(applicant1);
+            applicantService.updateApplicantWithoutChangingApplications(applicant1);
         }
         return "applicant/applicationOverview";
     }

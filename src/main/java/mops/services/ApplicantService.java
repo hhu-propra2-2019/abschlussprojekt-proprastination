@@ -58,7 +58,7 @@ public class ApplicantService {
      *
      * @param newApplicant The Object containing the new information
      */
-    public void updateApplicantWithouChangingApplications(final Applicant newApplicant) {
+    public void updateApplicantWithoutChangingApplications(final Applicant newApplicant) {
         Applicant oldApplicant = findByUniserial(newApplicant.getUniserial());
         saveApplicant(Applicant.builder()
                 .applications(oldApplicant.getApplications())
