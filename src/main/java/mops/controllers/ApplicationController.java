@@ -126,24 +126,36 @@ public class ApplicationController {
      * saves Applicant into database and waits for moduleinformation
      * @param token Keycloaktoken
      * @param webApplicant webApplicant and its data
-     * @param bindingResult the result of validating webApplicant
+     * @param applicantBindingResult the result of validating webApplicant
      * @param webAddress webAddress and its data
+     * @param addressBindingResult the result of validating webAddress
      * @param model Model
      * @param modules the module the Applicant wants to apply for
      * @return applicationModule.html
      */
     @PostMapping("/modul")
     @Secured("ROLE_studentin")
-    public String modul(final KeycloakAuthenticationToken token, @Valid final WebApplicant webApplicant,
-                            final BindingResult bindingResult,
-                            final WebAddress webAddress, final Model model,
+    public String modul(final KeycloakAuthenticationToken token,
+                            @Valid final WebApplicant webApplicant, final BindingResult applicantBindingResult,
+                            @Valid final WebAddress webAddress, final BindingResult addressBindingResult,
+                            final Model model,
                             @RequestParam("modules") final String modules) {
 
-        if (bindingResult.hasErrors()) {
-            bindingResult.getAllErrors().forEach(err -> {
+        if (applicantBindingResult.hasErrors()) {
+            applicantBindingResult.getAllErrors().forEach(err -> {
                 LOGGER.info("ERROR {}", err.getDefaultMessage());
             });
             model.addAttribute("webApplicant", webApplicant);
+            model.addAttribute("webAddress", webAddress);
+            return "redirect:/bewerbung2/bewerber/neueBewerbung";
+        }
+
+        if (addressBindingResult.hasErrors()) {
+            addressBindingResult.getAllErrors().forEach(err -> {
+                LOGGER.info("ERROR {}", err.getDefaultMessage());
+            });
+            model.addAttribute("webApplicant", webApplicant);
+            model.addAttribute("webAddress", webAddress);
             return "redirect:/bewerbung2/bewerber/neueBewerbung";
         }
 
