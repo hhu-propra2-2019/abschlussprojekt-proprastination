@@ -10,9 +10,11 @@ import lombok.ToString;
 import org.springframework.data.relational.core.mapping.Table;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Builder(toBuilder = true)
 @EqualsAndHashCode
@@ -35,7 +37,8 @@ public class Application {
     private String semester;
     private String role;
     private String comment;
-
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Applicant applicant;
 }
 
 
