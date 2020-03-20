@@ -68,7 +68,6 @@ public class DistributorController {
                             applicant.getUniserial(),
                             distribution.getModule());
                     //Evaluation evaluation = evaluationService.findByApplication(application);
-                    //TODO folgende Evaluation wieder rausnehmen
                     Evaluation evaluation = Evaluation.builder()
                             .application(application)
                             .comment("blablabla")
