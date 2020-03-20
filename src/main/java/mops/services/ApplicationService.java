@@ -3,7 +3,6 @@ package mops.services;
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
 import mops.repositories.ApplicationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,16 +18,28 @@ public class ApplicationService {
      * @param applicantService the applicant service
      * @param applicationRepository the application repository
      */
+    @SuppressWarnings("checkstyle:HiddenField")
     public ApplicationService(final ApplicantService applicantService,
                               final ApplicationRepository applicationRepository) {
         this.applicantService = applicantService;
         this.applicationRepository = applicationRepository;
     }
 
+    /**
+     * Finds application by uniserial and module
+     * @param uniserial the applicant uniserial
+     * @param module the module he applied in
+     * @return the application
+     */
     public Application findApplicatinByUniserialAndModule(final String uniserial, final String module) {
         return applicationRepository.findByApplicantAndModule(applicantService.findByUniserial(uniserial), module);
     }
 
+    /**
+     * Finds all application of an applicant
+     * @param applicant the applicant
+     * @return his applications
+     */
     public List<Application> findApplicationByApplicant(final Applicant applicant) {
         return applicationRepository.findAllByApplicant(applicant);
     }
