@@ -126,7 +126,7 @@ public class DistributionService {
         List<Module> modules = moduleService.getModules();
         for (Module module : modules) {
             List<Evaluation> evaluations = new LinkedList<>();
-            List<Application> applications = applicationService.findApplicationsByModule();
+            List<Application> applications = applicationService.findApplicationsByModule(module.getName());
             for (Application application : applications) {
                 Evaluation evaluation = evaluationService.findByApplication(application);
                 evaluations.add(evaluation);
@@ -194,6 +194,11 @@ public class DistributionService {
                     }
                 }
             }
+
+            distributionRepository.save(Distribution.builder()
+                    .employees(distributedApplicants)
+                    .module(module.getName())
+                    .build());
         }
     }
 
