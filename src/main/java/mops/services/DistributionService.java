@@ -117,13 +117,13 @@ public class DistributionService {
 
     private List<WebDistributorApplication> createWebDistributorApplications(final Set<Application> applicationSet) {
         List<WebDistributorApplication> webDistributorApplicationList = new ArrayList<>();
-        for (Application value : applicationSet) {
-            Evaluation evaluation = evaluationService.findByApplication(value);
+        for (Application application : applicationSet) {
+            Evaluation evaluation = evaluationService.findByApplication(application);
             WebDistributorApplication webDistributorApplication = WebDistributorApplication.builder()
-                    .applicantPriority(value.getPriority() + "")
-                    .minHours(value.getMinHours() + "")
-                    .maxHours(value.getMaxHours() + "")
-                    .module(value.getModule())
+                    .applicantPriority(application.getPriority() + "")
+                    .minHours(application.getMinHours() + "")
+                    .maxHours(application.getMaxHours() + "")
+                    .module(application.getModule())
                     .organizerHours(evaluation.getHours() + "")
                     .organizerPriority(evaluation.getPriority() + "")
                     .build();
