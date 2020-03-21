@@ -1,6 +1,7 @@
 package mops.services;
 
 import mops.model.classes.Applicant;
+import mops.model.classes.Application;
 import mops.repositories.ApplicantRepository;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Service;
@@ -50,6 +51,15 @@ public class ApplicantService {
      */
     public Applicant findByUniserial(final String uniserial) {
         return applicantRepository.findByUniserial(uniserial);
+    }
+
+    /**
+     * Finds Applicant by Application
+     * @param application application
+     * @return applicant
+     */
+    Applicant findByApplications(final Application application) {
+        return applicantRepository.findByApplications(application);
     }
 
     /**
