@@ -1,5 +1,6 @@
 package mops.controllers;
 
+import com.github.javafaker.App;
 import mops.model.Account;
 import mops.model.classes.Address;
 import mops.model.classes.Applicant;
@@ -273,6 +274,46 @@ public class ApplicationController {
     }
 
     /**
+     *
+     * @param token
+     * @return
+     */
+    @GetMapping("/dummy")
+    public String dummy(final KeycloakAuthenticationToken token, final Model model){
+        Address address = Address.builder()
+                .street("Suitbertusstraße")
+                .houseNumber("134")
+                .city("Düsseldorf")
+                .zipcode(40223)
+                .build();
+        Applicant applicant = Applicant.builder()
+                .uniserial("iamkawaiineko")
+                .surname("Dürwald")
+                .firstName("Paulin")
+                .address(address)
+                .birthday("1999-06-10")
+                .birthplace("Ho-Chi-Minh, Vietnam")
+                .gender("weiblich")
+                .nationality("Deutschland")
+                .course("Informatik")
+                .status("neueinstellung")
+                .comment("Ich mag Katzen")
+                .build();
+        model.addAttribute("applicant", applicant);
+        return "applicant/applicationOverviewThymeleaf";
+    }
+
+    /**
+     *
+     * @param token
+     * @return
+     */
+    @PostMapping("/uebersicht")
+    public String uebersicht(final KeycloakAuthenticationToken token) {
+
+        return "applicant/applicationOverviewThymeleaf";
+    }
+/*    /**
      * Overview, will be used to save the last module and shows the data the applicant filled in
      *
      * @param token     keycloaktone
@@ -287,7 +328,7 @@ public class ApplicationController {
      *                  //  * @param priority "
      * @return overview.html
      */
-    @PostMapping("/uebersicht")
+ /*   @PostMapping("/uebersicht")
     @SuppressWarnings("checkstyle:ParameterNumber")
     public String postOverview(final KeycloakAuthenticationToken token,
                                final Model model,
@@ -313,7 +354,7 @@ public class ApplicationController {
                     .build();
         }
         return "applicant/applicationOverview";
-    }
+    }*/
 
 
     /**

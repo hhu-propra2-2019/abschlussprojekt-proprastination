@@ -56,6 +56,8 @@ public class ApplicantService {
         Set<Application> applications = new HashSet<>();
         Applicant applicant = Applicant.builder()
                 .uniserial(uniserial)
+                .firstName("")
+                .surname("")
                 .address(address)
                 .birthday(webApplicant.getBirthday())
                 .birthplace(webApplicant.getBirthplace())
