@@ -81,33 +81,13 @@ public class DistributionService {
                 sortedByOrgaPrio[i] = new LinkedList<>();
             }
 
-            //List<Evaluation> orgaPrio1 = new LinkedList<>();
-            //List<Evaluation> orgaPrio2 = new LinkedList<>();
-            //List<Evaluation> orgaPrio3 = new LinkedList<>();
-            //List<Evaluation> orgaPrio4 = new LinkedList<>();
-
             for (Evaluation evaluation : evaluations) {
                 sortedByOrgaPrio[evaluation.getPriority()].add(evaluation);
-                /*
-                if (evaluation.getPriority() == 1) {
-                    orgaPrio1.add(evaluation);
-                } else if (evaluation.getPriority() == 2) {
-                    orgaPrio2.add(evaluation);
-                } else if (evaluation.getPriority() == 3) {
-                    orgaPrio3.add(evaluation);
-                } else if (evaluation.getPriority() == 4) {
-                    orgaPrio4.add(evaluation);
-                } */
             }
 
             for (int i = 0; i < numberOfPriorities; i++) {
                 sortedByOrgaPrio[i].sort(Comparator.comparing(a -> a.getApplication().getPriority()));
             }
-
-            /*orgaPrio1.sort(Comparator.comparing(a -> a.getApplication().getPriority()));
-            orgaPrio2.sort(Comparator.comparing(a -> a.getApplication().getPriority()));
-            orgaPrio3.sort(Comparator.comparing(a -> a.getApplication().getPriority()));
-            orgaPrio4.sort(Comparator.comparing(a -> a.getApplication().getPriority()));*/
 
             int count7 = 0;
             int count9 = 0;
@@ -124,113 +104,17 @@ public class DistributionService {
                         break;
                     }
                     if (evaluation.getHours() == sevenHours && count7 < module.getMax7()) {
-                        Applicant oldApplicant = evaluation.getApplication().getApplicant();
-                        Set<Application> newApplicationSet = oldApplicant.getApplications();
-                        Application oldApplication = evaluation.getApplication();
-                        newApplicationSet.remove(oldApplication);
-                        newApplicationSet.add(Application.builder()
-                                .id(oldApplication.getId())
-                                .minHours(oldApplication.getMinHours())
-                                .finalHours(evaluation.getHours())
-                                .maxHours(oldApplication.getMaxHours())
-                                .module(oldApplication.getModule())
-                                .priority(oldApplication.getPriority())
-                                .grade(oldApplication.getGrade())
-                                .lecturer(oldApplication.getLecturer())
-                                .semester(oldApplication.getSemester())
-                                .role(oldApplication.getRole())
-                                .comment(oldApplication.getComment())
-                                .applicant(oldApplication.getApplicant())
-                                .build());
-                        applicantService.saveApplicant(Applicant.builder()
-                                .applications(newApplicationSet)
-                                .uniserial(oldApplicant.getUniserial())
-                                .certs(oldApplicant.getCerts())
-                                .status(oldApplicant.getStatus())
-                                .course(oldApplicant.getCourse())
-                                .nationality(oldApplicant.getComment())
-                                .birthday(oldApplicant.getBirthday())
-                                .address(oldApplicant.getAddress())
-                                .birthplace(oldApplicant.getBirthplace())
-                                .comment(oldApplicant.getComment())
-                                .surname(oldApplicant.getSurname())
-                                .firstName(oldApplicant.getFirstName())
-                                .gender(oldApplicant.getGender())
-                                .build());
+                        changeFinalHours(evaluation);
                         distributedApplicants.add(evaluation.getApplication().getApplicant());
                         count7++;
                     }
                     if (evaluation.getHours() == nineHours && count7 < module.getMax9()) {
-                        Applicant oldApplicant = evaluation.getApplication().getApplicant();
-                        Set<Application> newApplicationSet = oldApplicant.getApplications();
-                        Application oldApplication = evaluation.getApplication();
-                        newApplicationSet.remove(oldApplication);
-                        newApplicationSet.add(Application.builder()
-                                .id(oldApplication.getId())
-                                .minHours(oldApplication.getMinHours())
-                                .finalHours(evaluation.getHours())
-                                .maxHours(oldApplication.getMaxHours())
-                                .module(oldApplication.getModule())
-                                .priority(oldApplication.getPriority())
-                                .grade(oldApplication.getGrade())
-                                .lecturer(oldApplication.getLecturer())
-                                .semester(oldApplication.getSemester())
-                                .role(oldApplication.getRole())
-                                .comment(oldApplication.getComment())
-                                .applicant(oldApplication.getApplicant())
-                                .build());
-                        applicantService.saveApplicant(Applicant.builder()
-                                .applications(newApplicationSet)
-                                .uniserial(oldApplicant.getUniserial())
-                                .certs(oldApplicant.getCerts())
-                                .status(oldApplicant.getStatus())
-                                .course(oldApplicant.getCourse())
-                                .nationality(oldApplicant.getComment())
-                                .birthday(oldApplicant.getBirthday())
-                                .address(oldApplicant.getAddress())
-                                .birthplace(oldApplicant.getBirthplace())
-                                .comment(oldApplicant.getComment())
-                                .surname(oldApplicant.getSurname())
-                                .firstName(oldApplicant.getFirstName())
-                                .gender(oldApplicant.getGender())
-                                .build());
+                        changeFinalHours(evaluation);
                         distributedApplicants.add(evaluation.getApplication().getApplicant());
                         count9++;
                     }
                     if (evaluation.getHours() == seventeenHours && count7 < module.getMax17()) {
-                        Applicant oldApplicant = evaluation.getApplication().getApplicant();
-                        Set<Application> newApplicationSet = oldApplicant.getApplications();
-                        Application oldApplication = evaluation.getApplication();
-                        newApplicationSet.remove(oldApplication);
-                        newApplicationSet.add(Application.builder()
-                                .id(oldApplication.getId())
-                                .minHours(oldApplication.getMinHours())
-                                .finalHours(evaluation.getHours())
-                                .maxHours(oldApplication.getMaxHours())
-                                .module(oldApplication.getModule())
-                                .priority(oldApplication.getPriority())
-                                .grade(oldApplication.getGrade())
-                                .lecturer(oldApplication.getLecturer())
-                                .semester(oldApplication.getSemester())
-                                .role(oldApplication.getRole())
-                                .comment(oldApplication.getComment())
-                                .applicant(oldApplication.getApplicant())
-                                .build());
-                        applicantService.saveApplicant(Applicant.builder()
-                                .applications(newApplicationSet)
-                                .uniserial(oldApplicant.getUniserial())
-                                .certs(oldApplicant.getCerts())
-                                .status(oldApplicant.getStatus())
-                                .course(oldApplicant.getCourse())
-                                .nationality(oldApplicant.getComment())
-                                .birthday(oldApplicant.getBirthday())
-                                .address(oldApplicant.getAddress())
-                                .birthplace(oldApplicant.getBirthplace())
-                                .comment(oldApplicant.getComment())
-                                .surname(oldApplicant.getSurname())
-                                .firstName(oldApplicant.getFirstName())
-                                .gender(oldApplicant.getGender())
-                                .build());
+                        changeFinalHours(evaluation);
                         distributedApplicants.add(evaluation.getApplication().getApplicant());
                         count17++;
                     }
@@ -242,6 +126,46 @@ public class DistributionService {
                     .module(module.getName())
                     .build());
         }
+    }
+
+    /**
+     * changes finalHours in application
+     * @param evaluation
+     */
+    private void changeFinalHours(final Evaluation evaluation) {
+        Applicant oldApplicant = evaluation.getApplication().getApplicant();
+        Set<Application> newApplicationSet = oldApplicant.getApplications();
+        Application oldApplication = evaluation.getApplication();
+        newApplicationSet.remove(oldApplication);
+        newApplicationSet.add(Application.builder()
+                .id(oldApplication.getId())
+                .minHours(oldApplication.getMinHours())
+                .finalHours(evaluation.getHours())
+                .maxHours(oldApplication.getMaxHours())
+                .module(oldApplication.getModule())
+                .priority(oldApplication.getPriority())
+                .grade(oldApplication.getGrade())
+                .lecturer(oldApplication.getLecturer())
+                .semester(oldApplication.getSemester())
+                .role(oldApplication.getRole())
+                .comment(oldApplication.getComment())
+                .applicant(oldApplication.getApplicant())
+                .build());
+        applicantService.saveApplicant(Applicant.builder()
+                .applications(newApplicationSet)
+                .uniserial(oldApplicant.getUniserial())
+                .certs(oldApplicant.getCerts())
+                .status(oldApplicant.getStatus())
+                .course(oldApplicant.getCourse())
+                .nationality(oldApplicant.getComment())
+                .birthday(oldApplicant.getBirthday())
+                .address(oldApplicant.getAddress())
+                .birthplace(oldApplicant.getBirthplace())
+                .comment(oldApplicant.getComment())
+                .surname(oldApplicant.getSurname())
+                .firstName(oldApplicant.getFirstName())
+                .gender(oldApplicant.getGender())
+                .build());
     }
 
     /**
