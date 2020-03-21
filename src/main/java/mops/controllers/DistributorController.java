@@ -72,38 +72,7 @@ public class DistributorController {
     public String index1(final KeycloakAuthenticationToken token, final Model model) throws JsonProcessingException {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
-            List<WebDistribution> webDistributionList = new ArrayList<>();
-            List<Distribution> distributionList = distributionService.findAll();
-            for (Distribution distribution : distributionList) {
-                List<WebDistributorApplicant> webDistributorApplicantList = new ArrayList<>();
-                List<Applicant> applicantList = distribution.getEmployees();
-                for (Applicant applicant : applicantList) {
-                    List<WebDistributorApplication> webDistributorApplicationList = new ArrayList<>();
-                    Set<Application> applicationList = applicant.getApplications();
-                    for (Application value : applicationList) {
-                        Evaluation evaluation = evaluationService.findByApplication(value);
-                        WebDistributorApplication webDistributorApplication = WebDistributorApplication.builder()
-                                .applicantPriority(value.getPriority() + "")
-                                .minHours(value.getMinHours() + "")
-                                .maxHours(value.getMaxHours() + "")
-                                .module(value.getModule())
-                                .organizerHours(evaluation.getHours() + "")
-                                .organizerPriority(evaluation.getPriority() + "")
-                                .build();
-                        webDistributorApplicationList.add(webDistributorApplication);
-                    }
-                    WebDistributorApplicant webDistributorApplicant = WebDistributorApplicant.builder()
-                            .username(applicant.getUniserial())
-                            .webDistributorApplications(webDistributorApplicationList)
-                            .build();
-                    webDistributorApplicantList.add(webDistributorApplicant);
-                }
-                WebDistribution webDistribution = WebDistribution.builder()
-                        .module(distribution.getModule())
-                        .webDistributorApplicants(webDistributorApplicantList)
-                        .build();
-                webDistributionList.add(webDistribution);
-            }
+            List<WebDistribution> webDistributionList = distributionService.convertDistributionsToWebDistributions();
             model.addAttribute("distributions", webDistributionList);
         }
         return "distributor/distributorMain";
