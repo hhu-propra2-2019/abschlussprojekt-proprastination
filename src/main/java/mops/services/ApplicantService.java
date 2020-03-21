@@ -1,6 +1,7 @@
 package mops.services;
 
 import mops.model.classes.Applicant;
+import mops.model.classes.webclasses.WebApplicant;
 import mops.repositories.ApplicantRepository;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,16 @@ public class ApplicantService {
     @SuppressWarnings("checkstyle:HiddenField")
     public ApplicantService(final ApplicantRepository applicantRepository) {
         this.applicantRepository = applicantRepository;
+    }
+
+    /**
+     *
+     * @param webapplicant
+     * @return
+     */
+    public Applicant buildApplicant (final WebApplicant webapplicant) {
+        Applicant applicant = Applicant.builder().build();
+        return applicant;
     }
 
     /**
