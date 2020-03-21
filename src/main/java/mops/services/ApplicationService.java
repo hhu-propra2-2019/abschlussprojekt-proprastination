@@ -28,11 +28,10 @@ public class ApplicationService {
     /**
      * Finds application by module and hours
      * @param module the module
-     * @param hours the hours
      * @return the applications
      */
-    public List<Application> findApplicationsByModuleAndHours(final String module, final int hours) {
-        return applicationRepository.findByModuleAndHours(module, hours);
+    public List<Application> findApplicationsByModule(final String module) {
+        return applicationRepository.findByModule(module);
     }
 
     /**
