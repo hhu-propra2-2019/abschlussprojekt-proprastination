@@ -7,8 +7,9 @@ import mops.model.classes.Evaluation;
 import mops.model.classes.Module;
 import mops.repositories.DistributionRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.*;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
 
 @Service
 public class DistributionService {
@@ -18,6 +19,10 @@ public class DistributionService {
     private final ApplicantService applicantService;
     private final ApplicationService applicationService;
     private final EvaluationService evaluationService;
+    private final int numberOfPriorities = 4;
+    private final int sevenHours = 7;
+    private final int nineHours = 9;
+    private final int seventeenHours = 17;
 
     /**
      * Injects Services and repositories
@@ -64,9 +69,9 @@ public class DistributionService {
                 evaluations.add(evaluation);
             }
 
-            List<Evaluation>[] sortedByOrgaPrio = new LinkedList[4];
+            List<Evaluation>[] sortedByOrgaPrio = new LinkedList[numberOfPriorities];
 
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < numberOfPriorities; i++) {
                 sortedByOrgaPrio[i] = new LinkedList<>();
             }
 
@@ -89,7 +94,7 @@ public class DistributionService {
                 } */
             }
 
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < numberOfPriorities; i++) {
                 sortedByOrgaPrio[i].sort(Comparator.comparing(a -> a.getApplication().getPriority()));
             }
 
@@ -104,7 +109,7 @@ public class DistributionService {
 
             List<Applicant> distributedApplicants = new LinkedList<>();
 
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < numberOfPriorities; i++) {
                 if (count7 == module.getMax7() && count9 == module.getMax9() && count17 == module.getMax17()) {
                     break;
                 }
@@ -112,15 +117,15 @@ public class DistributionService {
                     if (count7 == module.getMax7() && count9 == module.getMax9() && count17 == module.getMax17()) {
                         break;
                     }
-                    if (ev.getHours() == 7 && count7 < modules.getMax7()) {
+                    if (ev.getHours() == sevenHours && count7 < modules.getMax7()) {
                         distributedApplicants.add(ev.getApplication().getApplicant());
                         count7++;
                     }
-                    if (ev.getHours() == 9 && count7 < modules.getMax9()) {
+                    if (ev.getHours() == nineHours && count7 < modules.getMax9()) {
                         distributedApplicants.add(ev.getApplication().getApplicant());
                         count9++;
                     }
-                    if (ev.getHours() == 17 && count7 < modules.getMax17()) {
+                    if (ev.getHours() == seventeenHours && count7 < modules.getMax17()) {
                         distributedApplicants.add(ev.getApplication().getApplicant());
                         count17++;
                     }
