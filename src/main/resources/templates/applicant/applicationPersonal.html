@@ -39,8 +39,8 @@
                             <input th:type="text" th:name="street"
                                    th:field="*{street}" th:attr="value = ${webAddress.street}"
                                    class="form-control" placeholder="Straße und Hausnummer">
-                            <div th:if="${#fields.hasErrors('street')}" th:errors="*{street}" class="text-danger">
-                                ungültige Straße und Hausnummer
+                            <div th:if="${#fields.hasErrors('street')}" class="text-danger">
+                                Bitte geben Sie eine Straße gefolgt von einer Hausnummer ein.
                             </div>
                             <br>
                             <br>
@@ -49,8 +49,8 @@
                             <input th:type="text" th:name="city" th:id="city"
                                    th:field="*{city}" th:attr="value = ${webAddress.city}"
                                    th:class="form-control" placeholder="Ort">
-                            <div th:if="${#fields.hasErrors('city')}" th:errors="*{city}" class="text-danger">
-                                ungültige Stadt
+                            <div th:if="${#fields.hasErrors('city')}" class="text-danger">
+                                Bitte geben Sie eine Stadt an.
                             </div>
                             <br>
                         </div>
@@ -58,8 +58,8 @@
                             <input th:type="text" th:name="zipcode" th:id="zipcode" th:field="*{zipcode}"
                                    th:attr="value = ${webAddress.zipcode}"
                                    th:class="form-control" placeholder="Postleitzahl">
-                            <div th:if="${#fields.hasErrors('zipcode')}" th:errors="*{zipcode}" class="text-danger">
-                                ungültige Postleitzahl
+                            <div th:if="${#fields.hasErrors('zipcode')}" class="text-danger">
+                                Bitte geben Sie eine fünfstellige Postleitzahl ein.
                             </div>
                             <br>
                         </div>
@@ -69,8 +69,8 @@
                             <input th:type="text" th:name="birthplace" th:id="birthplace"
                                    th:field="*{birthplace}"  th:attr="value = ${webApplicant.birthplace}"
                                    th:class="form-control" placeholder="Geburtsort, Land">
-                            <div th:if="${#fields.hasErrors('birthplace')}" th:errors="*{birthplace}" class="text-danger">
-                                ungültiger Geburtsort
+                            <div th:if="${#fields.hasErrors('birthplace')}" class="text-danger">
+                                Bitte geben Sie einen Geburtsort an.
                             </div>
                             <br>
                         </div>
@@ -80,8 +80,8 @@
                                 <option value="" disabled selected hidden>Nationalität</option>
                                 <option th:each="country:${countries}" th:text="${country}" th:value="${country}"></option>
                             </select>
-                            <div th:if="${#fields.hasErrors('nationality')}" th:errors="*{nationality}" class="text-danger">
-                                ungültige Nationalitätsangabe
+                            <div th:if="${#fields.hasErrors('nationality')}" class="text-danger">
+                                Bitte geben SIe eine Nationalität an.
                             </div>
                             <br>
                         </div>
@@ -89,8 +89,8 @@
                             <input type="text" name="birthday" id="birthday" onfocus="(this.type='date')"
                                    th:field="*{birthday}" th:attr="value = ${webApplicant.birthday}"
                                    onblur="(this.type='text')" class="form-control" placeholder="Geburtstag">
-                            <div th:if="${#fields.hasErrors('birthday')}" th:errors="*{birthday}" class="text-danger">
-                                ungültiges Geburtsdatum
+                            <div th:if="${#fields.hasErrors('birthday')}" class="text-danger">
+                                Bitte geben Sie ein Geburtsdatum an.
                             </div>
                             <br><br>
                         </div>
@@ -103,8 +103,8 @@
                                 <option value="male">männlich</option>
                                 <option value="female">weiblich</option>
                             </select>
-                            <div th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}" class="text-danger">
-                                ungültige Geschlechtsangabe
+                            <div th:if="${#fields.hasErrors('gender')}" class="text-danger">
+                                Bitte wählen Sie ein Geschlecht.
                             </div>
                         </div>
                         <div class="col-4">
@@ -121,8 +121,8 @@
                                     th:field="*{course}" th:attr="value=${webApplicant.course}">
                                 <option th:each="cours:${courses}" th:text="${cours}" th:value="${cours}"></option>
                             </select>
-                            <div th:if="${#fields.hasErrors('course')}" th:errors="*{course}" class="text-danger">
-                                ungültiges Studienfach
+                            <div th:if="${#fields.hasErrors('course')}" class="text-danger">
+                                Bitte wählen Sie ein Studienfach.
                             </div>
                             <br> <br>
                         </div>
@@ -149,6 +149,9 @@
                                     Wiedereinstellung (KEIN bestehender Vertrag bis zum DD.MM.YYYY)
                                 </option>
                             </select>
+                            <div th:if="${#fields.hasErrors('status')}" class="text-danger">
+                                Bitte wählen Sie Ihren Angestelltenstatus.
+                            </div>
                             <br><br>
                         </div>
                     </div>
