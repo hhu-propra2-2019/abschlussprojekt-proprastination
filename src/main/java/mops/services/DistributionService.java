@@ -4,6 +4,8 @@ import mops.model.classes.Applicant;
 import mops.model.classes.Application;
 import mops.model.classes.Distribution;
 import mops.model.classes.Evaluation;
+import mops.model.classes.Module;
+import mops.model.classes.webclasses.WebDistributorApplicant;
 import mops.repositories.DistributionRepository;
 import org.springframework.stereotype.Service;
 
@@ -121,6 +123,23 @@ public class DistributionService {
         }
 
         return result;
+    }
+
+    public void distribute2() {
+        List<Module> modules = moduleService.getModules();
+        List<WebDistributorApplicant> webDistributorApplicants = new LinkedList<>();
+        for (Module module : modules) {
+            List<Application> applications = applicationService.findApplicationsByModule();
+            for (Application application : applications) {
+                Evaluation evaluation = evaluationService.findByApplication(application);
+                webDistributorApplicants.add(WebDistributorApplicant.builder()
+                        .username(application.getApplicant().getUniserial())
+                        .applicantPriority(application.getPriority() + "")
+                        .organizerHours(evaluation.getHours() + "")
+                        .organizerPriority(evaluation.getPriority() + "")
+                        .build());
+            }
+        }
     }
 
     /**
