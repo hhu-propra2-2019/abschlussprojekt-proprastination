@@ -25,6 +25,7 @@ public class WebApplicant {
     @NotBlank
     private String course;
     @NotBlank
+    @Pattern(regexp = "neueinstellung|weiterbeschaeftigung|wiedereinstellung")
     private String status;
     private String comment;
 }
