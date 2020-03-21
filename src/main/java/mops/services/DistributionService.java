@@ -122,7 +122,10 @@ public class DistributionService {
         return result;
     }
 
-    public void distribute2() {
+    /**
+     * distributes the Applicants
+     */
+    private void distribute2() {
         List<Module> modules = moduleService.getModules();
         for (Module module : modules) {
             List<Evaluation> evaluations = new LinkedList<>();
