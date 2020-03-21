@@ -120,6 +120,15 @@ public class ApplicantService {
     }
 
     /**
+     * Finds Applicant by Application
+     * @param application application
+     * @return applicant
+     */
+    public Applicant findByApplications(final Application application) {
+        return applicantRepository.findByApplications(application);
+    }
+
+    /**
      * Updates Applicant without changing his applications
      *
      * @param newApplicant The Object containing the new information
