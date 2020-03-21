@@ -30,9 +30,9 @@ public class ApplicantService {
     }
 
     /**
-     *
-     * @param webAddress
-     * @return
+     * builds Address from webAddress
+     * @param webAddress Address Information
+     * @return address
      */
     public Address buildAddress(final WebAddress webAddress) {
         String street = webAddress.getStreet();
@@ -46,10 +46,11 @@ public class ApplicantService {
     }
 
     /**
-     * @param uniserial
-     * @param webApplicant
-     * @param address
-     * @return
+     * builds Applicant from webApplicant with Address and uniserial as ID
+     * @param uniserial the ID (Name)
+     * @param webApplicant Applicant Information
+     * @param address builded Address
+     * @return fully functional Applicant
      */
     public Applicant buildApplicant(final String uniserial, final WebApplicant webApplicant, final Address address) {
         Set<Application> applications = new HashSet<>();

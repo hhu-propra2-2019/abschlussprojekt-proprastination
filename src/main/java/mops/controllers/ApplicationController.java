@@ -9,6 +9,7 @@ import mops.model.classes.webclasses.WebAddress;
 import mops.model.classes.webclasses.WebApplicant;
 import mops.model.classes.webclasses.WebApplication;
 import mops.services.ApplicantService;
+import mops.services.ApplicationService;
 import mops.services.CSVService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
@@ -33,6 +34,7 @@ public class ApplicationController {
 
     @Autowired
     private ApplicantService applicantService;
+    private ApplicationService applicationService;
 
     private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
         KeycloakPrincipal principal = (KeycloakPrincipal) token.getPrincipal();
@@ -158,23 +160,11 @@ public class ApplicationController {
                               final WebApplication webApplication, final Model model,
                               @RequestParam("modules") final String module) {
         Applicant applicant = applicantService.findByUniserial(token.getName());
-        Application application = Application.builder()
-                //Module wird irgendwie nicht eingelesen? Mach ich später >_>
-                .module(webApplication.getModule())
-                .minHours(webApplication.getWorkload())//HTML anpassen
-                .maxHours(webApplication.getWorkload())//HTML anpassen
-                .priority(webApplication.getPriority())
-                .grade(webApplication.getGrade())
-                .lecturer(webApplication.getLecturer())
-                .semester(webApplication.getSemester())
-                .role(webApplication.getRole())
-                .comment(webApplication.getComment())
-                .build();
+        Application application = applicationService.buildApplication(webApplication);
         Set<Application> applications = applicant.getApplications();
         applications.add(application);
         applicant.toBuilder().applications(applications);
         applicantService.saveApplicant(applicant);
-        System.out.println(applicant);
         model.addAttribute("account", createAccountFromPrincipal(token));
         model.addAttribute("modul", module);
         model.addAttribute("semesters", CSVService.getSemester());
