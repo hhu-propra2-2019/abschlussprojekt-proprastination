@@ -81,7 +81,7 @@
                                 <option th:each="country:${countries}" th:text="${country}" th:value="${country}"></option>
                             </select>
                             <div th:if="${#fields.hasErrors('nationality')}" class="text-danger">
-                                Bitte geben SIe eine Nationalität an.
+                                Bitte geben Sie eine Nationalität an.
                             </div>
                             <br>
                         </div>
@@ -90,7 +90,7 @@
                                    th:field="*{birthday}" th:attr="value = ${webApplicant.birthday}"
                                    onblur="(this.type='text')" class="form-control" placeholder="Geburtstag">
                             <div th:if="${#fields.hasErrors('birthday')}" class="text-danger">
-                                Bitte geben Sie ein Geburtsdatum an.
+                                Bitte geben Sie ein gültiges Geburtsdatum an.
                             </div>
                             <br><br>
                         </div>
