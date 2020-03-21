@@ -54,7 +54,7 @@ public class ApplicantService {
      */
     public Certificate buildCertificate(final WebCertificate webCertificate) {
         Certificate certificate = Certificate.builder()
-                .name(webCertificate.getName())
+                .name(webCertificate.getGraduation())
                 .course(webCertificate.getCourse())
                 .build();
         return certificate;

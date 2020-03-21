@@ -149,7 +149,7 @@ public class ApplicationController {
             model.addAttribute("modules", CSVService.getModules());
             model.addAttribute("webApplication", WebApplication.builder().build());
         }
-        return "applicant/applicationModuleThymeleaf";
+        return "applicant/applicationModule";
     }
 
     /**
@@ -161,7 +161,7 @@ public class ApplicationController {
      * @return html for another Modul
      */
     @PostMapping("weiteresModul")
-    public String weiteresModul(final KeycloakAuthenticationToken token,
+    public String anotherModule(final KeycloakAuthenticationToken token,
                               final WebApplication webApplication, final Model model,
                               @RequestParam("modules") final String module) {
         Applicant applicant = applicantService.findByUniserial(token.getName());
@@ -175,7 +175,7 @@ public class ApplicationController {
         model.addAttribute("semesters", CSVService.getSemester());
         model.addAttribute("modules", CSVService.getModules());
         model.addAttribute("webApplication", webApplication);
-        return "applicant/applicationModuleThymeleaf";
+        return "applicant/applicationModule";
     }
 
     /**
@@ -313,13 +313,21 @@ public class ApplicationController {
     }
 
     /**
-     *
+     * overview after Application is finished
      * @param token
+     * @param model
+     * @param webApplication
      * @return
      */
     @PostMapping("/uebersicht")
-    public String uebersicht(final KeycloakAuthenticationToken token) {
-
+    public String overview(final KeycloakAuthenticationToken token, final Model model, final WebApplication webApplication) {
+        Applicant applicant = applicantService.findByUniserial(token.getName());
+        Application application = applicationService.buildApplication(webApplication);
+        Set<Application> applications = applicant.getApplications();
+        applications.add(application);
+        applicant.toBuilder().applications(applications);
+        applicantService.saveApplicant(applicant);
+        model.addAttribute("applicant", applicant);
         return "applicant/applicationOverviewThymeleaf";
     }
 /*    /**
