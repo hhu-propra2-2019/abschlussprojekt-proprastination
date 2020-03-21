@@ -9,6 +9,7 @@ import mops.model.classes.Certificate;
 import mops.model.classes.webclasses.WebAddress;
 import mops.model.classes.webclasses.WebApplicant;
 import mops.model.classes.webclasses.WebApplication;
+import mops.model.classes.webclasses.WebCertificate;
 import mops.services.ApplicantService;
 import mops.services.ApplicationService;
 import mops.services.CSVService;
@@ -76,14 +77,15 @@ public class ApplicationController {
     @Secured("ROLE_studentin")
     public String newAppl(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
-            WebApplicant webApplicant = WebApplicant.builder()
-                    .build();
+            WebApplicant webApplicant = WebApplicant.builder().build();
             WebAddress webAddress = WebAddress.builder().build();
+            WebCertificate webCertificate = WebCertificate.builder().build();
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("countries", CSVService.getCountries());
             model.addAttribute("courses", CSVService.getCourses());
             model.addAttribute("webApplicant", webApplicant);
             model.addAttribute("webAddress", webAddress);
+            model.addAttribute("webCertificate", webCertificate);
             model.addAttribute("modules", CSVService.getModules());
         }
         return "applicant/applicationPersonal";
@@ -133,12 +135,13 @@ public class ApplicationController {
     @PostMapping("/modul")
     @Secured("ROLE_studentin")
     public String modul(final KeycloakAuthenticationToken token, final WebApplicant webApplicant,
-                            final WebAddress webAddress, final Model model,
+                            final WebAddress webAddress, final WebCertificate webCertificate, final Model model,
                             @RequestParam("modules") final String modules) {
 
         if (token != null) {
             Address address = applicantService.buildAddress(webAddress);
-            Applicant applicant = applicantService.buildApplicant(token.getName(), webApplicant, address);
+            Certificate certificate = applicantService.buildCertificate(webCertificate);
+            Applicant applicant = applicantService.buildApplicant(token.getName(), webApplicant, address, certificate);
             applicantService.saveApplicant(applicant);
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("modul", modules);

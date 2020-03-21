@@ -3,8 +3,10 @@ package mops.services;
 import mops.model.classes.Address;
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
+import mops.model.classes.Certificate;
 import mops.model.classes.webclasses.WebAddress;
 import mops.model.classes.webclasses.WebApplicant;
+import mops.model.classes.webclasses.WebCertificate;
 import mops.repositories.ApplicantRepository;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Service;
@@ -46,13 +48,28 @@ public class ApplicantService {
     }
 
     /**
+     * builds Certificate from webCertificate
+     * @param webCertificate informatons
+     * @return fully build Certificate
+     */
+    public Certificate buildCertificate(final WebCertificate webCertificate) {
+        Certificate certificate = Certificate.builder()
+                .name(webCertificate.getName())
+                .course(webCertificate.getCourse())
+                .build();
+        return certificate;
+    }
+
+    /**
      * builds Applicant from webApplicant with Address and uniserial as ID
      * @param uniserial the ID (Name)
      * @param webApplicant Applicant Information
      * @param address builded Address
+     * @param certificate certificate (highest)
      * @return fully functional Applicant
      */
-    public Applicant buildApplicant(final String uniserial, final WebApplicant webApplicant, final Address address) {
+    public Applicant buildApplicant(final String uniserial, final WebApplicant webApplicant,
+                                    final Address address, final Certificate certificate) {
         Set<Application> applications = new HashSet<>();
         Applicant applicant = Applicant.builder()
                 .uniserial(uniserial)
@@ -65,6 +82,7 @@ public class ApplicantService {
                 .nationality(webApplicant.getNationality())
                 .course(webApplicant.getCourse())
                 .status(webApplicant.getStatus())
+                .certs(certificate)
                 .comment(webApplicant.getComment())
                 .applications(applications)
                 .build();
