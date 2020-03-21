@@ -19,10 +19,9 @@ public interface ApplicationRepository extends CrudRepository<Application, Long>
     /**
      * Finds application by module and hours
      * @param module the module
-     * @param hours the hours
      * @return the applications
      */
-    List<Application> findByModuleAndHours(String module, int hours);
+    List<Application> findByModule(String module);
 
     /**
      * Finds application by applicant and module
