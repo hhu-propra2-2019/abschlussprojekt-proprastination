@@ -119,20 +119,53 @@ public class DistributionService {
                 if (count7 == module.getMax7() && count9 == module.getMax9() && count17 == module.getMax17()) {
                     break;
                 }
-                for (Evaluation ev : sortedByOrgaPrio[i]) {
+                for (Evaluation evaluation : sortedByOrgaPrio[i]) {
                     if (count7 == module.getMax7() && count9 == module.getMax9() && count17 == module.getMax17()) {
                         break;
                     }
-                    if (ev.getHours() == sevenHours && count7 < module.getMax7()) {
-                        distributedApplicants.add(ev.getApplication().getApplicant());
+                    if (evaluation.getHours() == sevenHours && count7 < module.getMax7()) {
+                        Applicant oldApplicant = evaluation.getApplication().getApplicant();
+                        Set<Application> newApplicationSet = oldApplicant.getApplications();
+                        Application oldApplication = evaluation.getApplication();
+                        newApplicationSet.remove(oldApplication);
+                        newApplicationSet.add(Application.builder()
+                                .id(oldApplication.getId())
+                                .minHours(oldApplication.getMinHours())
+                                .finalHours(evaluation.getHours())
+                                .maxHours(oldApplication.getMaxHours())
+                                .module(oldApplication.getModule())
+                                .priority(oldApplication.getPriority())
+                                .grade(oldApplication.getGrade())
+                                .lecturer(oldApplication.getLecturer())
+                                .semester(oldApplication.getSemester())
+                                .role(oldApplication.getRole())
+                                .comment(oldApplication.getComment())
+                                .applicant(oldApplication.getApplicant())
+                                .build());
+                        applicantService.saveApplicant(Applicant.builder()
+                                .applications(newApplicationSet)
+                                .uniserial(oldApplicant.getUniserial())
+                                .certs(oldApplicant.getCerts())
+                                .status(oldApplicant.getStatus())
+                                .course(oldApplicant.getCourse())
+                                .nationality(oldApplicant.getComment())
+                                .birthday(oldApplicant.getBirthday())
+                                .address(oldApplicant.getAddress())
+                                .birthplace(oldApplicant.getBirthplace())
+                                .comment(oldApplicant.getComment())
+                                .surname(oldApplicant.getSurname())
+                                .firstName(oldApplicant.getFirstName())
+                                .gender(oldApplicant.getGender())
+                                .build());
+                        distributedApplicants.add(evaluation.getApplication().getApplicant());
                         count7++;
                     }
-                    if (ev.getHours() == nineHours && count7 < module.getMax9()) {
-                        distributedApplicants.add(ev.getApplication().getApplicant());
+                    if (evaluation.getHours() == nineHours && count7 < module.getMax9()) {
+                        distributedApplicants.add(evaluation.getApplication().getApplicant());
                         count9++;
                     }
-                    if (ev.getHours() == seventeenHours && count7 < module.getMax17()) {
-                        distributedApplicants.add(ev.getApplication().getApplicant());
+                    if (evaluation.getHours() == seventeenHours && count7 < module.getMax17()) {
+                        distributedApplicants.add(evaluation.getApplication().getApplicant());
                         count17++;
                     }
                 }
