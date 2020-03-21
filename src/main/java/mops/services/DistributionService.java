@@ -5,7 +5,6 @@ import mops.model.classes.Application;
 import mops.model.classes.Distribution;
 import mops.model.classes.Evaluation;
 import mops.model.classes.Module;
-import mops.model.classes.webclasses.WebDistributorApplicant;
 import mops.repositories.DistributionRepository;
 import org.springframework.stereotype.Service;
 
@@ -50,76 +49,6 @@ public class DistributionService {
                 .employees(applicantService.findAll())
                 .module("unassigned")
                 .build());
-    }
-
-    /**
-     * automatically distributes applicants for one module
-     * @param module
-     * @return List of assigned applicants
-     */
-    private List<Applicant> distribute(final Module module) {
-        List<Applicant> result = new LinkedList<>();
-        List<Application> applications = applicationService.findApplicationsByModuleAndHours(module.getName(), 7);
-        Map<Application, Integer> sortedApplications = new LinkedHashMap<>();
-        int count = 0;
-
-        for (Application application : applications) {
-            int sum = application.getPriority() + evaluationService.findByApplication(application).getPriority();
-            sortedApplications.put(application, sum);
-        }
-        sortedApplications.entrySet()
-                .stream()
-                .sorted(Map.Entry.comparingByValue())
-                .forEachOrdered(x -> sortedApplications.put(x.getKey(), x.getValue()));
-        for (Application application : applications) {
-            if (count >= module.getMax7()) {
-                break;
-            }
-            result.add(application.getApplicant());
-            count++;
-        }
-
-        applications = applicationService.findApplicationsByModuleAndHours(module.getName(), 9);
-        sortedApplications = new LinkedHashMap<>();
-        count = 0;
-
-        for (Application application : applications) {
-            int sum = application.getPriority() + evaluationService.findByApplication(application).getPriority();
-            sortedApplications.put(application, sum);
-        }
-        sortedApplications.entrySet()
-                .stream()
-                .sorted(Map.Entry.comparingByValue())
-                .forEachOrdered(x -> sortedApplications.put(x.getKey(), x.getValue()));
-        for (Application application : applications) {
-            if (count >= module.getMax9()) {
-                break;
-            }
-            result.add(application.getApplicant());
-            count++;
-        }
-
-        applications = applicationService.findApplicationsByModuleAndHours(module.getName(), 17);
-        sortedApplications = new LinkedHashMap<>();
-        count = 0;
-
-        for (Application application : applications) {
-            int sum = application.getPriority() + evaluationService.findByApplication(application).getPriority();
-            sortedApplications.put(application, sum);
-        }
-        sortedApplications.entrySet()
-                .stream()
-                .sorted(Map.Entry.comparingByValue())
-                .forEachOrdered(x -> sortedApplications.put(x.getKey(), x.getValue()));
-        for (Application application : applications) {
-            if (count >= module.getMax17()) {
-                break;
-            }
-            result.add(application.getApplicant());
-            count++;
-        }
-
-        return result;
     }
 
     /**
