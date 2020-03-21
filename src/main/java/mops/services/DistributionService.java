@@ -9,10 +9,7 @@ import mops.model.classes.webclasses.WebDistributorApplicant;
 import mops.repositories.DistributionRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class DistributionService {
@@ -127,17 +124,75 @@ public class DistributionService {
 
     public void distribute2() {
         List<Module> modules = moduleService.getModules();
-        List<WebDistributorApplicant> webDistributorApplicants = new LinkedList<>();
         for (Module module : modules) {
+            List<Evaluation> evaluations = new LinkedList<>();
             List<Application> applications = applicationService.findApplicationsByModule();
             for (Application application : applications) {
                 Evaluation evaluation = evaluationService.findByApplication(application);
-                webDistributorApplicants.add(WebDistributorApplicant.builder()
-                        .username(application.getApplicant().getUniserial())
-                        .applicantPriority(application.getPriority() + "")
-                        .organizerHours(evaluation.getHours() + "")
-                        .organizerPriority(evaluation.getPriority() + "")
-                        .build());
+                evaluations.add(evaluation);
+            }
+
+            List<Evaluation>[] sortedByOrgaPrio = new LinkedList[4];
+
+            for (int i = 0; i < 4; i++) {
+                sortedByOrgaPrio[i] = new LinkedList<>();
+            }
+
+            //List<Evaluation> orgaPrio1 = new LinkedList<>();
+            //List<Evaluation> orgaPrio2 = new LinkedList<>();
+            //List<Evaluation> orgaPrio3 = new LinkedList<>();
+            //List<Evaluation> orgaPrio4 = new LinkedList<>();
+
+            for (Evaluation evaluation : evaluations) {
+                sortedByOrgaPrio[evaluation.getPriority()].add(evaluation);
+                /*
+                if (evaluation.getPriority() == 1) {
+                    orgaPrio1.add(evaluation);
+                } else if (evaluation.getPriority() == 2) {
+                    orgaPrio2.add(evaluation);
+                } else if (evaluation.getPriority() == 3) {
+                    orgaPrio3.add(evaluation);
+                } else if (evaluation.getPriority() == 4) {
+                    orgaPrio4.add(evaluation);
+                } */
+            }
+
+            for (int i = 0; i < 4; i++) {
+                sortedByOrgaPrio[i].sort(Comparator.comparing(a -> a.getApplication().getPriority()));
+            }
+
+            /*orgaPrio1.sort(Comparator.comparing(a -> a.getApplication().getPriority()));
+            orgaPrio2.sort(Comparator.comparing(a -> a.getApplication().getPriority()));
+            orgaPrio3.sort(Comparator.comparing(a -> a.getApplication().getPriority()));
+            orgaPrio4.sort(Comparator.comparing(a -> a.getApplication().getPriority()));*/
+
+            int count7 = 0;
+            int count9 = 0;
+            int count17 = 0;
+
+            List<Applicant> distributedApplicants = new LinkedList<>();
+
+            for (int i = 0; i < 4; i++) {
+                if (count7 == module.getMax7() && count9 == module.getMax9() && count17 == module.getMax17()) {
+                    break;
+                }
+                for (Evaluation ev : sortedByOrgaPrio[i]) {
+                    if (count7 == module.getMax7() && count9 == module.getMax9() && count17 == module.getMax17()) {
+                        break;
+                    }
+                    if (ev.getHours() == 7 && count7 < modules.getMax7()) {
+                        distributedApplicants.add(ev.getApplication().getApplicant());
+                        count7++;
+                    }
+                    if (ev.getHours() == 9 && count7 < modules.getMax9()) {
+                        distributedApplicants.add(ev.getApplication().getApplicant());
+                        count9++;
+                    }
+                    if (ev.getHours() == 17 && count7 < modules.getMax17()) {
+                        distributedApplicants.add(ev.getApplication().getApplicant());
+                        count17++;
+                    }
+                }
             }
         }
     }
