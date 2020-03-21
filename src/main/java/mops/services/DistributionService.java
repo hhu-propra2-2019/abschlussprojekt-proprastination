@@ -4,12 +4,18 @@ import mops.model.classes.Applicant;
 import mops.model.classes.Application;
 import mops.model.classes.Distribution;
 import mops.model.classes.Evaluation;
+import mops.model.classes.webclasses.WebDistribution;
+import mops.model.classes.webclasses.WebDistributorApplicant;
+import mops.model.classes.webclasses.WebDistributorApplication;
 import mops.model.classes.Module;
 import mops.repositories.DistributionRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class DistributionService {
@@ -167,5 +173,56 @@ public class DistributionService {
         return distributionRepository.findByModule("unassigned");
     }
 
+    /**
+     * converts Distributions to Web Distributions
+     * @return List of WebDistributions
+     */
 
+    public List<WebDistribution> convertDistributionsToWebDistributions() {
+        List<WebDistribution> webDistributionList = new ArrayList<>();
+        List<Distribution> distributionList = findAll();
+        for (Distribution distribution : distributionList) {
+            List<WebDistributorApplicant> webDistributorApplicantList =
+                    convertApplicantToWebDistributorApplicant(distribution.getEmployees());
+            WebDistribution webDistribution = WebDistribution.builder()
+                    .module(distribution.getModule())
+                    .webDistributorApplicants(webDistributorApplicantList)
+                    .build();
+            webDistributionList.add(webDistribution);
+        }
+        return webDistributionList;
+    }
+
+    private List<WebDistributorApplicant> convertApplicantToWebDistributorApplicant(
+            final List<Applicant> applicantList) {
+        List<WebDistributorApplicant> webDistributorApplicantList = new ArrayList<>();
+        for (Applicant applicant : applicantList) {
+            Set<Application> applicationSet = applicant.getApplications();
+            List<WebDistributorApplication> webDistributorApplicationList =
+                    createWebDistributorApplications(applicationSet);
+            WebDistributorApplicant webDistributorApplicant = WebDistributorApplicant.builder()
+                    .username(applicant.getUniserial())
+                    .webDistributorApplications(webDistributorApplicationList)
+                    .build();
+            webDistributorApplicantList.add(webDistributorApplicant);
+        }
+        return webDistributorApplicantList;
+    }
+
+    private List<WebDistributorApplication> createWebDistributorApplications(final Set<Application> applicationSet) {
+        List<WebDistributorApplication> webDistributorApplicationList = new ArrayList<>();
+        for (Application application : applicationSet) {
+            Evaluation evaluation = evaluationService.findByApplication(application);
+            WebDistributorApplication webDistributorApplication = WebDistributorApplication.builder()
+                    .applicantPriority(application.getPriority() + "")
+                    .minHours(application.getMinHours() + "")
+                    .maxHours(application.getMaxHours() + "")
+                    .module(application.getModule())
+                    .organizerHours(evaluation.getHours() + "")
+                    .organizerPriority(evaluation.getPriority() + "")
+                    .build();
+            webDistributorApplicationList.add(webDistributorApplication);
+        }
+        return  webDistributorApplicationList;
+    }
 }
