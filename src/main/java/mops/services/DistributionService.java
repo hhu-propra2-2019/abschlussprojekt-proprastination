@@ -161,10 +161,76 @@ public class DistributionService {
                         count7++;
                     }
                     if (evaluation.getHours() == nineHours && count7 < module.getMax9()) {
+                        Applicant oldApplicant = evaluation.getApplication().getApplicant();
+                        Set<Application> newApplicationSet = oldApplicant.getApplications();
+                        Application oldApplication = evaluation.getApplication();
+                        newApplicationSet.remove(oldApplication);
+                        newApplicationSet.add(Application.builder()
+                                .id(oldApplication.getId())
+                                .minHours(oldApplication.getMinHours())
+                                .finalHours(evaluation.getHours())
+                                .maxHours(oldApplication.getMaxHours())
+                                .module(oldApplication.getModule())
+                                .priority(oldApplication.getPriority())
+                                .grade(oldApplication.getGrade())
+                                .lecturer(oldApplication.getLecturer())
+                                .semester(oldApplication.getSemester())
+                                .role(oldApplication.getRole())
+                                .comment(oldApplication.getComment())
+                                .applicant(oldApplication.getApplicant())
+                                .build());
+                        applicantService.saveApplicant(Applicant.builder()
+                                .applications(newApplicationSet)
+                                .uniserial(oldApplicant.getUniserial())
+                                .certs(oldApplicant.getCerts())
+                                .status(oldApplicant.getStatus())
+                                .course(oldApplicant.getCourse())
+                                .nationality(oldApplicant.getComment())
+                                .birthday(oldApplicant.getBirthday())
+                                .address(oldApplicant.getAddress())
+                                .birthplace(oldApplicant.getBirthplace())
+                                .comment(oldApplicant.getComment())
+                                .surname(oldApplicant.getSurname())
+                                .firstName(oldApplicant.getFirstName())
+                                .gender(oldApplicant.getGender())
+                                .build());
                         distributedApplicants.add(evaluation.getApplication().getApplicant());
                         count9++;
                     }
                     if (evaluation.getHours() == seventeenHours && count7 < module.getMax17()) {
+                        Applicant oldApplicant = evaluation.getApplication().getApplicant();
+                        Set<Application> newApplicationSet = oldApplicant.getApplications();
+                        Application oldApplication = evaluation.getApplication();
+                        newApplicationSet.remove(oldApplication);
+                        newApplicationSet.add(Application.builder()
+                                .id(oldApplication.getId())
+                                .minHours(oldApplication.getMinHours())
+                                .finalHours(evaluation.getHours())
+                                .maxHours(oldApplication.getMaxHours())
+                                .module(oldApplication.getModule())
+                                .priority(oldApplication.getPriority())
+                                .grade(oldApplication.getGrade())
+                                .lecturer(oldApplication.getLecturer())
+                                .semester(oldApplication.getSemester())
+                                .role(oldApplication.getRole())
+                                .comment(oldApplication.getComment())
+                                .applicant(oldApplication.getApplicant())
+                                .build());
+                        applicantService.saveApplicant(Applicant.builder()
+                                .applications(newApplicationSet)
+                                .uniserial(oldApplicant.getUniserial())
+                                .certs(oldApplicant.getCerts())
+                                .status(oldApplicant.getStatus())
+                                .course(oldApplicant.getCourse())
+                                .nationality(oldApplicant.getComment())
+                                .birthday(oldApplicant.getBirthday())
+                                .address(oldApplicant.getAddress())
+                                .birthplace(oldApplicant.getBirthplace())
+                                .comment(oldApplicant.getComment())
+                                .surname(oldApplicant.getSurname())
+                                .firstName(oldApplicant.getFirstName())
+                                .gender(oldApplicant.getGender())
+                                .build());
                         distributedApplicants.add(evaluation.getApplication().getApplicant());
                         count17++;
                     }
