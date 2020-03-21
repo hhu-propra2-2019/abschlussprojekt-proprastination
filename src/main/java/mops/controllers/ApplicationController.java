@@ -133,26 +133,8 @@ public class ApplicationController {
                             @RequestParam("modules") final String modules) {
 
         if (token != null) {
-            String street = webAddress.getStreet();
-            Set<Application> applications = new HashSet<>();
-            Address address = Address.builder()
-                    .street(street.substring(0, street.indexOf(' ')))
-                    .houseNumber(street.substring(street.indexOf(' ') + 1))
-                    .city(webAddress.getCity())
-                    .zipcode(webAddress.getZipcode())
-                    .build();
-            Applicant applicant = Applicant.builder()
-                    .uniserial(token.getName())
-                    .address(address)
-                    .birthday(webApplicant.getBirthday())
-                    .birthplace(webApplicant.getBirthplace())
-                    .gender(webApplicant.getGender())
-                    .nationality(webApplicant.getNationality())
-                    .course(webApplicant.getCourse())
-                    .status(webApplicant.getStatus())
-                    .comment(webApplicant.getComment())
-                    .applications(applications)
-                    .build();
+            Address address = applicantService.buildAddress(webAddress);
+            Applicant applicant = applicantService.buildApplicant(token.getName(), webApplicant, address);
             applicantService.saveApplicant(applicant);
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("modul", modules);
