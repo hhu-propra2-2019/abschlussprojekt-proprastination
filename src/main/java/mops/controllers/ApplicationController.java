@@ -277,9 +277,10 @@ public class ApplicationController {
     }
 
     /**
-     *
-     * @param token
-     * @return
+     * xx
+     * @param token xx
+     * @param model xx
+     * @return xx
      */
     @GetMapping("/dummy")
     public String dummy(final KeycloakAuthenticationToken token, final Model model){
@@ -288,6 +289,10 @@ public class ApplicationController {
                 .houseNumber("134")
                 .city("Düsseldorf")
                 .zipcode(40223)
+                .build();
+        Certificate certificate = Certificate.builder()
+                .name("none")
+                .course("none")
                 .build();
         Applicant applicant = Applicant.builder()
                 .uniserial("iamkawaiineko")
@@ -300,6 +305,7 @@ public class ApplicationController {
                 .nationality("Deutschland")
                 .course("Informatik")
                 .status("neueinstellung")
+                .certs(certificate)
                 .comment("Ich mag Katzen")
                 .build();
         model.addAttribute("applicant", applicant);
