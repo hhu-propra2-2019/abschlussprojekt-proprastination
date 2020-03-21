@@ -58,7 +58,7 @@ public class ApplicantService {
      * @param application application
      * @return applicant
      */
-    Applicant findByApplications(final Application application) {
+    public Applicant findByApplications(final Application application) {
         return applicantRepository.findByApplications(application);
     }
 
