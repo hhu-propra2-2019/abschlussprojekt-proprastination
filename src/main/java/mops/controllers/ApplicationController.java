@@ -34,6 +34,7 @@ public class ApplicationController {
 
     @Autowired
     private ApplicantService applicantService;
+    @Autowired
     private ApplicationService applicationService;
 
     private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
