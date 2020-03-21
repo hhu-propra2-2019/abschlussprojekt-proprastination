@@ -92,8 +92,8 @@ public class DatabaseInit implements ServletContextInitializer {
 
             Application application1 = Application.builder()
                     .module(nextModule())
-                    .minHours(faker.number().numberBetween(1, 10))
-                    .maxHours(faker.number().numberBetween(10, 17))
+                    .minHours(hoursGenerator())
+                    .maxHours(hoursGenerator())
                     .lecturer(faker.name().fullName())
                     .grade(faker.number().randomDouble(1, 1, 5))
                     .semester("SS2020")
@@ -104,8 +104,8 @@ public class DatabaseInit implements ServletContextInitializer {
 
             Application application2 = Application.builder()
                     .module(nextModule())
-                    .minHours(faker.number().numberBetween(1, 10))
-                    .maxHours(faker.number().numberBetween(10, 17))
+                    .minHours(hoursGenerator())
+                    .maxHours(hoursGenerator())
                     .lecturer(faker.name().fullName())
                     .grade(faker.number().randomDouble(1, 1, 5))
                     .semester("SS2020")
@@ -148,6 +148,20 @@ public class DatabaseInit implements ServletContextInitializer {
             return "männlich";
         }
         return "weiblich";
+    }
+
+    @SuppressWarnings("checkstyle:MagicNumber")
+    private int hoursGenerator() {
+        switch (random.nextInt(3)) {
+            case 0:
+                return 7;
+            case 1:
+                return 9;
+            case 2:
+                return 17;
+            default:
+                return 0;
+        }
     }
 
     @SuppressWarnings("checkstyle:MagicNumber")
@@ -210,9 +224,9 @@ public class DatabaseInit implements ServletContextInitializer {
 
         Application application1 = Application.builder()
                 .module("Rechnerarchitektur")
-                .finalHours(faker.number().numberBetween(1, 17))
-                .minHours(faker.number().numberBetween(1, 10))
-                .maxHours(faker.number().numberBetween(10, 17))
+                .finalHours(hoursGenerator())
+                .minHours(hoursGenerator())
+                .maxHours(hoursGenerator())
                 .lecturer(faker.name().fullName())
                 .grade(faker.number().randomDouble(1, 1, 5))
                 .semester("SS2020")
@@ -223,9 +237,9 @@ public class DatabaseInit implements ServletContextInitializer {
 
         Application application2 = Application.builder()
                 .module("Theoretische Informatik")
-                .finalHours(faker.number().numberBetween(1, 17))
-                .minHours(faker.number().numberBetween(1, 10))
-                .maxHours(faker.number().numberBetween(10, 17))
+                .finalHours(hoursGenerator())
+                .minHours(hoursGenerator())
+                .maxHours(hoursGenerator())
                 .lecturer(faker.name().fullName())
                 .grade(faker.number().randomDouble(1, 1, 5))
                 .semester("SS2020")
@@ -280,7 +294,7 @@ public class DatabaseInit implements ServletContextInitializer {
         applicationRepository.findAll().forEach(application -> {
                     Evaluation evaluation = Evaluation.builder()
                             .comment(truncate(faker.yoda().quote(), 255))
-                            .hours(faker.number().numberBetween(7, 17))
+                            .hours(hoursGenerator())
                             .priority(faker.number().numberBetween(1, 4))
                             .application(application)
                             .build();
