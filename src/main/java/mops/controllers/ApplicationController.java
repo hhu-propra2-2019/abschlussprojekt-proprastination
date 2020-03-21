@@ -1,6 +1,5 @@
 package mops.controllers;
 
-import com.github.javafaker.App;
 import mops.model.Account;
 import mops.model.classes.Address;
 import mops.model.classes.Applicant;
@@ -128,6 +127,7 @@ public class ApplicationController {
      * @param token Keycloaktoken
      * @param webApplicant webApplicant and its data
      * @param webAddress webAddress and its data
+     * @param webCertificate webCertificate and its data
      * @param model Model
      * @param modules the module the Applicant wants to apply for
      * @return applicationModule.html
@@ -283,12 +283,13 @@ public class ApplicationController {
      * @return xx
      */
     @GetMapping("/dummy")
-    public String dummy(final KeycloakAuthenticationToken token, final Model model){
+    public String dummy(final KeycloakAuthenticationToken token, final Model model) {
+        final int zipcode = 40223;
         Address address = Address.builder()
                 .street("Suitbertusstraße")
                 .houseNumber("134")
                 .city("Düsseldorf")
-                .zipcode(40223)
+                .zipcode(zipcode)
                 .build();
         Certificate certificate = Certificate.builder()
                 .name("none")
@@ -313,14 +314,15 @@ public class ApplicationController {
     }
 
     /**
-     * overview after Application is finished
-     * @param token
-     * @param model
-     * @param webApplication
-     * @return
+     * overview after Application is finished (also saves the last webApplication)
+     * @param token the keycloak token
+     * @param model the model
+     * @param webApplication the last webApplication and its information
+     * @return the overviewhtml
      */
     @PostMapping("/uebersicht")
-    public String overview(final KeycloakAuthenticationToken token, final Model model, final WebApplication webApplication) {
+    public String overview(final KeycloakAuthenticationToken token, final Model model,
+                           final WebApplication webApplication) {
         Applicant applicant = applicantService.findByUniserial(token.getName());
         Application application = applicationService.buildApplication(webApplication);
         Set<Application> applications = applicant.getApplications();
