@@ -117,15 +117,15 @@ public class DistributionService {
                     if (count7 == module.getMax7() && count9 == module.getMax9() && count17 == module.getMax17()) {
                         break;
                     }
-                    if (ev.getHours() == sevenHours && count7 < modules.getMax7()) {
+                    if (ev.getHours() == sevenHours && count7 < module.getMax7()) {
                         distributedApplicants.add(ev.getApplication().getApplicant());
                         count7++;
                     }
-                    if (ev.getHours() == nineHours && count7 < modules.getMax9()) {
+                    if (ev.getHours() == nineHours && count7 < module.getMax9()) {
                         distributedApplicants.add(ev.getApplication().getApplicant());
                         count9++;
                     }
-                    if (ev.getHours() == seventeenHours && count7 < modules.getMax17()) {
+                    if (ev.getHours() == seventeenHours && count7 < module.getMax17()) {
                         distributedApplicants.add(ev.getApplication().getApplicant());
                         count17++;
                     }
