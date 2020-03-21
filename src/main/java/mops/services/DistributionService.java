@@ -38,7 +38,7 @@ public class DistributionService {
         this.applicantService = applicantService;
         this.applicationService = applicationService;
         this.evaluationService = evaluationService;
-        assign();
+        distribute();
     }
 
     /**
@@ -54,7 +54,7 @@ public class DistributionService {
     /**
      * distributes the Applicants
      */
-    private void distribute2() {
+    private void distribute() {
         List<Module> modules = moduleService.getModules();
         for (Module module : modules) {
             List<Evaluation> evaluations = new LinkedList<>();
