@@ -66,11 +66,12 @@ public class DistributionService {
      * distributes the Applicants
      */
     private void distribute() {
-        List<Module> modules = moduleService.getModules();
+        //List<Module> modules = moduleService.getModules();
+        List<String> modules = CSVService.getModules();
         List<Applicant> allApplicants = applicantService.findAll();
-        for (Module module : modules) {
+        for (String module : modules) {
             List<Evaluation> evaluations = new LinkedList<>();
-            List<Application> preApplications = applicationService.findApplicationsByModule(module.getName());
+            List<Application> preApplications = applicationService.findApplicationsByModule(module);
             List<Application> applications = new LinkedList<>();
             for (Application application : preApplications) {
                 if (allApplicants.indexOf(application.getApplicant()) != -1) {
@@ -103,24 +104,24 @@ public class DistributionService {
             List<Applicant> distributedApplicants = new LinkedList<>();
 
             for (int i = 0; i < numberOfPriorities; i++) {
-                if (count7 == module.getMax7() && count9 == module.getMax9() && count17 == module.getMax17()) {
+                if (count7 == 3 && count9 == 4 && count17 == 5) {
                     break;
                 }
                 for (Evaluation evaluation : sortedByOrgaPrio[i]) {
-                    if (count7 == module.getMax7() && count9 == module.getMax9() && count17 == module.getMax17()) {
+                    if (count7 == 3 && count9 == 4 && count17 == 5) {
                         break;
                     }
-                    if (evaluation.getHours() == sevenHours && count7 < module.getMax7()) {
+                    if (evaluation.getHours() == sevenHours && count7 < 3) {
                         changeFinalHours(evaluation);
                         distributedApplicants.add(evaluation.getApplication().getApplicant());
                         allApplicants.remove(evaluation.getApplication().getApplicant());
                         count7++;
-                    } else if (evaluation.getHours() == nineHours && count7 < module.getMax9()) {
+                    } else if (evaluation.getHours() == nineHours && count7 < 4) {
                         changeFinalHours(evaluation);
                         distributedApplicants.add(evaluation.getApplication().getApplicant());
                         allApplicants.remove(evaluation.getApplication().getApplicant());
                         count9++;
-                    } else if (evaluation.getHours() == seventeenHours && count7 < module.getMax17()) {
+                    } else if (evaluation.getHours() == seventeenHours && count7 < 5) {
                         changeFinalHours(evaluation);
                         distributedApplicants.add(evaluation.getApplication().getApplicant());
                         allApplicants.remove(evaluation.getApplication().getApplicant());
@@ -131,7 +132,7 @@ public class DistributionService {
 
             distributionRepository.save(Distribution.builder()
                     .employees(distributedApplicants)
-                    .module(module.getName())
+                    .module(module)
                     .build());
         }
         distributionRepository.save(Distribution.builder()
