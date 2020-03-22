@@ -7,7 +7,7 @@ import mops.model.classes.Evaluation;
 import mops.model.classes.webclasses.WebDistribution;
 import mops.model.classes.webclasses.WebDistributorApplicant;
 import mops.model.classes.webclasses.WebDistributorApplication;
-import mops.model.classes.Module;
+//import mops.model.classes.Module;
 import mops.repositories.DistributionRepository;
 import org.springframework.stereotype.Service;
 
@@ -90,7 +90,7 @@ public class DistributionService {
             }
 
             for (Evaluation evaluation : evaluations) {
-                sortedByOrgaPrio[evaluation.getPriority()-1].add(evaluation);
+                sortedByOrgaPrio[evaluation.getPriority() - 1].add(evaluation);
             }
 
             for (int i = 0; i < numberOfPriorities; i++) {
