@@ -74,7 +74,7 @@ public class DistributionService {
             List<Application> preApplications = applicationService.findApplicationsByModule(module);
             List<Application> applications = new LinkedList<>();
             for (Application application : preApplications) {
-                if (allApplicants.indexOf(application.getApplicant()) != -1) {
+                if (allApplicants.indexOf(applicantService.findByApplications(application)) != -1) {
                     applications.add(application);
                 }
             }
@@ -113,18 +113,18 @@ public class DistributionService {
                     }
                     if (evaluation.getHours() == sevenHours && count7 < 3) {
                         changeFinalHours(evaluation);
-                        distributedApplicants.add(evaluation.getApplication().getApplicant());
-                        allApplicants.remove(evaluation.getApplication().getApplicant());
+                        distributedApplicants.add(applicantService.findByApplications(evaluation.getApplication()));
+                        allApplicants.remove(applicantService.findByApplications(evaluation.getApplication()));
                         count7++;
                     } else if (evaluation.getHours() == nineHours && count9 < 4) {
                         changeFinalHours(evaluation);
-                        distributedApplicants.add(evaluation.getApplication().getApplicant());
-                        allApplicants.remove(evaluation.getApplication().getApplicant());
+                        distributedApplicants.add(applicantService.findByApplications(evaluation.getApplication()));
+                        allApplicants.remove(applicantService.findByApplications(evaluation.getApplication()));
                         count9++;
                     } else if (evaluation.getHours() == seventeenHours && count17 < 5) {
                         changeFinalHours(evaluation);
-                        distributedApplicants.add(evaluation.getApplication().getApplicant());
-                        allApplicants.remove(evaluation.getApplication().getApplicant());
+                        distributedApplicants.add(applicantService.findByApplications(evaluation.getApplication()));
+                        allApplicants.remove(applicantService.findByApplications(evaluation.getApplication()));
                         count17++;
                     }
                 }
@@ -146,7 +146,7 @@ public class DistributionService {
      * @param evaluation
      */
     private void changeFinalHours(final Evaluation evaluation) {
-        Applicant oldApplicant = evaluation.getApplication().getApplicant();
+        Applicant oldApplicant = applicantService.findByApplications(evaluation.getApplication());
         Set<Application> newApplicationSet = oldApplicant.getApplications();
         Application oldApplication = evaluation.getApplication();
         newApplicationSet.remove(oldApplication);
@@ -162,9 +162,10 @@ public class DistributionService {
                 .semester(oldApplication.getSemester())
                 .role(oldApplication.getRole())
                 .comment(oldApplication.getComment())
-                .applicant(oldApplication.getApplicant())
+                .applicant(applicantService.findByApplications(oldApplication))
                 .build());
         applicantService.saveApplicant(Applicant.builder()
+                .id(oldApplicant.getId())
                 .applications(newApplicationSet)
                 .uniserial(oldApplicant.getUniserial())
                 .certs(oldApplicant.getCerts())
