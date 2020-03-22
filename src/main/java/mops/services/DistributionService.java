@@ -90,7 +90,7 @@ public class DistributionService {
             }
 
             for (Evaluation evaluation : evaluations) {
-                sortedByOrgaPrio[evaluation.getPriority()].add(evaluation);
+                sortedByOrgaPrio[evaluation.getPriority()-1].add(evaluation);
             }
 
             for (int i = 0; i < numberOfPriorities; i++) {
@@ -116,12 +116,12 @@ public class DistributionService {
                         distributedApplicants.add(evaluation.getApplication().getApplicant());
                         allApplicants.remove(evaluation.getApplication().getApplicant());
                         count7++;
-                    } else if (evaluation.getHours() == nineHours && count7 < 4) {
+                    } else if (evaluation.getHours() == nineHours && count9 < 4) {
                         changeFinalHours(evaluation);
                         distributedApplicants.add(evaluation.getApplication().getApplicant());
                         allApplicants.remove(evaluation.getApplication().getApplicant());
                         count9++;
-                    } else if (evaluation.getHours() == seventeenHours && count7 < 5) {
+                    } else if (evaluation.getHours() == seventeenHours && count17 < 5) {
                         changeFinalHours(evaluation);
                         distributedApplicants.add(evaluation.getApplication().getApplicant());
                         allApplicants.remove(evaluation.getApplication().getApplicant());
@@ -135,10 +135,10 @@ public class DistributionService {
                     .module(module)
                     .build());
         }
-        distributionRepository.save(Distribution.builder()
+        /*distributionRepository.save(Distribution.builder()
                 .employees(allApplicants)
                 .module("unassigned")
-                .build());
+                .build());*/
     }
 
     /**
