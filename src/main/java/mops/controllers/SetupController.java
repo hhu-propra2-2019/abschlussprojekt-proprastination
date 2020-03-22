@@ -86,6 +86,7 @@ public class SetupController {
      */
     @SuppressWarnings("checkstyle:ParameterNumber")
     @PostMapping("/setupMain")
+    @Secured("ROLE_setup")
     public String postEditedModule(final KeycloakAuthenticationToken token, final Model model,
                                    @RequestParam("oldName") final String oldName,
                                    @RequestParam("name") final String name,
@@ -126,8 +127,8 @@ public class SetupController {
      * @param module wrapped Object with module details
      * @return redirects to index
      */
-    @SuppressWarnings("checkstyle:ParameterNumber")
     @PostMapping("/neuesModul")
+    @Secured("ROLE_setup")
     public String postNewModule(final KeycloakAuthenticationToken token, final Model model,
                                 final Module module) {
         List<String[]> input = new ArrayList<>();
@@ -152,6 +153,7 @@ public class SetupController {
      */
     @SuppressWarnings("checkstyle:ParameterNumber")
     @PostMapping("/modulBearbeiten")
+    @Secured("ROLE_setup")
     public String postEditModule(final KeycloakAuthenticationToken token, final Model model,
                                  @RequestParam("name") final String name,
                                  @RequestParam("shortName") final String shortName,
@@ -175,16 +177,30 @@ public class SetupController {
     }
 
     /**
-     * Post mapping for saving a new module
+     * Post mapping for deleting a module
      * @param token The KeycloakAuthentication
      * @param model The Website model
      * @return The HTML file rendered as a String
      * @param name module name
      */
     @PostMapping("/deleteModule")
+    @Secured("ROLE_setup")
     public String postDeleteModule(final KeycloakAuthenticationToken token, final Model model,
                                 @RequestParam("nameDelete") final String name) {
         CSVService.deleteModule(name);
+        return index(token, model);
+    }
+
+    /**
+     * Post mapping for deleting all modules
+     * @param token The KeycloakAuthentication
+     * @param model The Website model
+     * @return index Redirect to setupMain
+     */
+    @PostMapping("/alleModuleLoeschen")
+    @Secured("ROLE_setup")
+    public String postDeleteAllModule(final KeycloakAuthenticationToken token, final Model model) {
+        CSVService.cleanModules();
         return index(token, model);
     }
 }
