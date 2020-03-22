@@ -114,6 +114,7 @@ public class SetupController {
     public String newModule(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("Module", Module.builder().build());
         }
         return "setup/neuesModul";
     }
@@ -122,28 +123,16 @@ public class SetupController {
      * Post mapping for saving a new module
      * @param token The KeycloakAuthentication
      * @param model The Website model
-     * @param name module name
-     * @param shortName module short name
-     * @param profName responsible person
-     * @param sevenHourLimit Amount of people with 7 hour jobs
-     * @param nineHourLimit Amount of people with 9 hour jobs
-     * @param seventeenHourLimit Amount of people with 17 hour jobs
-     * @param hourLimit maximum hours of work required
+     * @param module wrapped Object with module details
      * @return redirects to index
      */
     @SuppressWarnings("checkstyle:ParameterNumber")
     @PostMapping("/neuesModul")
     public String postNewModule(final KeycloakAuthenticationToken token, final Model model,
-                                @RequestParam("name") final String name,
-                                @RequestParam("shortName") final String shortName,
-                                @RequestParam("profName") final String profName,
-                                @RequestParam("sevenHourLimit") final String sevenHourLimit,
-                                @RequestParam("nineHourLimit") final String nineHourLimit,
-                                @RequestParam("seventeenHourLimit") final String seventeenHourLimit,
-                                @RequestParam("hourLimit") final String hourLimit) {
+                                final Module module) {
         List<String[]> input = new ArrayList<>();
-        String[] s1 = {name, shortName, profName, sevenHourLimit, nineHourLimit, seventeenHourLimit, hourLimit};
-        input.add(s1);
+        String[] newModule = module.toStringArray();
+        input.add(newModule);
         CSVService.writeInCSV("src/main/resources/csv/module.csv", input);
         return index(token, model);
     }

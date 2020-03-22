@@ -1,18 +1,28 @@
 package mops.model.classes;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@EqualsAndHashCode
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder(builderClassName = "ModuleBuilder", toBuilder = true)
 public class Module {
-    private final String name;
-    private final String shortName;
-    private final String profName;
-    private final String sevenHourLimit;
-    private final String nineHourLimit;
-    private final String seventeenHourLimit;
-    private final String hourLimit;
+    private String name;
+    private String shortName;
+    private String profName;
+    private String sevenHourLimit;
+    private String nineHourLimit;
+    private String seventeenHourLimit;
+    private String hourLimit;
+
+    /**
+     * @return returns module as String Array
+     */
+    public String[] toStringArray() {
+        return new String[]{name, shortName, profName, sevenHourLimit,
+                            nineHourLimit, seventeenHourLimit, hourLimit};
+    }
 }

@@ -35,7 +35,7 @@
 </header>
 
 <main th:fragment="bodycontent">
-    <form th:action="@{neuesModul}" th:method="POST">
+    <form th:action="@{neuesModul}" th:method="POST" th:object="${Module}">
         <div class="card bg-light mb-3 border-primary">
             <div class="card-header container-fluid">
                 <div class="row">
@@ -48,16 +48,16 @@
             <div class="card-body">
                 <div class="row container-fluid">
                     <div class="col float-left">
-                        <input type="text" name="name" id="name"
+                        <input type="text" name="name" id="name" th:field="*{name}"
                                class="form-control" placeholder="Name des Moduls">
                     </div>
                     <div class="col">
                         <input type="text" name="shortName" id="shortName"
-                               class="form-control" placeholder="Abkürzung des Moduls">
+                               class="form-control" placeholder="Abkürzung des Moduls" th:field="*{shortName}">
                     </div>
                     <div class="col float-right">
                         <input type="text" name="profName" id="profName"
-                               class="form-control" placeholder="Zugeordnete Person">
+                               class="form-control" placeholder="Zugeordnete Person" th:field="*{profName}">
                     </div>
                 </div><br><br>
                 <div class="row">
@@ -71,19 +71,19 @@
                 <div class="row">
                     <div class="col">
                         <input type="number" name="sevenHourLimit" id="sevenHourLimit"
-                               class="form-control" placeholder="Tutoren mit 7 Stunden">
+                               class="form-control" placeholder="Tutoren mit 7 Stunden" th:field="*{sevenHourLimit}">
                     </div>
                     <div class="col">
                         <input type="number" name="nineHourLimit" id="nienHourLimit"
-                               class="form-control" placeholder="Tutoren mit 9 Stunden">
+                               class="form-control" placeholder="Tutoren mit 9 Stunden" th:field="*{nineHourLimit}">
                     </div>
                     <div class="col">
                         <input type="number" name="seventeenHourLimit" id="seventeenHourLimit"
-                               class="form-control" placeholder="Tutoren mit 17 Stunden">
+                               class="form-control" placeholder="Tutoren mit 17 Stunden" th:field="*{seventeenHourLimit}">
                     </div>
                     <div class="col">
                         <input type="number" name="hourLimit" id="hourLimit"
-                               class="form-control" placeholder="Stundenlimit Gesamt">
+                               class="form-control" placeholder="Stundenlimit Gesamt" th:field="*{hourLimit}">
                     </div>
                 </div>
             </div>
