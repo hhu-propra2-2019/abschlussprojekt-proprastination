@@ -145,7 +145,7 @@ public class ApplicationController {
     public String modul(final KeycloakAuthenticationToken token,
                             @Valid final WebApplicant webApplicant, final BindingResult applicantBindingResult,
                             @Valid final WebAddress webAddress, final BindingResult addressBindingResult,
-                            final Model model, final WebCertificate webCertificate
+                            final Model model, final WebCertificate webCertificate,
                             @RequestParam("modules") final String modules) {
 
         if (applicantBindingResult.hasErrors()) {
