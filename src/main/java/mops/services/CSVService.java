@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,13 +28,13 @@ public class CSVService {
     private static final int HOUR_LIMIT = 6;
 
     /**
-     *
+     * Reads from CSV-file
      * @param csvName path of file to open
      * @return list of String[]
      */
     public static List<String[]> readFromCSV(final String csvName) {
         List<String[]> list = new ArrayList<>();
-        final Charset charset = Charset.forName("UTF-8");
+        final Charset charset = StandardCharsets.UTF_8;
         try {
             CSVReader csvReader = new CSVReader(new FileReader(csvName, charset));
             list = csvReader.readAll();
@@ -62,42 +63,33 @@ public class CSVService {
     }
 
     /**
-     * @return list of countries
+     * Gets data from CSV file
+     * @param dataPosition Where the data is saved
+     * @param csvPath Where the CSV document is
+     * @return List with the data
      */
-
-    public static List<String> getCountries() {
-        List<String> list = new ArrayList<>();
-        List<String[]> countries = readFromCSV("src/main/resources/csv/countries.csv");
+    private static List<String> getCSVData(final int dataPosition, final String csvPath) {
+        List<String> output = new ArrayList<>();
+        List<String[]> data = readFromCSV(csvPath);
         String[] strArr;
-        for (int i = 0; i < countries.size(); i++) {
-            strArr = countries.get(i);
-            list.add(strArr[0]);
+        for (String[] strings : data) {
+            strArr = strings;
+            output.add(strArr[dataPosition]);
         }
-        return list;
+        return output;
     }
 
     /**
-     * get modules with all details
-     * @return return module with details as list of string arrays
-     */
-    public static List<String[]> getModulesWithDetails() {
-        List<String[]> modules = readFromCSV("src/main/resources/csv/module.csv");
-        return modules;
-    }
-
-    /**
-     * deltes module line from module.csv
-     * @param moduleName
+     * deletes module line from module.csv
+     * @param moduleName Name of the module
      */
     public static void deleteModule(final String moduleName) {
         List<String[]> readData = getModulesWithDetails();
         List<String[]> writeData = new ArrayList<>();
         String[] tmp;
-        for (int i = 0; i < readData.size(); i++) {
-            tmp = readData.get(i);
-            if (tmp[0].equals(moduleName)) {
-                continue;
-            } else {
+        for (String[] readDatum : readData) {
+            tmp = readDatum;
+            if (!(tmp[0].equals(moduleName))) {
                 writeData.add(tmp);
             }
         }
@@ -121,14 +113,7 @@ public class CSVService {
      * @return List of all modules
      */
     public static List<String> getModules() {
-        List<String> list = new ArrayList<>();
-        List<String[]> modules = readFromCSV("src/main/resources/csv/module.csv");
-        String[] strArr;
-        for (int i = 0; i < modules.size(); i++) {
-            strArr = modules.get(i);
-            list.add(strArr[NAME]);
-        }
-        return list;
+        return getCSVData(NAME, "src/main/resources/csv/module.csv");
     }
 
     /**
@@ -136,29 +121,7 @@ public class CSVService {
      * @return list of short names
      */
     public  static List<String> getShortModuleNames() {
-        List<String> list = new ArrayList<>();
-        List<String[]> moduleNames = readFromCSV("src/main/resources/csv/module.csv");
-        String[] strArr;
-        for (int i = 0; i < moduleNames.size(); i++) {
-            strArr = moduleNames.get(i);
-            list.add(strArr[SHORT_NAME]);
-        }
-        return list;
-    }
-
-    /**
-     * return hour limit for modules
-     * @return List of all limits
-     */
-    public static List<String> getHourLimits() {
-        List<String> list = new ArrayList<>();
-        List<String[]> limits = readFromCSV("src/main/resources/csv/module.csv");
-        String[] strArr;
-        for (int i = 0; i < limits.size(); i++) {
-            strArr = limits.get(i);
-            list.add(strArr[HOUR_LIMIT]);
-        }
-        return list;
+        return getCSVData(SHORT_NAME, "src/main/resources/csv/module.csv");
     }
 
     /**
@@ -167,15 +130,33 @@ public class CSVService {
      */
 
     public static List<String> getModuleProfs() {
-        List<String> list = new ArrayList<>();
-        List<String[]> profs = readFromCSV("src/main/resources/csv/module.csv");
-        String[] strArr;
-        for (int i = 0; i < profs.size(); i++) {
-            strArr = profs.get(i);
-            list.add(strArr[PROF_NAME]);
-        }
-        return list;
+        return getCSVData(PROF_NAME, "src/main/resources/csv/module.csv");
     }
+
+    /**
+     * return hour limit for modules
+     * @return List of all limits
+     */
+    public static List<String> getHourLimits() {
+        return getCSVData(HOUR_LIMIT, "src/main/resources/csv/module.csv");
+    }
+
+    /**
+     * Get modules with all details
+     * @return return module with details as list of string arrays
+     */
+    public static List<String[]> getModulesWithDetails() {
+        return readFromCSV("src/main/resources/csv/module.csv");
+    }
+
+    /**
+     * Gets list of countries
+     * @return list of countries
+     */
+    public static List<String> getCountries() {
+        return getCSVData(0, "src/main/resources/csv/countries.csv");
+    }
+
     /**
      * Get person responsible for single module
      * @return responsible person as String
@@ -185,14 +166,15 @@ public class CSVService {
     public static String getProfForModule(final String moduleName) {
         List<String[]> data = readFromCSV("src/main/resources/csv/module.csv");
         String[] strArr;
-        for (int i = 0; i < data.size(); i++) {
-            strArr = data.get(i);
+        for (String[] datum : data) {
+            strArr = datum;
             if (strArr[0].equals(moduleName)) {
                 return strArr[PROF_NAME];
             }
         }
         return "Not found";
     }
+
     /**
      * Get modules asserted to prof/organizer
      * @return modules as list
@@ -203,8 +185,8 @@ public class CSVService {
         List<String> list = new ArrayList<>();
         List<String[]> profs = readFromCSV("src/main/resources/csv/module.csv");
         String[] strArr;
-        for (int i = 0; i < profs.size(); i++) {
-            strArr = profs.get(i);
+        for (String[] prof : profs) {
+            strArr = prof;
             if (strArr[PROF_NAME].equals(profName)) {
                 list.add(strArr[0]);
             }
@@ -217,14 +199,7 @@ public class CSVService {
      * @return List of all courses
      */
     public static List<String> getCourses() {
-        List<String> list = new ArrayList<>();
-        List<String[]> courses = readFromCSV("src/main/resources/csv/courses.csv");
-        String[] strArr;
-        for (int i = 0; i < courses.size(); i++) {
-            strArr = courses.get(i);
-            list.add(strArr[0]);
-        }
-        return list;
+        return getCSVData(0, "src/main/resources/csv/courses.csv");
     }
 
     /**
@@ -232,13 +207,6 @@ public class CSVService {
      * @return List of all Semesters
      */
     public static List<String> getSemester() {
-        List<String> list = new ArrayList<>();
-        List<String[]> semester = readFromCSV("src/main/resources/csv/semester.csv");
-        String[] strArr;
-        for (int i = 0; i < semester.size(); i++) {
-            strArr = semester.get(i);
-            list.add(strArr[0]);
-        }
-        return list;
+        return getCSVData(0, "src/main/resources/csv/semester.csv");
     }
 }
