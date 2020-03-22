@@ -135,10 +135,10 @@ public class DistributionService {
                     .module(module)
                     .build());
         }
-        /*distributionRepository.save(Distribution.builder()
+        distributionRepository.save(Distribution.builder()
                 .employees(allApplicants)
                 .module("unassigned")
-                .build());*/
+                .build());
     }
 
     /**
