@@ -10,9 +10,9 @@ import mops.model.classes.webclasses.WebDistributorApplication;
 //import mops.model.classes.Module;
 import mops.repositories.DistributionRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -23,7 +23,6 @@ public class DistributionService {
     private final DistributionRepository distributionRepository;
     private final ModuleService moduleService;
     private final ApplicantService applicantService;
-    private final ApplicationService applicationService;
     private final EvaluationService evaluationService;
     private final int numberOfPriorities = 4;
     private final int sevenHours = 7;
@@ -35,19 +34,16 @@ public class DistributionService {
      * @param distributionRepository the injected repository
      * @param moduleService the services that manages modules
      * @param applicantService the services that manages applicants
-     * @param applicationService the services that manages applications
      * @param evaluationService the services that manages evaluations
      */
     @SuppressWarnings("checkstyle:HiddenField")
     public DistributionService(final DistributionRepository distributionRepository,
                                final ModuleService moduleService,
                                final ApplicantService applicantService,
-                               final ApplicationService applicationService,
                                final EvaluationService evaluationService) {
         this.distributionRepository = distributionRepository;
         this.moduleService = moduleService;
         this.applicantService = applicantService;
-        this.applicationService = applicationService;
         this.evaluationService = evaluationService;
         distribute();
     }
@@ -71,7 +67,11 @@ public class DistributionService {
         List<Applicant> allApplicants = applicantService.findAll();
         for (String module : modules) {
             List<Evaluation> evaluations = new LinkedList<>();
-            List<Application> preApplications = applicationService.findApplicationsByModule(module);
+            //List<Application> preApplications = applicationService.findApplicationsByModule(module);
+            List<Application> preApplications = new LinkedList<>();
+            for (Applicant applicant : allApplicants) {
+                preApplications.addAll(applicant.getApplications());
+            }
             List<Application> applications = new LinkedList<>();
             for (Application application : preApplications) {
                 if (allApplicants.indexOf(applicantService.findByApplications(application)) != -1) {
@@ -101,35 +101,34 @@ public class DistributionService {
             int count9 = 0;
             int count17 = 0;
 
-            List<Applicant> distributedApplicants = new LinkedList<>();
+            Set<Applicant> distributedApplicants = new HashSet<>();
 
             for (int i = 0; i < numberOfPriorities; i++) {
-                if (count7 == 3 && count9 == 4 && count17 == 5) {
+                if (count7 == 1 && count9 == 2 && count17 == 3) {
                     break;
                 }
                 for (Evaluation evaluation : sortedByOrgaPrio[i]) {
-                    if (count7 == 3 && count9 == 4 && count17 == 5) {
+                    if (count7 == 1 && count9 == 2 && count17 == 3) {
                         break;
                     }
-                    if (evaluation.getHours() == sevenHours && count7 < 3) {
-                        changeFinalHours(evaluation);
+                    if (evaluation.getHours() == sevenHours && count7 < 1) {
+                        //changeFinalHours(evaluation);
                         distributedApplicants.add(applicantService.findByApplications(evaluation.getApplication()));
                         allApplicants.remove(applicantService.findByApplications(evaluation.getApplication()));
                         count7++;
-                    } else if (evaluation.getHours() == nineHours && count9 < 4) {
-                        changeFinalHours(evaluation);
+                    } else if (evaluation.getHours() == nineHours && count9 < 2) {
+                        //changeFinalHours(evaluation);
                         distributedApplicants.add(applicantService.findByApplications(evaluation.getApplication()));
                         allApplicants.remove(applicantService.findByApplications(evaluation.getApplication()));
                         count9++;
-                    } else if (evaluation.getHours() == seventeenHours && count17 < 5) {
-                        changeFinalHours(evaluation);
+                    } else if (evaluation.getHours() == seventeenHours && count17 < 3) {
+                        //changeFinalHours(evaluation);
                         distributedApplicants.add(applicantService.findByApplications(evaluation.getApplication()));
                         allApplicants.remove(applicantService.findByApplications(evaluation.getApplication()));
                         count17++;
                     }
                 }
             }
-
             distributionRepository.save(Distribution.builder()
                     .employees(distributedApplicants)
                     .module(module)
