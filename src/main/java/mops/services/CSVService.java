@@ -18,6 +18,14 @@ import java.util.List;
 @SuppressWarnings("checkstyle:HideUtilityClassConstructor")
 @Service
 public class CSVService {
+    private static final int NAME = 0;
+    private static final int SHORT_NAME = 1;
+    private static final int PROF_NAME = 2;
+    private static final int SEVEN_HOUR_LIMIT = 3;
+    private static final int NINE_HOUR_LIMIT = 4;
+    private static final int SEVENTEEN_HOUR_LIMIT = 5;
+    private static final int HOUR_LIMIT = 6;
+
     /**
      *
      * @param csvName path of file to open
@@ -118,7 +126,7 @@ public class CSVService {
         String[] strArr;
         for (int i = 0; i < modules.size(); i++) {
             strArr = modules.get(i);
-            list.add(strArr[0]);
+            list.add(strArr[NAME]);
         }
         return list;
     }
@@ -133,7 +141,7 @@ public class CSVService {
         String[] strArr;
         for (int i = 0; i < moduleNames.size(); i++) {
             strArr = moduleNames.get(i);
-            list.add(strArr[1]);
+            list.add(strArr[SHORT_NAME]);
         }
         return list;
     }
@@ -148,7 +156,7 @@ public class CSVService {
         String[] strArr;
         for (int i = 0; i < limits.size(); i++) {
             strArr = limits.get(i);
-            list.add(strArr[6]);
+            list.add(strArr[HOUR_LIMIT]);
         }
         return list;
     }
@@ -164,7 +172,7 @@ public class CSVService {
         String[] strArr;
         for (int i = 0; i < profs.size(); i++) {
             strArr = profs.get(i);
-            list.add(strArr[2]);
+            list.add(strArr[PROF_NAME]);
         }
         return list;
     }
@@ -180,7 +188,7 @@ public class CSVService {
         for (int i = 0; i < data.size(); i++) {
             strArr = data.get(i);
             if (strArr[0].equals(moduleName)) {
-                return strArr[2];
+                return strArr[PROF_NAME];
             }
         }
         return "Not found";
@@ -197,7 +205,7 @@ public class CSVService {
         String[] strArr;
         for (int i = 0; i < profs.size(); i++) {
             strArr = profs.get(i);
-            if (strArr[2].equals(profName)) {
+            if (strArr[PROF_NAME].equals(profName)) {
                 list.add(strArr[0]);
             }
         }
