@@ -38,7 +38,8 @@
                         <div class="col-5">
                             <input th:type="text" th:name="street"
                                    th:field="*{street}" th:attr="value = ${webAddress.street}"
-                                   class="form-control" placeholder="Straße und Hausnummer">
+                                   class="form-control" placeholder="Straße und Hausnummer"
+                                   required pattern=".+ [0-9]+">
                             <div th:if="${#fields.hasErrors('street')}" class="text-danger">
                                 Bitte geben Sie eine Straße gefolgt von einer Hausnummer ein.
                             </div>
@@ -48,7 +49,8 @@
                         <div class="col-5">
                             <input th:type="text" th:name="city" th:id="city"
                                    th:field="*{city}" th:attr="value = ${webAddress.city}"
-                                   th:class="form-control" placeholder="Ort">
+                                   th:class="form-control" placeholder="Ort"
+                                   required>
                             <div th:if="${#fields.hasErrors('city')}" class="text-danger">
                                 Bitte geben Sie eine Stadt an.
                             </div>
@@ -57,7 +59,8 @@
                         <div class="col-2">
                             <input th:type="text" th:name="zipcode" th:id="zipcode" th:field="*{zipcode}"
                                    th:attr="value = ${webAddress.zipcode}"
-                                   th:class="form-control" placeholder="Postleitzahl">
+                                   th:class="form-control" placeholder="Postleitzahl"
+                                   required pattern="^\d{5}$" minlength="5" maxlength="5">
                             <div th:if="${#fields.hasErrors('zipcode')}" class="text-danger">
                                 Bitte geben Sie eine fünfstellige Postleitzahl ein.
                             </div>
@@ -68,7 +71,8 @@
                         <div class="col-5">
                             <input th:type="text" th:name="birthplace" th:id="birthplace"
                                    th:field="*{birthplace}"  th:attr="value = ${webApplicant.birthplace}"
-                                   th:class="form-control" placeholder="Geburtsort, Land">
+                                   th:class="form-control" placeholder="Geburtsort, Land"
+                                   required>
                             <div th:if="${#fields.hasErrors('birthplace')}" class="text-danger">
                                 Bitte geben Sie einen Geburtsort an.
                             </div>
@@ -76,7 +80,8 @@
                         </div>
                         <div class="col-5">
                             <select th:name="nationality" th:id="nationality" th:class="form-control"
-                                    th:field="*{nationality}" th:attr="value = ${webApplicant.nationality}">
+                                    th:field="*{nationality}" th:attr="value = ${webApplicant.nationality}"
+                                    required>
                                 <option value="" disabled selected hidden>Nationalität</option>
                                 <option th:each="country:${countries}" th:text="${country}" th:value="${country}"></option>
                             </select>
@@ -88,7 +93,8 @@
                         <div class="col-2">
                             <input type="text" name="birthday" id="birthday" onfocus="(this.type='date')"
                                    th:field="*{birthday}" th:attr="value = ${webApplicant.birthday}"
-                                   onblur="(this.type='text')" class="form-control" placeholder="Geburtstag">
+                                   onblur="(this.type='text')" class="form-control" placeholder="Geburtstag"
+                                   required pattern="[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])">
                             <div th:if="${#fields.hasErrors('birthday')}" class="text-danger">
                                 Bitte geben Sie ein gültiges Geburtsdatum an.
                             </div>
@@ -98,7 +104,8 @@
                     <div class="row">
                         <div class="col-2">
                             <select name="gender" id="gender" class="form-control"
-                                    th:field="*{gender}" th:attr="value = ${webApplicant.gender}">
+                                    th:field="*{gender}" th:attr="value = ${webApplicant.gender}"
+                                    required>
                                 <option value="" disabled selected hidden>Geschlecht</option>
                                 <option value="male">männlich</option>
                                 <option value="female">weiblich</option>
@@ -118,7 +125,8 @@
                         </div>
                         <div class="col-6">
                             <select name="courses" id="courses" class="form-control"
-                                    th:field="*{course}" th:attr="value=${webApplicant.course}">
+                                    th:field="*{course}" th:attr="value=${webApplicant.course}"
+                                    required>
                                 <option th:each="cours:${courses}" th:text="${cours}" th:value="${cours}"></option>
                             </select>
                             <div th:if="${#fields.hasErrors('course')}" class="text-danger">
@@ -138,7 +146,7 @@
                         <div class="col-6">
                             <select th:name="status" th:id="status" th:class="form-control"
                                     th:field="*{status}" th:attr="value = ${webApplicant.status}"
-                            >
+                                    required>
                                 <option th:value="neueinstellung">
                                     Neueinstellung (bisher keine Anstellung an der HHU)
                                 </option>
@@ -166,7 +174,8 @@
                     </div>
                     <div class="row">
                         <div class="col-6">
-                            <select name="graduation" id="graduation" class="form-control">
+                            <select name="graduation" id="graduation" class="form-control"
+                            required>
                                 <option value="none">kein Universitätsabschluss</option>
                                 <option value="bachelor">Bachelor</option>
                                 <option value="master">Master</option>
@@ -189,9 +198,14 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <textarea th:name="comment" th:id="comment" th:class="form-control" rows="6" maxlength="1000"
+                            <textarea th:name="comment" th:id="comment" th:class="form-control" rows="6"
                                       th:field="*{comment}" th:attr="value = ${webApplicant.comment}"
-                            ></textarea> <br>
+                            maxlength="1000"></textarea>
+                            <div th:if="${#fields.hasErrors('comment')}" class="text-danger">
+                                Die Anmerkungen dürfen maximal 1000 Zeichen lang sein.
+                            </div>
+                            <br>
+
                         </div>
                     </div>
                 </div>

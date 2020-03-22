@@ -7,12 +7,14 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder(toBuilder = true)
 public class WebApplicant {
+    public static final int MAX_COMMENT_LENGTH = 1000;
     @NotBlank
     private String birthplace;
     @NotBlank
@@ -27,5 +29,6 @@ public class WebApplicant {
     @NotBlank
     @Pattern(regexp = "neueinstellung|weiterbeschaeftigung|wiedereinstellung")
     private String status;
+    @Size(max = MAX_COMMENT_LENGTH)
     private String comment;
 }
