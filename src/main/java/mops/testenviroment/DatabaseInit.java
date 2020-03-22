@@ -5,13 +5,21 @@ import mops.model.classes.Applicant;
 import com.github.javafaker.Faker;
 import mops.model.classes.Application;
 import mops.model.classes.Certificate;
+import mops.model.classes.Distribution;
+import mops.model.classes.Evaluation;
 import mops.repositories.ApplicantRepository;
+import mops.repositories.ApplicationRepository;
+import mops.repositories.DistributionRepository;
+import mops.repositories.EvaluationRepository;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletContext;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
@@ -22,15 +30,32 @@ public class DatabaseInit implements ServletContextInitializer {
 
     private transient ApplicantRepository applicantRepository;
 
+    private transient ApplicationRepository applicationRepository;
+
+    private transient DistributionRepository distributionRepository;
+
+    private transient EvaluationRepository evaluationRepository;
+
+
     /**
-     * Initializes the needed repo.
+     * Inits.
      *
-     * @param applicantRepository repo.
+     * @param applicantRepository    a
+     * @param applicationRepository  b
+     * @param distributionRepository c
+     * @param evaluationRepository   d
      */
     @SuppressWarnings("checkstyle:HiddenField")
-    public DatabaseInit(final ApplicantRepository applicantRepository) {
+    public DatabaseInit(final ApplicantRepository applicantRepository,
+                        final ApplicationRepository applicationRepository,
+                        final DistributionRepository distributionRepository,
+                        final EvaluationRepository evaluationRepository) {
         this.applicantRepository = applicantRepository;
+        this.applicationRepository = applicationRepository;
+        this.distributionRepository = distributionRepository;
+        this.evaluationRepository = evaluationRepository;
     }
+
 
     /**
      * On statup function.
@@ -40,6 +65,8 @@ public class DatabaseInit implements ServletContextInitializer {
     public void onStartup(final ServletContext servletContext) {
         Faker faker = new Faker(Locale.GERMAN);
         fakeApplicants(faker);
+        fakeEvaluations(faker);
+        //fakeDistribution(); //Primary Key violation.
     }
 
     /**
@@ -65,7 +92,8 @@ public class DatabaseInit implements ServletContextInitializer {
 
             Application application1 = Application.builder()
                     .module(nextModule())
-                    .hours(faker.number().numberBetween(1, 17))
+                    .minHours(hoursGenerator())
+                    .maxHours(hoursGenerator())
                     .lecturer(faker.name().fullName())
                     .grade(faker.number().randomDouble(1, 1, 5))
                     .semester("SS2020")
@@ -76,7 +104,8 @@ public class DatabaseInit implements ServletContextInitializer {
 
             Application application2 = Application.builder()
                     .module(nextModule())
-                    .hours(faker.number().numberBetween(1, 17))
+                    .minHours(hoursGenerator())
+                    .maxHours(hoursGenerator())
                     .lecturer(faker.name().fullName())
                     .grade(faker.number().randomDouble(1, 1, 5))
                     .semester("SS2020")
@@ -89,7 +118,6 @@ public class DatabaseInit implements ServletContextInitializer {
                     .uniserial(truncate(faker.animal().name(), 5) + faker.number().digits(3))
                     .firstName(faker.name().firstName())
                     .surname(faker.name().lastName())
-                    .title(faker.name().prefix())
                     .comment(truncate(faker.yoda().quote(), 255))
                     .course(faker.educator().course())
                     .nationality(faker.nation().nationality())
@@ -104,6 +132,8 @@ public class DatabaseInit implements ServletContextInitializer {
                     .build();
             applicantRepository.save(applicant);
         }
+        applicantRepository.save(createMainRole("studentin", faker));
+
     }
 
     private String nextModule() {
@@ -118,6 +148,20 @@ public class DatabaseInit implements ServletContextInitializer {
             return "männlich";
         }
         return "weiblich";
+    }
+
+    @SuppressWarnings("checkstyle:MagicNumber")
+    private int hoursGenerator() {
+        switch (random.nextInt(3)) {
+            case 0:
+                return 7;
+            case 1:
+                return 9;
+            case 2:
+                return 17;
+            default:
+                return 0;
+        }
     }
 
     @SuppressWarnings("checkstyle:MagicNumber")
@@ -161,5 +205,101 @@ public class DatabaseInit implements ServletContextInitializer {
                 break;
         }
         return ret;
+    }
+
+    @SuppressWarnings("checkstyle:MagicNumber")
+    private Applicant createMainRole(final String role, final Faker faker) {
+        Address address = Address.builder()
+                .street(faker.address().streetName())
+                .houseNumber(faker.address().buildingNumber())
+                .city(faker.address().city())
+                .country(faker.address().country())
+                .zipcode(faker.number().numberBetween(10000, 99999))
+                .build();
+
+        Certificate certificate = Certificate.builder()
+                .course(faker.educator().course())
+                .name("Bachelor")
+                .build();
+
+        Application application1 = Application.builder()
+                .module("Rechnerarchitektur")
+                .finalHours(hoursGenerator())
+                .minHours(hoursGenerator())
+                .maxHours(hoursGenerator())
+                .lecturer(faker.name().fullName())
+                .grade(faker.number().randomDouble(1, 1, 5))
+                .semester("SS2020")
+                .comment(truncate(faker.rickAndMorty().quote(), 255))
+                .role(getRole())
+                .priority(faker.number().numberBetween(1, 4))
+                .build();
+
+        Application application2 = Application.builder()
+                .module("Theoretische Informatik")
+                .finalHours(hoursGenerator())
+                .minHours(hoursGenerator())
+                .maxHours(hoursGenerator())
+                .lecturer(faker.name().fullName())
+                .grade(faker.number().randomDouble(1, 1, 5))
+                .semester("SS2020")
+                .comment(truncate(faker.rickAndMorty().quote(), 255))
+                .role(getRole())
+                .priority(faker.number().numberBetween(1, 4))
+                .build();
+
+        return Applicant.builder()
+                .uniserial(role)
+                .firstName(role)
+                .surname(role)
+                .comment(truncate(faker.yoda().quote(), 255))
+                .course("Informatik")
+                .nationality(faker.nation().nationality())
+                .birthday(getDate(faker.date().birthday()))
+                .status("Einstellung")
+                .application(application1)
+                .application(application2)
+                .birthplace(faker.address().country())
+                .gender(nextGender())
+                .certs(certificate)
+                .address(address)
+                .build();
+    }
+
+    @SuppressWarnings("checkstyle:MagicNumber")
+    private void fakeDistribution() {
+        int i = 0;
+        String[] names = {"Rechnerarchitektur", "Theoretische Informatik", "Aldat"};
+        List<Applicant> applications = applicantRepository.findAll();
+        List<Distribution> all = new ArrayList<>();
+        int size = applications.size();
+        int trd = size / 3;
+        for (int x = 1; x < 4; x++) {
+            Collection<Applicant> apps = new ArrayList<>();
+            for (int j = 0; i < trd; i++) {
+                apps.add(applications.get(j + (x * trd)));
+            }
+            Distribution distribution = Distribution.builder()
+                    .module(names[x - 1])
+                    .employees(apps)
+                    .build();
+            all.add(distribution);
+        }
+        distributionRepository.saveAll(all);
+
+    }
+
+    @SuppressWarnings("checkstyle:MagicNumber")
+    private void fakeEvaluations(final Faker faker) {
+        applicationRepository.findAll().forEach(application -> {
+                    Evaluation evaluation = Evaluation.builder()
+                            .comment(truncate(faker.yoda().quote(), 255))
+                            .hours(hoursGenerator())
+                            .priority(faker.number().numberBetween(1, 4))
+                            .application(application)
+                            .build();
+                    evaluationRepository.save(evaluation);
+                }
+        );
     }
 }

@@ -7,7 +7,10 @@ import mops.model.classes.Application;
 import mops.model.classes.Certificate;
 import mops.model.classes.webclasses.WebAddress;
 import mops.model.classes.webclasses.WebApplicant;
+import mops.model.classes.webclasses.WebApplication;
+import mops.model.classes.webclasses.WebCertificate;
 import mops.services.ApplicantService;
+import mops.services.ApplicationService;
 import mops.services.CSVService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
@@ -38,6 +41,8 @@ public class ApplicationController {
 
     @Autowired
     private ApplicantService applicantService;
+    @Autowired
+    private ApplicationService applicationService;
 
     private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
         KeycloakPrincipal principal = (KeycloakPrincipal) token.getPrincipal();
@@ -77,14 +82,15 @@ public class ApplicationController {
     @Secured("ROLE_studentin")
     public String newAppl(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
-            WebApplicant webApplicant = WebApplicant.builder()
-                    .build();
+            WebApplicant webApplicant = WebApplicant.builder().build();
             WebAddress webAddress = WebAddress.builder().build();
+            WebCertificate webCertificate = WebCertificate.builder().build();
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("countries", CSVService.getCountries());
             model.addAttribute("courses", CSVService.getCourses());
             model.addAttribute("webApplicant", webApplicant);
             model.addAttribute("webAddress", webAddress);
+            model.addAttribute("webCertificate", webCertificate);
             model.addAttribute("modules", CSVService.getModules());
         }
         return "applicant/applicationPersonal";
@@ -129,6 +135,7 @@ public class ApplicationController {
      * @param applicantBindingResult the result of validating webApplicant
      * @param webAddress webAddress and its data
      * @param addressBindingResult the result of validating webAddress
+     * @param webCertificate webCertificate and its data
      * @param model Model
      * @param modules the module the Applicant wants to apply for
      * @return applicationModule.html
@@ -138,7 +145,7 @@ public class ApplicationController {
     public String modul(final KeycloakAuthenticationToken token,
                             @Valid final WebApplicant webApplicant, final BindingResult applicantBindingResult,
                             @Valid final WebAddress webAddress, final BindingResult addressBindingResult,
-                            final Model model,
+                            final Model model, final WebCertificate webCertificate
                             @RequestParam("modules") final String modules) {
 
         if (applicantBindingResult.hasErrors()) {
@@ -172,37 +179,44 @@ public class ApplicationController {
         }
 
         if (token != null) {
-            String street = webAddress.getStreet();
-            Address address = Address.builder()
-                    .street(street.substring(0, street.indexOf(' ')))
-                    .houseNumber(street.substring(street.indexOf(' ') + 1))
-                    .city(webAddress.getCity())
-                    .zipcode(webAddress.getZipcode())
-                    .build();
-            Applicant applicant = Applicant.builder()
-                    .firstName("Paulin")
-                    .surname("Dürwald")
-                    .address(address)
-                    .birthday(webApplicant.getBirthday())
-                    .birthplace(webApplicant.getBirthplace())
-                    .gender(webApplicant.getGender())
-                    .nationality(webApplicant.getNationality())
-                    .course(webApplicant.getCourse())
-                    .status(webApplicant.getStatus())
-                    .comment(webApplicant.getComment())
-                    .build();
+            Address address = applicantService.buildAddress(webAddress);
+            Certificate certificate = applicantService.buildCertificate(webCertificate);
+            Applicant applicant = applicantService.buildApplicant(token.getName(), webApplicant, address, certificate);
             applicantService.saveApplicant(applicant);
-            applicantService.findAll().forEach(System.out::println);
-            model.addAttribute("webApplicant", webApplicant);
             model.addAttribute("account", createAccountFromPrincipal(token));
-            model.addAttribute("module", modules);
+            model.addAttribute("modul", modules);
             model.addAttribute("semesters", CSVService.getSemester());
             model.addAttribute("modules", CSVService.getModules());
-            model.addAttribute("webAddress", webAddress);
+            model.addAttribute("webApplication", WebApplication.builder().build());
         }
         return "applicant/applicationModule";
     }
 
+    /**
+     * saves the current module application + calls for information for another module
+     * @param token security token
+     * @param webApplication the Application with its information
+     * @param model model
+     * @param module the module the applicant wants to apply for next
+     * @return html for another Modul
+     */
+    @PostMapping("weiteresModul")
+    public String anotherModule(final KeycloakAuthenticationToken token,
+                              final WebApplication webApplication, final Model model,
+                              @RequestParam("modules") final String module) {
+        Applicant applicant = applicantService.findByUniserial(token.getName());
+        Application application = applicationService.buildApplication(webApplication);
+        Set<Application> applications = applicant.getApplications();
+        applications.add(application);
+        applicant.toBuilder().applications(applications);
+        applicantService.saveApplicant(applicant);
+        model.addAttribute("account", createAccountFromPrincipal(token));
+        model.addAttribute("modul", module);
+        model.addAttribute("semesters", CSVService.getSemester());
+        model.addAttribute("modules", CSVService.getModules());
+        model.addAttribute("webApplication", webApplication);
+        return "applicant/applicationModule";
+    }
 
     /**
      * @param token
@@ -258,11 +272,12 @@ public class ApplicationController {
                     .uniserial("has220")
                     .applications(appls)
                     .build();
-            applicantService.updateApplicantWithouChangingApplications(applicant);
+            applicantService.updateApplicantWithoutChangingApplications(applicant);
             model.addAttribute("applicant", applicantService.findByUniserial("has220"));
         }
         return "applicant/applicationOverview";
     }
+
 
     /**
      * The GetMapping for the overview
@@ -279,54 +294,9 @@ public class ApplicationController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("applicant", applicantService.findByUniserial("has220"));
-            applicantService.updateApplicantWithouChangingApplications(applicant1);
+            applicantService.updateApplicantWithoutChangingApplications(applicant1);
         }
         return "applicant/applicationOverview";
-    }
-
-    /**
-     * website for more modules, saves the former module and provides input for the next one
-     *
-     * @param token     keycloaktoken
-     * @param model     model
-     * @param modules   the module the applicant wants to apply for now
-     * @param module    the module the applicant applied for
-     * @param workload  hours the applicant may apply for
-     * @param grade     the grade the applicant had in the module
-     * @param semester  the semester the applicant completed the module
-     * @param lecturer  the lecturer the applicant wrote his exam with
-     *                  //    * @param tasks the role he wants to take
-     *                  //    * @param priority his priority
-     * @param applicant probably not neccessary?
-     * @return the same applicationModule.html
-     */
-    @PostMapping("/weiteresModul")
-    @SuppressWarnings("checkstyle:ParameterNumber")
-    public String weiteresModul(final KeycloakAuthenticationToken token,
-                                final Model model,
-                                @RequestParam("modules") final String modules,
-                                @RequestParam("module") final String module,
-                                @RequestParam("workload") final String workload,
-                                @RequestParam("grade") final String grade,
-                                @RequestParam("semesters") final String semester,
-                                @RequestParam("lecturer") final String lecturer,
-                                //                              @RequestParam("tasks") final String tasks,
-                                //                              @RequestParam("priority") final String priority,
-                                @RequestParam("applicant") final String applicant) {
-        if (token != null) {
-            model.addAttribute("account", createAccountFromPrincipal(token));
-            model.addAttribute("module", modules);
-            model.addAttribute("semesters", CSVService.getSemester());
-            model.addAttribute("modules", CSVService.getModules());
-            model.addAttribute("applicant", applicant);
-            Application.builder()
-                    .module(module)
-                    .lecturer(lecturer)
-                    .semester(semester)
-                    .grade(Double.parseDouble(grade))
-                    .build();
-        }
-        return "applicant/applicationModule";
     }
 
     /**
@@ -338,13 +308,71 @@ public class ApplicationController {
     @GetMapping("bewerbungsUebersicht")
     public String dashboardOverview(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
-            model.addAttribute("account", createAccountFromPrincipal(token));
-            model.addAttribute("applicant", applicantService.findByUniserial("has220"));
+            Account account = createAccountFromPrincipal(token);
+            model.addAttribute("account", account);
+            model.addAttribute("applicant", applicantService.findByUniserial(account.getName()));
+
         }
         return "applicant/applicationOverview";
     }
 
     /**
+     * xx
+     * @param token xx
+     * @param model xx
+     * @return xx
+     */
+    @GetMapping("/dummy")
+    public String dummy(final KeycloakAuthenticationToken token, final Model model) {
+        final int zipcode = 40223;
+        Address address = Address.builder()
+                .street("Suitbertusstraße")
+                .houseNumber("134")
+                .city("Düsseldorf")
+                .zipcode(zipcode)
+                .build();
+        Certificate certificate = Certificate.builder()
+                .name("none")
+                .course("none")
+                .build();
+        Applicant applicant = Applicant.builder()
+                .uniserial("iamkawaiineko")
+                .surname("Dürwald")
+                .firstName("Paulin")
+                .address(address)
+                .birthday("1999-06-10")
+                .birthplace("Ho-Chi-Minh, Vietnam")
+                .gender("weiblich")
+                .nationality("Deutschland")
+                .course("Informatik")
+                .status("neueinstellung")
+                .certs(certificate)
+                .comment("Ich mag Katzen")
+                .build();
+        model.addAttribute("applicant", applicant);
+        return "applicant/applicationOverviewThymeleaf";
+    }
+
+    /**
+     * overview after Application is finished (also saves the last webApplication)
+     * @param token the keycloak token
+     * @param model the model
+     * @param webApplication the last webApplication and its information
+     * @return the overviewhtml
+     */
+    @PostMapping("/uebersicht")
+    public String overview(final KeycloakAuthenticationToken token, final Model model,
+                           final WebApplication webApplication) {
+        Applicant applicant = applicantService.findByUniserial(token.getName());
+        Application application = applicationService.buildApplication(webApplication);
+        Set<Application> applications = applicant.getApplications();
+        applications.add(application);
+        applicant.toBuilder().applications(applications);
+        applicantService.saveApplicant(applicant);
+        model.addAttribute("applicant", applicant);
+        return "applicant/applicationOverviewThymeleaf";
+    }
+/*    /**
      * Overview, will be used to save the last module and shows the data the applicant filled in
      *
      * @param token     keycloaktone
@@ -359,7 +387,7 @@ public class ApplicationController {
      *                  //  * @param priority "
      * @return overview.html
      */
-    @PostMapping("/uebersicht")
+ /*   @PostMapping("/uebersicht")
     @SuppressWarnings("checkstyle:ParameterNumber")
     public String postOverview(final KeycloakAuthenticationToken token,
                                final Model model,
@@ -379,12 +407,13 @@ public class ApplicationController {
                     .module(module)
                     .lecturer(lecturer)
                     .semester(semester)
-                    .hours(Integer.parseInt(workload))
+                    .minHours(Integer.parseInt(workload))
+                    .maxHours(Integer.parseInt(workload))
                     .grade(Double.parseDouble(grade))
                     .build();
         }
         return "applicant/applicationOverview";
-    }
+    }*/
 
 
     /**

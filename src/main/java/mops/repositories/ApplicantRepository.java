@@ -1,6 +1,7 @@
 package mops.repositories;
 
 import mops.model.classes.Applicant;
+import mops.model.classes.Application;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -19,10 +20,17 @@ public interface ApplicantRepository extends CrudRepository<Applicant, Long> {
     List<Applicant> findAll();
 
     /**
-     * Finds all Applicants with give uniserial
+     * Finds Applicant with given uniserial
      *
      * @param uniserial Unikennung
-     * @return List of Applicants
+     * @return the applicant
      */
-    List<Applicant> findByUniserial(String uniserial);
+    Applicant findByUniserial(String uniserial);
+
+    /**
+     * Finds Applicant by Application
+     * @param application application
+     * @return applicant
+     */
+    Applicant findByApplications(Application application);
 }

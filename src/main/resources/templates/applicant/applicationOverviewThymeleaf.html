@@ -41,22 +41,27 @@
                 <a class="btn btn-outline-primary" style="float: right;" th:href="@{bearbeitePersoenlicheDaten}">
                     Bearbeiten </a>
             </div>
-            <div class="card-body">
+            <div class="card-body" th:object="${applicant}">
                 <div class="col-auto">
                     <div class="row">
                         <div class="col-6">
                             <div class="row">
-                                <label for="name">Name:&nbsp;</label>
-                                <label id="name" th:text="${applicant.surname}">Max Mustermann</label>
+                                <label for="surname">Name:&nbsp</label>
+                                <label id="firstName" th:text="${applicant.firstName}">Max&nbsp</label>
+                                &nbsp
+                                <label id="surname" th:text="${applicant.surname}">Mustermann</label>
                             </div>
                             <div class="row">
-                                <label for="email">E-Mail:&nbsp;</label>
+                                <label for="email">E-Mail:&nbsp </label>
                                 <label id="email">maxmustermann@mustermail.de</label>
                             </div>
                             <div class="row">
-                                <label for="streetplusnumber">Straße und Hausnummer:&nbsp;</label>
-                                <label id="streetplusnumber" th:text="${applicant.address.street}">Musterstraße
-                                    1</label>
+                                <label for="street">Straße:&nbsp </label>
+                                <label id="street" th:text="${applicant.address.street}">Musterstraße</label>
+                            </div>
+                            <div class="row">
+                                <label for="houseNumber">Hausnummer:&nbsp </label>
+                                <label id="houseNumber" th:text="${applicant.address.houseNumber}">1</label>
                             </div>
                             <div class="row">
                                 <label for="place">Ort:&nbsp;</label>
@@ -85,21 +90,21 @@
                                 <label id="graduation" th:text="${applicant.certs.name}">Bachelor</label>
                             </div>
                             <div class="row">
-                                <label for="graduationsubject">Berreits Abgeschlossenes Fach:&nbsp;</label>
+                                <label for="graduationsubject">Bereits abgeschlossenes Fach:&nbsp;</label>
                                 <label id="graduationsubject" th:text="${applicant.certs.course}">BWL</label>
                             </div>
                             <div class="row">
                                 <label for="information">Ihre sonstigen Angaben:&nbsp;</label>
                             </div>
                             <div class="row">
-                                <label id="information">Nehmt mich, denn ich bin sehr gut ...</label>
+                                <label id="information" th:text="${applicant.comment}">Nehmt mich, denn ich bin sehr gut ...</label>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
+   <!--     <div class="row">
             <div class="col-sm-4" th:each="appl: ${applicant.applications}">
                 <div class="card bg-light mb-3 border-primary">
                     <div class="card-header">
@@ -140,7 +145,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>-->
     </div>
 </main>
 </body>

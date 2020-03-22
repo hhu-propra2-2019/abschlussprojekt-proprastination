@@ -1,6 +1,5 @@
 package mops.model.classes.webclasses;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,14 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder(toBuilder = true)
-public class WebApplication {
+public class WebDistributorApplication {
     private String module;
-    private int workload;
-    private int priority;
-    private double grade;
-    private String lecturer;
-    private String semester;
-    private String role;
-    private String comment;
-
+    private String applicantPriority;
+    private String organizerPriority;
+    private String minHours;
+    private String maxHours;
+    private String organizerHours;
 }

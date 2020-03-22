@@ -165,7 +165,7 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <label for="graduation">
+                            <label th:for="graduation">
                                 Was ist der bisher höchste Universitätsabschluss, den Sie erreicht haben?
                                 Bitte schreiben Sie in das Textfeld, in welchem Fach Sie Ihren Abschluss erreicht haben.
                                 Falls der Abschluss nicht an der HHU erlangt wurde, schreiben sie dies bitte dazu.
@@ -173,20 +173,21 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-6">
-                            <select name="graduation" id="graduation" class="form-control"
-                            required>
-                                <option value="none">kein Universitätsabschluss</option>
-                                <option value="bachelor">Bachelor</option>
-                                <option value="master">Master</option>
-                                <option value="diplom">Diplom</option>
-                                <option value="staatsexamen">Staatsexamen</option>
-                                <option value="else">Anderes</option>
+                        <div class="col-6" th:object="${webCertificate}" >
+                            <select th:name="graduation" th:id="name" class="form-control" required
+                                    th:field="*{graduation}" th:attr="value = ${webCertificate.graduation}">
+                                <option th:value="none">kein Universitätsabschluss</option>
+                                <option th:value="bachelor">Bachelor</option>
+                                <option th:value="master">Master</option>
+                                <option th:value="diplom">Diplom</option>
+                                <option th:value="staatsexamen">Staatsexamen</option>
+                                <option th:value="else">Anderes</option>
                             </select> <br>
                         </div>
                         <div class="col-6">
-                            <input type="text" name="graduationsubject" id="graduationsubject"
-                                   class="form-control" placeholder="Abschlussfach"> <br>
+                            <input th:type="text" th:name="graduationsubject" th:id="graduationsubject"
+                                   th:field="*{course}" th:attr="value = ${webCertificate.course}"
+                                   class="form-control" placeholder="Abschlussfach" th:value="none"> <br>
                         </div>
                     </div>
                     <div class="row">
@@ -229,7 +230,7 @@
                     </div>
                 </div>
             </div>
-        </form>>
+        </form>
     </div>
 </main>
 </body>

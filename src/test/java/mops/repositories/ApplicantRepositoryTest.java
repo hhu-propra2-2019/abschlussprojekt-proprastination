@@ -40,7 +40,8 @@ class ApplicantRepositoryTest {
                 .course("Hauskunde")
                 .build();
         application = Application.builder()
-                .hours(17)
+                .minHours(7)
+                .maxHours(17)
                 .module("Info")
                 .priority(1)
                 .grade(1.3)
@@ -56,7 +57,6 @@ class ApplicantRepositoryTest {
                 .uniserial("ask111")
                 .firstName("Hans")
                 .surname("Anders")
-                .title("Baumgarten")
                 .address(address)
                 .birthday("20.20.2020")
                 .course("Hausbau")
