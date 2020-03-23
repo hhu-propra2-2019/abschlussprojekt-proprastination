@@ -30,4 +30,7 @@ public interface ApplicationRepository extends CrudRepository<Application, Long>
      * @return the application
      */
     Application findByApplicantAndModule(Applicant applicant, String module);
+
+    @Override
+    List<Application> findAll();
 }

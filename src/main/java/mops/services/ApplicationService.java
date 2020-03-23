@@ -6,6 +6,7 @@ import mops.model.classes.webclasses.WebApplication;
 import mops.repositories.ApplicationRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -56,6 +57,10 @@ public class ApplicationService {
         return applicationRepository.findByModule(module);
     }
 
+    public void save(final Application application) {
+        applicationRepository.save(application);
+    }
+
     /**
      * Finds application by uniserial and module
      * @param uniserial the applicant uniserial
@@ -73,5 +78,9 @@ public class ApplicationService {
      */
     public List<Application> findApplicationByApplicant(final Applicant applicant) {
         return applicationRepository.findAllByApplicant(applicant);
+    }
+
+    public List<Application> findAll() {
+        return applicationRepository.findAll();
     }
 }
