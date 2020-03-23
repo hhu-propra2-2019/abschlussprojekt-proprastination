@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en"
+      th:replace="~{mopslayout :: html(name='Erstellen der Module', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <th:block th:fragment="headcontent">
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+
+        <link href="../static/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"
+              th:href="@{node_modules/bootstrap/dist/css/bootstrap.min.css}">
+
+    </th:block>
+    <title>Organize Applications</title>
+</head>
+
+<body>
+<header>
+    <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
+        <ul>
+            <li>
+                <a th:href="@{/}">
+                    Startseite
+                </a>
+            </li>
+            <li>
+                <a th:href="@{./}">
+                    Dashboard
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<main th:fragment="bodycontent">
+    <form th:action="@{neuesModul}" th:method="POST" th:object="${Module}">
+        <div class="card bg-light mb-3 border-primary">
+            <div class="card-header container-fluid">
+                <div class="row">
+                    <h2 style="margin-bottom: .0rem" class="card-text col-6 float-left">Neues Modul</h2>
+                    <div class="col-6">
+                        <button class="btn btn-outline-primary btn-sm float-right" th:type="submit">Speichern</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row container-fluid">
+                    <div class="col float-left">
+                        <input type="text" name="name" id="name"
+                               class="form-control" placeholder="Name des Moduls" th:field="*{name}">
+                    </div>
+                    <div class="col">
+                        <input type="text" name="shortName" id="shortName"
+                               class="form-control" placeholder="Abkürzung des Moduls" th:field="*{shortName}">
+                    </div>
+                    <div class="col float-right">
+                        <input type="text" name="profName" id="profName"
+                               class="form-control" placeholder="Zugeordnete Person" th:field="*{profName}">
+                    </div>
+                </div><br><br>
+                <div class="row">
+                    <div class="card-text col">
+                        Füllen Sie bitte alle unteren Felder aus. Geben
+                        Sie für das jeweilige Feld die Anzahl an Personen
+                        an, welche für die ausgewählte Stundenanzahl eingestellt
+                        werden sollen.
+                    </div>
+                </div><br>
+                <div class="row">
+                    <div class="col">
+                        <input type="number" name="sevenHourLimit" id="sevenHourLimit"
+                               class="form-control" placeholder="Tutoren mit 7 Stunden" th:field="*{sevenHourLimit}">
+                    </div>
+                    <div class="col">
+                        <input type="number" name="nineHourLimit" id="nienHourLimit"
+                               class="form-control" placeholder="Tutoren mit 9 Stunden" th:field="*{nineHourLimit}">
+                    </div>
+                    <div class="col">
+                        <input type="number" name="seventeenHourLimit" id="seventeenHourLimit"
+                               class="form-control" placeholder="Tutoren mit 17 Stunden" th:field="*{seventeenHourLimit}">
+                    </div>
+                    <div class="col">
+                        <input type="number" name="hourLimit" id="hourLimit"
+                               class="form-control" placeholder="Stundenlimit Gesamt" th:field="*{hourLimit}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div th:replace="${content} ? ${content}: ~{}"></div>
+</main>
+
+</body>
+</html>
