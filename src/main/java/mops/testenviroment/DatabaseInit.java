@@ -7,22 +7,29 @@ import mops.model.classes.Application;
 import mops.model.classes.Certificate;
 import mops.model.classes.Distribution;
 import mops.model.classes.Evaluation;
+import mops.model.classes.Module;
+import mops.model.classes.Priority;
+import mops.model.classes.Role;
 import mops.repositories.ApplicantRepository;
 import mops.repositories.ApplicationRepository;
 import mops.repositories.DistributionRepository;
 import mops.repositories.EvaluationRepository;
+import mops.repositories.ModuleRepository;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletContext;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
+@SuppressWarnings("checkstyle:MagicNumber")
 @Component
 public class DatabaseInit implements ServletContextInitializer {
     private static final int ENTRYNUMBER = 30;
@@ -36,6 +43,8 @@ public class DatabaseInit implements ServletContextInitializer {
 
     private transient EvaluationRepository evaluationRepository;
 
+    private transient ModuleRepository moduleRepository;
+
 
     /**
      * Inits.
@@ -44,16 +53,19 @@ public class DatabaseInit implements ServletContextInitializer {
      * @param applicationRepository  b
      * @param distributionRepository c
      * @param evaluationRepository   d
+     * @param moduleRepository       e
      */
     @SuppressWarnings("checkstyle:HiddenField")
     public DatabaseInit(final ApplicantRepository applicantRepository,
                         final ApplicationRepository applicationRepository,
                         final DistributionRepository distributionRepository,
-                        final EvaluationRepository evaluationRepository) {
+                        final EvaluationRepository evaluationRepository,
+                        final ModuleRepository moduleRepository) {
         this.applicantRepository = applicantRepository;
         this.applicationRepository = applicationRepository;
         this.distributionRepository = distributionRepository;
         this.evaluationRepository = evaluationRepository;
+        this.moduleRepository = moduleRepository;
     }
 
 
@@ -64,9 +76,10 @@ public class DatabaseInit implements ServletContextInitializer {
      */
     public void onStartup(final ServletContext servletContext) {
         Faker faker = new Faker(Locale.GERMAN);
+        fakeModules(faker);
         fakeApplicants(faker);
         fakeEvaluations(faker);
-        //fakeDistribution(); //Primary Key violation.
+        fakeDistribution();
     }
 
     /**
@@ -89,29 +102,32 @@ public class DatabaseInit implements ServletContextInitializer {
                     .course(faker.educator().course())
                     .name(faker.funnyName().name())
                     .build();
+            Module[] modules = nextModules();
 
             Application application1 = Application.builder()
-                    .module(nextModule())
-                    .minHours(hoursGenerator())
-                    .maxHours(hoursGenerator())
+                    .module(modules[0])
+                    .minHours(faker.number().numberBetween(1, 10))
+                    .maxHours(faker.number().numberBetween(10, 17))
+                    .finalHours(nextFinalHour())
                     .lecturer(faker.name().fullName())
-                    .grade(faker.number().randomDouble(1, 1, 5))
+                    .grade(nextGrade())
                     .semester("SS2020")
                     .comment(truncate(faker.rickAndMorty().quote(), 255))
                     .role(getRole())
-                    .priority(faker.number().numberBetween(1, 4))
+                    .priority(nextPriority())
                     .build();
 
             Application application2 = Application.builder()
-                    .module(nextModule())
-                    .minHours(hoursGenerator())
-                    .maxHours(hoursGenerator())
+                    .module(modules[1])
+                    .minHours(faker.number().numberBetween(1, 10))
+                    .maxHours(faker.number().numberBetween(10, 17))
+                    .finalHours(nextFinalHour())
                     .lecturer(faker.name().fullName())
-                    .grade(faker.number().randomDouble(1, 1, 5))
+                    .grade(nextGrade())
                     .semester("SS2020")
                     .comment(truncate(faker.rickAndMorty().quote(), 255))
                     .role(getRole())
-                    .priority(faker.number().numberBetween(1, 4))
+                    .priority(nextPriority())
                     .build();
 
             Applicant applicant = Applicant.builder()
@@ -136,11 +152,16 @@ public class DatabaseInit implements ServletContextInitializer {
 
     }
 
-    private String nextModule() {
-        if (random.nextBoolean()) {
-            return "RDB";
+    private Module[] nextModules() {
+        long value = random.nextInt(5) + 1;
+        long value2 = random.nextInt(5) + 1;
+        while (value == value2) {
+            value2 = random.nextInt(5) + 1;
         }
-        return "Rechenarchitektur";
+        Module[] modules = new Module[2];
+        modules[0] = moduleRepository.findById(value).get();
+        modules[1] = moduleRepository.findById(value2).get();
+        return modules;
     }
 
     private String nextGender() {
@@ -150,21 +171,35 @@ public class DatabaseInit implements ServletContextInitializer {
         return "weiblich";
     }
 
-    @SuppressWarnings("checkstyle:MagicNumber")
-    private int hoursGenerator() {
-        switch (random.nextInt(3)) {
+    private Priority nextPriority() {
+        Priority prio;
+        switch (random.nextInt(4)) {
             case 0:
-                return 7;
+                prio = Priority.SehrHoch;
+                break;
             case 1:
-                return 9;
+                prio = Priority.Hoch;
+                break;
             case 2:
-                return 17;
+                prio = Priority.Neutral;
+                break;
             default:
-                return 0;
+                prio = Priority.Negative;
+                break;
         }
+        return prio;
     }
 
-    @SuppressWarnings("checkstyle:MagicNumber")
+    private int nextFinalHour() {
+        int[] hours = {7, 9, 17};
+        return hours[random.nextInt(3)];
+    }
+
+    private double nextGrade() {
+        double[] grades = {1.0, 1.3, 1.7, 2.0, 2.3, 2.7, 3.0, 3.3, 3.7, 4.0, 5.0};
+        return grades[random.nextInt(11)];
+    }
+
     private String getStatus() {
         String ret;
         switch (random.nextInt(3)) {
@@ -191,17 +226,17 @@ public class DatabaseInit implements ServletContextInitializer {
     }
 
     @SuppressWarnings("checkstyle:MagicNumber")
-    private String getRole() {
-        String ret;
+    private Role getRole() {
+        Role ret;
         switch (random.nextInt(3)) {
             case 0:
-                ret = "Tutor";
+                ret = Role.KORREKTOR;
                 break;
             case 1:
-                ret = "Korrektor";
+                ret = Role.TUTOR;
                 break;
             default:
-                ret = "Beides";
+                ret = Role.NONE;
                 break;
         }
         return ret;
@@ -222,30 +257,32 @@ public class DatabaseInit implements ServletContextInitializer {
                 .name("Bachelor")
                 .build();
 
+        Module[] modules = nextModules();
+
         Application application1 = Application.builder()
-                .module("Rechnerarchitektur")
-                .finalHours(hoursGenerator())
-                .minHours(hoursGenerator())
-                .maxHours(hoursGenerator())
+                .module(modules[0])
+                .finalHours(nextFinalHour())
+                .minHours(faker.number().numberBetween(1, 10))
+                .maxHours(faker.number().numberBetween(10, 17))
                 .lecturer(faker.name().fullName())
-                .grade(faker.number().randomDouble(1, 1, 5))
+                .grade(nextGrade())
                 .semester("SS2020")
                 .comment(truncate(faker.rickAndMorty().quote(), 255))
                 .role(getRole())
-                .priority(faker.number().numberBetween(1, 4))
+                .priority(nextPriority())
                 .build();
 
         Application application2 = Application.builder()
-                .module("Theoretische Informatik")
-                .finalHours(hoursGenerator())
-                .minHours(hoursGenerator())
-                .maxHours(hoursGenerator())
+                .module(modules[1])
+                .finalHours(nextFinalHour())
+                .minHours(faker.number().numberBetween(1, 10))
+                .maxHours(faker.number().numberBetween(10, 17))
                 .lecturer(faker.name().fullName())
-                .grade(faker.number().randomDouble(1, 1, 5))
+                .grade(nextGrade())
                 .semester("SS2020")
                 .comment(truncate(faker.rickAndMorty().quote(), 255))
                 .role(getRole())
-                .priority(faker.number().numberBetween(1, 4))
+                .priority(nextPriority())
                 .build();
 
         return Applicant.builder()
@@ -269,18 +306,19 @@ public class DatabaseInit implements ServletContextInitializer {
     @SuppressWarnings("checkstyle:MagicNumber")
     private void fakeDistribution() {
         int i = 0;
-        String[] names = {"Rechnerarchitektur", "Theoretische Informatik", "Aldat"};
         List<Applicant> applications = applicantRepository.findAll();
         List<Distribution> all = new ArrayList<>();
+        List<Module> modules = moduleRepository.findAll();
         int size = applications.size();
-        int trd = size / 3;
-        for (int x = 1; x < 4; x++) {
+        int msize = modules.size();
+        int part = size / msize;
+        for (int x = 0; x < msize; x++) {
             Collection<Applicant> apps = new ArrayList<>();
-            for (int j = 0; i < trd; i++) {
-                apps.add(applications.get(j + (x * trd)));
+            for (int j = 0; j < part; j++) {
+                apps.add(applications.get(j + (x * part)));
             }
             Distribution distribution = Distribution.builder()
-                    .module(names[x - 1])
+                    .module(modules.get(x))
                     .employees(apps)
                     .build();
             all.add(distribution);
@@ -294,12 +332,28 @@ public class DatabaseInit implements ServletContextInitializer {
         applicationRepository.findAll().forEach(application -> {
                     Evaluation evaluation = Evaluation.builder()
                             .comment(truncate(faker.yoda().quote(), 255))
-                            .hours(hoursGenerator())
-                            .priority(faker.number().numberBetween(1, 4))
+                            .hours(faker.number().numberBetween(7, 17))
+                            .priority(nextPriority())
                             .application(application)
                             .build();
                     evaluationRepository.save(evaluation);
                 }
         );
+    }
+
+    @SuppressWarnings("checkstyle:MagicNumber")
+    private void fakeModules(final Faker faker) {
+        String[] modulenames = {"Programmier Praktikum 1", "Programmier Praktikum 2",
+                "RDB",
+                "Algorithmen und Datenstrukturen", "Theoretische Informatik"};
+        for (String s : modulenames) {
+            Instant date = faker.date().future(300, 30, TimeUnit.DAYS).toInstant();
+            Module module = Module.builder()
+                    .name(s)
+                    .deadline(date)
+                    .build();
+            moduleRepository.save(module);
+        }
+
     }
 }

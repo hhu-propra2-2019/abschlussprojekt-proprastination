@@ -17,15 +17,16 @@ public class ApplicationControllerTest {
     @Autowired
     MockMvc mockMvc;
 
+    //FIXME: Test needs to be updated to use database/ mock of database
     @Test
-    @WithMockKeycloackAuth(name = "test_dödel", roles = "studentin")
+    @WithMockKeycloackAuth(name = "studentin", roles = "studentin")
     public void applicantCanAccessApplicant() throws Exception {
         mockMvc.perform(get("/bewerbung2/bewerber/"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    @WithMockKeycloackAuth(name = "test_dödel", roles = "orga")
+    @WithMockKeycloackAuth(name = "orga", roles = "orga")
     public void organizerCantAccessApplicant() throws Exception {
         mockMvc.perform(get("/bewerbung2/bewerber/"))
                 .andExpect(status().isForbidden());
