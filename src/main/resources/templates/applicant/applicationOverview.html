@@ -58,7 +58,8 @@
                             </div>
                             <div class="row">
                                 <label for="streetplusnumber">Straße und Hausnummer:&nbsp;</label>
-                                <label id="streetplusnumber" th:text="${applicant.address.street}">Musterstraße
+                                <label id="streetplusnumber"
+                                       th:text="${applicant.address.street} + ' ' + ${applicant.address.houseNumber}">Musterstraße
                                     1</label>
                             </div>
                             <div class="row">
