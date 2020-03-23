@@ -25,13 +25,14 @@
                     "info":     false,
                     "columns": [
                         {"name": "ProfPrio", "orderable": true, "orderDataType": "dom-select" },
-                        {"name": "Unikennung", "orderable": true},
-                        {"name": "Note", "orderable": true},
-                        {"name": "Rolle", "orderable": true},
-                        {"name": "Stunden", "orderable": true, "orderDataType": "dom-select" },
                         {"name": "AppPrio", "orderable": true},
-                        {"name": "ButtonShow", "orderable": false},
-                        {"name": "ButtonComment", "orderable": false}
+                        {"name": "Rolle", "orderable": true},
+                        {"name": "Note", "orderable": true},
+                        {"name": "MinStunden", "orderable": true},
+                        {"name": "MaxStunden", "orderable": true},
+                        {"name": "Stunden", "orderable": true, "orderDataType": "dom-select" },
+                        {"name": "Unikennung", "orderable": true},
+                        {"name": "ButtonShow", "orderable": false}
                     ]
                 } );
             } );
@@ -53,13 +54,14 @@
             <thead>
             <tr>
                 <th class="text-center">Ihre Priorität</th>
-                <th class="text-center">Unikennung</th>
+                <th class="text-center">Priorität des Bewerbers</th>
                 <th class="text-center">Note</th>
                 <th class="text-center">Rolle</th>
+                <th class="text-center">Min. Arbeitszeit</th>
+                <th class="text-center">Max. Arbeitszeit</th>
                 <th class="text-center">Stundenanzahl</th>
-                <th class="text-center">Priorität des Bewerbers</th>
+                <th class="text-center">Unikennung</th>
                 <th class="text-center">Ganze Bewerbung</th>
-                <th class="text-center">Anmerkung</th>
             </tr>
             </thead>
             <tbody>
@@ -72,9 +74,11 @@
                         <option value="4">-</option>
                     </select>
                 </td>
-                <td th:text="${appl.applicant.uniserial}" class="text-center">Mamus100</td>
+                <td th:text="${appl.priority}" class="text-center">++</td>
                 <td th:text="${appl.grade}" class="text-center">2,7</td>
                 <td th:text="${appl.role}" class="text-center">Tutor</td>
+                <td th:text="${appl.minHours} + 'h'" class="text-center">7h</td>
+                <td th:text="${appl.maxHours} + 'h'" class="text-center">9h</td>
                 <td class="text-center">
                     <select name="hours" id="hours">
                         <option value="7">7 Stunden</option>
@@ -82,12 +86,9 @@
                         <option value="17">17 Stunden</option>
                     </select>
                 </td>
-                <td th:text="${appl.priority}" class="text-center">++</td>
+                <td th:text="${appl.applicant.uniserial}" class="text-center">Mamus100</td>
                 <td class="text-center">
                     <button type="button" class="btn btn-outline-dark openBtn" data-toggle="modal" data-target="#applicationModal">Bewerbung ansehen</button>
-                </td>
-                <td class="text-center">
-                    <button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#commentModal">Anmerkung hinzufügen</button>
                 </td>
             </tr>
             </tbody>
