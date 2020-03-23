@@ -138,9 +138,9 @@ public class DatabaseInit implements ServletContextInitializer {
 
     private String nextModule() {
         if (random.nextBoolean()) {
-            return "ProPra";
+            return "RDB";
         }
-        return "TheoInfo";
+        return "Rechenarchitektur";
     }
 
     private String nextGender() {

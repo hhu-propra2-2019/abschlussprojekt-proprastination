@@ -1,28 +1,33 @@
 package mops.services;
 
 import mops.model.classes.Application;
+import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebApplication;
 import mops.repositories.ApplicationRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ApplicationService {
 
     private final ApplicantService applicantService;
     private final ApplicationRepository applicationRepository;
+    private final ModuleService moduleService;
 
     /**
      * Lets Spring inject the Repository and Service
      * @param applicantService the applicant service
      * @param applicationRepository the application repository
+     * @param moduleService
      */
     @SuppressWarnings("checkstyle:HiddenField")
     public ApplicationService(final ApplicantService applicantService,
-                              final ApplicationRepository applicationRepository) {
+                              final ApplicationRepository applicationRepository, ModuleService moduleService) {
         this.applicantService = applicantService;
         this.applicationRepository = applicationRepository;
+        this.moduleService = moduleService;
     }
 
     /**
@@ -46,5 +51,7 @@ public class ApplicationService {
         return application;
     }
 
-
+    public List<Application> findAllByModuleId(final UUID id) {
+        return applicationRepository.findAllByModule("RDB");
+    }
 }

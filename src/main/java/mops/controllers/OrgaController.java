@@ -5,6 +5,7 @@ import mops.model.Account;
 import mops.services.ApplicantService;
 import mops.services.ApplicationService;
 import mops.services.ModuleService;
+import mops.services.OrgaService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.security.access.annotation.Secured;
@@ -25,11 +26,14 @@ public class OrgaController {
     private final ApplicantService applicantService;
     private final ApplicationService applicationService;
     private final ModuleService moduleService;
+    private final OrgaService orgaService;
 
-    public OrgaController(final ApplicantService applicantService, ApplicationService applicationService, final ModuleService moduleService) {
+    public OrgaController(final ApplicantService applicantService, ApplicationService applicationService, final ModuleService moduleService,
+                          final OrgaService orgaService) {
         this.applicantService = applicantService;
         this.applicationService = applicationService;
         this.moduleService = moduleService;
+        this.orgaService = orgaService;
     }
 
     private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
@@ -94,7 +98,7 @@ public class OrgaController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
-        model.addAttribute("applications", applicationService.findAllByModuleId(Long.parseLong(id)));
+        model.addAttribute("applications", orgaService.getAllApplications(id));
         return "organizer/orgaOverview";
     }
 

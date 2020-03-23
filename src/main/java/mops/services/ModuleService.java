@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ModuleService {
@@ -33,7 +34,7 @@ public class ModuleService {
         for (int i = 0; i < strings.size(); i++) {
             modules.add(Module.builder()
                     .name(strings.get(i))
-                    .id(i)
+                    .id(UUID.randomUUID())
                     .build());
         }
         return modules;

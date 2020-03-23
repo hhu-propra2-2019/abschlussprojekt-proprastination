@@ -63,7 +63,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
+            <tr th:each="appl : ${applications}">
                 <td class="text-center">
                     <select name="priority" id="priority">
                         <option value="1">++</option>
@@ -72,9 +72,9 @@
                         <option value="4">-</option>
                     </select>
                 </td>
-                <td class="text-center">Mamus100</td>
-                <td class="text-center">2,7</td>
-                <td class="text-center">Tutor</td>
+                <td th:text="${appl.applicant.uniserial}" class="text-center">Mamus100</td>
+                <td th:text="${appl.grade}" class="text-center">2,7</td>
+                <td th:text="${appl.role}" class="text-center">Tutor</td>
                 <td class="text-center">
                     <select name="hours" id="hours">
                         <option value="7">7 Stunden</option>
@@ -82,7 +82,7 @@
                         <option value="17">17 Stunden</option>
                     </select>
                 </td>
-                <td class="text-center">++</td>
+                <td th:text="${appl.priority}" class="text-center">++</td>
                 <td class="text-center">
                     <button type="button" class="btn btn-outline-dark openBtn" data-toggle="modal" data-target="#applicationModal">Bewerbung ansehen</button>
                 </td>
