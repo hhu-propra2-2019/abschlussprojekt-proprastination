@@ -49,4 +49,13 @@ public class ModuleService {
     public Module findById(final long id) {
         return moduleRepository.findById(id).get();
     }
+
+    /**
+     * Saves a module
+     *
+     * @param module module.
+     */
+    public void save(final Module module) {
+        moduleRepository.save(module);
+    }
 }

@@ -66,7 +66,7 @@ public class ApplicationController {
         if (token != null) {
             Account account = createAccountFromPrincipal(token);
             model.addAttribute("account", account);
-            model.addAttribute("Applicant", applicantService.findByUniserial(account.getName()));
+            model.addAttribute("applicant", applicantService.findByUniserial(account.getName()));
         }
         return "applicant/applicantMain";
     }

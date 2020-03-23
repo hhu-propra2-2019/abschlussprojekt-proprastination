@@ -8,6 +8,7 @@ import mops.model.classes.Module;
 import mops.model.classes.Priority;
 import mops.model.classes.Role;
 import mops.services.ApplicantService;
+import mops.services.ModuleService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +23,9 @@ class ApplicantRepositoryTest {
 
     @Autowired
     ApplicantService service;
+
+    @Autowired
+    ModuleService moduleService;
 
     Applicant applicant;
     Application application;
@@ -75,6 +79,7 @@ class ApplicantRepositoryTest {
                 .certs(cert)
                 .applications(applications).build();
 
+        moduleService.save(module);
         service.saveApplicant(applicant);
     }
 

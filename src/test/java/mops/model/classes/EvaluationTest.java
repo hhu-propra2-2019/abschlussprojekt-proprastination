@@ -33,7 +33,7 @@ class EvaluationTest {
         assertThat(evaluation)
                 .hasFieldOrPropertyWithValue("application", application)
                 .hasFieldOrPropertyWithValue("comment", "He is awesome!")
-                .hasFieldOrPropertyWithValue("priority", 1);
+                .hasFieldOrPropertyWithValue("priority", Priority.SehrHoch);
 
     }
 
@@ -46,10 +46,11 @@ class EvaluationTest {
                 .build();
 
         String evalString = evaluation.toString();
-        String expected = "Evaluation(application=Application(minHours=0, " +
-                "finalHours=0, maxHours=0, module=ProPra2, priority=0, grade=0.0, " +
-                "lecturer=null, semester=null, role=null, comment=null), " +
-                "hours=0, comment=He is not awesome!, priority=3)";
+        String expected = "Evaluation(application=Application(minHours=0, finalHours=0, maxHours=0, " +
+                "module=Module(name=Info4, deadline=1970-01-01T00:01:40Z, shortName=null, profName=null, " +
+                "sevenHourLimit=null, nineHourLimit=null, seventeenHourLimit=null, hourLimit=null), priority=null," +
+                " grade=0.0, lecturer=null, semester=null, role=null, comment=null, applicant=null), hours=0," +
+                " comment=He is not awesome!, priority=Neutral)";
         assertThat(evalString).isEqualTo(expected);
     }
 

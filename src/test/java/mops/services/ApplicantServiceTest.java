@@ -2,6 +2,7 @@ package mops.services;
 
 import mops.model.classes.*;
 import mops.model.classes.Module;
+import mops.repositories.ModuleRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -22,15 +23,19 @@ class ApplicantServiceTest {
     @Autowired
     ApplicantService applicantService;
 
+    @Autowired
+    ModuleRepository moduleRepository;
+
     Applicant applicant;
     Application application1;
     Application application2;
     Certificate cert;
     Address address;
+    Module module;
 
     @BeforeAll
     void setup() {
-        Module module = Module.builder()
+        module = Module.builder()
                 .deadline(Instant.ofEpochSecond(100l))
                 .name("Info4")
                 .build();
@@ -90,6 +95,7 @@ class ApplicantServiceTest {
 
     @Test
     void saveApplicant() {
+        moduleRepository.save(module);
         applicantService.saveApplicant(applicant);
 
         var test = applicantService.findByUniserial(applicant.getUniserial());

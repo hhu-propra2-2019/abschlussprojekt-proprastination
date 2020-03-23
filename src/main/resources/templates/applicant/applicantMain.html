@@ -6,8 +6,8 @@
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <title>KorrektorInnenbewerbung</title>
     <th:block th:fragment="headcontent">
-    <link href="../static/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"
-          th:href="@{node_modules/bootstrap/dist/css/bootstrap.min.css}">
+        <link href="../static/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"
+              th:href="@{node_modules/bootstrap/dist/css/bootstrap.min.css}">
     </th:block>
 </head>
 <body>
@@ -108,12 +108,14 @@
                         <th scope="col">Bewerbungsfrist</th>
                         <th scope="col">Bewerbungsstatus</th>
                     </tr>
-                    <tr th:each="app, appNum : ${Applicant.applications}">
+
+                    <tr th:each="app, appNum : ${applicant?.applications}">
                         <th scope="row" th:text="${appNum.count}"></th>
                         <td th:text="${app.module.name}">Example #1</td>
                         <td th:text="${app.module.deadline}">Example #2</td>
                         <td>Example #3</td>
                     </tr>
+
                     </tbody>
                 </table>
             </div>
