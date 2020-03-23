@@ -48,23 +48,8 @@ public class SetupController {
     @Secured("ROLE_setup")
     public String index(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
-            List<String[]> modules = CSVService.getModulesWithDetails();
-            List<Module> moduleList = new ArrayList<>();
-            String[] tmp;
-            for (String[] module : modules) {
-                tmp = module;
-                Module newModule = Module.builder()
-                        .name(tmp[NAME])
-                        .shortName(tmp[SHORT_NAME])
-                        .profName(tmp[PROF_NAME])
-                        .sevenHourLimit(tmp[SEVEN_HOUR_LIMIT])
-                        .nineHourLimit(tmp[NINE_HOUR_LIMIT])
-                        .seventeenHourLimit(tmp[SEVENTEEN_HOUR_LIMIT])
-                        .hourLimit(tmp[HOUR_LIMIT])
-                        .build();
-                moduleList.add(newModule);
-            }
-            model.addAttribute("modules", moduleList);
+            List<Module> modules = CSVService.getModulesWithDetails();
+            model.addAttribute("modules", modules);
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("module", Module.builder().build());
         }
@@ -79,7 +64,6 @@ public class SetupController {
      * @param module the module object with details
      * @return redirects to index
      */
-    @SuppressWarnings("checkstyle:ParameterNumber")
     @PostMapping("/setupMain")
     @Secured("ROLE_setup")
     public String postEditedModule(final KeycloakAuthenticationToken token, final Model model,
@@ -147,8 +131,8 @@ public class SetupController {
      * Post mapping for deleting a module
      * @param token The KeycloakAuthentication
      * @param model The Website model
-     * @return The HTML file rendered as a String
      * @param name module name
+     * @return The HTML file rendered as a String
      */
     @PostMapping("/deleteModule")
     @Secured("ROLE_setup")

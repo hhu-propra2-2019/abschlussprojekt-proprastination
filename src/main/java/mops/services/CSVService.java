@@ -3,6 +3,7 @@ package mops.services;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvException;
+import mops.model.classes.Module;
 import org.springframework.stereotype.Service;
 
 import java.io.FileReader;
@@ -85,7 +86,7 @@ public class CSVService {
      * @param moduleName Name of the module
      */
     public static void deleteModule(final String moduleName) {
-        List<String[]> readData = getModulesWithDetails();
+        List<String[]> readData = readFromCSV("src/main/resources/csv/module.csv");
         List<String[]> writeData = new ArrayList<>();
         String[] tmp;
         for (String[] readDatum : readData) {
@@ -145,10 +146,26 @@ public class CSVService {
 
     /**
      * Get modules with all details
-     * @return return module with details as list of string arrays
+     * @return return module with details as list of Modules
      */
-    public static List<String[]> getModulesWithDetails() {
-        return readFromCSV("src/main/resources/csv/module.csv");
+    public static List<Module> getModulesWithDetails() {
+        List<String[]> modules = readFromCSV("src/main/resources/csv/module.csv");
+        List<Module> moduleList = new ArrayList<>();
+        String[] tmp;
+        for (String[] module : modules) {
+            tmp = module;
+            Module newModule = Module.builder()
+                    .name(tmp[NAME])
+                    .shortName(tmp[SHORT_NAME])
+                    .profName(tmp[PROF_NAME])
+                    .sevenHourLimit(tmp[SEVEN_HOUR_LIMIT])
+                    .nineHourLimit(tmp[NINE_HOUR_LIMIT])
+                    .seventeenHourLimit(tmp[SEVENTEEN_HOUR_LIMIT])
+                    .hourLimit(tmp[HOUR_LIMIT])
+                    .build();
+            moduleList.add(newModule);
+        }
+        return moduleList;
     }
 
     /**
