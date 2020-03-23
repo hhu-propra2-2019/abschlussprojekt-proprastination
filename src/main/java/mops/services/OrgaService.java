@@ -42,6 +42,10 @@ public class OrgaService {
     }
 
     public List<OrgaApplication> getAllApplications(final String id) {
-        return wrapApplications(applicationService.findAllByModuleId(UUID.fromString(id)));
+        return wrapApplications(applicationService.findAllByModuleId(Long.parseLong(id)));
+    }
+
+    public OrgaApplication getApplication(final String id) {
+        return wrapApplication(applicationService.findById(Long.parseLong(id)));
     }
 }

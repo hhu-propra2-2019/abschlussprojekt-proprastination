@@ -109,7 +109,8 @@ public class OrgaController {
      */
     @GetMapping("/modal")
     @Secured("ROLE_orga")
-    public String applicationInfo() {
+    public String applicationInfo(@PathVariable("id") final String id, final Model model) {
+        model.addAttribute("appl", orgaService.getApplication(id));
         return "organizer/applicationModalContent";
     }
 

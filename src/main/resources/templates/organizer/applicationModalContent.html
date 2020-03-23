@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
 </head>
@@ -10,13 +10,15 @@
         </div>
         <div class="card-body">
             <h3>Anschrift:</h3>
-            <p>Bla bla bla</p>
+            <p th:text="${appl.applicant.address.street + appl.applicant.address.houseNumber}">Bla bla bla</p>
+            <p th:text="${appl.applicant.address.zipcode + appl.applicant.address.city}">Bla bla bla</p>
+            <p th:text="${appl.applicant.address.country}">Bla bla bla</p>
             <h3>Geburtsdatum:</h3>
-            <p>Bla bla</p>
+            <p th:text="${appl.applicant.birthday}">Bla bla</p>
             <h3>Geburtsort:</h3>
-            <p>Bla bla bla bla</p>
+            <p th:text="${appl.applicant.birthplace}">Bla bla bla bla</p>
             <h3>Nationalität:</h3>
-            <p>Bla</p>
+            <p th:text="${appl.applicant.nationality}">Bla</p>
         </div>
     </div>
 
@@ -26,9 +28,9 @@
         </div>
         <div class="card-body">
             <h3>Studienfach:</h3>
-            <p>Bla bla bla</p>
+            <p th:text="${appl.applicant.cert.course}">Bla bla bla</p>
             <h3>Höchster Abschluss:</h3>
-            <p>Bla bla</p>
+            <p th:text="${appl.applicant.cert.name}">Bla bla</p>
         </div>
     </div>
 
@@ -37,7 +39,7 @@
             <h3>Angestelltenstatus</h3>
         </div>
         <div class="card-body">
-            <p>Bla bla</p>
+            <p th:text="${appl.applicant.status}">Bla bla</p>
         </div>
     </div>
 

@@ -51,7 +51,11 @@ public class ApplicationService {
         return application;
     }
 
-    public List<Application> findAllByModuleId(final UUID id) {
+    public List<Application> findAllByModuleId(final long id) {
         return applicationRepository.findAllByModule("RDB");
+    }
+
+    public Application findById(final long id) {
+        return applicationRepository.findById(id);
     }
 }
