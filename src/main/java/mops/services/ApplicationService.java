@@ -1,6 +1,5 @@
 package mops.services;
 
-import mops.model.classes.Applicant;
 import mops.model.classes.Application;
 import mops.model.classes.webclasses.WebApplication;
 import mops.repositories.ApplicationRepository;
