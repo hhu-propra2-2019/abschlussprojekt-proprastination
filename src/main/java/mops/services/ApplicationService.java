@@ -1,12 +1,9 @@
 package mops.services;
 
-import mops.model.classes.Applicant;
 import mops.model.classes.Application;
 import mops.model.classes.webclasses.WebApplication;
 import mops.repositories.ApplicationRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class ApplicationService {
@@ -45,24 +42,5 @@ public class ApplicationService {
                 .comment(webApplication.getComment())
                 .build();
         return application;
-    }
-
-    /**
-     * Finds application by uniserial and module
-     * @param uniserial the applicant uniserial
-     * @param module the module he applied in
-     * @return the application
-     */
-    public Application findApplicatonByUniserialAndModule(final String uniserial, final String module) {
-        return applicationRepository.findByApplicantAndModule(applicantService.findByUniserial(uniserial), module);
-    }
-
-    /**
-     * Finds all application of an applicant
-     * @param applicant the applicant
-     * @return his applications
-     */
-    public List<Application> findApplicationByApplicant(final Applicant applicant) {
-        return applicationRepository.findAllByApplicant(applicant);
     }
 }
