@@ -277,43 +277,6 @@ public class ApplicationController {
     }
 
     /**
-     * xx
-     * @param token xx
-     * @param model xx
-     * @return xx
-     */
-    @GetMapping("/dummy")
-    public String dummy(final KeycloakAuthenticationToken token, final Model model) {
-        final int zipcode = 40223;
-        Address address = Address.builder()
-                .street("Suitbertusstraße")
-                .houseNumber("134")
-                .city("Düsseldorf")
-                .zipcode(zipcode)
-                .build();
-        Certificate certificate = Certificate.builder()
-                .name("none")
-                .course("none")
-                .build();
-        Applicant applicant = Applicant.builder()
-                .uniserial("iamkawaiineko")
-                .surname("Dürwald")
-                .firstName("Paulin")
-                .address(address)
-                .birthday("1999-06-10")
-                .birthplace("Ho-Chi-Minh, Vietnam")
-                .gender("weiblich")
-                .nationality("Deutschland")
-                .course("Informatik")
-                .status("neueinstellung")
-                .certs(certificate)
-                .comment("Ich mag Katzen")
-                .build();
-        model.addAttribute("applicant", applicant);
-        return "applicant/applicationOverviewThymeleaf";
-    }
-
-    /**
      * overview after Application is finished (also saves the last webApplication)
      * @param token the keycloak token
      * @param model the model

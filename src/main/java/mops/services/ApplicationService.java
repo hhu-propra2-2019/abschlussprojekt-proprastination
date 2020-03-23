@@ -6,9 +6,7 @@ import mops.model.classes.webclasses.WebApplication;
 import mops.repositories.ApplicationRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
-
 @Service
 public class ApplicationService {
 

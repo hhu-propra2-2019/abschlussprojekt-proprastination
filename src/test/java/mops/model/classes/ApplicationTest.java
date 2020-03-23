@@ -52,7 +52,6 @@ class ApplicationTest {
                 .semester("WS2020")
                 .module("ProPra")
                 .comment("")
-                .applicant(applicant)
                 .build();
     }
 
@@ -119,12 +118,7 @@ class ApplicationTest {
         assertThat(application.toString()).isEqualTo(
                 "Application(minHours=2, finalHours=0, maxHours=4, module=ProPra, " +
                         "priority=1, grade=1.3, lecturer=Tester, semester=WS2020, " +
-                        "role=Korrektor, comment=, applicant=Applicant(uniserial=lolol420, " +
-                        "birthplace=Deutschland, firstName=Angelo, surname=Merkel, " +
-                        "address=Address(street=Street, houseNumber=999, city=Düsseldorf, " +
-                        "country=USA, zipcode=12345), gender=male, birthday=32.32.9999, " +
-                        "nationality=Russian, course=Trivial, status=irelevant, comment=Moin, " +
-                        "certs=Certificate(name=Bachelor, course=Informatik), applications=[null]))");
+                        "role=Korrektor, comment=)");
 
     }
 

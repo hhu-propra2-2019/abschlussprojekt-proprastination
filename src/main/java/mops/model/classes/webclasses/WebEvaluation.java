@@ -4,16 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
+import mops.model.classes.Application;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Builder(toBuilder = true)
-public class WebDistributorApplicant {
-
-    private String username;
-    private List<WebDistributorApplication> webDistributorApplications;
-    private String distributorHours;
+@Data
+public class WebEvaluation {
+    private Application application;
+    private int hours;
+    private String comment;
+    private int priority;
 }
