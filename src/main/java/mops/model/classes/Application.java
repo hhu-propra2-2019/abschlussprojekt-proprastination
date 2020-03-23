@@ -36,6 +36,7 @@ public class Application {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "module_id")
     private Module module;
+    @Enumerated(EnumType.STRING)
     private Priority priority;
     private double grade;
     private String lecturer;

@@ -2,6 +2,7 @@ package mops.services;
 
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
+import mops.model.classes.webclasses.WebApplication;
 import mops.repositories.ApplicationRepository;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,27 @@ public class ApplicationService {
                               final ApplicationRepository applicationRepository) {
         this.applicantService = applicantService;
         this.applicationRepository = applicationRepository;
+    }
+
+    /**
+     * builds Application from webApplication
+     * @param webApplication Informations
+     * @return fully buildApplication
+     */
+    public Application buildApplication(final WebApplication webApplication) {
+        Application application = Application.builder()
+                //Module wird irgendwie nicht eingelesen? Mach ich später >_>
+                .module(webApplication.getModule())
+                .minHours(webApplication.getFinalHours())//HTML anpassen
+                .maxHours(webApplication.getFinalHours())//HTML anpassen
+                .priority(webApplication.getPriority())
+                .grade(webApplication.getGrade())
+                .lecturer(webApplication.getLecturer())
+                .semester(webApplication.getSemester())
+                .role(webApplication.getRole())
+                .comment(webApplication.getComment())
+                .build();
+        return application;
     }
 
     /**
