@@ -22,13 +22,6 @@ import java.util.List;
 @SessionScope
 @RequestMapping("/bewerbung2/setup")
 public class SetupController {
-    private static final int NAME = 0;
-    private static final int SHORT_NAME = 1;
-    private static final int PROF_NAME = 2;
-    private static final int SEVEN_HOUR_LIMIT = 3;
-    private static final int NINE_HOUR_LIMIT = 4;
-    private static final int SEVENTEEN_HOUR_LIMIT = 5;
-    private static final int HOUR_LIMIT = 6;
 
     private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
         KeycloakPrincipal principal = (KeycloakPrincipal) token.getPrincipal();
