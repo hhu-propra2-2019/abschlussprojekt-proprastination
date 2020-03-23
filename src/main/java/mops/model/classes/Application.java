@@ -5,15 +5,17 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.ToString;
 import org.springframework.data.relational.core.mapping.Table;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Builder(toBuilder = true)
@@ -31,13 +33,15 @@ public class Application {
     private int minHours;
     private int finalHours;
     private int maxHours;
-    @NonNull
-    private String module;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "module_id")
+    private Module module;
     private int priority;
     private double grade;
     private String lecturer;
     private String semester;
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
     private String comment;
     @ManyToOne(fetch = FetchType.EAGER)
     private Applicant applicant;
