@@ -100,7 +100,7 @@ public class DistributionService {
     }
 
     private List<WebDistributorApplicant> convertApplicantToWebDistributorApplicant(
-            final List<Applicant> applicantList, String module) {
+            final List<Applicant> applicantList, final String module) {
         List<WebDistributorApplicant> webDistributorApplicantList = new ArrayList<>();
         for (Applicant applicant : applicantList) {
             Set<Application> applicationSet = applicant.getApplications();
