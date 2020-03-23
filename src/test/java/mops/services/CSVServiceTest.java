@@ -5,12 +5,12 @@ import com.opencsv.exceptions.CsvException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.w3c.dom.ls.LSInput;
 
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,8 +22,9 @@ class CSVServiceTest{
 
     @AfterEach
     void cleanTestCSV(){
+        final Charset charset = StandardCharsets.UTF_8;
         try {
-            new FileWriter("src/test/java/mops/test.csv").close();
+            new FileWriter("src/test/java/mops/test.csv", charset).close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -35,8 +36,8 @@ class CSVServiceTest{
         String[] module1 = {"propra","21"};
         List<String[]> data = new ArrayList<>();
         data.add(module1);
-        List<String[]> readData = new ArrayList<>();
-        final Charset charset = Charset.forName("UTF-8");
+        List<String[]> readData;
+        final Charset charset = StandardCharsets.UTF_8;
 
         service.writeInCSV(csvName,data);
         readData = service.readFromCSV(csvName);
@@ -59,7 +60,7 @@ class CSVServiceTest{
         List<String[]> data = new ArrayList<>();
         data.add(module1);
         List<String[]> readData = new ArrayList<>();
-        final Charset charset = Charset.forName("UTF-8");
+        final Charset charset = StandardCharsets.UTF_8;
 
         service.writeInCSV(csvName,data);
 

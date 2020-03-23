@@ -51,8 +51,9 @@ public class CSVService {
      * @param input lines to write into the file
      */
     public static void writeInCSV(final String csvName, final List<String[]> input) {
+        final Charset charset = StandardCharsets.UTF_8;
         try {
-            CSVWriter writer = new CSVWriter(new FileWriter(csvName, true));
+            CSVWriter writer = new CSVWriter(new FileWriter(csvName, charset, true));
             for (String[] s: input) {
                 writer.writeNext(s);
             }
@@ -101,8 +102,9 @@ public class CSVService {
      * Empty out module.csv
      */
     public static void cleanModules() {
+        final Charset charset = StandardCharsets.UTF_8;
         try {
-            new FileWriter("src/main/resources/csv/module.csv").close();
+            new FileWriter("src/main/resources/csv/module.csv", charset).close();
         } catch (IOException e) {
             e.printStackTrace();
         }
