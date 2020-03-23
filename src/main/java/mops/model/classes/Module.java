@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.ToString;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -34,11 +33,4 @@ public class Module {
     private String seventeenHourLimit;
     private String hourLimit;
 
-    /**
-     * @return returns module as String Array
-     */
-    public String[] toStringArray() {
-        return new String[]{name, shortName, profName, sevenHourLimit,
-                nineHourLimit, seventeenHourLimit, hourLimit};
-    }
 }

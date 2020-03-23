@@ -2,6 +2,7 @@ package mops.controllers;
 
 import mops.model.Account;
 import mops.model.classes.Module;
+import mops.model.classes.webclasses.WebModule;
 import mops.services.CSVService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
@@ -48,7 +49,7 @@ public class SetupController {
     @Secured("ROLE_setup")
     public String index(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
-            List<Module> modules = CSVService.getModulesWithDetails();
+            List<WebModule> modules = CSVService.getModulesWithDetails();
             model.addAttribute("modules", modules);
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("module", Module.builder().build());
@@ -68,7 +69,7 @@ public class SetupController {
     @Secured("ROLE_setup")
     public String postEditedModule(final KeycloakAuthenticationToken token, final Model model,
                                    @RequestParam("oldName") final String oldName,
-                                   final Module module) {
+                                   final WebModule module) {
         CSVService.deleteModule(oldName);
         List<String[]> input = new ArrayList<>();
         String[] editedModule = module.toStringArray();
@@ -103,7 +104,7 @@ public class SetupController {
     @PostMapping("/neuesModul")
     @Secured("ROLE_setup")
     public String postNewModule(final KeycloakAuthenticationToken token, final Model model,
-                                final Module module) {
+                                final WebModule module) {
         List<String[]> input = new ArrayList<>();
         String[] newModule = module.toStringArray();
         input.add(newModule);
@@ -121,7 +122,7 @@ public class SetupController {
     @PostMapping("/modulBearbeiten")
     @Secured("ROLE_setup")
     public String postEditModule(final KeycloakAuthenticationToken token, final Model model,
-                                 final Module oldModule) {
+                                 final WebModule oldModule) {
         model.addAttribute("module", oldModule);
         model.addAttribute("account", createAccountFromPrincipal(token));
         return "/setup/modulBearbeiten";

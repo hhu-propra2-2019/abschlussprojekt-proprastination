@@ -4,6 +4,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvException;
 import mops.model.classes.Module;
+import mops.model.classes.webclasses.WebModule;
 import org.springframework.stereotype.Service;
 
 import java.io.FileReader;
@@ -148,13 +149,13 @@ public class CSVService {
      * Get modules with all details
      * @return return module with details as list of Modules
      */
-    public static List<Module> getModulesWithDetails() {
+    public static List<WebModule> getModulesWithDetails() {
         List<String[]> modules = readFromCSV("src/main/resources/csv/module.csv");
-        List<Module> moduleList = new ArrayList<>();
+        List<WebModule> moduleList = new ArrayList<>();
         String[] tmp;
         for (String[] module : modules) {
             tmp = module;
-            Module newModule = Module.builder()
+            WebModule newModule = WebModule.builder()
                     .name(tmp[NAME])
                     .shortName(tmp[SHORT_NAME])
                     .profName(tmp[PROF_NAME])
