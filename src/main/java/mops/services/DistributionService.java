@@ -69,15 +69,15 @@ public class DistributionService {
      */
     private void distribute() {
         //List<Module> modules = moduleService.getModules();
-        List<String> modules = CSVService.getModules();
+                                                                                                                        List<String> modules = CSVService.getModules();
         List<Applicant> allApplicants = applicantService.findAll();
         for (String module : modules) {
             List<Evaluation> evaluations = new LinkedList<>();
             //List<Application> preApplications = applicationService.findApplicationsByModule(module);
-            List<Application> preApplications = new LinkedList<>();
-            for (Applicant applicant : allApplicants) {
-                preApplications.add(applicant.getApplications().iterator().next());
-            }
+                                                                                                                        List<Application> preApplications = new LinkedList<>();
+                                                                                                                        for (Applicant applicant : allApplicants) {
+                                                                                                                            preApplications.add(applicant.getApplications().iterator().next());
+                                                                                                                        }
             List<Application> applications = new LinkedList<>();
             for (Application application : preApplications) {
                 if (allApplicants.indexOf(applicantService.findByApplications(application)) != -1) {
@@ -117,19 +117,20 @@ public class DistributionService {
                     if (count7 == 4 && count9 == 5 && count17 == 6) {
                         break;
                     }
+                    Applicant applicant = applicantService.findByApplications(evaluation.getApplication());
                     if (evaluation.getHours() == sevenHours && count7 < 4) {
-                        distributedApplicants.add(applicantService.findByApplications(evaluation.getApplication()));
-                        allApplicants.remove(applicantService.findByApplications(evaluation.getApplication()));
+                        distributedApplicants.add(applicant);
+                        allApplicants.remove(applicant);
                         changeFinalHours(evaluation);
                         count7++;
                     } else if (evaluation.getHours() == nineHours && count9 < 5) {
-                        distributedApplicants.add(applicantService.findByApplications(evaluation.getApplication()));
-                        allApplicants.remove(applicantService.findByApplications(evaluation.getApplication()));
+                        distributedApplicants.add(applicant);
+                        allApplicants.remove(applicant);
                         changeFinalHours(evaluation);
                         count9++;
                     } else if (evaluation.getHours() == seventeenHours && count17 < 6) {
-                        distributedApplicants.add(applicantService.findByApplications(evaluation.getApplication()));
-                        allApplicants.remove(applicantService.findByApplications(evaluation.getApplication()));
+                        distributedApplicants.add(applicant);
+                        allApplicants.remove(applicant);
                         changeFinalHours(evaluation);
                         count17++;
                     }
@@ -154,19 +155,6 @@ public class DistributionService {
         ApplicationBuilder applicationBuilder = evaluation.getApplication().toBuilder();
         Application application = applicationBuilder.finalHours(evaluation.getHours()).build();
         applicationService.save(application);
-
-        /*Applicant oldApplicant = applicantService.findByApplications(evaluation.getApplication());
-        Set<Application> newApplicationSet = oldApplicant.getApplications();
-        Application oldApplication = evaluation.getApplication();
-        newApplicationSet.remove(oldApplication);
-        newApplicationSet.add(applicationBuilder
-                .finalHours(evaluation.getHours())
-                .build());
-        ApplicantBuilder applicantBuilder = oldApplicant.toBuilder();
-        applicantService.saveApplicant(applicantBuilder
-                .clearApplications()
-                .applications(newApplicationSet)
-                .build());*/
     }
 
     /**
