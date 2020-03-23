@@ -379,7 +379,19 @@ public class ApplicationController {
      */
     @PostMapping("/uebersicht")
     public String overview(final KeycloakAuthenticationToken token, final Model model,
-                           final WebApplication webApplication) {
+                           @Valid final WebApplication webApplication,
+                           final BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            bindingResult.getAllErrors().forEach(err -> {
+                LOGGER.info("ERROR {}", err.getDefaultMessage());
+            });
+            model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("semesters", CSVService.getSemester());
+            model.addAttribute("modules", CSVService.getModules());
+            model.addAttribute("webApplication", webApplication);
+            return "applicant/applicationModule";
+        }
+
         Applicant applicant = applicantService.findByUniserial(token.getName());
         Application application = applicationService.buildApplication(webApplication);
         Set<Application> applications = applicant.getApplications();
