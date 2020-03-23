@@ -1,7 +1,9 @@
 package mops.services;
 
 import mops.model.classes.Applicant;
+import mops.model.classes.Applicant.ApplicantBuilder;
 import mops.model.classes.Application;
+import mops.model.classes.Application.ApplicationBuilder;
 import mops.model.classes.Distribution;
 import mops.model.classes.Evaluation;
 import mops.model.classes.webclasses.WebDistribution;
@@ -116,17 +118,17 @@ public class DistributionService {
                         break;
                     }
                     if (evaluation.getHours() == sevenHours && count7 < 4) {
-                        //changeFinalHours(evaluation);
+                        changeFinalHours(evaluation);
                         distributedApplicants.add(applicantService.findByApplications(evaluation.getApplication()));
                         allApplicants.remove(applicantService.findByApplications(evaluation.getApplication()));
                         count7++;
                     } else if (evaluation.getHours() == nineHours && count9 < 5) {
-                        //changeFinalHours(evaluation);
+                        changeFinalHours(evaluation);
                         distributedApplicants.add(applicantService.findByApplications(evaluation.getApplication()));
                         allApplicants.remove(applicantService.findByApplications(evaluation.getApplication()));
                         count9++;
                     } else if (evaluation.getHours() == seventeenHours && count17 < 6) {
-                        //changeFinalHours(evaluation);
+                        changeFinalHours(evaluation);
                         distributedApplicants.add(applicantService.findByApplications(evaluation.getApplication()));
                         allApplicants.remove(applicantService.findByApplications(evaluation.getApplication()));
                         count17++;
@@ -149,40 +151,23 @@ public class DistributionService {
      * @param evaluation
      */
     private void changeFinalHours(final Evaluation evaluation) {
-        Applicant oldApplicant = applicantService.findByApplications(evaluation.getApplication());
+        ApplicationBuilder applicationBuilder = evaluation.getApplication().toBuilder();
+        Application application = applicationBuilder.finalHours(evaluation.getHours()).build();
+        applicationService.save(application);
+
+
+        /*Applicant oldApplicant = applicantService.findByApplications(evaluation.getApplication());
         Set<Application> newApplicationSet = oldApplicant.getApplications();
         Application oldApplication = evaluation.getApplication();
         newApplicationSet.remove(oldApplication);
-        newApplicationSet.add(Application.builder()
-                .id(oldApplication.getId())
-                .minHours(oldApplication.getMinHours())
+        newApplicationSet.add(applicationBuilder
                 .finalHours(evaluation.getHours())
-                .maxHours(oldApplication.getMaxHours())
-                .module(oldApplication.getModule())
-                .priority(oldApplication.getPriority())
-                .grade(oldApplication.getGrade())
-                .lecturer(oldApplication.getLecturer())
-                .semester(oldApplication.getSemester())
-                .role(oldApplication.getRole())
-                .comment(oldApplication.getComment())
-                .applicant(applicantService.findByApplications(oldApplication))
                 .build());
-        applicantService.saveApplicant(Applicant.builder()
-                .id(oldApplicant.getId())
+        ApplicantBuilder applicantBuilder = oldApplicant.toBuilder();
+        applicantService.saveApplicant(applicantBuilder
+                .clearApplications()
                 .applications(newApplicationSet)
-                .uniserial(oldApplicant.getUniserial())
-                .certs(oldApplicant.getCerts())
-                .status(oldApplicant.getStatus())
-                .course(oldApplicant.getCourse())
-                .nationality(oldApplicant.getComment())
-                .birthday(oldApplicant.getBirthday())
-                .address(oldApplicant.getAddress())
-                .birthplace(oldApplicant.getBirthplace())
-                .comment(oldApplicant.getComment())
-                .surname(oldApplicant.getSurname())
-                .firstName(oldApplicant.getFirstName())
-                .gender(oldApplicant.getGender())
-                .build());
+                .build());*/
     }
 
     /**
