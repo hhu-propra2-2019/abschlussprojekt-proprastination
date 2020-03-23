@@ -15,7 +15,7 @@ import javax.persistence.Id;
 import java.time.Instant;
 
 
-@Builder(toBuilder = true)
+@Builder(toBuilder = true, builderClassName = "ModuleBuilder")
 @EqualsAndHashCode
 @Getter
 @ToString(exclude = "id")
@@ -29,5 +29,11 @@ public class Module {
     private long id;
     private String name;
     private Instant deadline;
+    private String shortName;
+    private String profName;
+    private String sevenHourLimit;
+    private String nineHourLimit;
+    private String seventeenHourLimit;
+    private String hourLimit;
 
 }

@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en"
+      th:replace="~{mopslayout :: html(name='Bewerbungs Organisation', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <th:block th:fragment="headcontent">
+
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+
+        <link href="../static/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"
+              th:href="@{node_modules/bootstrap/dist/css/bootstrap.min.css}">
+
+    </th:block>
+    <title>Organize Applications</title>
+</head>
+
+<body>
+<header>
+    <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
+        <ul>
+            <li>
+                <a th:href="@{/}">
+                    Startseite
+                </a>
+            </li>
+            <li>
+                <a th:href="@{./}">
+                    Zurück
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<main th:fragment="bodycontent">
+    <form th:action="@{setupMain}" th:method="POST">
+        <div class="card bg-light mb-3 border-primary">
+            <div class="card-header" th:object="${module}">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h3 style="margin-bottom: .0rem" class="card-title" th:text="${module.name}"></h3>
+                    </div>
+                    <div class="col-md-4 container-fluid">
+                        <button class="btn btn-outline-primary btn-sm float-right" type="submit">Speichern</button>
+                   </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row container-fluid">
+                    <div class="col-3">
+                        <div class="card-text">Name des Moduls</div>
+                    </div>
+                    <div class="col-3">
+                        <div class="card-text">Kurzform des Moduls</div>
+                    </div>
+                    <div class="col-3">
+                        <div class="card-text">Zugeordnete Person</div>
+                    </div>
+                </div>
+                <div class="row container-fluid">
+                    <input id="oldName" name="oldName" type="hidden" th:value="${module.name}">
+                    <div class="col-3">
+                        <input type="text" name="name" id="name"
+                               th:value="${module.name}" th:placeholder="${module.name}" th:field="${module.name}">
+                    </div>
+                    <div class="col-3">
+                        <input type="text" name="shortName" id="shortName"
+                               th:value="${module.shortName}" th:placeholder="${module.shortName}" th:field="${module.shortName}">
+                    </div>
+                    <div class="col-3">
+                        <input type="text" name="profName" id="profName"
+                               th:value="${module.profName}" th:placeholder="${module.profName}" th:field="${module.profName}">
+                    </div>
+                </div><br>
+                <div class="row container-fluid">
+                    <div class="col-3">
+                        <div class="card-text">Personenanzahl 7 Std: </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="card-text">Personenanzahl 9 Std: </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="card-text">Personenanzahl 17 Std: </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="card-text">Stundenlimit Gesamt</div>
+                    </div>
+                </div>
+                <div class="row container-fluid">
+                    <div class="col-3">
+                        <input type="number" name="sevenHourLimit" id="sevenHourLimit"
+                               th:value="${module.sevenHourLimit}" th:placeholder="${module.sevenHourLimit}"
+                               th:field="${module.sevenHourLimit}">
+                    </div>
+                    <div class="col-3">
+                        <input type="number" name="nineHourLimit" id="nineHourLimit"
+                               th:value="${module.nineHourLimit}" th:placeholder="${module.nineHourLimit}"
+                               th:field="${module.nineHourLimit}">
+                    </div>
+                    <div class="col-3">
+                        <input type="number" name="seventeenHourLimit" id="seventeenHourLimit"
+                               th:value="${module.seventeenHourLimit}" th:placeholder="${module.seventeenHourLimit}"
+                               th:field="${module.seventeenHourLimit}">
+                    </div>
+                    <div class="col-3">
+                        <input type="number" name="hourLimit" id="hourLimit"
+                               th:value="${module.hourLimit}" th:placeholder="${module.hourLimit}"
+                               th:field="${module.hourLimit}">
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div th:replace="${content} ? ${content}: ~{}"></div>
+</main>
+
+</body>
+</html>
