@@ -7,7 +7,6 @@ import mops.model.classes.Application;
 import mops.model.classes.Certificate;
 import mops.model.classes.webclasses.WebAddress;
 import mops.model.classes.webclasses.WebApplicant;
-import mops.model.classes.Application.ApplicationBuilder;
 import mops.model.classes.webclasses.WebApplication;
 import mops.model.classes.webclasses.WebCertificate;
 import mops.services.ApplicantService;
