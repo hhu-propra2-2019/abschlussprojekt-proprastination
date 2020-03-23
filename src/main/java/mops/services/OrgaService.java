@@ -22,7 +22,7 @@ public class OrgaService {
 
     private OrgaApplication wrapApplication(final Application application) {
         return OrgaApplication.builder()
-                .applicationId(application.getId())
+                .id(application.getId())
                 .minHours(application.getMinHours())
                 .finalHours(application.getFinalHours())
                 .maxHours(application.getMaxHours())

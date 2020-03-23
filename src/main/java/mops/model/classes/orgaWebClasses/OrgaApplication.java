@@ -7,7 +7,7 @@ import mops.model.classes.Applicant;
 @Builder(toBuilder = true)
 @Data
 public class OrgaApplication {
-    private long applicationId;
+    private long id;
     private int minHours;
     private int finalHours;
     private int maxHours;
