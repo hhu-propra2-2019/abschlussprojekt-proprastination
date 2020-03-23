@@ -41,3 +41,4 @@ public class Module {
         return new String[]{name, shortName, profName, sevenHourLimit,
                 nineHourLimit, seventeenHourLimit, hourLimit};
     }
+}
