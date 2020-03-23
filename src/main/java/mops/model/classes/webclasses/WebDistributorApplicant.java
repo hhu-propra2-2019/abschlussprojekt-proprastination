@@ -15,4 +15,5 @@ public class WebDistributorApplicant {
 
     private String username;
     private List<WebDistributorApplication> webDistributorApplications;
+    private String distributorHours;
 }

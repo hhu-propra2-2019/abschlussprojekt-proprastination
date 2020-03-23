@@ -89,7 +89,7 @@ public class DistributionService {
         List<Distribution> distributionList = findAll();
         for (Distribution distribution : distributionList) {
             List<WebDistributorApplicant> webDistributorApplicantList =
-                    convertApplicantToWebDistributorApplicant(distribution.getEmployees());
+                    convertApplicantToWebDistributorApplicant(distribution.getEmployees(), distribution.getModule());
             WebDistribution webDistribution = WebDistribution.builder()
                     .module(distribution.getModule())
                     .webDistributorApplicants(webDistributorApplicantList)
@@ -100,15 +100,22 @@ public class DistributionService {
     }
 
     private List<WebDistributorApplicant> convertApplicantToWebDistributorApplicant(
-            final List<Applicant> applicantList) {
+            final List<Applicant> applicantList, final String module) {
         List<WebDistributorApplicant> webDistributorApplicantList = new ArrayList<>();
         for (Applicant applicant : applicantList) {
             Set<Application> applicationSet = applicant.getApplications();
             List<WebDistributorApplication> webDistributorApplicationList =
                     createWebDistributorApplications(applicationSet);
+            int finalHours = 0;
+            for (Application application : applicationSet) {
+                if (application.getModule().equals(module)) {
+                    finalHours = application.getFinalHours();
+                }
+            }
             WebDistributorApplicant webDistributorApplicant = WebDistributorApplicant.builder()
                     .username(applicant.getUniserial())
                     .webDistributorApplications(webDistributorApplicationList)
+                    .distributorHours(finalHours + "")
                     .build();
             webDistributorApplicantList.add(webDistributorApplicant);
         }
