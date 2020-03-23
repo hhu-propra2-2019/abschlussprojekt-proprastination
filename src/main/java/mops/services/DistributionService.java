@@ -118,19 +118,19 @@ public class DistributionService {
                         break;
                     }
                     if (evaluation.getHours() == sevenHours && count7 < 4) {
-                        changeFinalHours(evaluation);
                         distributedApplicants.add(applicantService.findByApplications(evaluation.getApplication()));
                         allApplicants.remove(applicantService.findByApplications(evaluation.getApplication()));
+                        changeFinalHours(evaluation);
                         count7++;
                     } else if (evaluation.getHours() == nineHours && count9 < 5) {
-                        changeFinalHours(evaluation);
                         distributedApplicants.add(applicantService.findByApplications(evaluation.getApplication()));
                         allApplicants.remove(applicantService.findByApplications(evaluation.getApplication()));
+                        changeFinalHours(evaluation);
                         count9++;
                     } else if (evaluation.getHours() == seventeenHours && count17 < 6) {
-                        changeFinalHours(evaluation);
                         distributedApplicants.add(applicantService.findByApplications(evaluation.getApplication()));
                         allApplicants.remove(applicantService.findByApplications(evaluation.getApplication()));
+                        changeFinalHours(evaluation);
                         count17++;
                     }
                 }
@@ -154,7 +154,6 @@ public class DistributionService {
         ApplicationBuilder applicationBuilder = evaluation.getApplication().toBuilder();
         Application application = applicationBuilder.finalHours(evaluation.getHours()).build();
         applicationService.save(application);
-
 
         /*Applicant oldApplicant = applicantService.findByApplications(evaluation.getApplication());
         Set<Application> newApplicationSet = oldApplicant.getApplications();
