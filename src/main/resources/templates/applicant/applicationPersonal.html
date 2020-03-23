@@ -182,7 +182,10 @@
                                 <option th:value="diplom">Diplom</option>
                                 <option th:value="staatsexamen">Staatsexamen</option>
                                 <option th:value="else">Anderes</option>
-                            </select> <br>
+                            </select>
+                            <div th:if="${#fields.hasErrors('graduation')}" class="text-danger">
+                                Bitte wählen Sie Ihren Angestelltenstatus.
+                            </div><br>
                         </div>
                         <div class="col-6">
                             <input th:type="text" th:name="graduationsubject" th:id="graduationsubject"
@@ -216,7 +219,7 @@
                     <div class="row">
                         <div class="col-6">
                             <label for="modules">
-                                Wählen sie das Modul für das Sie sich bewerben möchten:
+                                Wählen Sie das Modul für das Sie sich bewerben möchten:
                             </label>
                         </div>
                         <div class="col-4">

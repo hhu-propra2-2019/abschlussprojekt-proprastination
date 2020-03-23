@@ -136,6 +136,7 @@ public class ApplicationController {
      * @param webAddress webAddress and its data
      * @param addressBindingResult the result of validating webAddress
      * @param webCertificate webCertificate and its data
+     * @param certificateBindingResult the result of validating webCertificate
      * @param model Model
      * @param modules the module the Applicant wants to apply for
      * @return applicationModule.html
@@ -145,7 +146,8 @@ public class ApplicationController {
     public String modul(final KeycloakAuthenticationToken token,
                             @Valid final WebApplicant webApplicant, final BindingResult applicantBindingResult,
                             @Valid final WebAddress webAddress, final BindingResult addressBindingResult,
-                            final Model model, final WebCertificate webCertificate,
+                            final Model model,
+                            @Valid final WebCertificate webCertificate, final BindingResult certificateBindingResult,
                             @RequestParam("modules") final String modules) {
 
         if (applicantBindingResult.hasErrors()) {
@@ -165,6 +167,21 @@ public class ApplicationController {
 
         if (addressBindingResult.hasErrors()) {
             addressBindingResult.getAllErrors().forEach(err -> {
+                LOGGER.info("ERROR {}", err.getDefaultMessage());
+            });
+            if (token != null) {
+                model.addAttribute("account", createAccountFromPrincipal(token));
+                model.addAttribute("countries", CSVService.getCountries());
+                model.addAttribute("courses", CSVService.getCourses());
+                model.addAttribute("webApplicant", webApplicant);
+                model.addAttribute("webAddress", webAddress);
+                model.addAttribute("modules", CSVService.getModules());
+            }
+            return "applicant/applicationPersonal";
+        }
+
+        if (certificateBindingResult.hasErrors()) {
+            certificateBindingResult.getAllErrors().forEach(err -> {
                 LOGGER.info("ERROR {}", err.getDefaultMessage());
             });
             if (token != null) {
