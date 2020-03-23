@@ -66,6 +66,7 @@ public class SetupController {
             }
             model.addAttribute("modules", moduleList);
             model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("module", Module.builder().build());
         }
         return "setup/setupMain";
     }
@@ -133,7 +134,6 @@ public class SetupController {
      * @param oldModule old module with details for pre filled text fields
      * @return redirects to index
      */
-    @SuppressWarnings("checkstyle:ParameterNumber")
     @PostMapping("/modulBearbeiten")
     @Secured("ROLE_setup")
     public String postEditModule(final KeycloakAuthenticationToken token, final Model model,
