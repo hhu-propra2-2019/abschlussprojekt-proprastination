@@ -9,6 +9,7 @@ import mops.model.classes.webclasses.WebAddress;
 import mops.model.classes.webclasses.WebApplicant;
 import mops.model.classes.Application.ApplicationBuilder;
 import mops.model.classes.webclasses.WebApplication;
+import mops.model.classes.webclasses.WebCertificate;
 import mops.services.ApplicantService;
 import mops.services.ApplicationService;
 import mops.services.CSVService;
@@ -360,8 +361,9 @@ public class ApplicationController {
     @GetMapping("/bearbeitePersoenlicheDaten")
     public String editPersonalData(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
-            model.addAttribute("account", createAccountFromPrincipal(token));
-            model.addAttribute("applicant", applicantService.findByUniserial("has220"));
+            Account account = createAccountFromPrincipal(token);
+            model.addAttribute("account", account);
+            model.addAttribute("applicant", applicantService.findByUniserial(account.getName()));
         }
         return "applicant/applicationEditPersonal";
     }

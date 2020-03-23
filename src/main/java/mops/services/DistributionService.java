@@ -72,7 +72,7 @@ public class DistributionService {
 
     /**
      * Finds all Distributions that are unassigned
-     * TODO: Needs to be addapted to retrieve List<Applicant> instead of Distribution
+     * FIXME:Needs to be addapted to retrieve List<Applicant> instead of Distribution.
      *
      * @return List of Distributions
      */
@@ -101,7 +101,7 @@ public class DistributionService {
     }
 
     private List<WebDistributorApplicant> convertApplicantToWebDistributorApplicant(
-            final List<Applicant> applicantList, final String module) {
+            final List<Applicant> applicantList, final Module module) {
         List<WebDistributorApplicant> webDistributorApplicantList = new ArrayList<>();
         for (Applicant applicant : applicantList) {
             Set<Application> applicationSet = applicant.getApplications();
