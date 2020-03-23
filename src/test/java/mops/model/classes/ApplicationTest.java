@@ -3,6 +3,8 @@ package mops.model.classes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
+
 import static org.assertj.core.api.Assertions.*;
 
 class ApplicationTest {
@@ -13,6 +15,10 @@ class ApplicationTest {
 
     @BeforeEach
     void setup() {
+        Module module = Module.builder()
+                .deadline(Instant.ofEpochSecond(100l))
+                .name("Info4")
+                .build();
         address = Address.builder()
                 .zipcode(12345)
                 .country("USA")
@@ -46,11 +52,11 @@ class ApplicationTest {
                 .minHours(2)
                 .maxHours(4)
                 .grade(1.3)
-                .priority(1)
+                .priority(Priority.SehrHoch)
                 .lecturer("Tester")
-                .role("Korrektor")
+                .role(Role.KORREKTOR)
                 .semester("WS2020")
-                .module("ProPra")
+                .module(module)
                 .comment("")
                 .build();
     }
@@ -75,26 +81,30 @@ class ApplicationTest {
 
     @Test
     void testEquals() {
+        Module module = Module.builder()
+                .deadline(Instant.ofEpochSecond(100l))
+                .name("Info4")
+                .build();
         Application application1 = Application.builder()
                 .minHours(5)
                 .maxHours(10)
                 .grade(1.3)
-                .priority(1)
+                .priority(Priority.SehrHoch)
                 .lecturer("Tester")
-                .role("Korrektor")
+                .role(Role.KORREKTOR)
                 .semester("WS2020")
-                .module("ProPra")
+                .module(module)
                 .build();
 
         Application application2 = Application.builder()
                 .minHours(5)
                 .maxHours(10)
                 .grade(1.3)
-                .priority(1)
+                .priority(Priority.SehrHoch)
                 .lecturer("Tester")
-                .role("Korrektor")
+                .role(Role.KORREKTOR)
                 .semester("WS2020")
-                .module("ProPra")
+                .module(module)
                 .build();
 
         assertThat(application1).isEqualTo(application2);

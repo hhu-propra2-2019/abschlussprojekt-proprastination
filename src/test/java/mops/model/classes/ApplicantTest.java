@@ -3,6 +3,7 @@ package mops.model.classes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -19,7 +20,11 @@ class ApplicantTest {
 
     @BeforeEach
     void init() {
-        Application application = Application.builder().module("Divination").build();
+        Module module = Module.builder()
+                .deadline(Instant.ofEpochSecond(100l))
+                .name("Info4")
+                .build();
+        Application application = Application.builder().module(module).build();
         applicationList = new HashSet<>();
         applicationList.add(application);
         certs = Certificate.builder()

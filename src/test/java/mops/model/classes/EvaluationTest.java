@@ -3,6 +3,8 @@ package mops.model.classes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class EvaluationTest {
@@ -10,9 +12,13 @@ class EvaluationTest {
 
     @BeforeEach
     void setup() {
+        Module module = Module.builder()
+                .deadline(Instant.ofEpochSecond(100l))
+                .name("Info4")
+                .build();
         //We do not Test the Applicant and Application here.
         application = Application.builder()
-                .module("ProPra2")
+                .module(module)
                 .build();
     }
 
@@ -21,7 +27,7 @@ class EvaluationTest {
         Evaluation evaluation = Evaluation.builder()
                 .application(application)
                 .comment("He is awesome!")
-                .priority(1)
+                .priority(Priority.SehrHoch)
                 .build();
 
         assertThat(evaluation)
@@ -36,7 +42,7 @@ class EvaluationTest {
         Evaluation evaluation = Evaluation.builder()
                 .application(application)
                 .comment("He is not awesome!")
-                .priority(3)
+                .priority(Priority.Neutral)
                 .build();
 
         String evalString = evaluation.toString();
@@ -52,19 +58,19 @@ class EvaluationTest {
         Evaluation evaluation = Evaluation.builder()
                 .application(application)
                 .comment("He is the best")
-                .priority(2)
+                .priority(Priority.SehrHoch)
                 .build();
 
         Evaluation evaluation2 = Evaluation.builder()
                 .application(application)
                 .comment("He is the best")
-                .priority(2)
+                .priority(Priority.SehrHoch)
                 .build();
 
         Evaluation evaluation3 = Evaluation.builder()
                 .application(application)
                 .comment("He is awesome!")
-                .priority(1)
+                .priority(Priority.Negative)
                 .build();
 
         assertThat(evaluation).isEqualTo(evaluation2);
