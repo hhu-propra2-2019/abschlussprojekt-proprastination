@@ -24,12 +24,10 @@
                 ev.dataTransfer.setData("text", ev.target.id);
             }
 
-            function drop(ev) {
+            function drop(ev, el) {
                 ev.preventDefault();
-                if (!ev.target.getAttribute("ondrop"))
-                    return false;
                 var data = ev.dataTransfer.getData("text");
-                ev.target.appendChild(document.getElementById(data));
+                el.appendChild(document.getElementById(data));
             }
         </script>
     </th:block>
@@ -46,7 +44,7 @@
         <div class="col-sm-6" th:each="distribution: ${distributions}">
             <div class="card bg-light mb-3 border-primary">
                 <div class="card-header d-flex justify-content-start align-items-start" th:text="${distribution.module}">Propra</div>
-                <div class="card-body" id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div class="card-body" id="div1" ondrop="drop(event, this)" ondragover="allowDrop(event)">
                     <div th:each="applicant: ${distribution.webDistributorApplicants}">
                         <div class="card w-100 bg-light mb-1 border-primary" th:id="drag + ${applicant.username}" id="drag1" draggable="true" ondragstart="drag(event)">
                             <div class="card-header container-fluid">
