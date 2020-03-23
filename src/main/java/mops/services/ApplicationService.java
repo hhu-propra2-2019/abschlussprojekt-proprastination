@@ -55,10 +55,18 @@ public class ApplicationService {
         return applicationRepository.findByModule(module);
     }
 
+    /**
+     * saves/updates application
+     * @param application new Application
+     */
     public void save(final Application application) {
         applicationRepository.save(application);
     }
 
+    /**
+     * finds all applications
+     * @return all applications as List
+     */
     public List<Application> findAll() {
         return applicationRepository.findAll();
     }
