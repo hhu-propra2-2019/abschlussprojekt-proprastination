@@ -12,7 +12,7 @@ import mops.repositories.DistributionRepository;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -70,7 +70,7 @@ public class DistributionService {
             //List<Application> preApplications = applicationService.findApplicationsByModule(module);
             List<Application> preApplications = new LinkedList<>();
             for (Applicant applicant : allApplicants) {
-                preApplications.addAll(applicant.getApplications());
+                preApplications.add(applicant.getApplications().iterator().next());
             }
             List<Application> applications = new LinkedList<>();
             for (Application application : preApplications) {
@@ -101,27 +101,27 @@ public class DistributionService {
             int count9 = 0;
             int count17 = 0;
 
-            Set<Applicant> distributedApplicants = new HashSet<>();
+            Set<Applicant> distributedApplicants = new LinkedHashSet<>();
 
             for (int i = 0; i < numberOfPriorities; i++) {
-                if (count7 == 1 && count9 == 2 && count17 == 3) {
+                if (count7 == 4 && count9 == 5 && count17 == 6) {
                     break;
                 }
                 for (Evaluation evaluation : sortedByOrgaPrio[i]) {
-                    if (count7 == 1 && count9 == 2 && count17 == 3) {
+                    if (count7 == 4 && count9 == 5 && count17 == 6) {
                         break;
                     }
-                    if (evaluation.getHours() == sevenHours && count7 < 1) {
+                    if (evaluation.getHours() == sevenHours && count7 < 4) {
                         //changeFinalHours(evaluation);
                         distributedApplicants.add(applicantService.findByApplications(evaluation.getApplication()));
                         allApplicants.remove(applicantService.findByApplications(evaluation.getApplication()));
                         count7++;
-                    } else if (evaluation.getHours() == nineHours && count9 < 2) {
+                    } else if (evaluation.getHours() == nineHours && count9 < 5) {
                         //changeFinalHours(evaluation);
                         distributedApplicants.add(applicantService.findByApplications(evaluation.getApplication()));
                         allApplicants.remove(applicantService.findByApplications(evaluation.getApplication()));
                         count9++;
-                    } else if (evaluation.getHours() == seventeenHours && count17 < 3) {
+                    } else if (evaluation.getHours() == seventeenHours && count17 < 6) {
                         //changeFinalHours(evaluation);
                         distributedApplicants.add(applicantService.findByApplications(evaluation.getApplication()));
                         allApplicants.remove(applicantService.findByApplications(evaluation.getApplication()));
