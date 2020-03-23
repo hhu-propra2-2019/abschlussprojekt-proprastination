@@ -47,7 +47,7 @@
                         <div class="col-6">
                             <div class="row">
                                 <label for="name">Name:&nbsp;</label>
-                                <label id="name" th:text="${applicant.surname}">Max Mustermann</label>
+                                <label id="name" th:text="${applicant.firstName} + ' ' + ${applicant.surname}">Max Mustermann</label>
                             </div>
                             <div class="row">
                                 <label for="email">E-Mail:&nbsp;</label>
@@ -55,8 +55,7 @@
                             </div>
                             <div class="row">
                                 <label for="streetplusnumber">Straße und Hausnummer:&nbsp;</label>
-                                <label id="streetplusnumber" th:text="${applicant.address.street}">Musterstraße
-                                    1</label>
+                                <label id="streetplusnumber" th:text="${applicant.address.street} + ' ' + ${applicant.address.houseNumber}">Musterstraße 1</label>
                             </div>
                             <div class="row">
                                 <label for="place">Ort:&nbsp;</label>
@@ -114,7 +113,7 @@
                         <div class="col-auto">
                             <div class="row">
                                 <label for="worktime">Arbeitszeit:&nbsp;</label>
-                                <label id="worktime" th:text="${appl.hours}">24/7</label>
+                                <label id="worktime" th:text="${appl.minHours}  + 'h - ' + ${appl.maxHours} + 'h'">24/7</label>
                             </div>
                             <div class="row">
                                 <label for="grade">Note:&nbsp;</label>
