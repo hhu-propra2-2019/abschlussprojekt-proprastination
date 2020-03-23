@@ -37,10 +37,28 @@ public class ApplicationService {
 
     /**
      * Finds all application of an applicant
+     *
      * @param applicant the applicant
      * @return his applications
      */
     public List<Application> findApplicationByApplicant(final Applicant applicant) {
         return applicationRepository.findAllByApplicant(applicant);
+    }
+
+    /**
+     * as
+     *
+     * @param id as
+     * @return Application
+     */
+    public Application findById(final long id) {
+        return applicationRepository.findById(id).get();
+    }
+
+    /**
+     * @param application application
+     */
+    public void save(final Application application) {
+        applicationRepository.save(application);
     }
 }

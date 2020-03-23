@@ -4,6 +4,7 @@ import mops.model.classes.Applicant;
 import mops.model.classes.Application;
 import mops.model.classes.Distribution;
 import mops.model.classes.Evaluation;
+import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebDistribution;
 import mops.model.classes.webclasses.WebDistributorApplicant;
 import mops.model.classes.webclasses.WebDistributorApplication;
@@ -47,7 +48,6 @@ public class DistributionService {
     public void assign() {
         distributionRepository.save(Distribution.builder()
                 .employees(applicantService.findAll())
-                .module("unassigned")
                 .build());
     }
 
@@ -57,7 +57,7 @@ public class DistributionService {
      * @param module the model
      * @return List of Distributions
      */
-    public Distribution findByModule(final String module) {
+    public Distribution findByModule(final Module module) {
         return distributionRepository.findByModule(module);
     }
 
@@ -72,11 +72,12 @@ public class DistributionService {
 
     /**
      * Finds all Distributions that are unassigned
+     * TODO: Needs to be addapted to retrieve List<Applicant> instead of Distribution
      *
      * @return List of Distributions
      */
     public Distribution findAllUnassigned() {
-        return distributionRepository.findByModule("unassigned");
+        return distributionRepository.findAll().get(0);
     }
 
     /**
@@ -91,7 +92,7 @@ public class DistributionService {
             List<WebDistributorApplicant> webDistributorApplicantList =
                     convertApplicantToWebDistributorApplicant(distribution.getEmployees());
             WebDistribution webDistribution = WebDistribution.builder()
-                    .module(distribution.getModule())
+                    .module(distribution.getModule().getName())
                     .webDistributorApplicants(webDistributorApplicantList)
                     .build();
             webDistributionList.add(webDistribution);
@@ -123,7 +124,7 @@ public class DistributionService {
                     .applicantPriority(application.getPriority() + "")
                     .minHours(application.getMinHours() + "")
                     .maxHours(application.getMaxHours() + "")
-                    .module(application.getModule())
+                    .module(application.getModule().getName())
                     .organizerHours(evaluation.getHours() + "")
                     .organizerPriority(evaluation.getPriority() + "")
                     .build();
