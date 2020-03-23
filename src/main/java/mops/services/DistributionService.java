@@ -23,6 +23,7 @@ public class DistributionService {
     private final DistributionRepository distributionRepository;
     private final ModuleService moduleService;
     private final ApplicantService applicantService;
+    private final ApplicationService applicationService;
     private final EvaluationService evaluationService;
     private final int numberOfPriorities = 4;
     private final int sevenHours = 7;
@@ -34,16 +35,19 @@ public class DistributionService {
      * @param distributionRepository the injected repository
      * @param moduleService the services that manages modules
      * @param applicantService the services that manages applicants
+     * @param applicationService the services that manages applications
      * @param evaluationService the services that manages evaluations
      */
     @SuppressWarnings("checkstyle:HiddenField")
     public DistributionService(final DistributionRepository distributionRepository,
                                final ModuleService moduleService,
                                final ApplicantService applicantService,
+                               final ApplicationService applicationService,
                                final EvaluationService evaluationService) {
         this.distributionRepository = distributionRepository;
         this.moduleService = moduleService;
         this.applicantService = applicantService;
+        this.applicationService = applicationService;
         this.evaluationService = evaluationService;
         distribute();
     }
