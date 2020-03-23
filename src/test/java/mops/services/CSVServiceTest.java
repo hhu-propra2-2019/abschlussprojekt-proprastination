@@ -2,6 +2,7 @@ package mops.services;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
+import mops.model.classes.webclasses.WebModule;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,14 +94,7 @@ class CSVServiceTest{
 
     @Test
     void getModulesWithDetailsTest() {
-        List<String[]> data = service.getModulesWithDetails();
-        String[] s1 = {"Rechnernetze Datenbanken und Betriebssysteme","RDB", "Jens Bendisposto", "10", "0", "0", "80"};
-        String[] s2 = {"Rechnerarchitektur","RA", "Christian Meter", "3", "5", "2", "120"};
-        String[] s3 = {"Theoretische Informatik", "Theo Info", "Anna Wintour", "5", "1", "1", "60"};
 
-        assertThat(data.get(0)).isEqualTo(s1);
-        assertThat(data.get(1)).isEqualTo(s2);
-        assertThat(data.get(2)).isEqualTo(s3);
     }
 
     @Test
