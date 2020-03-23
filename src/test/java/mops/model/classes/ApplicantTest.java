@@ -73,6 +73,6 @@ class ApplicantTest {
                 "comment=null, certs=Certificate(name=Bachelor, course=Harvard), " +
                 "applications=[Application(minHours=0, finalHours=0, maxHours=0, " +
                 "module=Divination, priority=0, grade=0.0, lecturer=null, semester=null, " +
-                "role=null, comment=null, applicant=null)])");
+                "role=null, comment=null)])");
     }
 }
