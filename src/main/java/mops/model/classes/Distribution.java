@@ -1,25 +1,37 @@
 package mops.model.classes;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Singular;
 import lombok.ToString;
+import org.springframework.data.relational.core.mapping.Table;
 
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.List;
 
-@Builder(builderClassName = "DistributionBuilder", toBuilder = true)
-@Getter
+@Builder(toBuilder = true)
 @EqualsAndHashCode
-@ToString
-@JsonDeserialize(builder = Distribution.DistributionBuilder.class)
+@Getter
+@ToString(exclude = "id")
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table
 public class Distribution {
-    private final String module;
-    private final List<Applicant> employees;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+    private String module;
+    @OneToMany(fetch = FetchType.EAGER)
+    @Singular
+    private List<Applicant> employees;
 
-    @JsonPOJOBuilder(withPrefix = "")
-    public static class DistributionBuilder {
-
-    }
 }

@@ -1,34 +1,46 @@
 package mops.model.classes;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
+import org.springframework.data.relational.core.mapping.Table;
 
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
+@Builder(toBuilder = true)
 @EqualsAndHashCode
-@ToString
 @Getter
-@Builder(builderClassName = "ApplicationBuilder", toBuilder = true)
-@JsonDeserialize(builder = Application.ApplicationBuilder.class)
+@ToString(exclude = "id")
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table
 public class Application {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+    private int minHours;
+    private int finalHours;
+    private int maxHours;
     @NonNull
-    private final String applicantusername;
-    private final int hours;
-    @NonNull
-    private final String module;
-    private final int priority;
-    private final double grade;
-    private final String lecturer;
-    private final String semester;
-    private final String comment;
-    private final Role role;
-
-    @JsonPOJOBuilder(withPrefix = "")
-    public static class ApplicationBuilder {
-
-    }
+    private String module;
+    private int priority;
+    private double grade;
+    private String lecturer;
+    private String semester;
+    private String role;
+    private String comment;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Applicant applicant;
 }
+
+

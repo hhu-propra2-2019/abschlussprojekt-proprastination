@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{mopslayout :: html(name='Persönliche Ansicht', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}">
+<head>
+    <meta charset="utf-8">
+    <th:block th:fragment="headcontent">
+        <link href="../static/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"
+              th:href="@{node_modules/bootstrap/dist/css/bootstrap.min.css}">
+    </th:block>
+</head>
+<body>
+<header>
+    <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
+        <ul>
+            <li>
+                <a th:href="@{/}">
+                    Startseite
+                </a>
+            </li>
+            <li>
+                <a th:href="@{..}">
+                    Dashboard
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main th:fragment="bodycontent">
+    <div th:object="${webApplicant}">
+        <div th:object="${webAddress}">
+            birthplace : <p th:text="${webApplicant.birthplace}"></p> </br>
+            gender: <p th:text="${webApplicant.gender}"></p></br>
+            nationality: <p th:text="${webApplicant.nationality}"></p></br>
+            birthday: <p th:text="${webApplicant.birthday}"></p></br>
+            course: <p th:text="${webApplicant.course}"></p></br>
+            status: <p th:text="${webApplicant.status}"></p></br>
+            comment: <p th:text="${webApplicant.comment}"></p></br>
+            street: <p th:text="${webAddress.street}"></p></br>
+            city: <p th:text="${webAddress.city}"></p></br>
+            zipcode: <p th:text="${webAddress.zipcode}"></p></br>
+        </div>
+        <div th:object="${webApplication}">
+            module: <p th:text="${webApplication.module}"></p></br>
+            workload: <p th:text="${webApplication.workload}"></p></br>
+            priority: <p th:text="${webApplication.priority}"></p></br>
+            grade: <p th:text="${webApplication.grade}"></p></br>
+            lecturer: <p th:text="${webApplication.lecturer}"></p></br>
+            semester: <p th:text="${webApplication.semester}"></p></br>
+            role: <p th:text="${webApplication.role}"></p></br>
+            comment: <p th:text="${webApplication.comment}"></p></br>
+        </div>
+    </div>
+</main>
+</body>
+</html>

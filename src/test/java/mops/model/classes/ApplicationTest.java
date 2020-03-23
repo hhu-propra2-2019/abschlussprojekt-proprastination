@@ -7,21 +7,53 @@ import static org.assertj.core.api.Assertions.*;
 
 class ApplicationTest {
     Application application;
+    Address address;
+    Applicant applicant;
+    Certificate certificate;
 
     @BeforeEach
     void setup() {
+        address = Address.builder()
+                .zipcode(12345)
+                .country("USA")
+                .city("Düsseldorf")
+                .street("Street")
+                .houseNumber("999")
+                .build();
+
+        certificate = Certificate.builder()
+                .name("Bachelor")
+                .course("Informatik")
+                .build();
+
+        applicant = Applicant.builder()
+                .uniserial("lolol420")
+                .address(address)
+                .gender("male")
+                .firstName("Angelo")
+                .surname("Merkel")
+                .comment("Moin")
+                .nationality("Russian")
+                .birthplace("Deutschland")
+                .birthday("32.32.9999")
+                .course("Trivial")
+                .status("irelevant")
+                .application(application)
+                .certs(certificate)
+                .build();
+
         application = Application.builder()
-                .applicantusername("user")
-                .hours(2)
+                .minHours(2)
+                .maxHours(4)
                 .grade(1.3)
                 .priority(1)
                 .lecturer("Tester")
-                .role(Role.KORREKTOR)
+                .role("Korrektor")
                 .semester("WS2020")
                 .module("ProPra")
                 .comment("")
+                .applicant(applicant)
                 .build();
-
     }
 
     @Test
@@ -29,12 +61,12 @@ class ApplicationTest {
         //Arrange in BeforeEach
 
         assertThat(application)
-                .hasFieldOrPropertyWithValue("applicantusername", "user")
-                .hasFieldOrPropertyWithValue("hours", 2)
+                .hasFieldOrPropertyWithValue("minHours", 2)
+                .hasFieldOrPropertyWithValue("maxHours", 4)
                 .hasFieldOrPropertyWithValue("priority", 1)
                 .hasFieldOrPropertyWithValue("grade", 1.3)
                 .hasFieldOrPropertyWithValue("lecturer", "Tester")
-                .hasFieldOrPropertyWithValue("role", Role.KORREKTOR)
+                .hasFieldOrPropertyWithValue("role", "Korrektor")
                 .hasFieldOrPropertyWithValue("semester", "WS2020")
                 .hasFieldOrPropertyWithValue("module", "ProPra")
                 .hasFieldOrPropertyWithValue("comment", "");
@@ -45,27 +77,25 @@ class ApplicationTest {
     @Test
     void testEquals() {
         Application application1 = Application.builder()
-                .applicantusername("user")
-                .hours(2)
+                .minHours(5)
+                .maxHours(10)
                 .grade(1.3)
                 .priority(1)
                 .lecturer("Tester")
-                .role(Role.KORREKTOR)
+                .role("Korrektor")
                 .semester("WS2020")
                 .module("ProPra")
-                .comment("")
                 .build();
 
         Application application2 = Application.builder()
-                .applicantusername("user")
-                .hours(2)
+                .minHours(5)
+                .maxHours(10)
                 .grade(1.3)
                 .priority(1)
                 .lecturer("Tester")
-                .role(Role.KORREKTOR)
+                .role("Korrektor")
                 .semester("WS2020")
                 .module("ProPra")
-                .comment("")
                 .build();
 
         assertThat(application1).isEqualTo(application2);
@@ -75,7 +105,8 @@ class ApplicationTest {
     void testBuilderFailsWithMissingArgument() {
         assertThatThrownBy(() -> {
                     Application application = Application.builder()
-                            .hours(2)
+                            .minHours(10)
+                            .maxHours(20)
                             .build();
                 }
         ).isInstanceOf(NullPointerException.class);
@@ -85,19 +116,16 @@ class ApplicationTest {
     void testToString() {
         //Arrange in BeforeEach
 
-        assertThat(application.toString()).isEqualTo("Application(applicantusername=user, hours=2, module=ProPra, priority=1, grade=1.3, lecturer=Tester, semester=WS2020, comment=, role=KORREKTOR)");
+        assertThat(application.toString()).isEqualTo(
+                "Application(minHours=2, finalHours=0, maxHours=4, module=ProPra, " +
+                        "priority=1, grade=1.3, lecturer=Tester, semester=WS2020, " +
+                        "role=Korrektor, comment=, applicant=Applicant(uniserial=lolol420, " +
+                        "birthplace=Deutschland, firstName=Angelo, surname=Merkel, " +
+                        "address=Address(street=Street, houseNumber=999, city=Düsseldorf, " +
+                        "country=USA, zipcode=12345), gender=male, birthday=32.32.9999, " +
+                        "nationality=Russian, course=Trivial, status=irelevant, comment=Moin, " +
+                        "certs=Certificate(name=Bachelor, course=Informatik), applications=[null]))");
 
     }
 
-    @Test
-    void testToBuilder() {
-        //Arrange in BeforeEach
-
-        Application.ApplicationBuilder applicationBuilder = application.toBuilder();
-        Application application2 = applicationBuilder.build();
-
-        assertThat(application2).isEqualTo(application);
-
-
-    }
 }
