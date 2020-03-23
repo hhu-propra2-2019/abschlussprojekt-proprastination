@@ -5,6 +5,8 @@ import mops.model.classes.webclasses.WebApplication;
 import mops.repositories.ApplicationRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ApplicationService {
 
@@ -43,4 +45,6 @@ public class ApplicationService {
                 .build();
         return application;
     }
+
+
 }

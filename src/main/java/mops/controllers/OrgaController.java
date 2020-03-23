@@ -3,13 +3,15 @@ package mops.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import mops.model.Account;
 import mops.services.ApplicantService;
+import mops.services.ApplicationService;
+import mops.services.ModuleService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,8 +22,15 @@ import org.springframework.web.context.annotation.SessionScope;
 @RequestMapping("/bewerbung2/organisator")
 public class OrgaController {
 
-    @Autowired
-    private ApplicantService applicantService;
+    private final ApplicantService applicantService;
+    private final ApplicationService applicationService;
+    private final ModuleService moduleService;
+
+    public OrgaController(final ApplicantService applicantService, ApplicationService applicationService, final ModuleService moduleService) {
+        this.applicantService = applicantService;
+        this.applicationService = applicationService;
+        this.moduleService = moduleService;
+    }
 
     private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
         KeycloakPrincipal principal = (KeycloakPrincipal) token.getPrincipal();
@@ -46,6 +55,7 @@ public class OrgaController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
+        model.addAttribute("modules", moduleService.getModules());
         return "organizer/orgaMain";
     }
 
@@ -78,12 +88,13 @@ public class OrgaController {
      * @param model
      * @return orgaOverview.html as String
      */
-    @GetMapping("/overview")
+    @GetMapping("/{id}/")
     @Secured("ROLE_orga")
-    public String overview(final KeycloakAuthenticationToken token, final Model model) {
+    public String overview(@PathVariable("id") final String id, final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
+        model.addAttribute("applications", applicationService.findAllByModuleId(Long.parseLong(id)));
         return "organizer/orgaOverview";
     }
 

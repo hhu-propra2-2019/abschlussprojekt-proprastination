@@ -4,6 +4,7 @@ import mops.model.classes.Module;
 import mops.repositories.ModuleRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -27,6 +28,14 @@ public class ModuleService {
      * @return List of all Modules
      */
     public List<Module> getModules() {
-        return moduleRepository.findAll();
+        List<Module> modules = new LinkedList<>();
+        List<String> strings = CSVService.getModules();
+        for (int i = 0; i < strings.size(); i++) {
+            modules.add(Module.builder()
+                    .name(strings.get(i))
+                    .id(i)
+                    .build());
+        }
+        return modules;
     }
 }
