@@ -107,7 +107,7 @@ public class OrgaController {
      * (Inside a modal / popup window.)
      * @return "applicationModalContent", the HTML file with the modal content.
      */
-    @GetMapping("/modal/{id}")
+    @GetMapping("/modal/{id}/")
     @Secured("ROLE_orga")
     public String applicationInfo(@PathVariable("id") final String id, final Model model) {
         model.addAttribute("appl", orgaService.getApplication(id));
