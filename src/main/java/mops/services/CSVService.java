@@ -3,7 +3,6 @@ package mops.services;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvException;
-import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebModule;
 import org.springframework.stereotype.Service;
 
