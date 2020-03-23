@@ -8,6 +8,7 @@ import mops.model.classes.Certificate;
 import mops.model.classes.Distribution;
 import mops.model.classes.Evaluation;
 import mops.model.classes.Module;
+import mops.model.classes.Priority;
 import mops.model.classes.Role;
 import mops.repositories.ApplicantRepository;
 import mops.repositories.ApplicationRepository;
@@ -113,7 +114,7 @@ public class DatabaseInit implements ServletContextInitializer {
                     .semester("SS2020")
                     .comment(truncate(faker.rickAndMorty().quote(), 255))
                     .role(getRole())
-                    .priority(faker.number().numberBetween(1, 4))
+                    .priority(nextPriority())
                     .build();
 
             Application application2 = Application.builder()
@@ -126,7 +127,7 @@ public class DatabaseInit implements ServletContextInitializer {
                     .semester("SS2020")
                     .comment(truncate(faker.rickAndMorty().quote(), 255))
                     .role(getRole())
-                    .priority(faker.number().numberBetween(1, 4))
+                    .priority(nextPriority())
                     .build();
 
             Applicant applicant = Applicant.builder()
@@ -168,6 +169,25 @@ public class DatabaseInit implements ServletContextInitializer {
             return "männlich";
         }
         return "weiblich";
+    }
+
+    private Priority nextPriority() {
+        Priority prio;
+        switch (random.nextInt(4)) {
+            case 0:
+                prio = Priority.SehrHoch;
+                break;
+            case 1:
+                prio = Priority.Hoch;
+                break;
+            case 2:
+                prio = Priority.Neutral;
+                break;
+            default:
+                prio = Priority.Negative;
+                break;
+        }
+        return prio;
     }
 
     private int nextFinalHour() {
@@ -249,7 +269,7 @@ public class DatabaseInit implements ServletContextInitializer {
                 .semester("SS2020")
                 .comment(truncate(faker.rickAndMorty().quote(), 255))
                 .role(getRole())
-                .priority(faker.number().numberBetween(1, 4))
+                .priority(nextPriority())
                 .build();
 
         Application application2 = Application.builder()
@@ -262,7 +282,7 @@ public class DatabaseInit implements ServletContextInitializer {
                 .semester("SS2020")
                 .comment(truncate(faker.rickAndMorty().quote(), 255))
                 .role(getRole())
-                .priority(faker.number().numberBetween(1, 4))
+                .priority(nextPriority())
                 .build();
 
         return Applicant.builder()
@@ -313,7 +333,7 @@ public class DatabaseInit implements ServletContextInitializer {
                     Evaluation evaluation = Evaluation.builder()
                             .comment(truncate(faker.yoda().quote(), 255))
                             .hours(faker.number().numberBetween(7, 17))
-                            .priority(faker.number().numberBetween(1, 5))
+                            .priority(nextPriority())
                             .application(application)
                             .build();
                     evaluationRepository.save(evaluation);

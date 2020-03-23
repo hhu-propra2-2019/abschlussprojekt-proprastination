@@ -36,7 +36,7 @@ public class Application {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "module_id")
     private Module module;
-    private int priority;
+    private Priority priority;
     private double grade;
     private String lecturer;
     private String semester;

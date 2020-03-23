@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import mops.model.classes.Module;
+import mops.model.classes.Priority;
 import mops.model.classes.Role;
 
 
@@ -17,7 +18,7 @@ public class WebApplication {
     private long id;
     private Module module;
     private int finalHours;
-    private int priority;
+    private Priority priority;
     private double grade;
     private String lecturer;
     private String semester;
