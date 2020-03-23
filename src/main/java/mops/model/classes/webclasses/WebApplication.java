@@ -5,19 +5,24 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mops.model.classes.Module;
+import mops.model.classes.Priority;
+import mops.model.classes.Role;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder(toBuilder = true)
 public class WebApplication {
-    private String module;
-    private int workload;
-    private int priority;
+    private long id;
+    private Module module;
+    private int finalHours;
+    private Priority priority;
     private double grade;
     private String lecturer;
     private String semester;
-    private String role;
+    private Role role;
     private String comment;
 
 }

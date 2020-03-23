@@ -14,6 +14,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.util.List;
 
@@ -29,9 +31,12 @@ public class Distribution {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private String module;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "module_id")
+    private Module module;
     @OneToMany(fetch = FetchType.EAGER)
     @Singular
+    @JoinColumn(name = "applicant_id")
     private List<Applicant> employees;
 
 }

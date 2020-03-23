@@ -1,7 +1,9 @@
 package mops.repositories;
 
 import mops.model.classes.Distribution;
+import mops.model.classes.Module;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,10 +13,12 @@ import java.util.Optional;
 public interface DistributionRepository extends CrudRepository<Distribution, Long> {
 
     @Override
+    @NonNull
     List<Distribution> findAll();
 
     @Override
-    Optional<Distribution> findById(Long id);
+    @NonNull
+    Optional<Distribution> findById(@NonNull Long id);
 
     /**
      * Finds the Distribution of a model
@@ -22,10 +26,10 @@ public interface DistributionRepository extends CrudRepository<Distribution, Lon
      * @param module the model
      * @return List of Distributions
      */
-    Distribution findByModule(String module);
+    Distribution findByModule(Module module);
 
-    @Override
-    Distribution save(Distribution distribution);
+    //@Override
+    //void save(Distribution distribution);
 
 
 }

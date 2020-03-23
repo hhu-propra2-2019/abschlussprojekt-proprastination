@@ -31,5 +31,5 @@ public class Evaluation {
     private Application application;
     private int hours;
     private String comment;
-    private int priority;
+    private Priority priority;
 }
