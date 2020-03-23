@@ -108,22 +108,10 @@
                         <th scope="col">Bewerbungsfrist</th>
                         <th scope="col">Bewerbungsstatus</th>
                     </tr>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Example #1</td>
-                        <td>Example #2</td>
-                        <td>Example #3</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Example #1</td>
-                        <td>Example #2</td>
-                        <td>Example #3</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Example #1</td>
-                        <td>Example #2</td>
+                    <tr th:each="app, appNum : ${Applicant.applications}">
+                        <th scope="row" th:text="${appNum.count}"></th>
+                        <td th:text="${app.module.name}">Example #1</td>
+                        <td th:text="${app.module.deadline}">Example #2</td>
                         <td>Example #3</td>
                     </tr>
                     </tbody>

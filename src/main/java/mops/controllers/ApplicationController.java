@@ -7,9 +7,12 @@ import mops.model.classes.Application;
 import mops.model.classes.Certificate;
 import mops.model.classes.webclasses.WebAddress;
 import mops.model.classes.webclasses.WebApplicant;
+import mops.model.classes.Application.ApplicationBuilder;
 import mops.model.classes.webclasses.WebApplication;
 import mops.services.ApplicantService;
+import mops.services.ApplicationService;
 import mops.services.CSVService;
+import mops.services.ModuleService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.context.annotation.SessionScope;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,6 +35,12 @@ public class ApplicationController {
 
     @Autowired
     private ApplicantService applicantService;
+
+    @Autowired
+    private ModuleService moduleService;
+
+    @Autowired
+    private ApplicationService applicationService;
 
     private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
         KeycloakPrincipal principal = (KeycloakPrincipal) token.getPrincipal();
@@ -55,7 +63,9 @@ public class ApplicationController {
     @Secured("ROLE_studentin")
     public String main(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
-            model.addAttribute("account", createAccountFromPrincipal(token));
+            Account account = createAccountFromPrincipal(token);
+            model.addAttribute("account", account);
+            model.addAttribute("Applicant", applicantService.findByUniserial(account.getName()));
         }
         return "applicant/applicantMain";
     }
@@ -179,8 +189,8 @@ public class ApplicationController {
         Application application = Application.builder()
                 //Module wird irgendwie nicht eingelesen? Mach ich später >_>
                 .module(webApplication.getModule())
-                .minHours(webApplication.getWorkload())//HTML anpassen
-                .maxHours(webApplication.getWorkload())//HTML anpassen
+                .minHours(webApplication.getFinalHours())//HTML anpassen
+                .maxHours(webApplication.getFinalHours())//HTML anpassen
                 .priority(webApplication.getPriority())
                 .grade(webApplication.getGrade())
                 .lecturer(webApplication.getLecturer())
@@ -293,7 +303,11 @@ public class ApplicationController {
         if (token != null) {
             Account account = createAccountFromPrincipal(token);
             model.addAttribute("account", account);
-            model.addAttribute("applicant", applicantService.findByUniserial(account.getName()));
+            Applicant applicant = applicantService.findByUniserial(account.getName());
+            model.addAttribute("applicant", applicant);
+            model.addAttribute("modules",
+                    applicantService.getAllNotfilledModules(applicant, moduleService.getModules()));
+
 
         }
         return "applicant/applicationOverview";
@@ -331,7 +345,7 @@ public class ApplicationController {
             applicantService.saveApplicant(applicant);
             model.addAttribute("account", createAccountFromPrincipal(token));
             Application.builder()
-                    .module(module)
+                    .module(moduleService.findModuleByName(module))
                     .lecturer(lecturer)
                     .semester(semester)
                     .minHours(Integer.parseInt(workload))
@@ -365,14 +379,75 @@ public class ApplicationController {
      *
      * @param token The KeycloakAuthentication
      * @param model The Website model
+     * @param id    module id.
      * @return The HTML file rendered as a String
      */
 
     @GetMapping("/bearbeiteModulDaten")
-    public String editModuleData(final KeycloakAuthenticationToken token, final Model model) {
+    public String editModuleData(@RequestParam("module") final long id,
+                                 final KeycloakAuthenticationToken token, final Model model) {
+        if (token != null) {
+            Account account = createAccountFromPrincipal(token);
+            model.addAttribute("account", account);
+            Applicant applicant = applicantService.findByUniserial(account.getName());
+            Application application = applicant.getApplicationById(id);
+            if (application == null) {
+                return "redirect:bewerbungsUebersicht";
+            }
+            model.addAttribute("app", application);
+        }
+        return "applicant/applicationEditModule";
+    }
+
+    /**
+     * Edits the given Application.
+     *
+     * @param webApplication Changes Data in WebApplication format.
+     * @param token          Keycloak.
+     * @param model          Model.
+     * @return mainpage.
+     */
+    @PostMapping(value = "/bearbeiteModulDaten")
+    public String postEditModuledata(final WebApplication webApplication, final KeycloakAuthenticationToken token,
+                                     final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
+            Application application = applicationService.findById(webApplication.getId());
+            ApplicationBuilder builder = application.toBuilder();
+            Application newApplication = builder.finalHours(webApplication.getFinalHours())
+                    .grade(webApplication.getGrade())
+                    .lecturer(webApplication.getLecturer())
+                    .priority(webApplication.getPriority())
+                    .semester(webApplication.getSemester())
+                    .role(webApplication.getRole())
+                    .build();
+            applicationService.save(newApplication);
         }
-        return "applicant/applicationEditPersonal";
+        return "redirect:bewerbungsUebersicht";
+    }
+
+    /**
+     * Deletes Module from applicant.
+     *
+     * @param module module id.
+     * @param token  Keycloak.
+     * @param model  Model.
+     * @return Mainpage.
+     */
+    @GetMapping("/loescheModul")
+    public String delete(@RequestParam("module") final long module,
+                         final KeycloakAuthenticationToken token, final Model model) {
+        if (token != null) {
+            Account account = createAccountFromPrincipal(token);
+            model.addAttribute("account", account);
+            Applicant applicant = applicantService.findByUniserial(account.getName());
+            Application application = applicant.getApplicationById(module);
+            if (application == null) {
+                return "redirect:bewerbungsUebersicht";
+            }
+            applicantService.deleteApplication(application, applicant);
+
+        }
+        return "redirect:bewerbungsUebersicht";
     }
 }
