@@ -375,6 +375,7 @@ public class ApplicationController {
      * @param token the keycloak token
      * @param model the model
      * @param webApplication the last webApplication and its information
+     * @param bindingResult the result of validating webApplication
      * @return the overviewhtml
      */
     @PostMapping("/uebersicht")
