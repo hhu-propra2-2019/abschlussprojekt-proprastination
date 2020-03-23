@@ -1,6 +1,7 @@
 package mops.services;
 
 import mops.model.classes.Application;
+import mops.model.classes.Application.ApplicationBuilder;
 import mops.model.classes.webclasses.WebApplication;
 import mops.repositories.ApplicationRepository;
 import org.springframework.stereotype.Service;
@@ -34,12 +35,35 @@ public class ApplicationService {
                 .module(webApplication.getModule())
                 .minHours(webApplication.getFinalHours())//HTML anpassen
                 .maxHours(webApplication.getFinalHours())//HTML anpassen
+                .finalHours(webApplication.getFinalHours())
                 .priority(webApplication.getPriority())
                 .grade(webApplication.getGrade())
                 .lecturer(webApplication.getLecturer())
                 .semester(webApplication.getSemester())
                 .role(webApplication.getRole())
                 .comment(webApplication.getComment())
+                .build();
+    }
+
+    /**
+     * Modifies application to the changes in webApplication.
+     *
+     * @param webApplication data to change.
+     * @param application    Merging data into application
+     * @return new application with changed data.
+     */
+    public Application changeApplication(final WebApplication webApplication, final Application application) {
+        ApplicationBuilder applicationBuilder = application.toBuilder();
+        return applicationBuilder.finalHours(webApplication.getFinalHours())
+                .maxHours(webApplication.getFinalHours())
+                .minHours(webApplication.getFinalHours())
+                .semester(webApplication.getSemester())
+                .comment(webApplication.getComment())
+                .grade(webApplication.getGrade())
+                .lecturer(webApplication.getLecturer())
+                .role(webApplication.getRole())
+                .module(webApplication.getModule())
+                .priority(webApplication.getPriority())
                 .build();
     }
 

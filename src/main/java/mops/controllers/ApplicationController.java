@@ -407,14 +407,7 @@ public class ApplicationController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
             Application application = applicationService.findById(webApplication.getId());
-            ApplicationBuilder builder = application.toBuilder();
-            Application newApplication = builder.finalHours(webApplication.getFinalHours())
-                    .grade(webApplication.getGrade())
-                    .lecturer(webApplication.getLecturer())
-                    .priority(webApplication.getPriority())
-                    .semester(webApplication.getSemester())
-                    .role(webApplication.getRole())
-                    .build();
+            Application newApplication = applicationService.changeApplication(webApplication, application);
             applicationService.save(newApplication);
         }
         return "redirect:bewerbungsUebersicht";
