@@ -63,7 +63,7 @@ public class ApplicationService {
         ApplicationBuilder applicationBuilder = application.toBuilder();
         return applicationBuilder
                 .maxHours(webApplication.getMinHours())
-                .minHours(webApplication.getMinHours())
+                .minHours(webApplication.getMaxHours())
                 .semester(webApplication.getSemester())
                 .comment(webApplication.getComment())
                 .grade(webApplication.getGrade())
