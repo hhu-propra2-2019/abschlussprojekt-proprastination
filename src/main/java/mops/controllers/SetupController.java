@@ -65,14 +65,7 @@ public class SetupController {
     public String postEditedModule(final KeycloakAuthenticationToken token, final Model model,
                                    @RequestParam("oldName") final String oldName,
                                    final WebModule module) {
-        //webService.deleteOne(oldName);
-        //webService.update(module);
-
-        /*CSVService.deleteModule(oldName);
-        List<String[]> input = new ArrayList<>();
-        String[] editedModule = module.toStringArray();
-        input.add(editedModule);
-        CSVService.writeInCSV("src/main/resources/csv/module.csv", input);*/
+        webService.update(module, oldName);
         return index(token, model);
     }
 
@@ -134,7 +127,7 @@ public class SetupController {
     @Secured("ROLE_setup")
     public String postDeleteModule(final KeycloakAuthenticationToken token, final Model model,
                                 @RequestParam("nameDelete") final String name) {
-        //webService.deleteOne(name);
+        webService.deleteOne(name);
         return index(token, model);
     }
 

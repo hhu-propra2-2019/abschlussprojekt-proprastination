@@ -48,6 +48,7 @@ public class Application {
     private Role role;
     private String comment;
     @ManyToOne(fetch = FetchType.EAGER)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Applicant applicant;
 }
 
