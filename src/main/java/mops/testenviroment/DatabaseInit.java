@@ -175,16 +175,16 @@ public class DatabaseInit implements ServletContextInitializer {
         Priority prio;
         switch (random.nextInt(4)) {
             case 0:
-                prio = Priority.SehrHoch;
+                prio = Priority.VERYHIGH;
                 break;
             case 1:
-                prio = Priority.Hoch;
+                prio = Priority.HIGH;
                 break;
             case 2:
-                prio = Priority.Neutral;
+                prio = Priority.NEUTRAL;
                 break;
             default:
-                prio = Priority.Negative;
+                prio = Priority.NEGATIVE;
                 break;
         }
         return prio;
@@ -230,13 +230,13 @@ public class DatabaseInit implements ServletContextInitializer {
         Role ret;
         switch (random.nextInt(3)) {
             case 0:
-                ret = Role.KORREKTOR;
+                ret = Role.PROOFREADER;
                 break;
             case 1:
                 ret = Role.TUTOR;
                 break;
             default:
-                ret = Role.NONE;
+                ret = Role.BOTH;
                 break;
         }
         return ret;
