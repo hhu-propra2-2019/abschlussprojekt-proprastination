@@ -66,12 +66,6 @@ public class SetupController {
                                    @RequestParam("oldName") final String oldName,
                                    final WebModule module) {
         webService.update(module, oldName);
-
-        /*CSVService.deleteModule(oldName);
-        List<String[]> input = new ArrayList<>();
-        String[] editedModule = module.toStringArray();
-        input.add(editedModule);
-        CSVService.writeInCSV("src/main/resources/csv/module.csv", input);*/
         return index(token, model);
     }
 
