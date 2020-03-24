@@ -11,6 +11,8 @@ import mops.model.classes.webclasses.WebDistributorApplicant;
 import mops.model.classes.webclasses.WebDistributorApplication;
 import mops.repositories.DistributionRepository;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
@@ -21,19 +23,20 @@ import java.util.Set;
 @Service
 public class DistributionService {
 
-    private final DistributionRepository distributionRepository;
-    private final ModuleService moduleService;
-    private final ApplicantService applicantService;
-    private final ApplicationService applicationService;
-    private final EvaluationService evaluationService;
+    private DistributionRepository distributionRepository;
+    private ModuleService moduleService;
+    private ApplicantService applicantService;
+    private ApplicationService applicationService;
+    private EvaluationService evaluationService;
 
     /**
      * Injects Services and repositories
+     *
      * @param distributionRepository the injected repository
-     * @param moduleService the services that manages modules
-     * @param applicantService the services that manages applicants
-     * @param applicationService the services that manages applications
-     * @param evaluationService the services that manages evaluations
+     * @param moduleService          the services that manages modules
+     * @param applicantService       the services that manages applicants
+     * @param applicationService     the services that manages applications
+     * @param evaluationService      the services that manages evaluations
      */
     @SuppressWarnings("checkstyle:HiddenField")
     public DistributionService(final DistributionRepository distributionRepository,
@@ -46,6 +49,13 @@ public class DistributionService {
         this.applicantService = applicantService;
         this.applicationService = applicationService;
         this.evaluationService = evaluationService;
+    }
+
+    /**
+     * Setup to init data.
+     */
+    @PostConstruct
+    public void setup() {
         distribute();
     }
 
@@ -142,7 +152,8 @@ public class DistributionService {
 
     /**
      * changes finalHours in application
-     * @param evaluation
+     *
+     * @param evaluation eval
      */
     private void changeFinalHours(final Evaluation evaluation) {
         ApplicationBuilder applicationBuilder = evaluation.getApplication().toBuilder();
