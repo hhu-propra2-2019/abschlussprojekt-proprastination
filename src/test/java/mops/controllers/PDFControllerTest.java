@@ -5,6 +5,7 @@ import mops.model.classes.Address;
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
 import mops.model.classes.Certificate;
+import mops.model.classes.Module;
 import mops.services.ApplicantService;
 import mops.services.PDFService;
 import org.junit.Ignore;
@@ -26,6 +27,7 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 
 import java.io.File;
 import java.io.FileWriter;
+import java.time.Instant;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -60,8 +62,12 @@ class PDFControllerTest {
     //@Test
     @WithMockKeycloackAuth(name = "name", roles = "studentin")
     void fileSystemResource() throws Exception {
+        Module module = Module.builder()
+                .deadline(Instant.ofEpochSecond(100l))
+                .name("Info4")
+                .build();
         Application application = Application.builder()
-                .module("test")
+                .module(module)
                 .build();
         Applicant applicant = Applicant.builder().application(application).build();
 
@@ -90,8 +96,12 @@ class PDFControllerTest {
     @Test
     @WithMockKeycloackAuth(name = "baum", roles = "studentin")
     void noSuchApplication() throws Exception {
+        Module module = Module.builder()
+                .deadline(Instant.ofEpochSecond(100l))
+                .name("Info4")
+                .build();
         Application application = Application.builder()
-                .module("s")
+                .module(module)
                 .build();
         Applicant applicant = Applicant.builder().application(application).build();
         when(appService.findByUniserial(any(String.class))).thenReturn(applicant);

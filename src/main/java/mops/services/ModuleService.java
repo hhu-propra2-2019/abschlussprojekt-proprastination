@@ -29,6 +29,7 @@ public class ModuleService {
     public List<Module> getModules() {
         return moduleRepository.findAll();
     }
+
     /**
      * Finds Module by Name.
      *
@@ -49,6 +50,14 @@ public class ModuleService {
         return moduleRepository.findById(id).get();
     }
 
+    /**
+     * Saves a module
+     *
+     * @param module module.
+     */
+    public void save(final Module module) {
+        moduleRepository.save(module);
+    }
     /**
      * delete single module
      * @param name of the module to be deleted
