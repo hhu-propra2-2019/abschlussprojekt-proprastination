@@ -1,7 +1,8 @@
 package mops.controllers;
 
 import mops.model.Account;
-import mops.model.classes.*;
+import mops.model.classes.Applicant;
+import mops.model.classes.Application;
 import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebAddress;
 import mops.model.classes.webclasses.WebApplicant;
@@ -211,20 +212,13 @@ public class ApplicationController {
             model.addAttribute("newModule", module);
             model.addAttribute("semesters", CSVService.getSemester());
             model.addAttribute("modules", availableMods);
-            model.addAttribute("countries", CSVService.getCountries());
-            model.addAttribute("courses", CSVService.getCourses());
             model.addAttribute("webApplication", WebApplication.builder().module(modules).build());
         }
         if (applicantBindingResult.hasErrors() || addressBindingResult.hasErrors()
                 || certificateBindingResult.hasErrors()) {
             return "applicant/applicationPersonal";
         }
-        Address address = studentService.buildAddress(webAddress);
-        Certificate certificate = studentService.buildCertificate(webCertificate);
-        Applicant applicant = studentService.buildApplicant(token.getName(), webApplicant, address, certificate);
-        applicantService.saveApplicant(applicant);
-        model.addAttribute("webApplication", WebApplication.builder().build());
-        return "applicant/applicationModule";
+       return "applicant/applicationModule";
     }
 
     /**
@@ -293,7 +287,7 @@ public class ApplicationController {
                                @ModelAttribute("applicant1") final Applicant applicant1) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
-            model.addAttribute("applicant", applicantService.findByUniserial("has220"));
+            model.addAttribute("applicant", applicantService.findByUniserial("has220"));        //?!?! WHAT IS DIS
             studentService.updateApplicantWithoutChangingApplications(applicant1);
         }
         return "applicant/applicationOverview";
