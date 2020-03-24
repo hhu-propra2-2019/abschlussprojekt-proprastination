@@ -242,12 +242,13 @@ public class DistributionService {
         for (Application application : applicationSet) {
             Evaluation evaluation = evaluationService.findByApplication(application);
             WebDistributorApplication webDistributorApplication = WebDistributorApplication.builder()
-                    .applicantPriority(application.getPriority() + "")
+                    .applicantPriority(application.getPriority())
                     .minHours(application.getMinHours() + "")
                     .maxHours(application.getMaxHours() + "")
                     .module(application.getModule().getName())
+                    .moduleShort(application.getModule().getShortName())
                     .organizerHours(evaluation.getHours() + "")
-                    .organizerPriority(evaluation.getPriority() + "")
+                    .organizerPriority(evaluation.getPriority())
                     .build();
             webDistributorApplicationList.add(webDistributorApplication);
         }
