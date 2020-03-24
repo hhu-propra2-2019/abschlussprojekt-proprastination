@@ -355,7 +355,7 @@ public class DatabaseInit implements ServletContextInitializer {
         );
     }
 
-    @SuppressWarnings("checkstyle:MagicNumber")
+    @SuppressWarnings({"checkstyle:MagicNumber", "checkstyle:HiddenField"})
     private void fakeModules(final Faker faker) {
         String[] modulenames = {"Programmier Praktikum 1", "Programmier Praktikum 2",
                 "RDB",
