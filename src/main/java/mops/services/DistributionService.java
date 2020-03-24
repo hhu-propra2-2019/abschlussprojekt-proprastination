@@ -1,8 +1,6 @@
 package mops.services;
 
-import com.sun.xml.bind.v2.runtime.output.SAXOutput;
 import mops.model.classes.Applicant;
-import mops.model.classes.Applicant.ApplicantBuilder;
 import mops.model.classes.Application;
 import mops.model.classes.Application.ApplicationBuilder;
 import mops.model.classes.Distribution;
@@ -11,7 +9,6 @@ import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebDistribution;
 import mops.model.classes.webclasses.WebDistributorApplicant;
 import mops.model.classes.webclasses.WebDistributorApplication;
-//import mops.model.classes.Module;
 import mops.repositories.DistributionRepository;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;

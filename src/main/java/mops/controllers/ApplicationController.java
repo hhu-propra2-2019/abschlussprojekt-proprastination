@@ -24,7 +24,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -332,53 +331,33 @@ public class ApplicationController {
         Application application = studentService.buildApplication(webApplication);
         applicant = applicant.toBuilder().application(application).build();
         applicantService.saveApplicant(applicant);
+        List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
         model.addAttribute("applicant", applicant);
+        model.addAttribute("modules", availableMods);
         return "applicant/applicationOverview";
     }
-/*    /**
-     * Overview, will be used to save the last module and shows the data the applicant filled in
+
+    /**
      *
-     * @param token     keycloaktone
-     * @param model     model
-     * @param applicant applicant (load from database?)
-     * @param module    the module the applicant applied last for
-     * @param workload  look above
-     * @param grade     "
-     * @param semester  "
-     * @param lecturer  "
-     *                  //  * @param tasks "
-     *                  //  * @param priority "
-     * @return overview.html
+     * @param token
+     * @param model
+     * @param modules
+     * @return html
      */
- /*   @PostMapping("/uebersicht")
-    @SuppressWarnings("checkstyle:ParameterNumber")
-    public String postOverview(final KeycloakAuthenticationToken token,
-                               final Model model,
-                               @RequestParam("applicant") final Applicant applicant,
-                               @RequestParam("module") final String module,
-                               @RequestParam("workload") final String workload,
-                               @RequestParam("grade") final String grade,
-                               @RequestParam("semesters") final String semester,
-                               @RequestParam("lecturer") final String lecturer
-                               //                           @RequestParam("tasks") final String tasks,
-                               //                           @RequestParam("priority") final String priority
-    ) {
-        if (token != null) {
-            applicantService.saveApplicant(applicant);
-            model.addAttribute("account", createAccountFromPrincipal(token));
-            Application.builder()
-                    .module(moduleService.findModuleByName(module))
-                    .lecturer(lecturer)
-                    .semester(semester)
-                    .minHours(Integer.parseInt(workload))
-                    .maxHours(Integer.parseInt(workload))
-                    .grade(Double.parseDouble(grade))
-                    .build();
-        }
-        return "applicant/applicationOverview";
-    }*/
-
-
+    @PostMapping("/moduleNachUebersicht")
+    public String postModuleAfterOverview(final KeycloakAuthenticationToken token, final Model model,
+                                          @RequestParam("modules") final String modules) {
+        Module module = moduleService.findModuleByName(modules);
+        Applicant applicant = applicantService.findByUniserial(token.getName());
+        List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
+        availableMods.remove(module);
+        model.addAttribute("account", createAccountFromPrincipal(token));
+        model.addAttribute("newModule", module);
+        model.addAttribute("semesters", CSVService.getSemester());
+        model.addAttribute("modules", availableMods);
+        model.addAttribute("webApplication", WebApplication.builder().module(modules).build());
+        return "applicant/applicationModule";
+    }
     /**
      * The GetMapping for the edit form fot personal data
      *
