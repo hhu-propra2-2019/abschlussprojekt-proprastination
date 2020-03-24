@@ -2,21 +2,27 @@ package mops.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import mops.model.Account;
+import mops.model.classes.orgaWebClasses.OrgaApplication;
 import mops.services.ApplicantService;
 import mops.services.ApplicationService;
 import mops.services.ModuleService;
 import mops.services.OrgaService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.annotation.SessionScope;
+
+import java.util.LinkedList;
+import java.util.List;
 
 @SessionScope
 @Controller
@@ -113,6 +119,24 @@ public class OrgaController {
     }
 
     /**
+     *
+     * @param applications
+     * @param id
+     * @param model
+     * @return
+     */
+    @PostMapping("/{id}/")
+    @Secured("ROLE_orga")
+    public String applicationInfoPost(final LinkedList<OrgaApplication> applications,
+                                      @PathVariable("id") final String id, final Model model) {
+        System.out.println("---------------------------------------------------------------------");
+        System.out.println(applications.size());
+        applications.forEach(System.out::println);
+        System.out.println("---------------------------------------------------------------------");
+        return "redirect:/bewerbung2/organisator/" + id + "/";
+    }
+
+    /**
      * Needed to display additional information about each application on the overview page.
      * (Inside a modal / popup window.)
      * @param id applications id
@@ -121,7 +145,7 @@ public class OrgaController {
      */
     @GetMapping("/modal/{id}/")
     @Secured("ROLE_orga")
-    public String applicationInfo(@PathVariable("id") final String id, final Model model) {
+    public String applicationInfoGet(@PathVariable("id") final String id, final Model model) {
         model.addAttribute("appl", orgaService.getApplication(id));
         return "organizer/applicationModalContent";
     }
