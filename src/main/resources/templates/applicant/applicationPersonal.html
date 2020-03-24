@@ -173,7 +173,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card bg-light mb-3 border-primary" th:if="${modules} ne null">
+            <div class="card bg-light mb-3 border-primary" th:if="${modules.size()} ne 0">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-6">
@@ -193,7 +193,7 @@
                 </div>
             </div>
         </form>
-        <div class="card bg-light mb-3 border-primary" th:unless="${modules} ne null">
+        <div class="card bg-light mb-3 border-primary" th:unless="${modules.size()} ne 0">
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
