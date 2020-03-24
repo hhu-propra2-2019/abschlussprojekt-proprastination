@@ -9,7 +9,18 @@ import java.util.List;
 
 @Repository
 public interface ApplicationRepository extends CrudRepository<Application, Long> {
+
+    /**
+     * Finds all applications for a module
+     * @param module the module
+     * @return the applications
+     */
     List<Application> findAllByModule(Module module);
+
+    /**
+     * Finds applications by ID
+     * @param id the id
+     * @return the application
+     */
     Application findById(long id);
-    List<Application> findAllById(Module module);
 }

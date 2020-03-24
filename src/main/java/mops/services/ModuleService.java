@@ -4,9 +4,7 @@ import mops.model.classes.Module;
 import mops.repositories.ModuleRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class ModuleService {

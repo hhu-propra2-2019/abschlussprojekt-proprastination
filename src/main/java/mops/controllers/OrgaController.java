@@ -28,8 +28,16 @@ public class OrgaController {
     private final ModuleService moduleService;
     private final OrgaService orgaService;
 
-    public OrgaController(final ApplicantService applicantService, ApplicationService applicationService, final ModuleService moduleService,
-                          final OrgaService orgaService) {
+    /**
+     * Lets Spring inject the services
+     * @param applicantService
+     * @param applicationService
+     * @param moduleService
+     * @param orgaService
+     */
+    @SuppressWarnings("checkstyle:HiddenField")
+    public OrgaController(final ApplicantService applicantService, final ApplicationService applicationService,
+                          final ModuleService moduleService, final OrgaService orgaService) {
         this.applicantService = applicantService;
         this.applicationService = applicationService;
         this.moduleService = moduleService;
@@ -88,13 +96,15 @@ public class OrgaController {
 
     /**
      * Shows overview of applications for a module.
+     * @param id the applications is, as Path variable
      * @param token
      * @param model
      * @return orgaOverview.html as String
      */
     @GetMapping("/{id}/")
     @Secured("ROLE_orga")
-    public String overview(@PathVariable("id") final String id, final KeycloakAuthenticationToken token, final Model model) {
+    public String overview(@PathVariable("id") final String id, final KeycloakAuthenticationToken token,
+                           final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
@@ -105,6 +115,8 @@ public class OrgaController {
     /**
      * Needed to display additional information about each application on the overview page.
      * (Inside a modal / popup window.)
+     * @param id applications id
+     * @param model
      * @return "applicationModalContent", the HTML file with the modal content.
      */
     @GetMapping("/modal/{id}/")

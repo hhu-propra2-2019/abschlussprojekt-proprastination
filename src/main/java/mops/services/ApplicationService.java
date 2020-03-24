@@ -1,15 +1,12 @@
 package mops.services;
 
-import mops.model.classes.Applicant;
 import mops.model.classes.Application;
 import mops.model.classes.Application.ApplicationBuilder;
-import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebApplication;
 import mops.repositories.ApplicationRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class ApplicationService {
@@ -26,7 +23,8 @@ public class ApplicationService {
      */
     @SuppressWarnings("checkstyle:HiddenField")
     public ApplicationService(final ApplicantService applicantService,
-                              final ApplicationRepository applicationRepository, ModuleService moduleService) {
+                              final ApplicationRepository applicationRepository,
+                              final ModuleService moduleService) {
         this.applicantService = applicantService;
         this.applicationRepository = applicationRepository;
         this.moduleService = moduleService;
@@ -82,10 +80,20 @@ public class ApplicationService {
         applicationRepository.save(application);
     }
 
+    /**
+     * Finds all Applications by Module id
+     * @param id the module id
+     * @return the list of applications
+     */
     public List<Application> findAllByModuleId(final long id) {
         return applicationRepository.findAllByModule(moduleService.findById(id));
     }
 
+    /**
+     * Finds applications by ID
+     * @param id the id
+     * @return the application
+     */
     public Application findById(final long id) {
         return applicationRepository.findById(id);
     }

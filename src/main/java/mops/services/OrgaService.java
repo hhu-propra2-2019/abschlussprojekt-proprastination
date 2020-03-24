@@ -14,6 +14,12 @@ public class OrgaService {
     private final ApplicantService applicantService;
     private final ApplicationService applicationService;
 
+    /**
+     * Lets Spring inject the services
+     * @param applicantService
+     * @param applicationService
+     */
+    @SuppressWarnings("checkstyle:HiddenField")
     public OrgaService(final ApplicantService applicantService, final ApplicationService applicationService) {
         this.applicantService = applicantService;
         this.applicationService = applicationService;
@@ -40,10 +46,20 @@ public class OrgaService {
         return applications.stream().map(this::wrapApplication).collect(Collectors.toCollection(LinkedList::new));
     }
 
+    /**
+     * Finds all applications from a module
+     * @param id the modules ID
+     * @return list of applications
+     */
     public List<OrgaApplication> getAllApplications(final String id) {
         return wrapApplications(applicationService.findAllByModuleId(Long.parseLong(id)));
     }
 
+    /**
+     * Gets a single applications
+     * @param id the applications ID
+     * @return list of applications
+     */
     public OrgaApplication getApplication(final String id) {
         return wrapApplication(applicationService.findById(Long.parseLong(id)));
     }

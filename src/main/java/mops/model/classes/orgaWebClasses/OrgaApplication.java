@@ -9,9 +9,6 @@ import mops.model.classes.Role;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 @Builder(toBuilder = true)
 @Data
