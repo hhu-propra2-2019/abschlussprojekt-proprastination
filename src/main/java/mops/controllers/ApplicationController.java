@@ -24,6 +24,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -160,12 +161,14 @@ public class ApplicationController {
     @Secured("ROLE_studentin")
     public String modul(final KeycloakAuthenticationToken token, final WebApplicant webApplicant,
                         final WebAddress webAddress, final WebCertificate webCertificate, final Model model,
-                        @RequestParam("modules") final Module modules) {
+                        final String modules) {
 
         if (token != null) {
             OidcKeycloakAccount account = token.getAccount();
             String givenName = account.getKeycloakSecurityContext().getIdToken().getGivenName();
             String familyName = account.getKeycloakSecurityContext().getIdToken().getFamilyName();
+
+            Module module = moduleService.findModuleByName(modules);
 
             Address address = studentService.buildAddress(webAddress);
             Certificate certificate = studentService.buildCertificate(webCertificate);
@@ -173,13 +176,13 @@ public class ApplicationController {
                     address, certificate, givenName, familyName);
             applicantService.saveApplicant(applicant);
             List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
-            availableMods.remove(modules);
+            availableMods.remove(module);
 
             model.addAttribute("account", createAccountFromPrincipal(token));
-            model.addAttribute("module", modules);
+            model.addAttribute("newModule", module);
             model.addAttribute("semesters", CSVService.getSemester());
             model.addAttribute("modules", availableMods);
-            model.addAttribute("webApplication", WebApplication.builder().build());
+            model.addAttribute("webApplication", WebApplication.builder().module(modules).build());
         }
         return "applicant/applicationModule";
     }
@@ -197,16 +200,19 @@ public class ApplicationController {
                               final WebApplication webApplication, final Model model,
                               @RequestParam("modules") final String module) {
         Applicant applicant = applicantService.findByUniserial(token.getName());
-        Application application = applicationService.buildApplication(webApplication);
-        Set<Application> applications = applicant.getApplications();
-        applications.add(application);
-        applicant.toBuilder().applications(applications);
+        Application application = studentService.buildApplication(webApplication);
+        applicant = applicant.toBuilder().application(application).build();
         applicantService.saveApplicant(applicant);
+
+        Module modul = moduleService.findModuleByName(module);
+        List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
+        availableMods.remove(modul);
+
         model.addAttribute("account", createAccountFromPrincipal(token));
-        model.addAttribute("modul", module);
+        model.addAttribute("newModule", modul);
         model.addAttribute("semesters", CSVService.getSemester());
-        model.addAttribute("modules", CSVService.getModules());
-        model.addAttribute("webApplication", webApplication);
+        model.addAttribute("modules", availableMods);
+        model.addAttribute("webApplication", WebApplication.builder().module(module).build());
         return "applicant/applicationModule";
     }
 
@@ -323,10 +329,8 @@ public class ApplicationController {
     public String overview(final KeycloakAuthenticationToken token, final Model model,
                            final WebApplication webApplication) {
         Applicant applicant = applicantService.findByUniserial(token.getName());
-        Application application = applicationService.buildApplication(webApplication);
-        Set<Application> applications = applicant.getApplications();
-        applications.add(application);
-        applicant.toBuilder().applications(applications);
+        Application application = studentService.buildApplication(webApplication);
+        applicant = applicant.toBuilder().application(application).build();
         applicantService.saveApplicant(applicant);
         model.addAttribute("applicant", applicant);
         return "applicant/applicationOverview";
@@ -432,7 +436,7 @@ public class ApplicationController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
             Application application = applicationService.findById(webApplication.getId());
-            Application newApplication = applicationService.changeApplication(webApplication, application);
+            Application newApplication = studentService.changeApplication(webApplication, application);
             applicationService.save(newApplication);
         }
         return "redirect:bewerbungsUebersicht";

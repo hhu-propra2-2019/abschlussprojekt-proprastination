@@ -124,8 +124,10 @@
                     </div>
                     <div class="row">
                         <div class="col-6">
-                            <select name="graduation" id="graduation" class="form-control">
-                                <option value="" selected th:text="${applicant.certs.name}"></option>
+                            <select class="form-control" id="graduation" name="graduation" th:field="*{graduation}"
+                                    th:object="${webCertificate}">
+                                <option selected th:text="${applicant.certs.name}"
+                                        th:value="${applicant.certs.name}"></option>
                                 <option value="bachelor">Bachelor</option>
                                 <option value="master">Master</option>
                                 <option value="diplom">Diplom</option>

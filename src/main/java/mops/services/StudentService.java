@@ -8,6 +8,7 @@ import mops.model.classes.Certificate;
 import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebAddress;
 import mops.model.classes.webclasses.WebApplicant;
+import mops.model.classes.webclasses.WebApplication;
 import mops.model.classes.webclasses.WebCertificate;
 import org.springframework.stereotype.Service;
 
@@ -21,17 +22,17 @@ public class StudentService {
 
     private ApplicantService applicantService;
 
-    private ApplicationService applicationService;
+    private ModuleService moduleService;
 
     /**
      * Setup the applicantserives
      *
-     * @param applicantService   applicant.
-     * @param applicationService application
+     * @param applicantService applicant.
+     * @param moduleService    modulesservice.
      */
-    public StudentService(final ApplicantService applicantService, final ApplicationService applicationService) {
+    public StudentService(final ApplicantService applicantService, final ModuleService moduleService) {
         this.applicantService = applicantService;
-        this.applicationService = applicationService;
+        this.moduleService = moduleService;
     }
 
     /**
@@ -99,6 +100,7 @@ public class StudentService {
         ApplicantBuilder applicantBuilder = applicant.toBuilder();
         return applicantBuilder.birthday(webApplicant.getBirthday())
                 .birthplace(webApplicant.getBirthplace())
+                .address(address)
                 .gender(webApplicant.getGender())
                 .nationality(webApplicant.getNationality())
                 .course(webApplicant.getCourse())
@@ -190,5 +192,48 @@ public class StudentService {
             modules.remove(app.getModule());
         }
         return modules;
+    }
+
+    /**
+     * builds Application from webApplication
+     *
+     * @param webApplication Informations
+     * @return fully buildApplication
+     */
+    public Application buildApplication(final WebApplication webApplication) {
+        return Application.builder()
+                //Module wird irgendwie nicht eingelesen? Mach ich später >_>
+                .module(moduleService.findModuleByName(webApplication.getModule()))
+                .minHours(webApplication.getMinHours())//HTML anpassen
+                .maxHours(webApplication.getMaxHours())//HTML anpassen
+                .priority(webApplication.getPriority())
+                .grade(webApplication.getGrade())
+                .lecturer(webApplication.getLecturer())
+                .semester(webApplication.getSemester())
+                .role(webApplication.getRole())
+                .comment(webApplication.getComment())
+                .build();
+    }
+
+    /**
+     * Modifies application to the changes in webApplication.
+     *
+     * @param webApplication data to change.
+     * @param application    Merging data into application
+     * @return new application with changed data.
+     */
+    public Application changeApplication(final WebApplication webApplication, final Application application) {
+        Application.ApplicationBuilder applicationBuilder = application.toBuilder();
+        return applicationBuilder
+                .maxHours(webApplication.getMaxHours())
+                .minHours(webApplication.getMinHours())
+                .semester(webApplication.getSemester())
+                .comment(webApplication.getComment())
+                .grade(webApplication.getGrade())
+                .lecturer(webApplication.getLecturer())
+                .role(webApplication.getRole())
+                .module(moduleService.findModuleByName(webApplication.getModule()))
+                .priority(webApplication.getPriority())
+                .build();
     }
 }

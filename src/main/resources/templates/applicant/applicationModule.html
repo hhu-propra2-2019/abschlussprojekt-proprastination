@@ -33,9 +33,9 @@
         <!-- Restlichen Inhalt hier einfügen! -->
         <form th:action="${weiteresModul}" th:method="POST" th:object="${webApplication}">
             <div class="card bg-light mb-3 border-primary">
-                <div class="card-header"><h2 th:text="${module.name}"></h2>
+                <div class="card-header"><h2 th:text="${newModule.name}"></h2>
                     <input th:field="*{module}" th:type="hidden"
-                           th:value="${module}">
+                           th:value="${newModule.name}">
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -125,18 +125,19 @@
                 </div>
             </div>
             <br>
-            <div class="card bg-light mb-3 border-primary">
+            <div class="card bg-light mb-3 border-primary" th:if="${modules.size() ne 0}">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-6">
                             <label th:for="modules">
-                                Falls Sie sich bei einem weiteren Modul bewerben möchten können Sie dieses hier auswählen
+                                Falls Sie sich bei einem weiteren Modul bewerben möchten können Sie dieses hier
+                                auswählen
                             </label>
                         </div>
                         <div class="col-4">
                             <select th:name="modules" th:id="modules" class="form-control">
-                                <option value="" disabled selected hidden>Modulname</option>
-                                <option th:each="module:${modules}" th:text="${module}" th:value="${module}"></option>
+                                <option th:each="module:${modules}" th:text="${module.name}"
+                                        th:value="${module.name}"></option>
                             </select>
                         </div>
                         <div class="col-2">

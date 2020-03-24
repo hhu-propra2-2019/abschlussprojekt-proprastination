@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import mops.model.classes.Module;
 import mops.model.classes.Priority;
 import mops.model.classes.Role;
 
@@ -16,7 +15,7 @@ import mops.model.classes.Role;
 @Builder(toBuilder = true)
 public class WebApplication {
     private long id;
-    private Module module;
+    private String module;
     private int minHours;
     private int maxHours;
     private Priority priority;
