@@ -1,8 +1,6 @@
 package mops.services;
 
-import com.sun.xml.bind.v2.runtime.output.SAXOutput;
 import mops.model.classes.Applicant;
-import mops.model.classes.Applicant.ApplicantBuilder;
 import mops.model.classes.Application;
 import mops.model.classes.Application.ApplicationBuilder;
 import mops.model.classes.Distribution;
@@ -11,7 +9,6 @@ import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebDistribution;
 import mops.model.classes.webclasses.WebDistributorApplicant;
 import mops.model.classes.webclasses.WebDistributorApplication;
-//import mops.model.classes.Module;
 import mops.repositories.DistributionRepository;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -29,10 +26,6 @@ public class DistributionService {
     private final ApplicantService applicantService;
     private final ApplicationService applicationService;
     private final EvaluationService evaluationService;
-    private final int numberOfPriorities = 4;
-    private final int sevenHours = 7;
-    private final int nineHours = 9;
-    private final int seventeenHours = 17;
 
     /**
      * Injects Services and repositories
@@ -69,6 +62,10 @@ public class DistributionService {
      * distributes the Applicants
      */
     private void distribute() {
+        final int numberOfPriorities = 4;
+        final int sevenHours = 7;
+        final int nineHours = 9;
+        final int seventeenHours = 17;
         List<Module> modules = moduleService.getModules();
         List<Applicant> allApplicants = applicantService.findAll();
         distributionRepository.deleteAll();
@@ -97,35 +94,38 @@ public class DistributionService {
             }
 
             for (int i = 0; i < numberOfPriorities; i++) {
-                sortedByOrgaPrio[i].sort(Comparator.comparing(a -> a.getApplication().getPriority()));
+                sortedByOrgaPrio[i].sort(Comparator.comparing(a -> a.getApplication().getPriority().getValue()));
             }
 
             int count7 = 0;
             int count9 = 0;
             int count17 = 0;
+            int max7 = Integer.parseInt(module.getSevenHourLimit());
+            int max9 = Integer.parseInt(module.getNineHourLimit());
+            int max17 = Integer.parseInt(module.getSeventeenHourLimit());
 
             Set<Applicant> distributedApplicants = new LinkedHashSet<>();
 
             for (int i = 0; i < numberOfPriorities; i++) {
-                if (count7 == 4 && count9 == 5 && count17 == 6) {
+                if (count7 == max7 && count9 == max9 && count17 == max17) {
                     break;
                 }
                 for (Evaluation evaluation : sortedByOrgaPrio[i]) {
-                    if (count7 == 4 && count9 == 5 && count17 == 6) {
+                    if (count7 == max7 && count9 == max9 && count17 == max17) {
                         break;
                     }
                     Applicant applicant = applicantService.findByApplications(evaluation.getApplication());
-                    if (evaluation.getHours() == sevenHours && count7 < 4) {
+                    if (evaluation.getHours() == sevenHours && count7 < max7) {
                         distributedApplicants.add(applicant);
                         allApplicants.remove(applicant);
                         changeFinalHours(evaluation);
                         count7++;
-                    } else if (evaluation.getHours() == nineHours && count9 < 5) {
+                    } else if (evaluation.getHours() == nineHours && count9 < max9) {
                         distributedApplicants.add(applicant);
                         allApplicants.remove(applicant);
                         changeFinalHours(evaluation);
                         count9++;
-                    } else if (evaluation.getHours() == seventeenHours && count17 < 6) {
+                    } else if (evaluation.getHours() == seventeenHours && count17 < max17) {
                         distributedApplicants.add(applicant);
                         allApplicants.remove(applicant);
                         changeFinalHours(evaluation);
@@ -242,12 +242,13 @@ public class DistributionService {
         for (Application application : applicationSet) {
             Evaluation evaluation = evaluationService.findByApplication(application);
             WebDistributorApplication webDistributorApplication = WebDistributorApplication.builder()
-                    .applicantPriority(application.getPriority() + "")
+                    .applicantPriority(application.getPriority())
                     .minHours(application.getMinHours() + "")
                     .maxHours(application.getMaxHours() + "")
                     .module(application.getModule().getName())
+                    .moduleShort(application.getModule().getShortName())
                     .organizerHours(evaluation.getHours() + "")
-                    .organizerPriority(evaluation.getPriority() + "")
+                    .organizerPriority(evaluation.getPriority())
                     .build();
             webDistributorApplicationList.add(webDistributorApplication);
         }

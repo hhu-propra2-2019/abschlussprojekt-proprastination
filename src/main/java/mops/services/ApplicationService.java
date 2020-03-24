@@ -17,7 +17,7 @@ public class ApplicationService {
      * Lets Spring inject the Repository and Service
      *
      * @param applicationRepository the application repository
-     * @param moduleService
+     * @param moduleService the module Service
      */
     @SuppressWarnings("checkstyle:HiddenField")
     public ApplicationService(final ApplicationRepository applicationRepository,

@@ -3,6 +3,7 @@ package mops.services;
 import mops.model.classes.Applicant;
 import mops.model.classes.Applicant.ApplicantBuilder;
 import mops.model.classes.Application;
+import mops.model.classes.Module;
 import mops.repositories.ApplicantRepository;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Service;

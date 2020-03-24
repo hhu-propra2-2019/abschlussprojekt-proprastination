@@ -77,8 +77,8 @@
                                     </div>
                                     <div class="row border" th:each="appl: ${applicant.webDistributorApplications}">
                                         <div class="col" th:text="${appl.module}">Modul1</div>
-                                        <div class="col" th:text="${appl.applicantPriority}">++</div>
-                                        <div class="col" th:text="${appl.organizerPriority}">+</div>
+                                        <div class="col" th:text="${appl.applicantPriority.label}">++</div>
+                                        <div class="col" th:text="${appl.organizerPriority.label}">+</div>
                                         <div class="col" th:text="${appl.organizerHours}">9</div>
                                         <div class="col" th:text="${appl.minHours} + '-' + ${appl.maxHours}">10 - 17</div>
                                     </div>
@@ -93,9 +93,9 @@
         <script>
             $("input[type='checkbox']").change(function(){
                 if($(this).is(":checked")){
-                    $(this).parent().parent().parent().parent().addClass("doneBackground");
+                    $(this).parent().parent().parent().addClass("doneBackground");
                 }else{
-                    $(this).parent().parent().parent().parent().removeClass("doneBackground");
+                    $(this).parent().parent().parent().removeClass("doneBackground");
                 }
             });
         </script>
