@@ -33,9 +33,8 @@ public class ApplicationService {
         return Application.builder()
                 //Module wird irgendwie nicht eingelesen? Mach ich später >_>
                 .module(webApplication.getModule())
-                .minHours(webApplication.getFinalHours())//HTML anpassen
-                .maxHours(webApplication.getFinalHours())//HTML anpassen
-                .finalHours(webApplication.getFinalHours())
+                .minHours(webApplication.getMinHours())//HTML anpassen
+                .maxHours(webApplication.getMaxHours())//HTML anpassen
                 .priority(webApplication.getPriority())
                 .grade(webApplication.getGrade())
                 .lecturer(webApplication.getLecturer())
@@ -54,9 +53,9 @@ public class ApplicationService {
      */
     public Application changeApplication(final WebApplication webApplication, final Application application) {
         ApplicationBuilder applicationBuilder = application.toBuilder();
-        return applicationBuilder.finalHours(webApplication.getFinalHours())
-                .maxHours(webApplication.getFinalHours())
-                .minHours(webApplication.getFinalHours())
+        return applicationBuilder
+                .maxHours(webApplication.getMaxHours())
+                .minHours(webApplication.getMinHours())
                 .semester(webApplication.getSemester())
                 .comment(webApplication.getComment())
                 .grade(webApplication.getGrade())
