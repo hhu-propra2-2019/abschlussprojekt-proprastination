@@ -3,6 +3,7 @@ package mops.services;
 import mops.model.classes.*;
 import mops.model.classes.Module;
 import mops.repositories.ModuleRepository;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -33,6 +34,12 @@ class ApplicantServiceTest {
     Address address;
     Module module;
 
+    @AfterAll
+    void setdown() {
+        applicantService.deleteAll();
+        moduleRepository.deleteAll();
+    }
+
     @BeforeAll
     void setup() {
         module = Module.builder()
@@ -42,7 +49,7 @@ class ApplicantServiceTest {
         address = Address.builder()
                 .city("Gotham")
                 .country("USA")
-                .zipcode(42069)
+                .zipcode("42069")
                 .street("Batstreet 1")
                 .build();
 
@@ -52,24 +59,24 @@ class ApplicantServiceTest {
                 .build();
 
         application1 = Application.builder()
-                .priority(Priority.Hoch)
+                .priority(Priority.HIGH)
                 .module(module)
                 .minHours(7)
                 .maxHours(17)
                 .grade(1.3)
                 .lecturer("Lala der Teletubby")
-                .role(Role.KORREKTOR)
+                .role(Role.PROOFREADER)
                 .semester("SS2020")
                 .build();
 
         application2 = Application.builder()
-                .priority(Priority.Hoch)
+                .priority(Priority.HIGH)
                 .module(module)
                 .minHours(5)
                 .maxHours(99)
                 .grade(1.0)
                 .lecturer("Ich selbst?")
-                .role(Role.KORREKTOR)
+                .role(Role.PROOFREADER)
                 .semester("Immer")
                 .build();
 
@@ -115,7 +122,7 @@ class ApplicantServiceTest {
                 .semester("SS2020")
                 .lecturer("Lala der Teletubby")
                 .module(module)
-                .role(Role.KORREKTOR)
+                .role(Role.PROOFREADER)
                 .build();
 
         assertThat(application1).isEqualTo(application1);

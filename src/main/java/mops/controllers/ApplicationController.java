@@ -1,10 +1,9 @@
 package mops.controllers;
 
 import mops.model.Account;
-import mops.model.classes.Address;
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
-import mops.model.classes.Certificate;
+import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebAddress;
 import mops.model.classes.webclasses.WebApplicant;
 import mops.model.classes.webclasses.WebApplication;
@@ -13,9 +12,9 @@ import mops.services.ApplicantService;
 import mops.services.ApplicationService;
 import mops.services.CSVService;
 import mops.services.ModuleService;
+import mops.services.StudentService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,22 +24,39 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.context.annotation.SessionScope;
-import java.util.HashSet;
-import java.util.Set;
+
+import java.util.List;
 
 @Controller
 @SessionScope
 @RequestMapping("/bewerbung2/bewerber")
 public class ApplicationController {
 
-    @Autowired
     private ApplicantService applicantService;
 
-    @Autowired
     private ModuleService moduleService;
 
-    @Autowired
     private ApplicationService applicationService;
+
+    private StudentService studentService;
+
+
+    /**
+     * Inits the service.
+     *
+     * @param applicantService   appservice
+     * @param moduleService      moduleservice
+     * @param applicationService appl. service
+     * @param studentService     studentservice
+     */
+    @SuppressWarnings("checkstyle:HiddenField")
+    public ApplicationController(final ApplicantService applicantService, final ModuleService moduleService,
+                                 final ApplicationService applicationService, final StudentService studentService) {
+        this.applicantService = applicantService;
+        this.moduleService = moduleService;
+        this.applicationService = applicationService;
+        this.studentService = studentService;
+    }
 
     private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
         KeycloakPrincipal principal = (KeycloakPrincipal) token.getPrincipal();
@@ -82,16 +98,26 @@ public class ApplicationController {
     @Secured("ROLE_studentin")
     public String newAppl(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
-            WebApplicant webApplicant = WebApplicant.builder().build();
-            WebAddress webAddress = WebAddress.builder().build();
-            WebCertificate webCertificate = WebCertificate.builder().build();
-            model.addAttribute("account", createAccountFromPrincipal(token));
+            Account account = createAccountFromPrincipal(token);
+            Applicant applicant = applicantService.findByUniserial(account.getName());
+
+            WebApplicant webApplicant = (applicant == null)
+                    ? WebApplicant.builder().build() : studentService.getExsistingApplicant(applicant);
+            WebAddress webAddress = (applicant == null)
+                    ? WebAddress.builder().build() : studentService.getExsistingAddress(applicant.getAddress());
+            WebCertificate webCertificate = (applicant == null)
+                    ? WebCertificate.builder().build() : studentService.getExsistingCertificate(applicant.getCerts());
+            List<Module> modules = (applicant == null)
+                    ? moduleService.getModules() : studentService
+                    .getAllNotfilledModules(applicant, moduleService.getModules());
+
+            model.addAttribute("account", account);
             model.addAttribute("countries", CSVService.getCountries());
             model.addAttribute("courses", CSVService.getCourses());
             model.addAttribute("webApplicant", webApplicant);
             model.addAttribute("webAddress", webAddress);
             model.addAttribute("webCertificate", webCertificate);
-            model.addAttribute("modules", CSVService.getModules());
+            model.addAttribute("modules", modules);
         }
         return "applicant/applicationPersonal";
     }
@@ -141,19 +167,21 @@ public class ApplicationController {
     @PostMapping("/modul")
     @Secured("ROLE_studentin")
     public String modul(final KeycloakAuthenticationToken token, final WebApplicant webApplicant,
-                            final WebAddress webAddress, final WebCertificate webCertificate, final Model model,
-                            @RequestParam("modules") final String modules) {
+                        final WebAddress webAddress, final WebCertificate webCertificate, final Model model,
+                        final String modules) {
 
         if (token != null) {
-            Address address = applicantService.buildAddress(webAddress);
-            Certificate certificate = applicantService.buildCertificate(webCertificate);
-            Applicant applicant = applicantService.buildApplicant(token.getName(), webApplicant, address, certificate);
-            applicantService.saveApplicant(applicant);
+
+            Applicant applicant = studentService.savePersonalData(token, webApplicant, webAddress, webCertificate);
+            Module module = moduleService.findModuleByName(modules);
+            List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
+            availableMods.remove(module);
+
             model.addAttribute("account", createAccountFromPrincipal(token));
-            model.addAttribute("modul", modules);
+            model.addAttribute("newModule", module);
             model.addAttribute("semesters", CSVService.getSemester());
-            model.addAttribute("modules", CSVService.getModules());
-            model.addAttribute("webApplication", WebApplication.builder().build());
+            model.addAttribute("modules", availableMods);
+            model.addAttribute("webApplication", WebApplication.builder().module(modules).build());
         }
         return "applicant/applicationModule";
     }
@@ -171,77 +199,42 @@ public class ApplicationController {
                               final WebApplication webApplication, final Model model,
                               @RequestParam("modules") final String module) {
         Applicant applicant = applicantService.findByUniserial(token.getName());
-        Application application = applicationService.buildApplication(webApplication);
-        Set<Application> applications = applicant.getApplications();
-        applications.add(application);
-        applicant.toBuilder().applications(applications);
+        Application application = studentService.buildApplication(webApplication);
+        applicant = applicant.toBuilder().application(application).build();
         applicantService.saveApplicant(applicant);
+
+        Module modul = moduleService.findModuleByName(module);
+        List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
+        availableMods.remove(modul);
+
         model.addAttribute("account", createAccountFromPrincipal(token));
-        model.addAttribute("modul", module);
+        model.addAttribute("newModule", modul);
         model.addAttribute("semesters", CSVService.getSemester());
-        model.addAttribute("modules", CSVService.getModules());
-        model.addAttribute("webApplication", webApplication);
+        model.addAttribute("modules", availableMods);
+        model.addAttribute("webApplication", WebApplication.builder().module(module).build());
         return "applicant/applicationModule";
     }
 
-    /**
-     * @param token
-     * @param model
-     * @param street
-     * @param city
-     * @param plz
-     * @param birthplace
-     * @param nationality
-     * @param birthday
-     * @param subject
-     * @param status
-     * @param graduation
-     * @param graduationsubject
-     * @param diverse
-     * @return overview formular as String
-     */
 
+    /**
+     * Postmapping for editing personal data.
+     * @param token keycloak
+     * @param webApplicant applicant data
+     * @param webAddress address data
+     * @param webCertificate certificate data
+     * @param model model
+     * @return webpage
+     */
     @SuppressWarnings("checkstyle:ParameterNumber")
     @PostMapping("/uebersichtBearbeitet")
-    public String saveOverview(final KeycloakAuthenticationToken token, final Model model,
-                               @RequestParam("address1") final String street,
-                               @RequestParam("address2") final String city,
-                               @RequestParam("plz") final String plz,
-                               @RequestParam("placeofbirth") final String birthplace,
-                               @RequestParam("nationality") final String nationality,
-                               @RequestParam("birthday") final String birthday,
-                               @RequestParam("subject") final String subject,
-                               @RequestParam("status") final String status,
-                               @RequestParam("graduation") final String graduation,
-                               @RequestParam("graduationsubject") final String graduationsubject,
-                               @RequestParam("diverse") final String diverse) {
+    public String saveOverview(final KeycloakAuthenticationToken token, final WebApplicant webApplicant,
+                               final WebAddress webAddress, final WebCertificate webCertificate, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
-            Address address = Address.builder().
-                    street(street).
-                    city(city).
-                    zipcode(Integer.parseInt(plz)).
-                    build();
-            Certificate cert = Certificate.builder()
-                    .name(graduation)
-                    .course(graduationsubject)
-                    .build();
-            Set<Application> appls = new HashSet<>();
-            Applicant applicant = Applicant.builder()
-                    .birthplace(birthplace)
-                    .address(address)
-                    .birthday(birthday)
-                    .nationality(nationality)
-                    .course(subject)
-                    .status("New")
-                    .certs(cert)
-                    .uniserial("has220")
-                    .applications(appls)
-                    .build();
-            applicantService.updateApplicantWithoutChangingApplications(applicant);
-            model.addAttribute("applicant", applicantService.findByUniserial("has220"));
+
+            studentService.savePersonalData(token, webApplicant, webAddress, webCertificate);
         }
-        return "applicant/applicationOverview";
+        return "redirect:bewerbungsUebersicht";
     }
 
 
@@ -260,7 +253,7 @@ public class ApplicationController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("applicant", applicantService.findByUniserial("has220"));
-            applicantService.updateApplicantWithoutChangingApplications(applicant1);
+            studentService.updateApplicantWithoutChangingApplications(applicant1);
         }
         return "applicant/applicationOverview";
     }
@@ -276,12 +269,11 @@ public class ApplicationController {
         if (token != null) {
             Account account = createAccountFromPrincipal(token);
             model.addAttribute("account", account);
+            model.addAttribute("email", account.getEmail());
             Applicant applicant = applicantService.findByUniserial(account.getName());
             model.addAttribute("applicant", applicant);
             model.addAttribute("modules",
-                    applicantService.getAllNotfilledModules(applicant, moduleService.getModules()));
-
-
+                    studentService.getAllNotfilledModules(applicant, moduleService.getModules()));
         }
         return "applicant/applicationOverview";
     }
@@ -297,57 +289,12 @@ public class ApplicationController {
     public String overview(final KeycloakAuthenticationToken token, final Model model,
                            final WebApplication webApplication) {
         Applicant applicant = applicantService.findByUniserial(token.getName());
-        Application application = applicationService.buildApplication(webApplication);
-        Set<Application> applications = applicant.getApplications();
-        applications.add(application);
-        applicant.toBuilder().applications(applications);
+        Application application = studentService.buildApplication(webApplication);
+        applicant = applicant.toBuilder().application(application).build();
         applicantService.saveApplicant(applicant);
         model.addAttribute("applicant", applicant);
         return "applicant/applicationOverview";
     }
-/*    /**
-     * Overview, will be used to save the last module and shows the data the applicant filled in
-     *
-     * @param token     keycloaktone
-     * @param model     model
-     * @param applicant applicant (load from database?)
-     * @param module    the module the applicant applied last for
-     * @param workload  look above
-     * @param grade     "
-     * @param semester  "
-     * @param lecturer  "
-     *                  //  * @param tasks "
-     *                  //  * @param priority "
-     * @return overview.html
-     */
- /*   @PostMapping("/uebersicht")
-    @SuppressWarnings("checkstyle:ParameterNumber")
-    public String postOverview(final KeycloakAuthenticationToken token,
-                               final Model model,
-                               @RequestParam("applicant") final Applicant applicant,
-                               @RequestParam("module") final String module,
-                               @RequestParam("workload") final String workload,
-                               @RequestParam("grade") final String grade,
-                               @RequestParam("semesters") final String semester,
-                               @RequestParam("lecturer") final String lecturer
-                               //                           @RequestParam("tasks") final String tasks,
-                               //                           @RequestParam("priority") final String priority
-    ) {
-        if (token != null) {
-            applicantService.saveApplicant(applicant);
-            model.addAttribute("account", createAccountFromPrincipal(token));
-            Application.builder()
-                    .module(moduleService.findModuleByName(module))
-                    .lecturer(lecturer)
-                    .semester(semester)
-                    .minHours(Integer.parseInt(workload))
-                    .maxHours(Integer.parseInt(workload))
-                    .grade(Double.parseDouble(grade))
-                    .build();
-        }
-        return "applicant/applicationOverview";
-    }*/
-
 
     /**
      * The GetMapping for the edit form fot personal data
@@ -361,8 +308,25 @@ public class ApplicationController {
     public String editPersonalData(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             Account account = createAccountFromPrincipal(token);
+            Applicant applicant = applicantService.findByUniserial(account.getName());
+
+            WebApplicant webApplicant = (applicant == null)
+                    ? WebApplicant.builder().build() : studentService.getExsistingApplicant(applicant);
+            WebAddress webAddress = (applicant == null)
+                    ? WebAddress.builder().build() : studentService.getExsistingAddress(applicant.getAddress());
+            WebCertificate webCertificate = (applicant == null)
+                    ? WebCertificate.builder().build() : studentService.getExsistingCertificate(applicant.getCerts());
+            List<Module> modules = (applicant == null)
+                    ? moduleService.getModules() : studentService
+                    .getAllNotfilledModules(applicant, moduleService.getModules());
+
             model.addAttribute("account", account);
-            model.addAttribute("applicant", applicantService.findByUniserial(account.getName()));
+            model.addAttribute("countries", CSVService.getCountries());
+            model.addAttribute("courses", CSVService.getCourses());
+            model.addAttribute("webApplicant", webApplicant);
+            model.addAttribute("webAddress", webAddress);
+            model.addAttribute("webCertificate", webCertificate);
+            model.addAttribute("modules", modules);
         }
         return "applicant/applicationEditPersonal";
     }
@@ -406,7 +370,7 @@ public class ApplicationController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
             Application application = applicationService.findById(webApplication.getId());
-            Application newApplication = applicationService.changeApplication(webApplication, application);
+            Application newApplication = studentService.changeApplication(webApplication, application);
             applicationService.save(newApplication);
         }
         return "redirect:bewerbungsUebersicht";

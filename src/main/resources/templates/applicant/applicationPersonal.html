@@ -35,11 +35,16 @@
                 <div class="card-header"><h2>Persönliche Daten</h2></div>
                 <div class="card-body">
                     <div class="row" th:object="${webAddress}">
-                        <div class="col-5">
+                        <div class="col-4">
                             <input th:type="text" th:name="street"
                                    th:field="*{street}" th:attr="value = ${webAddress.street}"
                                    class="form-control" placeholder="Straße und Hausnummer" required> <br>
                             <br>
+                        </div>
+                        <div class="col-md-1">
+                            <input class="form-control" name="streetnumber" placeholder="Hausnummer" required
+                                   th:field="*{number}" th:attr="value = ${webAddress.number}"
+                                   type="text">
                         </div>
                         <div class="col-5">
                             <input th:type="text" th:name="city" th:id="city"
@@ -47,7 +52,7 @@
                                    th:class="form-control" placeholder="Ort" required> <br>
                         </div>
                         <div class="col-2">
-                            <input th:type="text" th:name="zipcode" th:id="zipcode" th:field="*{zipcode}"
+                            <input th:field="*{zipcode}" th:id="zipcode" th:name="zipcode" type="text"
                                    th:attr="value = ${webAddress.zipcode}"
                                    th:class="form-control" placeholder="Postleitzahl" required> <br>
                         </div>
@@ -91,7 +96,7 @@
                         </div>
                         <div class="col-6">
                             <select name="courses" id="courses" class="form-control"
-                                    th:field="*{course}" th:attr="value=${webApplicant.course}">
+                                    th:field="*{course}">
                                 <option th:each="cours:${courses}" th:text="${cours}" th:value="${cours}"></option>
                             </select> <br> <br>
                         </div>
@@ -108,13 +113,13 @@
                             <select th:name="status" th:id="status" th:class="form-control"
                                     th:field="*{status}" th:attr="value = ${webApplicant.status}"
                             >
-                                <option th:value="neueinstellung">
+                                <option th:value="Einstellung">
                                     Neueinstellung (bisher keine Anstellung an der HHU)
                                 </option>
-                                <option th:value="weiterbeschaeftigung">
+                                <option th:value="Weiterbeschaeftigung">
                                     Weiterbeschäftigung (bestehender Vertrag bis zum DD.MM.YYYY)
                                 </option>
-                                <option th:value="wiedereinstellung">
+                                <option th:value="Änderung">
                                     Wiedereinstellung (KEIN bestehender Vertrag bis zum DD.MM.YYYY)
                                 </option>
                             </select>
@@ -131,22 +136,25 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-6" th:object="${webCertificate}" >
-                            <select th:name="graduation" th:id="name" class="form-control"
-                                    th:field="*{graduation}" th:attr="value = ${webCertificate.graduation}">
-                                <option th:value="none">kein Universitätsabschluss</option>
-                                <option th:value="bachelor">Bachelor</option>
-                                <option th:value="master">Master</option>
-                                <option th:value="diplom">Diplom</option>
-                                <option th:value="staatsexamen">Staatsexamen</option>
-                                <option th:value="else">Anderes</option>
-                            </select> <br>
-                        </div>
-                        <div class="col-6">
-                            <input th:type="text" th:name="graduationsubject" th:id="graduationsubject"
-                                   th:field="*{course}" th:attr="value = ${webCertificate.course}"
-                                   class="form-control" placeholder="Abschlussfach" th:value="none"> <br>
-                        </div>
+                        <th:block th:object="${webCertificate}">
+                            <div class="col-6">
+                                <select th:name="graduation" th:id="name" class="form-control"
+                                        th:field="*{graduation}" th:attr="value = ${webCertificate.graduation}">
+                                    <option th:value="Keins">kein Universitätsabschluss</option>
+                                    <option th:value="Bachelor">Bachelor</option>
+                                    <option th:value="Master">Master</option>
+                                    <option th:value="Diplom">Diplom</option>
+                                    <option th:value="Staatsexamen">Staatsexamen</option>
+                                    <option th:value="Anderes">Anderes</option>
+                                </select> <br>
+                            </div>
+                            <div class="col-6">
+                                <input th:type="text" th:name="graduationsubject" th:id="graduationsubject"
+                                       class="form-control" placeholder="Abschlussfach"
+                                       th:field="*{graduationcourse}" th:value="${webCertificate.graduationcourse}">
+                                <br>
+                            </div>
+                        </th:block>
                     </div>
                     <div class="row">
                         <div class="col">
@@ -157,14 +165,15 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <textarea th:name="comment" th:id="comment" th:class="form-control" rows="6" maxlength="1000"
+                            <textarea th:name="comment" th:id="comment" th:class="form-control" rows="6"
+                                      maxlength="1000"
                                       th:field="*{comment}" th:attr="value = ${webApplicant.comment}"
                             ></textarea> <br>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="card bg-light mb-3 border-primary">
+            <div class="card bg-light mb-3 border-primary" th:if="${modules.size()} ne 0">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-6">
@@ -174,16 +183,27 @@
                         </div>
                         <div class="col-4">
                             <select name="modules" id="modules" class="form-control">
-                                <option th:each="module:${modules}" th:text="${module}"></option>
+                                <option th:each="module:${modules}" th:text="${module.name}"></option>
                             </select>
                         </div>
                         <div class="col-2">
-                            <button th:type="submit" class="btn btn-outline-primary form-control"> Bestätige </button>
+                            <button th:type="submit" class="btn btn-outline-primary form-control"> Bestätige</button>
                         </div>
                     </div>
                 </div>
             </div>
         </form>
+        <div class="card bg-light mb-3 border-primary" th:unless="${modules.size()} ne 0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <label for="back"><h3>Du kannst keine weiteren Bewerbungen ausfüllen!</h3></label>
+                        <a class="btn btn-outline-danger" name="back"
+                           th:href="@{/bewerbung2/bewerber/}" type="submit"> Zurück</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
 </body>

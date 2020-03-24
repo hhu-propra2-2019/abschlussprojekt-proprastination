@@ -36,7 +36,7 @@ class ApplicantTest {
                 .houseNumber("21B")
                 .city("London")
                 .country("England")
-                .zipcode(20394)
+                .zipcode("NW1 6XE")
                 .build();
 
         applicant = Applicant.builder()
@@ -73,11 +73,11 @@ class ApplicantTest {
     void testToString() {
         assertThat(applicant.toString()).isEqualTo("Applicant(uniserial=null, birthplace=Wakanda, firstName=null," +
                 " surname=J, address=Address(street=Baker Street, houseNumber=21B, city=London, country=England," +
-                " zipcode=20394), gender=null, birthday=01.01.2001, nationality=English, course=Arts, status=New," +
+                " zipcode=NW1 6XE), gender=null, birthday=01.01.2001, nationality=English, course=Arts, status=New," +
                 " comment=null, certs=Certificate(name=Bachelor, course=Harvard), applications=[Application" +
                 "(minHours=0, finalHours=0, maxHours=0, module=Module(name=Info4, deadline=1970-01-01T00:01:40Z, " +
                 "shortName=null, profName=null, sevenHourLimit=null, nineHourLimit=null, seventeenHourLimit=null, " +
-                "hourLimit=null), priority=null, grade=0.0, lecturer=null, semester=null, role=null, comment=null, " +
-                "applicant=null)])");
+                "hourLimit=null), priority=null, grade=0.0, lecturer=null, semester=null, role=null, comment=null" +
+                ")])");
     }
 }
