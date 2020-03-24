@@ -1,8 +1,7 @@
 package mops.controllers;
 
 import mops.model.Account;
-import mops.model.classes.Applicant;
-import mops.model.classes.Application;
+import mops.model.classes.*;
 import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebAddress;
 import mops.model.classes.webclasses.WebApplicant;
@@ -220,9 +219,9 @@ public class ApplicationController {
                 || certificateBindingResult.hasErrors()) {
             return "applicant/applicationPersonal";
         }
-        Address address = applicantService.buildAddress(webAddress);
-        Certificate certificate = applicantService.buildCertificate(webCertificate);
-        Applicant applicant = applicantService.buildApplicant(token.getName(), webApplicant, address, certificate);
+        Address address = studentService.buildAddress(webAddress);
+        Certificate certificate = studentService.buildCertificate(webCertificate);
+        Applicant applicant = studentService.buildApplicant(token.getName(), webApplicant, address, certificate);
         applicantService.saveApplicant(applicant);
         model.addAttribute("webApplication", WebApplication.builder().build());
         return "applicant/applicationModule";
