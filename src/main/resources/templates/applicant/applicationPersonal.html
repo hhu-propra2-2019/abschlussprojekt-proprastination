@@ -35,11 +35,15 @@
                 <div class="card-header"><h2>Persönliche Daten</h2></div>
                 <div class="card-body">
                     <div class="row" th:object="${webAddress}">
-                        <div class="col-5">
+                        <div class="col-4">
                             <input th:type="text" th:name="street"
                                    th:field="*{street}" th:attr="value = ${webAddress.street}"
                                    class="form-control" placeholder="Straße und Hausnummer" required> <br>
                             <br>
+                        </div>
+                        <div class="col-md-1">
+                            <input class="form-control" name="streetnumber" placeholder="Hausnummer" required
+                                   th:field="*{number}" type="text">
                         </div>
                         <div class="col-5">
                             <input th:type="text" th:name="city" th:id="city"
@@ -47,7 +51,7 @@
                                    th:class="form-control" placeholder="Ort" required> <br>
                         </div>
                         <div class="col-2">
-                            <input th:type="text" th:name="zipcode" th:id="zipcode" th:field="*{zipcode}"
+                            <input th:field="*{zipcode}" th:id="zipcode" th:name="zipcode" type="text"
                                    th:attr="value = ${webAddress.zipcode}"
                                    th:class="form-control" placeholder="Postleitzahl" required> <br>
                         </div>
@@ -108,13 +112,13 @@
                             <select th:name="status" th:id="status" th:class="form-control"
                                     th:field="*{status}" th:attr="value = ${webApplicant.status}"
                             >
-                                <option th:value="neueinstellung">
+                                <option th:value="Einstellung">
                                     Neueinstellung (bisher keine Anstellung an der HHU)
                                 </option>
-                                <option th:value="weiterbeschaeftigung">
+                                <option th:value="Weiterbeschaeftigung">
                                     Weiterbeschäftigung (bestehender Vertrag bis zum DD.MM.YYYY)
                                 </option>
-                                <option th:value="wiedereinstellung">
+                                <option th:value="Änderung">
                                     Wiedereinstellung (KEIN bestehender Vertrag bis zum DD.MM.YYYY)
                                 </option>
                             </select>
@@ -157,14 +161,15 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <textarea th:name="comment" th:id="comment" th:class="form-control" rows="6" maxlength="1000"
+                            <textarea th:name="comment" th:id="comment" th:class="form-control" rows="6"
+                                      maxlength="1000"
                                       th:field="*{comment}" th:attr="value = ${webApplicant.comment}"
                             ></textarea> <br>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="card bg-light mb-3 border-primary">
+            <div class="card bg-light mb-3 border-primary" th:if="${modules} ne null">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-6">
@@ -174,16 +179,27 @@
                         </div>
                         <div class="col-4">
                             <select name="modules" id="modules" class="form-control">
-                                <option th:each="module:${modules}" th:text="${module}"></option>
+                                <option th:each="module:${modules}" th:text="${module.name}"></option>
                             </select>
                         </div>
                         <div class="col-2">
-                            <button th:type="submit" class="btn btn-outline-primary form-control"> Bestätige </button>
+                            <button th:type="submit" class="btn btn-outline-primary form-control"> Bestätige</button>
                         </div>
                     </div>
                 </div>
             </div>
         </form>
+        <div class="card bg-light mb-3 border-primary" th:unless="${modules} ne null">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <label for="back"><h3>Du kannst keine weiteren Bewerbungen ausfüllen!</h3></label>
+                        <a class="btn btn-outline-danger" name="back"
+                           th:href="@{/bewerbung2/bewerber/}" type="submit"> Zurück</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
 </body>
