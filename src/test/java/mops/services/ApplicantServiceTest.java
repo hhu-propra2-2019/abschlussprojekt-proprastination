@@ -42,7 +42,7 @@ class ApplicantServiceTest {
         address = Address.builder()
                 .city("Gotham")
                 .country("USA")
-                .zipcode(42069)
+                .zipcode("42069")
                 .street("Batstreet 1")
                 .build();
 

@@ -45,7 +45,7 @@ class ApplicantRepositoryTest {
                 .street("1")
                 .city("Baumberg")
                 .country("Bergland")
-                .zipcode(22222)
+                .zipcode("22222")
                 .build();
         cert = Certificate.builder()
                 .name("Uni")

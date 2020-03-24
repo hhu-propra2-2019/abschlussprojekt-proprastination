@@ -20,7 +20,7 @@ class ApplicationTest {
                 .name("Info4")
                 .build();
         address = Address.builder()
-                .zipcode(12345)
+                .zipcode("12345")
                 .country("USA")
                 .city("Düsseldorf")
                 .street("Street")

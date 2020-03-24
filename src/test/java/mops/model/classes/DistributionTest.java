@@ -34,7 +34,7 @@ class DistributionTest {
                 .houseNumber("21B")
                 .city("London")
                 .country("England")
-                .zipcode(20394)
+                .zipcode("20394")
                 .build();
 
         Applicant applicant = Applicant.builder()

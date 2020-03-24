@@ -49,7 +49,7 @@ class PDFServiceTest {
                 .houseNumber("21B")
                 .city("London")
                 .country("England")
-                .zipcode(20394)
+                .zipcode("NW1 6XE")
                 .build();
 
         Applicant applicant = Applicant.builder()
