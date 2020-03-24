@@ -21,17 +21,12 @@ public class StudentService {
 
     private ApplicantService applicantService;
 
-    private ApplicationService applicationService;
-
     /**
      * Setup the applicantserives
-     *
      * @param applicantService   applicant.
-     * @param applicationService application
      */
-    public StudentService(final ApplicantService applicantService, final ApplicationService applicationService) {
+    public StudentService(final ApplicantService applicantService) {
         this.applicantService = applicantService;
-        this.applicationService = applicationService;
     }
 
     /**
