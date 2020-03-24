@@ -85,7 +85,8 @@
                         </div>
                         <div class="col-6">
                             <select name="subject" id="subject" class="form-control">
-                                <option value="" selected th:text="${applicant.course}"></option>
+                                <option selected th:text="${applicant.course}" th:value="${applicant.course}"
+                                        value=""></option>
                             </select> <br> <br>
                         </div>
                     </div>
@@ -137,9 +138,9 @@
                             </select> <br>
                         </div>
                         <div class="col-6">
-                            <input type="text" name="graduationsubject" id="graduationsubject"
+                            <input id="graduationcourse" name="graduationcourse" th:text="${applicant.certs.course}"
                                    class="form-control" placeholder="Abschlussfach"
-                                   th:value="${applicant.certs.name}"> <br>
+                                   th:value="${applicant.certs.name}" type="text"> <br>
                         </div>
                     </div>
                     <div class="row">
