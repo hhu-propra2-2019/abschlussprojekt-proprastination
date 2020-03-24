@@ -89,7 +89,7 @@ public class PDFController {
             try {
                 applicant = applicantService.findByUniserial(student);
                 application = applicant.getApplications().stream()
-                        .filter(p -> p.getModule().equals(module)).findFirst();
+                        .filter(p -> p.getModule().getName().equals(module)).findFirst();
             } catch (Exception e) {
                 e.printStackTrace();
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);

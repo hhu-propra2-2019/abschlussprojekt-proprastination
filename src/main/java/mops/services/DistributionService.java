@@ -1,10 +1,19 @@
 package mops.services;
 
+import mops.model.classes.Applicant;
+import mops.model.classes.Application;
 import mops.model.classes.Distribution;
+import mops.model.classes.Evaluation;
+import mops.model.classes.Module;
+import mops.model.classes.webclasses.WebDistribution;
+import mops.model.classes.webclasses.WebDistributorApplicant;
+import mops.model.classes.webclasses.WebDistributorApplication;
 import mops.repositories.DistributionRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class DistributionService {
@@ -12,20 +21,24 @@ public class DistributionService {
     private final DistributionRepository distributionRepository;
     private final ModuleService moduleService;
     private final ApplicantService applicantService;
+    private final EvaluationService evaluationService;
 
     /**
      * Injects Services and repositories
      * @param distributionRepository the injected repository
      * @param moduleService the services that manages modules
      * @param applicantService the services that manages applicants
+     * @param evaluationService the services that manage evaluations
      */
     @SuppressWarnings("checkstyle:HiddenField")
     public DistributionService(final DistributionRepository distributionRepository,
                                final ModuleService moduleService,
-                               final ApplicantService applicantService) {
+                               final ApplicantService applicantService,
+                               final EvaluationService evaluationService) {
         this.distributionRepository = distributionRepository;
         this.moduleService = moduleService;
         this.applicantService = applicantService;
+        this.evaluationService = evaluationService;
         assign();
     }
 
@@ -35,7 +48,6 @@ public class DistributionService {
     public void assign() {
         distributionRepository.save(Distribution.builder()
                 .employees(applicantService.findAll())
-                .module("unassigned")
                 .build());
     }
 
@@ -45,7 +57,7 @@ public class DistributionService {
      * @param module the model
      * @return List of Distributions
      */
-    public Distribution findByModule(final String module) {
+    public Distribution findByModule(final Module module) {
         return distributionRepository.findByModule(module);
     }
 
@@ -60,12 +72,71 @@ public class DistributionService {
 
     /**
      * Finds all Distributions that are unassigned
+     * FIXME:Needs to be addapted to retrieve List<Applicant> instead of Distribution.
      *
      * @return List of Distributions
      */
     public Distribution findAllUnassigned() {
-        return distributionRepository.findByModule("unassigned");
+        return distributionRepository.findAll().get(0);
     }
 
+    /**
+     * converts Distributions to Web Distributions
+     * @return List of WebDistributions
+     */
 
+    public List<WebDistribution> convertDistributionsToWebDistributions() {
+        List<WebDistribution> webDistributionList = new ArrayList<>();
+        List<Distribution> distributionList = findAll();
+        for (Distribution distribution : distributionList) {
+            List<WebDistributorApplicant> webDistributorApplicantList =
+                    convertApplicantToWebDistributorApplicant(distribution.getEmployees(), distribution.getModule());
+            WebDistribution webDistribution = WebDistribution.builder()
+                    .module(distribution.getModule().getName())
+                    .webDistributorApplicants(webDistributorApplicantList)
+                    .build();
+            webDistributionList.add(webDistribution);
+        }
+        return webDistributionList;
+    }
+
+    private List<WebDistributorApplicant> convertApplicantToWebDistributorApplicant(
+            final List<Applicant> applicantList, final Module module) {
+        List<WebDistributorApplicant> webDistributorApplicantList = new ArrayList<>();
+        for (Applicant applicant : applicantList) {
+            Set<Application> applicationSet = applicant.getApplications();
+            List<WebDistributorApplication> webDistributorApplicationList =
+                    createWebDistributorApplications(applicationSet);
+            int finalHours = 0;
+            for (Application application : applicationSet) {
+                if (application.getModule().equals(module)) {
+                    finalHours = application.getFinalHours();
+                }
+            }
+            WebDistributorApplicant webDistributorApplicant = WebDistributorApplicant.builder()
+                    .username(applicant.getUniserial())
+                    .webDistributorApplications(webDistributorApplicationList)
+                    .distributorHours(finalHours + "")
+                    .build();
+            webDistributorApplicantList.add(webDistributorApplicant);
+        }
+        return webDistributorApplicantList;
+    }
+
+    private List<WebDistributorApplication> createWebDistributorApplications(final Set<Application> applicationSet) {
+        List<WebDistributorApplication> webDistributorApplicationList = new ArrayList<>();
+        for (Application application : applicationSet) {
+            Evaluation evaluation = evaluationService.findByApplication(application);
+            WebDistributorApplication webDistributorApplication = WebDistributorApplication.builder()
+                    .applicantPriority(application.getPriority() + "")
+                    .minHours(application.getMinHours() + "")
+                    .maxHours(application.getMaxHours() + "")
+                    .module(application.getModule().getName())
+                    .organizerHours(evaluation.getHours() + "")
+                    .organizerPriority(evaluation.getPriority() + "")
+                    .build();
+            webDistributorApplicationList.add(webDistributorApplication);
+        }
+        return  webDistributorApplicationList;
+    }
 }

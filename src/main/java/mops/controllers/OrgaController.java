@@ -3,13 +3,16 @@ package mops.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import mops.model.Account;
 import mops.services.ApplicantService;
+import mops.services.ApplicationService;
+import mops.services.ModuleService;
+import mops.services.OrgaService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,8 +23,26 @@ import org.springframework.web.context.annotation.SessionScope;
 @RequestMapping("/bewerbung2/organisator")
 public class OrgaController {
 
-    @Autowired
-    private ApplicantService applicantService;
+    private final ApplicantService applicantService;
+    private final ApplicationService applicationService;
+    private final ModuleService moduleService;
+    private final OrgaService orgaService;
+
+    /**
+     * Lets Spring inject the services
+     * @param applicantService
+     * @param applicationService
+     * @param moduleService
+     * @param orgaService
+     */
+    @SuppressWarnings("checkstyle:HiddenField")
+    public OrgaController(final ApplicantService applicantService, final ApplicationService applicationService,
+                          final ModuleService moduleService, final OrgaService orgaService) {
+        this.applicantService = applicantService;
+        this.applicationService = applicationService;
+        this.moduleService = moduleService;
+        this.orgaService = orgaService;
+    }
 
     private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
         KeycloakPrincipal principal = (KeycloakPrincipal) token.getPrincipal();
@@ -46,6 +67,7 @@ public class OrgaController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
+        model.addAttribute("modules", moduleService.getModules());
         return "organizer/orgaMain";
     }
 
@@ -74,27 +96,33 @@ public class OrgaController {
 
     /**
      * Shows overview of applications for a module.
+     * @param id the applications is, as Path variable
      * @param token
      * @param model
      * @return orgaOverview.html as String
      */
-    @GetMapping("/overview")
+    @GetMapping("/{id}/")
     @Secured("ROLE_orga")
-    public String overview(final KeycloakAuthenticationToken token, final Model model) {
+    public String overview(@PathVariable("id") final String id, final KeycloakAuthenticationToken token,
+                           final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
+        model.addAttribute("applications", orgaService.getAllApplications(id));
         return "organizer/orgaOverview";
     }
 
     /**
      * Needed to display additional information about each application on the overview page.
      * (Inside a modal / popup window.)
+     * @param id applications id
+     * @param model
      * @return "applicationModalContent", the HTML file with the modal content.
      */
-    @GetMapping("/modal")
+    @GetMapping("/modal/{id}/")
     @Secured("ROLE_orga")
-    public String applicationInfo() {
+    public String applicationInfo(@PathVariable("id") final String id, final Model model) {
+        model.addAttribute("appl", orgaService.getApplication(id));
         return "organizer/applicationModalContent";
     }
 

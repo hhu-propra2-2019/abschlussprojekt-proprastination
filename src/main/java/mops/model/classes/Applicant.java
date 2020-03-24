@@ -49,4 +49,20 @@ public class Applicant {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Singular
     private Set<Application> applications;
+
+    /**
+     * Returns Application given the id.
+     *
+     * @param id long.
+     * @return searched Application
+     */
+    @SuppressWarnings("checkstyle:HiddenField")
+    public Application getApplicationById(final long id) {
+        for (Application a : applications) {
+            if (a.getId() == id) {
+                return a;
+            }
+        }
+        return null;
+    }
 }

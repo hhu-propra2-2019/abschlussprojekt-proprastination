@@ -5,15 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder(toBuilder = true)
-public class WebDistributorApplicant {
-
-    private String username;
-    private List<WebDistributorApplication> webDistributorApplications;
-    private String distributorHours;
+public class WebCertificate {
+    private String graduation;
+    private String course;
 }
