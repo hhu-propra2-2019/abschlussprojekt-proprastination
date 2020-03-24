@@ -1,5 +1,6 @@
 package mops.services;
 
+import com.sun.xml.bind.v2.runtime.output.SAXOutput;
 import mops.model.classes.Applicant;
 import mops.model.classes.Applicant.ApplicantBuilder;
 import mops.model.classes.Application;
@@ -70,6 +71,7 @@ public class DistributionService {
     private void distribute() {
         List<Module> modules = moduleService.getModules();
         List<Applicant> allApplicants = applicantService.findAll();
+        distributionRepository.deleteAll();
         for (Module module : modules) {
             List<Evaluation> evaluations = new LinkedList<>();
             List<Application> preApplications = applicationService.findApplicationsByModule(module);
@@ -136,13 +138,6 @@ public class DistributionService {
                     .module(module)
                     .build());
         }
-        moduleService.save(Module.builder()
-                .name("unassinged")
-                .build());
-        distributionRepository.save(Distribution.builder()
-                .employees(allApplicants)
-                .module(moduleService.findModuleByName("unassigned"))
-                .build());
     }
 
     /**
@@ -174,15 +169,6 @@ public class DistributionService {
         return distributionRepository.findAll();
     }
 
-    /**
-     * Finds all Distributions that are unassigned
-     * FIXME:Needs to be addapted to retrieve List<Applicant> instead of Distribution.
-     *
-     * @return List of Distributions
-     */
-    public Distribution findAllUnassigned() {
-        return distributionRepository.findAll().get(0);
-    }
 
     /**
      * converts Distributions to Web Distributions
@@ -201,7 +187,31 @@ public class DistributionService {
                     .build();
             webDistributionList.add(webDistribution);
         }
+        List<WebDistributorApplicant> webDistributorApplicantList =
+                convertUnassignedApplicantsToWebDistributorApplicants(findAllUnassigned());
+        WebDistribution webDistribution = WebDistribution.builder()
+                .module("unassigned")
+                .webDistributorApplicants(webDistributorApplicantList)
+                .build();
+        webDistributionList.add(webDistribution);
         return webDistributionList;
+    }
+
+    private List<WebDistributorApplicant> convertUnassignedApplicantsToWebDistributorApplicants(
+            final List<Applicant> applicants) {
+        List<WebDistributorApplicant> webDistributorApplicantList = new ArrayList<>();
+        for (Applicant applicant : applicants) {
+            Set<Application> applicationSet = applicant.getApplications();
+            List<WebDistributorApplication> webDistributorApplicationList =
+                    createWebDistributorApplications(applicationSet);
+            WebDistributorApplicant webDistributorApplicant = WebDistributorApplicant.builder()
+                    .username(applicant.getUniserial())
+                    .webDistributorApplications(webDistributorApplicationList)
+                    .distributorHours("0")
+                    .build();
+            webDistributorApplicantList.add(webDistributorApplicant);
+        }
+        return webDistributorApplicantList;
     }
 
     private List<WebDistributorApplicant> convertApplicantToWebDistributorApplicant(
@@ -242,5 +252,17 @@ public class DistributionService {
             webDistributorApplicationList.add(webDistributorApplication);
         }
         return  webDistributorApplicationList;
+    }
+
+    private List<Applicant> findAllUnassigned() {
+        List<Applicant> allApplicants = applicantService.findAll();
+        List<Distribution> allDistributions = findAll();
+        List<Applicant> distributedApplicants = new LinkedList<>();
+
+        for (Distribution distribution : allDistributions) {
+            distributedApplicants.addAll(distribution.getEmployees());
+        }
+        allApplicants.removeIf(applicant -> distributedApplicants.indexOf(applicant) != -1);
+        return allApplicants;
     }
 }
