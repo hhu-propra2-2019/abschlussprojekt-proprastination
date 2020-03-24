@@ -216,67 +216,6 @@ public class ApplicationController {
     }
 
     /**
-     * @param token
-     * @param model
-     * @param street
-     * @param city
-     * @param plz
-     * @param birthplace
-     * @param nationality
-     * @param birthday
-     * @param subject
-     * @param status
-     * @param graduation
-     * @param graduationsubject
-     * @param diverse
-     * @return overview formular as String
-     */
-
-    @SuppressWarnings("checkstyle:ParameterNumber")
-    @PostMapping("/uebersichtBearbeitet")
-    public String saveOverview(final KeycloakAuthenticationToken token, final Model model,
-                               @RequestParam("address1") final String street,
-                               @RequestParam("address2") final String city,
-                               @RequestParam("plz") final String plz,
-                               @RequestParam("placeofbirth") final String birthplace,
-                               @RequestParam("nationality") final String nationality,
-                               @RequestParam("birthday") final String birthday,
-                               @RequestParam("subject") final String subject,
-                               @RequestParam("status") final String status,
-                               @RequestParam("graduation") final String graduation,
-                               @RequestParam("graduationsubject") final String graduationsubject,
-                               @RequestParam("diverse") final String diverse) {
-        if (token != null) {
-            model.addAttribute("account", createAccountFromPrincipal(token));
-            Address address = Address.builder().
-                    street(street).
-                    city(city).
-                    zipcode(plz).
-                    build();
-            Certificate cert = Certificate.builder()
-                    .name(graduation)
-                    .course(graduationsubject)
-                    .build();
-            Set<Application> appls = new HashSet<>();
-            Applicant applicant = Applicant.builder()
-                    .birthplace(birthplace)
-                    .address(address)
-                    .birthday(birthday)
-                    .nationality(nationality)
-                    .course(subject)
-                    .status("New")
-                    .certs(cert)
-                    .uniserial("has220")
-                    .applications(appls)
-                    .build();
-            studentService.updateApplicantWithoutChangingApplications(applicant);
-            model.addAttribute("applicant", applicantService.findByUniserial("has220"));
-        }
-        return "applicant/applicationOverview";
-    }
-
-
-    /**
      * The GetMapping for the overview
      *
      * @param token      The KeycloakAuthentication
