@@ -68,4 +68,27 @@ public class ApplicantService {
         Applicant newApplicant = applicantBuider.clearApplications().applications(applications).build();
         applicantRepository.save(newApplicant);
     }
+
+    /**
+     * Returns a Set of all Modules the Applicant has not submitted an application yet.
+     *
+     * @param applicant Applicant.
+     * @param modules   all Modules
+     * @return Set of Modules.
+     */
+    public List<Module> getAllNotfilledModules(final Applicant applicant, final List<Module> modules) {
+        for (Application app : applicant.getApplications()) {
+            modules.remove(app.getModule());
+        }
+        return modules;
+    }
+
+    /**
+     * Finds the corrosponding applicant to the application
+     * @param application the application
+     * @return the applicant
+     */
+    public Applicant findByApplications(final Application application) {
+        return applicantRepository.findByApplications(application);
+    }
 }
