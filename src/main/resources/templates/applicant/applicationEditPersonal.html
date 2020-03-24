@@ -41,37 +41,63 @@
                     <div class="col-5">
                         <input type="text" name="adress1" id="adress1"
                                required
+                               pattern=".+ [0-9]+"
                                class="form-control" placeholder="Straße und Hausnummer"
-                               th:value="${applicant.address.street}"> <br>
+                               th:value="${applicant.address.street}">
+                        <div th:if="${#fields.hasErrors('street')}" class="text-danger">
+                            Bitte geben Sie eine Straße gefolgt von einer Hausnummer ein.
+                        </div>
+                        <br>
                         <br>
                     </div>
                     <div class="col-5">
                         <input type="text" name="adress2" id="adress2"
                                required
-                               class="form-control" placeholder="Ort" th:value="${applicant.address.city}"> <br>
+                               class="form-control" placeholder="Ort" th:value="${applicant.address.city}">
+                        <div th:if="${#fields.hasErrors('city')}" class="text-danger">
+                            Bitte geben Sie eine Stadt an.
+                        </div>
+                        <br>
                     </div>
                     <div class="col-2">
                         <input type="text" name="plz" id="plz" class="form-control" placeholder="Postleitzahl"
                                required pattern="^\d{5}$" minlength="5" maxlength="5"
-                               th:value="${applicant.address.zipcode}"> <br>
+                               th:value="${applicant.address.zipcode}">
+                        <div th:if="${#fields.hasErrors('zipcode')}" class="text-danger">
+                            Bitte geben Sie eine fünfstellige Postleitzahl ein.
+                        </div>
+                        <br>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-5">
                         <input type="text" name="placeofbirth" id="placeofbirth" required
-                               class="form-control" placeholder="Geburtsort, Land" th:value="${applicant.birthplace}"> <br>
+                               class="form-control" placeholder="Geburtsort, Land" th:value="${applicant.birthplace}">
+                        <div th:if="${#fields.hasErrors('birthplace')}" class="text-danger">
+                            Bitte geben Sie einen Geburtsort an.
+                        </div>
+                        <br>
                     </div>
                     <div class="col-5">
                         <select name="nationality" id="nationality" class="form-control">
                             <option th:value="${applicant.nationality}" selected th:text="${applicant.nationality}">Nationalität</option>
                             <option th:each="country:${countries}" th:text="${country}"></option>
-                        </select> <br>
+                        </select>
+                        <div th:if="${#fields.hasErrors('nationality')}" class="text-danger">
+                            Bitte geben Sie eine Nationalität an.
+                        </div>
+                        <br>
                     </div>
                     <div class="col-2">
                         <input type="text" name="birthday" id="birthday" onfocus="(this.type='date')"
                                required
+                               pattern="[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])"
                                onblur="(this.type='text')" class="form-control" placeholder="Geburtstag"
-                               th:value="${applicant.birthday}"> <br><br>
+                               th:value="${applicant.birthday}">
+                        <div th:if="${#fields.hasErrors('birthday')}" class="text-danger">
+                            Bitte geben Sie ein gültiges Geburtsdatum an.
+                        </div>
+                        <br><br>
                     </div>
                     <div class="row">
                         <div class="col-6">
@@ -86,7 +112,11 @@
                         <div class="col-6">
                             <select name="subject" id="subject" class="form-control">
                                 <option value="" selected th:text="${applicant.course}"></option>
-                            </select> <br> <br>
+                            </select>
+                            <div th:if="${#fields.hasErrors('course')}" class="text-danger">
+                                Bitte wählen Sie ein Studienfach.
+                            </div>
+                            <br> <br>
                         </div>
                     </div>
                     <div class="row">
@@ -110,6 +140,9 @@
                                     Wiedereinstellung (KEIN bestehender Vertrag bis zum DD.MM.YYYY)
                                 </option>
                             </select>
+                            <div th:if="${#fields.hasErrors('status')}" class="text-danger">
+                                Bitte wählen Sie Ihren Angestelltenstatus.
+                            </div>
                             <br><br>
                         </div>
                     </div>
