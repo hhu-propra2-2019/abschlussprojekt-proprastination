@@ -173,4 +173,8 @@ public class ApplicantService {
         }
         return modules;
     }
+
+    public Applicant findByApplications(final Application application) {
+        return applicantRepository.findByApplications(application);
+    }
 }

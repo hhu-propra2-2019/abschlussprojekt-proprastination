@@ -26,7 +26,7 @@ import java.time.Instant;
 public class Module {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    private long id;
     private String name;
     private Instant deadline;
     private String shortName;

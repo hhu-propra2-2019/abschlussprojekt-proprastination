@@ -68,22 +68,20 @@
             <tr th:each="appl : ${applications}">
                 <td class="text-center">
                     <select name="priority" id="priority">
-                        <option value="1">++</option>
-                        <option value="2">+</option>
-                        <option value="3" selected>o</option>
-                        <option value="4">-</option>
+                        <option th:each="priority : ${T(mops.model.classes.Priority).values()}" th:text="${priority.label}"
+                                th:value="${priority}" th:selected="${priority==priority.Neutral}">++</option>
                     </select>
                 </td>
-                <td th:text="${appl.priority}" class="text-center">++</td>
+                <td th:text="${appl.priority.label}" class="text-center">++</td>
                 <td th:text="${appl.grade}" class="text-center">2,7</td>
-                <td th:text="${appl.role}" class="text-center">Tutor</td>
+                <td th:text="${appl.role.label}" class="text-center">Tutor</td>
                 <td th:text="${appl.minHours} + 'h'" class="text-center">7h</td>
                 <td th:text="${appl.maxHours} + 'h'" class="text-center">9h</td>
                 <td class="text-center">
                     <select name="hours" id="hours">
-                        <option value="7">7 Stunden</option>
-                        <option value="9" selected>9 Stunden</option>
-                        <option value="17">17 Stunden</option>
+                        <option th:value="7">7 Stunden</option>
+                        <option th:value="9" selected>9 Stunden</option>
+                        <option th:value="17">17 Stunden</option>
                     </select>
                 </td>
                 <td th:text="${appl.applicant.uniserial}" class="text-center">Mamus100</td>

@@ -1,5 +1,6 @@
 package mops.services;
 
+import mops.model.classes.Applicant;
 import mops.model.classes.Application;
 import mops.model.classes.Application.ApplicationBuilder;
 import mops.model.classes.Module;
@@ -75,16 +76,6 @@ public class ApplicationService {
     }
 
     /**
-     * as
-     *
-     * @param id as
-     * @return Application
-     */
-    public Application findById(final long id) {
-        return applicationRepository.findById(id).get();
-    }
-
-    /**
      * @param application application
      */
     public void save(final Application application) {
@@ -92,7 +83,7 @@ public class ApplicationService {
     }
 
     public List<Application> findAllByModuleId(final long id) {
-        return applicationRepository.findAllByModule("RDB");
+        return applicationRepository.findAllByModule(moduleService.findById(id));
     }
 
     public Application findById(final long id) {

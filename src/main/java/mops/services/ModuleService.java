@@ -29,15 +29,7 @@ public class ModuleService {
      * @return List of all Modules
      */
     public List<Module> getModules() {
-        List<Module> modules = new LinkedList<>();
-        List<String> strings = CSVService.getModules();
-        for (int i = 0; i < strings.size(); i++) {
-            modules.add(Module.builder()
-                    .name(strings.get(i))
-                    .id(UUID.randomUUID())
-                    .build());
-        }
-        return modules;
+        return moduleRepository.findAll();
     }
 
     /**
