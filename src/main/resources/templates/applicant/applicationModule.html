@@ -88,7 +88,9 @@
                                 <option value="" disabled selected hidden>Semester</option>
                                 <option th:each="semester:${semesters}" th:text="${semester}" th:value="${semester}"></option>
                             </select>
-
+                            <div th:if="${#fields.hasErrors('semester')}" class="text-danger">
+                                Bitte geben Sie ein Semester an.
+                            </div>
                             <br>
                         </div>
                         <div class="col">
