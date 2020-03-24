@@ -2,7 +2,6 @@ package mops.services;
 
 import mops.model.classes.Application;
 import mops.model.classes.Application.ApplicationBuilder;
-import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebApplication;
 import mops.repositories.ApplicationRepository;
 import org.springframework.stereotype.Service;
