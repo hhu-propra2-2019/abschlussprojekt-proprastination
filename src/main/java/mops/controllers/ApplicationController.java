@@ -155,58 +155,37 @@ public class ApplicationController {
             applicantBindingResult.getAllErrors().forEach(err -> {
                 LOGGER.info("ERROR {}", err.getDefaultMessage());
             });
-            if (token != null) {
-                model.addAttribute("account", createAccountFromPrincipal(token));
-                model.addAttribute("countries", CSVService.getCountries());
-                model.addAttribute("courses", CSVService.getCourses());
-                model.addAttribute("webApplicant", webApplicant);
-                model.addAttribute("webAddress", webAddress);
-                model.addAttribute("modules", CSVService.getModules());
-            }
-            return "applicant/applicationPersonal";
         }
 
         if (addressBindingResult.hasErrors()) {
             addressBindingResult.getAllErrors().forEach(err -> {
                 LOGGER.info("ERROR {}", err.getDefaultMessage());
             });
-            if (token != null) {
-                model.addAttribute("account", createAccountFromPrincipal(token));
-                model.addAttribute("countries", CSVService.getCountries());
-                model.addAttribute("courses", CSVService.getCourses());
-                model.addAttribute("webApplicant", webApplicant);
-                model.addAttribute("webAddress", webAddress);
-                model.addAttribute("modules", CSVService.getModules());
-            }
-            return "applicant/applicationPersonal";
         }
 
         if (certificateBindingResult.hasErrors()) {
             certificateBindingResult.getAllErrors().forEach(err -> {
                 LOGGER.info("ERROR {}", err.getDefaultMessage());
             });
-            if (token != null) {
-                model.addAttribute("account", createAccountFromPrincipal(token));
-                model.addAttribute("countries", CSVService.getCountries());
-                model.addAttribute("courses", CSVService.getCourses());
-                model.addAttribute("webApplicant", webApplicant);
-                model.addAttribute("webAddress", webAddress);
-                model.addAttribute("modules", CSVService.getModules());
-            }
-            return "applicant/applicationPersonal";
         }
 
         if (token != null) {
-            Address address = applicantService.buildAddress(webAddress);
-            Certificate certificate = applicantService.buildCertificate(webCertificate);
-            Applicant applicant = applicantService.buildApplicant(token.getName(), webApplicant, address, certificate);
-            applicantService.saveApplicant(applicant);
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("modul", modules);
             model.addAttribute("semesters", CSVService.getSemester());
             model.addAttribute("modules", CSVService.getModules());
-            model.addAttribute("webApplication", WebApplication.builder().build());
+            model.addAttribute("countries", CSVService.getCountries());
+            model.addAttribute("courses", CSVService.getCourses());
         }
+        if (applicantBindingResult.hasErrors() | addressBindingResult.hasErrors()
+                | certificateBindingResult.hasErrors()) {
+            return "applicant/applicationPersonal";
+        }
+        Address address = applicantService.buildAddress(webAddress);
+        Certificate certificate = applicantService.buildCertificate(webCertificate);
+        Applicant applicant = applicantService.buildApplicant(token.getName(), webApplicant, address, certificate);
+        applicantService.saveApplicant(applicant);
+        model.addAttribute("webApplication", WebApplication.builder().build());
         return "applicant/applicationModule";
     }
 
