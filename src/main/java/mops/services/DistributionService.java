@@ -97,7 +97,7 @@ public class DistributionService {
             }
 
             for (int i = 0; i < numberOfPriorities; i++) {
-                sortedByOrgaPrio[i].sort(Comparator.comparing(a -> a.getApplication().getPriority()));
+                sortedByOrgaPrio[i].sort(Comparator.comparing(a -> a.getApplication().getPriority().getValue()));
             }
 
             int count7 = 0;
@@ -107,25 +107,25 @@ public class DistributionService {
             Set<Applicant> distributedApplicants = new LinkedHashSet<>();
 
             for (int i = 0; i < numberOfPriorities; i++) {
-                if (count7 == 4 && count9 == 5 && count17 == 6) {
+                if (count7 == 1 && count9 == 2 && count17 == 3) {
                     break;
                 }
                 for (Evaluation evaluation : sortedByOrgaPrio[i]) {
-                    if (count7 == 4 && count9 == 5 && count17 == 6) {
+                    if (count7 == 1 && count9 == 2 && count17 == 3) {
                         break;
                     }
                     Applicant applicant = applicantService.findByApplications(evaluation.getApplication());
-                    if (evaluation.getHours() == sevenHours && count7 < 4) {
+                    if (evaluation.getHours() == sevenHours && count7 < 1) {
                         distributedApplicants.add(applicant);
                         allApplicants.remove(applicant);
                         changeFinalHours(evaluation);
                         count7++;
-                    } else if (evaluation.getHours() == nineHours && count9 < 5) {
+                    } else if (evaluation.getHours() == nineHours && count9 < 2) {
                         distributedApplicants.add(applicant);
                         allApplicants.remove(applicant);
                         changeFinalHours(evaluation);
                         count9++;
-                    } else if (evaluation.getHours() == seventeenHours && count17 < 6) {
+                    } else if (evaluation.getHours() == seventeenHours && count17 < 3) {
                         distributedApplicants.add(applicant);
                         allApplicants.remove(applicant);
                         changeFinalHours(evaluation);

@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("checkstyle:MagicNumber")
 @Component
 public class DatabaseInit implements ServletContextInitializer {
-    private static final int ENTRYNUMBER = 30;
+    private static final int ENTRYNUMBER = 100;
     private transient Random random = new Random();
 
     private transient ApplicantRepository applicantRepository;
@@ -346,7 +346,7 @@ public class DatabaseInit implements ServletContextInitializer {
         applicationRepository.findAll().forEach(application -> {
                     Evaluation evaluation = Evaluation.builder()
                             .comment(truncate(faker.yoda().quote(), 255))
-                            .hours(faker.number().numberBetween(7, 17))
+                            .hours(nextFinalHour())
                             .priority(nextPriority())
                             .application(application)
                             .build();
