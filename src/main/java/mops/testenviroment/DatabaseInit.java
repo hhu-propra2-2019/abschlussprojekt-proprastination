@@ -360,14 +360,21 @@ public class DatabaseInit implements ServletContextInitializer {
         String[] modulenames = {"Programmier Praktikum 1", "Programmier Praktikum 2",
                 "RDB",
                 "Algorithmen und Datenstrukturen", "Theoretische Informatik"};
+        String[] shortNames = {"ProPra1", "Propra2", "RDB", "Aldat", "Theo"};
+        Random random = new Random();
+        int i = 0;
         for (String s : modulenames) {
             Instant date = faker.date().future(300, 30, TimeUnit.DAYS).toInstant();
             Module module = Module.builder()
                     .name(s)
+                    .shortName(shortNames[i])
+                    .sevenHourLimit((1 + random.nextInt(5)) + "")
+                    .nineHourLimit((1 + random.nextInt(5)) + "")
+                    .seventeenHourLimit((1 + random.nextInt(5)) + "")
                     .deadline(date)
                     .build();
             moduleRepository.save(module);
+            i++;
         }
-
     }
 }

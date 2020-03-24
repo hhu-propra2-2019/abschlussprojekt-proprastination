@@ -107,25 +107,25 @@ public class DistributionService {
             Set<Applicant> distributedApplicants = new LinkedHashSet<>();
 
             for (int i = 0; i < numberOfPriorities; i++) {
-                if (count7 == 1 && count9 == 2 && count17 == 3) {
+                if (count7 == Integer.parseInt(module.getSevenHourLimit()) && count9 == Integer.parseInt(module.getNineHourLimit()) && count17 == Integer.parseInt(module.getSeventeenHourLimit())) {
                     break;
                 }
                 for (Evaluation evaluation : sortedByOrgaPrio[i]) {
-                    if (count7 == 1 && count9 == 2 && count17 == 3) {
+                    if (count7 == Integer.parseInt(module.getSevenHourLimit()) && count9 == Integer.parseInt(module.getNineHourLimit()) && count17 == Integer.parseInt(module.getSeventeenHourLimit())) {
                         break;
                     }
                     Applicant applicant = applicantService.findByApplications(evaluation.getApplication());
-                    if (evaluation.getHours() == sevenHours && count7 < 1) {
+                    if (evaluation.getHours() == sevenHours && count7 < Integer.parseInt(module.getSevenHourLimit())) {
                         distributedApplicants.add(applicant);
                         allApplicants.remove(applicant);
                         changeFinalHours(evaluation);
                         count7++;
-                    } else if (evaluation.getHours() == nineHours && count9 < 2) {
+                    } else if (evaluation.getHours() == nineHours && count9 < Integer.parseInt(module.getNineHourLimit())) {
                         distributedApplicants.add(applicant);
                         allApplicants.remove(applicant);
                         changeFinalHours(evaluation);
                         count9++;
-                    } else if (evaluation.getHours() == seventeenHours && count17 < 3) {
+                    } else if (evaluation.getHours() == seventeenHours && count17 < Integer.parseInt(module.getSeventeenHourLimit())) {
                         distributedApplicants.add(applicant);
                         allApplicants.remove(applicant);
                         changeFinalHours(evaluation);
