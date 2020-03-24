@@ -141,6 +141,7 @@ public class ApplicationController {
      * @param modules the module the Applicant wants to apply for
      * @return applicationModule.html
      */
+    @SuppressWarnings("checkstyle:ParameterNumber")
     @PostMapping("/modul")
     @Secured("ROLE_studentin")
     public String modul(final KeycloakAuthenticationToken token,
