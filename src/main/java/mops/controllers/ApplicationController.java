@@ -13,6 +13,7 @@ import mops.services.ApplicantService;
 import mops.services.ApplicationService;
 import mops.services.CSVService;
 import mops.services.ModuleService;
+import mops.services.StudentService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,9 @@ public class ApplicationController {
 
     @Autowired
     private ApplicationService applicationService;
+
+    @Autowired
+    private StudentService studentService;
 
     private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
         KeycloakPrincipal principal = (KeycloakPrincipal) token.getPrincipal();
@@ -145,9 +149,9 @@ public class ApplicationController {
                             @RequestParam("modules") final String modules) {
 
         if (token != null) {
-            Address address = applicantService.buildAddress(webAddress);
-            Certificate certificate = applicantService.buildCertificate(webCertificate);
-            Applicant applicant = applicantService.buildApplicant(token.getName(), webApplicant, address, certificate);
+            Address address = studentService.buildAddress(webAddress);
+            Certificate certificate = studentService.buildCertificate(webCertificate);
+            Applicant applicant = studentService.buildApplicant(token.getName(), webApplicant, address, certificate);
             applicantService.saveApplicant(applicant);
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("modul", modules);
