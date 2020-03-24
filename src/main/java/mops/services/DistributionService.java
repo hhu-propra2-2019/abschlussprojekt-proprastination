@@ -68,16 +68,11 @@ public class DistributionService {
      * distributes the Applicants
      */
     private void distribute() {
-        //List<Module> modules = moduleService.getModules();
-                                                                                                                        List<String> modules = CSVService.getModules();
+        List<Module> modules = moduleService.getModules();
         List<Applicant> allApplicants = applicantService.findAll();
-        for (String module : modules) {
+        for (Module module : modules) {
             List<Evaluation> evaluations = new LinkedList<>();
-            //List<Application> preApplications = applicationService.findApplicationsByModule(module);
-                                                                                                                        List<Application> preApplications = new LinkedList<>();
-                                                                                                                        for (Applicant applicant : allApplicants) {
-                                                                                                                            preApplications.add(applicant.getApplications().iterator().next());
-                                                                                                                        }
+            List<Application> preApplications = applicationService.findApplicationsByModule(module);
             List<Application> applications = new LinkedList<>();
             for (Application application : preApplications) {
                 if (allApplicants.indexOf(applicantService.findByApplications(application)) != -1) {
@@ -96,7 +91,7 @@ public class DistributionService {
             }
 
             for (Evaluation evaluation : evaluations) {
-                sortedByOrgaPrio[evaluation.getPriority() - 1].add(evaluation);
+                sortedByOrgaPrio[evaluation.getPriority().getValue() - 1].add(evaluation);
             }
 
             for (int i = 0; i < numberOfPriorities; i++) {
@@ -141,9 +136,12 @@ public class DistributionService {
                     .module(module)
                     .build());
         }
+        moduleService.save(Module.builder()
+                .name("unassinged")
+                .build());
         distributionRepository.save(Distribution.builder()
                 .employees(allApplicants)
-                .module("unassigned")
+                .module(moduleService.findModuleByName("unassigned"))
                 .build());
     }
 

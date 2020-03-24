@@ -1,6 +1,7 @@
 package mops.services;
 
 import mops.model.classes.Application;
+import mops.model.classes.Module;
 import mops.model.classes.Application.ApplicationBuilder;
 import mops.model.classes.webclasses.WebApplication;
 import mops.repositories.ApplicationRepository;
@@ -74,13 +75,6 @@ public class ApplicationService {
     }
 
     /**
-     * @param application application
-     */
-    public void save(final Application application) {
-        applicationRepository.save(application);
-    }
-
-    /**
      * Finds all Applications by Module id
      * @param id the module id
      * @return the list of applications
@@ -103,7 +97,7 @@ public class ApplicationService {
      * @param module the module
      * @return the applications
      */
-    public List<Application> findApplicationsByModule(final String module) {
+    public List<Application> findApplicationsByModule(final Module module) {
         return applicationRepository.findByModule(module);
     }
 

@@ -15,7 +15,7 @@ public interface ApplicationRepository extends CrudRepository<Application, Long>
      * @param module the module
      * @return the applications
      */
-    List<Application> findByModule(String module);
+    List<Application> findByModule(Module module);
 
     @Override
     List<Application> findAll();
