@@ -12,7 +12,6 @@ import java.util.List;
 @Service
 public class ApplicationService {
 
-    private final ApplicantService applicantService;
     private final ApplicationRepository applicationRepository;
     private final ModuleService moduleService;
 
@@ -20,13 +19,12 @@ public class ApplicationService {
      * Lets Spring inject the Repository and Service
      * @param applicantService the applicant service
      * @param applicationRepository the application repository
-     * @param moduleService
+     * @param moduleService the module Service
      */
     @SuppressWarnings("checkstyle:HiddenField")
     public ApplicationService(final ApplicantService applicantService,
                               final ApplicationRepository applicationRepository,
                               final ModuleService moduleService) {
-        this.applicantService = applicantService;
         this.applicationRepository = applicationRepository;
         this.moduleService = moduleService;
     }

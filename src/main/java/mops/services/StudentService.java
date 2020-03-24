@@ -21,7 +21,6 @@ public class StudentService {
 
     private ApplicantService applicantService;
 
-    private ApplicationService applicationService;
 
     /**
      * Setup the applicantserives
@@ -31,7 +30,6 @@ public class StudentService {
      */
     public StudentService(final ApplicantService applicantService, final ApplicationService applicationService) {
         this.applicantService = applicantService;
-        this.applicationService = applicationService;
     }
 
     /**
