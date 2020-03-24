@@ -65,7 +65,7 @@ public class SetupController {
     public String postEditedModule(final KeycloakAuthenticationToken token, final Model model,
                                    @RequestParam("oldName") final String oldName,
                                    final WebModule module) {
-        webService.update(module,oldName);
+        webService.update(module, oldName);
 
         /*CSVService.deleteModule(oldName);
         List<String[]> input = new ArrayList<>();
