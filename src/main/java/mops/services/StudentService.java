@@ -234,12 +234,21 @@ public class StudentService {
                 .grade(webApplication.getGrade())
                 .lecturer(webApplication.getLecturer())
                 .role(webApplication.getRole())
-                .module(moduleService.findModuleByName(webApplication.getModule()))
                 .priority(webApplication.getPriority())
                 .build();
     }
 
-    public Applicant savePersonalData(KeycloakAuthenticationToken token, WebApplicant webApplicant, WebAddress webAddress, WebCertificate webCertificate) {
+    /**
+     * Saves personal data of applicant and returns matching applicant
+     *
+     * @param token          keycloak
+     * @param webApplicant   Applicant data
+     * @param webAddress     Address data
+     * @param webCertificate Certificate data
+     * @return applicant
+     */
+    public Applicant savePersonalData(final KeycloakAuthenticationToken token, final WebApplicant webApplicant,
+                                      final WebAddress webAddress, final WebCertificate webCertificate) {
         OidcKeycloakAccount account = token.getAccount();
         String givenName = account.getKeycloakSecurityContext().getIdToken().getGivenName();
         String familyName = account.getKeycloakSecurityContext().getIdToken().getFamilyName();
