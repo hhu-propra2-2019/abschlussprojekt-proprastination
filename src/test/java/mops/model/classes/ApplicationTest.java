@@ -52,9 +52,9 @@ class ApplicationTest {
                 .minHours(2)
                 .maxHours(4)
                 .grade(1.3)
-                .priority(Priority.SehrHoch)
+                .priority(Priority.VERYHIGH)
                 .lecturer("Tester")
-                .role(Role.KORREKTOR)
+                .role(Role.PROOFREADER)
                 .semester("WS2020")
                 .module(module)
                 .comment("")
@@ -72,10 +72,10 @@ class ApplicationTest {
         assertThat(application)
                 .hasFieldOrPropertyWithValue("minHours", 2)
                 .hasFieldOrPropertyWithValue("maxHours", 4)
-                .hasFieldOrPropertyWithValue("priority", Priority.SehrHoch)
+                .hasFieldOrPropertyWithValue("priority", Priority.VERYHIGH)
                 .hasFieldOrPropertyWithValue("grade", 1.3)
                 .hasFieldOrPropertyWithValue("lecturer", "Tester")
-                .hasFieldOrPropertyWithValue("role", Role.KORREKTOR)
+                .hasFieldOrPropertyWithValue("role", Role.PROOFREADER)
                 .hasFieldOrPropertyWithValue("semester", "WS2020")
                 .hasFieldOrPropertyWithValue("module", module)
                 .hasFieldOrPropertyWithValue("comment", "");
@@ -93,9 +93,9 @@ class ApplicationTest {
                 .minHours(5)
                 .maxHours(10)
                 .grade(1.3)
-                .priority(Priority.SehrHoch)
+                .priority(Priority.VERYHIGH)
                 .lecturer("Tester")
-                .role(Role.KORREKTOR)
+                .role(Role.PROOFREADER)
                 .semester("WS2020")
                 .module(module)
                 .build();
@@ -104,9 +104,9 @@ class ApplicationTest {
                 .minHours(5)
                 .maxHours(10)
                 .grade(1.3)
-                .priority(Priority.SehrHoch)
+                .priority(Priority.VERYHIGH)
                 .lecturer("Tester")
-                .role(Role.KORREKTOR)
+                .role(Role.PROOFREADER)
                 .semester("WS2020")
                 .module(module)
                 .build();
@@ -121,8 +121,8 @@ class ApplicationTest {
         assertThat(application.toString()).isEqualTo(
                 "Application(minHours=2, finalHours=0, maxHours=4, module=Module(name=Info4," +
                         " deadline=1970-01-01T00:01:40Z, shortName=null, profName=null, sevenHourLimit=null," +
-                        " nineHourLimit=null, seventeenHourLimit=null, hourLimit=null), priority=SehrHoch," +
-                        " grade=1.3, lecturer=Tester, semester=WS2020, role=KORREKTOR, comment=, applicant=null)");
+                        " nineHourLimit=null, seventeenHourLimit=null, hourLimit=null), priority=VERYHIGH," +
+                        " grade=1.3, lecturer=Tester, semester=WS2020, role=PROOFREADER, comment=)");
 
     }
 

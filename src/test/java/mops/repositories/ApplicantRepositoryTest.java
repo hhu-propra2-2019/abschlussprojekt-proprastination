@@ -55,7 +55,7 @@ class ApplicantRepositoryTest {
                 .minHours(7)
                 .maxHours(17)
                 .module(module)
-                .priority(Priority.SehrHoch)
+                .priority(Priority.VERYHIGH)
                 .grade(1.3)
                 .lecturer("Prof")
                 .semester("SS2020")

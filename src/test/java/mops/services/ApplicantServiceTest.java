@@ -52,24 +52,24 @@ class ApplicantServiceTest {
                 .build();
 
         application1 = Application.builder()
-                .priority(Priority.Hoch)
+                .priority(Priority.HIGH)
                 .module(module)
                 .minHours(7)
                 .maxHours(17)
                 .grade(1.3)
                 .lecturer("Lala der Teletubby")
-                .role(Role.KORREKTOR)
+                .role(Role.PROOFREADER)
                 .semester("SS2020")
                 .build();
 
         application2 = Application.builder()
-                .priority(Priority.Hoch)
+                .priority(Priority.HIGH)
                 .module(module)
                 .minHours(5)
                 .maxHours(99)
                 .grade(1.0)
                 .lecturer("Ich selbst?")
-                .role(Role.KORREKTOR)
+                .role(Role.PROOFREADER)
                 .semester("Immer")
                 .build();
 
@@ -115,7 +115,7 @@ class ApplicantServiceTest {
                 .semester("SS2020")
                 .lecturer("Lala der Teletubby")
                 .module(module)
-                .role(Role.KORREKTOR)
+                .role(Role.PROOFREADER)
                 .build();
 
         assertThat(application1).isEqualTo(application1);
