@@ -3,6 +3,7 @@ package mops.repositories;
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public interface ApplicantRepository extends CrudRepository<Applicant, Long> {
      * @return List of Applicants
      */
     @Override
+    @NonNull
     List<Applicant> findAll();
 
     /**
