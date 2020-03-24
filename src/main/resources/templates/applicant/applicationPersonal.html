@@ -96,7 +96,7 @@
                         </div>
                         <div class="col-6">
                             <select name="courses" id="courses" class="form-control"
-                                    th:field="*{course}" th:attr="value=${webApplicant.course}">
+                                    th:field="*{course}">
                                 <option th:each="cours:${courses}" th:text="${cours}" th:value="${cours}"></option>
                             </select> <br> <br>
                         </div>
@@ -136,22 +136,25 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-6" th:object="${webCertificate}" >
-                            <select th:name="graduation" th:id="name" class="form-control"
-                                    th:field="*{graduation}" th:attr="value = ${webCertificate.graduation}">
-                                <option th:value="none">kein Universitätsabschluss</option>
-                                <option th:value="bachelor">Bachelor</option>
-                                <option th:value="master">Master</option>
-                                <option th:value="diplom">Diplom</option>
-                                <option th:value="staatsexamen">Staatsexamen</option>
-                                <option th:value="else">Anderes</option>
-                            </select> <br>
-                        </div>
-                        <div class="col-6">
-                            <input th:type="text" th:name="graduationsubject" th:id="graduationsubject"
-                                   th:field="*{course}" th:attr="value = ${webCertificate.course}"
-                                   class="form-control" placeholder="Abschlussfach" th:value="none"> <br>
-                        </div>
+                        <th:block th:object="${webCertificate}">
+                            <div class="col-6">
+                                <select th:name="graduation" th:id="name" class="form-control"
+                                        th:field="*{graduation}" th:attr="value = ${webCertificate.graduation}">
+                                    <option th:value="none">kein Universitätsabschluss</option>
+                                    <option th:value="bachelor">Bachelor</option>
+                                    <option th:value="master">Master</option>
+                                    <option th:value="diplom">Diplom</option>
+                                    <option th:value="staatsexamen">Staatsexamen</option>
+                                    <option th:value="else">Anderes</option>
+                                </select> <br>
+                            </div>
+                            <div class="col-6">
+                                <input th:type="text" th:name="graduationsubject" th:id="graduationsubject"
+                                       class="form-control" placeholder="Abschlussfach"
+                                       th:field="*{graduationcourse}" th:value="${webCertificate.graduationcourse}">
+                                <br>
+                            </div>
+                        </th:block>
                     </div>
                     <div class="row">
                         <div class="col">

@@ -95,9 +95,15 @@
 
                         </div>
                         <div class="col-6">
+<<<<<<< HEAD
                             <select name="courses" id="courses" class="form-control"
                                     th:field="*{course}" th:attr="value=${webApplicant.course}">
                                 <option th:each="cours:${courses}" th:text="${cours}" th:value="${cours}"></option>
+=======
+                            <select name="subject" id="subject" class="form-control">
+                                <option selected th:text="${applicant.course}" th:value="${applicant.course}"
+                                        value=""></option>
+>>>>>>> 16381d5b779aa22c4dbfa05ea9c9f56455d18b3a
                             </select> <br> <br>
                         </div>
                     </div>
@@ -149,9 +155,9 @@
                             </select> <br>
                         </div>
                         <div class="col-6">
-                            <input th:type="text" th:name="graduationsubject" th:id="graduationsubject"
-                                   th:field="*{course}" th:attr="value = ${webCertificate.course}"
-                                   class="form-control" placeholder="Abschlussfach" th:value="none"> <br>
+                            <input id="graduationcourse" name="graduationcourse" th:text="${applicant.certs.course}"
+                                   class="form-control" placeholder="Abschlussfach"
+                                   th:value="${applicant.certs.name}" type="text"> <br>
                         </div>
                     </div>
                     <div class="row">
