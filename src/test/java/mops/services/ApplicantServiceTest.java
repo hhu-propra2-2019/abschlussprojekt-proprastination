@@ -1,12 +1,15 @@
 package mops.services;
 
 import mops.model.classes.*;
+import mops.model.classes.Module;
+import mops.repositories.ModuleRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,14 +23,22 @@ class ApplicantServiceTest {
     @Autowired
     ApplicantService applicantService;
 
+    @Autowired
+    ModuleRepository moduleRepository;
+
     Applicant applicant;
     Application application1;
     Application application2;
     Certificate cert;
     Address address;
+    Module module;
 
     @BeforeAll
     void setup() {
+        module = Module.builder()
+                .deadline(Instant.ofEpochSecond(100l))
+                .name("Info4")
+                .build();
         address = Address.builder()
                 .city("Gotham")
                 .country("USA")
@@ -41,24 +52,24 @@ class ApplicantServiceTest {
                 .build();
 
         application1 = Application.builder()
-                .priority(0)
-                .module("Hausbau")
+                .priority(Priority.Hoch)
+                .module(module)
                 .minHours(7)
                 .maxHours(17)
                 .grade(1.3)
                 .lecturer("Lala der Teletubby")
-                .role("Korrektor")
+                .role(Role.KORREKTOR)
                 .semester("SS2020")
                 .build();
 
         application2 = Application.builder()
-                .priority(1)
-                .module("Rächer")
+                .priority(Priority.Hoch)
+                .module(module)
                 .minHours(5)
                 .maxHours(99)
                 .grade(1.0)
                 .lecturer("Ich selbst?")
-                .role("Both")
+                .role(Role.KORREKTOR)
                 .semester("Immer")
                 .build();
 
@@ -84,6 +95,7 @@ class ApplicantServiceTest {
 
     @Test
     void saveApplicant() {
+        moduleRepository.save(module);
         applicantService.saveApplicant(applicant);
 
         var test = applicantService.findByUniserial(applicant.getUniserial());
@@ -91,14 +103,19 @@ class ApplicantServiceTest {
 
     @Test
     void createApplication() {
+        Module module = Module.builder()
+                .deadline(Instant.ofEpochSecond(100l))
+                .name("Info4")
+                .build();
+
         Application.builder()
                 .grade(1.3)
                 .minHours(9)
                 .maxHours(17)
                 .semester("SS2020")
                 .lecturer("Lala der Teletubby")
-                .module("Hausbau")
-                .role("Korrektor")
+                .module(module)
+                .role(Role.KORREKTOR)
                 .build();
 
         assertThat(application1).isEqualTo(application1);

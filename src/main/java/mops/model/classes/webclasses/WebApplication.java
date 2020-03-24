@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mops.model.classes.Module;
+import mops.model.classes.Priority;
+import mops.model.classes.Role;
+
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
@@ -18,16 +22,11 @@ import javax.validation.constraints.Size;
 @Data
 @Builder(toBuilder = true)
 public class WebApplication {
-    public static final int MAX_PRIORITY_VALUE = 4;
     public static final int MAX_COMMENT_LENGTH = 1000;
-    private String module;
-    @NotNull
-    @Positive
-    private int workload;
-    @NotNull
-    @Positive
-    @Max(MAX_PRIORITY_VALUE)
-    private int priority;
+    private long id;
+    private Module module;
+    private Priority priority;
+    private int finalHours;
     @NotNull
     @Positive
     private double grade;
@@ -35,9 +34,7 @@ public class WebApplication {
     private String lecturer;
     @NotBlank
     private String semester;
-    @NotBlank
-    @Pattern(regexp = "corrector|correctorandtutor|nomatter")
-    private String role;
+    private Role role;
     @Size(max = MAX_COMMENT_LENGTH)
     private String comment;
 

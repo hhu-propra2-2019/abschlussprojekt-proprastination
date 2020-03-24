@@ -1,7 +1,7 @@
 package mops.services;
 
-import mops.model.classes.Applicant;
 import mops.model.classes.Application;
+import mops.model.classes.Application.ApplicationBuilder;
 import mops.model.classes.webclasses.WebApplication;
 import mops.repositories.ApplicationRepository;
 import org.springframework.stereotype.Service;
@@ -13,17 +13,21 @@ public class ApplicationService {
 
     private final ApplicantService applicantService;
     private final ApplicationRepository applicationRepository;
+    private final ModuleService moduleService;
 
     /**
      * Lets Spring inject the Repository and Service
      * @param applicantService the applicant service
      * @param applicationRepository the application repository
+     * @param moduleService
      */
     @SuppressWarnings("checkstyle:HiddenField")
     public ApplicationService(final ApplicantService applicantService,
-                              final ApplicationRepository applicationRepository) {
+                              final ApplicationRepository applicationRepository,
+                              final ModuleService moduleService) {
         this.applicantService = applicantService;
         this.applicationRepository = applicationRepository;
+        this.moduleService = moduleService;
     }
 
     /**
@@ -32,11 +36,12 @@ public class ApplicationService {
      * @return fully buildApplication
      */
     public Application buildApplication(final WebApplication webApplication) {
-        Application application = Application.builder()
+        return Application.builder()
                 //Module wird irgendwie nicht eingelesen? Mach ich später >_>
                 .module(webApplication.getModule())
-                .minHours(webApplication.getWorkload())//HTML anpassen
-                .maxHours(webApplication.getWorkload())//HTML anpassen
+                .minHours(webApplication.getFinalHours())//HTML anpassen
+                .maxHours(webApplication.getFinalHours())//HTML anpassen
+                .finalHours(webApplication.getFinalHours())
                 .priority(webApplication.getPriority())
                 .grade(webApplication.getGrade())
                 .lecturer(webApplication.getLecturer())
@@ -44,25 +49,52 @@ public class ApplicationService {
                 .role(webApplication.getRole())
                 .comment(webApplication.getComment())
                 .build();
-        return application;
     }
 
     /**
-     * Finds application by uniserial and module
-     * @param uniserial the applicant uniserial
-     * @param module the module he applied in
+     * Modifies application to the changes in webApplication.
+     *
+     * @param webApplication data to change.
+     * @param application    Merging data into application
+     * @return new application with changed data.
+     */
+    public Application changeApplication(final WebApplication webApplication, final Application application) {
+        ApplicationBuilder applicationBuilder = application.toBuilder();
+        return applicationBuilder.finalHours(webApplication.getFinalHours())
+                .maxHours(webApplication.getFinalHours())
+                .minHours(webApplication.getFinalHours())
+                .semester(webApplication.getSemester())
+                .comment(webApplication.getComment())
+                .grade(webApplication.getGrade())
+                .lecturer(webApplication.getLecturer())
+                .role(webApplication.getRole())
+                .module(webApplication.getModule())
+                .priority(webApplication.getPriority())
+                .build();
+    }
+
+    /**
+     * @param application application
+     */
+    public void save(final Application application) {
+        applicationRepository.save(application);
+    }
+
+    /**
+     * Finds all Applications by Module id
+     * @param id the module id
+     * @return the list of applications
+     */
+    public List<Application> findAllByModuleId(final long id) {
+        return applicationRepository.findAllByModule(moduleService.findById(id));
+    }
+
+    /**
+     * Finds applications by ID
+     * @param id the id
      * @return the application
      */
-    public Application findApplicatonByUniserialAndModule(final String uniserial, final String module) {
-        return applicationRepository.findByApplicantAndModule(applicantService.findByUniserial(uniserial), module);
-    }
-
-    /**
-     * Finds all application of an applicant
-     * @param applicant the applicant
-     * @return his applications
-     */
-    public List<Application> findApplicationByApplicant(final Applicant applicant) {
-        return applicationRepository.findAllByApplicant(applicant);
+    public Application findById(final long id) {
+        return applicationRepository.findById(id);
     }
 }

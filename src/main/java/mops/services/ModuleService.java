@@ -29,4 +29,41 @@ public class ModuleService {
     public List<Module> getModules() {
         return moduleRepository.findAll();
     }
+
+    /**
+     * Finds Module by Name.
+     *
+     * @param name Name of Modul.
+     * @return Distinct Module.
+     */
+    public Module findModuleByName(final String name) {
+        return moduleRepository.findDistinctByName(name);
+    }
+
+    /**
+     * Finds Module by id.
+     *
+     * @param id id.
+     * @return Distinct Module.
+     */
+    public Module findById(final long id) {
+        return moduleRepository.findById(id).get();
+    }
+
+    /**
+     * Saves a module
+     *
+     * @param module module.
+     */
+    public void save(final Module module) {
+        moduleRepository.save(module);
+    }
+    /**
+     * delete single module
+     * @param name of the module to be deleted
+     */
+    public void deleteModule(final String name) {
+        Module m = moduleRepository.findDistinctByName(name);
+        moduleRepository.deleteById(m.getId());
+    }
 }
