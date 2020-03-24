@@ -51,8 +51,8 @@ public class WebModuleService {
      * saves an updated version of Module
      * @param webmodule
      */
-    public void update(final WebModule webmodule) {
-        Module m = moduleRepository.findDistinctByName(webmodule.getName());
+    public void update(final WebModule webmodule, final String oldName) {
+        Module m = moduleRepository.findDistinctByName(oldName);
         Module updated = webmodule.toModule();
         updated.setId(m.getId());
         moduleRepository.save(updated);
