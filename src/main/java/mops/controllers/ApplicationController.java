@@ -217,8 +217,6 @@ public class ApplicationController {
 
 
     /**
-<<<<<<< HEAD
-=======
      * Postmapping for editing personal data.
      * @param token keycloak
      * @param webApplicant applicant data
