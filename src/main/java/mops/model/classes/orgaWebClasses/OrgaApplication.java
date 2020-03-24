@@ -1,28 +1,30 @@
-package mops.model.classes.webclasses;
+package mops.model.classes.orgaWebClasses;
 
-
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import mops.model.classes.Applicant;
 import mops.model.classes.Module;
 import mops.model.classes.Priority;
 import mops.model.classes.Role;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
 @Builder(toBuilder = true)
-public class WebApplication {
+@Data
+public class OrgaApplication {
     private long id;
-    private Module module;
+    private int minHours;
     private int finalHours;
+    private int maxHours;
+    private Module module;
+    @Enumerated(EnumType.STRING)
     private Priority priority;
     private double grade;
     private String lecturer;
     private String semester;
+    @Enumerated(EnumType.STRING)
     private Role role;
     private String comment;
-
+    private Applicant applicant;
 }

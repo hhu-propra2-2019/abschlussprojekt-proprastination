@@ -2,7 +2,10 @@ package mops.services;
 
 import mops.model.classes.Address;
 import mops.model.classes.Applicant;
+import mops.model.classes.Applicant.ApplicantBuilder;
 import mops.model.classes.Application;
+import mops.model.classes.Module;
+
 import mops.model.classes.Certificate;
 import mops.model.classes.webclasses.WebAddress;
 import mops.model.classes.webclasses.WebApplicant;
@@ -120,15 +123,6 @@ public class ApplicantService {
     }
 
     /**
-     * Finds Applicant by Application
-     * @param application application
-     * @return applicant
-     */
-    public Applicant findByApplications(final Application application) {
-        return applicantRepository.findByApplications(application);
-    }
-
-    /**
      * Updates Applicant without changing his applications
      *
      * @param newApplicant The Object containing the new information
@@ -150,5 +144,42 @@ public class ApplicantService {
                 .firstName(newApplicant.getFirstName())
                 .gender(newApplicant.getGender())
                 .build());
+    }
+
+    /**
+     * Deletes Application from Applicant.
+     *
+     * @param application Application.
+     * @param applicant   Applicant.
+     */
+    public void deleteApplication(final Application application, final Applicant applicant) {
+        Set<Application> applications = applicant.getApplications();
+        applications.remove(application);
+        ApplicantBuilder applicantBuider = applicant.toBuilder();
+        Applicant newApplicant = applicantBuider.clearApplications().applications(applications).build();
+        applicantRepository.save(newApplicant);
+    }
+
+    /**
+     * Returns a Set of all Modules the Applicant has not submitted an application yet.
+     *
+     * @param applicant Applicant.
+     * @param modules   all Modules
+     * @return Set of Modules.
+     */
+    public List<Module> getAllNotfilledModules(final Applicant applicant, final List<Module> modules) {
+        for (Application app : applicant.getApplications()) {
+            modules.remove(app.getModule());
+        }
+        return modules;
+    }
+
+    /**
+     * Finds the corrosponding applicant to the application
+     * @param application the application
+     * @return the applicant
+     */
+    public Applicant findByApplications(final Application application) {
+        return applicantRepository.findByApplications(application);
     }
 }
