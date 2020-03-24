@@ -153,29 +153,31 @@
                     </div>
                 </div>
             </div>
-            <div class="col text-center align-self-stretch flex-fill">
-                <div class="card bg-light mb-3 border-primary">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-6">
-                                <label th:for="modules">
-                                    Falls Sie sich bei einem weiteren Modul bewerben möchten können Sie dieses hier
-                                    auswählen
-                                </label>
-                            </div>
-                            <div class="col-4">
-                                <select th:name="modules" th:id="modules" class="form-control">
-                                    <option th:each="module:${modules}" th:text="${module.name}"
-                                            th:value="${module.name}"></option>
-                                </select>
-                            </div>
-                            <div class="col-2">
-                                <button th:type="submit" th:formaction="@{weiteresModul} "class="btn btn-outline-primary form-control">Weiteres Modul</button>
+            <form th:action="@{moduleNachOverview}" th:method="POST">
+                <div class="col text-center align-self-stretch flex-fill">
+                    <div class="card bg-light mb-3 border-primary">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label th:for="modules">
+                                        Falls Sie sich bei einem weiteren Modul bewerben möchten können Sie dieses hier
+                                        auswählen
+                                    </label>
+                                </div>
+                                <div class="col-4">
+                                    <select th:name="modules" th:id="modules" class="form-control">
+                                        <option th:each="module:${modules}" th:text="${module.name}"
+                                                th:value="${module.name}"></option>
+                                    </select>
+                                </div>
+                                <div class="col-2">
+                                    <button th:type="submit" class="btn btn-outline-primary form-control">Weiteres Modul</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-            </div>
-        </div>
+            </form>
+       </div>
     </div>
 </main>
 </body>
