@@ -94,7 +94,7 @@ public class DatabaseInit implements ServletContextInitializer {
                     .street(faker.address().streetName())
                     .houseNumber(faker.address().buildingNumber())
                     .city(faker.address().city())
-                    .country(faker.address().country())
+                    .country(faker.address().countryCode())
                     .zipcode(Integer.toString(faker.number().numberBetween(10000, 99999)))
                     .build();
 
@@ -103,11 +103,12 @@ public class DatabaseInit implements ServletContextInitializer {
                     .name(faker.funnyName().name())
                     .build();
             Module[] modules = nextModules();
+            int[] hours = nextHours();
 
             Application application1 = Application.builder()
                     .module(modules[0])
-                    .minHours(faker.number().numberBetween(1, 10))
-                    .maxHours(faker.number().numberBetween(10, 17))
+                    .minHours(hours[0])
+                    .maxHours(hours[1])
                     .finalHours(nextFinalHour())
                     .lecturer(faker.name().fullName())
                     .grade(nextGrade())
@@ -119,8 +120,8 @@ public class DatabaseInit implements ServletContextInitializer {
 
             Application application2 = Application.builder()
                     .module(modules[1])
-                    .minHours(faker.number().numberBetween(1, 10))
-                    .maxHours(faker.number().numberBetween(10, 17))
+                    .minHours(hours[0])
+                    .maxHours(hours[1])
                     .finalHours(nextFinalHour())
                     .lecturer(faker.name().fullName())
                     .grade(nextGrade())
@@ -195,6 +196,16 @@ public class DatabaseInit implements ServletContextInitializer {
         return hours[random.nextInt(3)];
     }
 
+    private int[] nextHours() {
+        int[] hours = {7, 9, 17};
+        int[] ret = new int[2];
+        int x = random.nextInt(3);
+        ret[0] = hours[x];
+        int y = x + random.nextInt(3 - x);
+        ret[1] = hours[y];
+        return ret;
+    }
+
     private double nextGrade() {
         double[] grades = {1.0, 1.3, 1.7, 2.0, 2.3, 2.7, 3.0, 3.3, 3.7, 4.0, 5.0};
         return grades[random.nextInt(11)];
@@ -248,7 +259,7 @@ public class DatabaseInit implements ServletContextInitializer {
                 .street(faker.address().streetName())
                 .houseNumber(faker.address().buildingNumber())
                 .city(faker.address().city())
-                .country(faker.address().country())
+                .country(faker.address().countryCode())
                 .zipcode(Integer.toString(faker.number().numberBetween(10000, 99999)))
                 .build();
 
@@ -258,12 +269,13 @@ public class DatabaseInit implements ServletContextInitializer {
                 .build();
 
         Module[] modules = nextModules();
+        int[] hours = nextHours();
 
         Application application1 = Application.builder()
                 .module(modules[0])
                 .finalHours(nextFinalHour())
-                .minHours(faker.number().numberBetween(1, 10))
-                .maxHours(faker.number().numberBetween(10, 17))
+                .minHours(hours[0])
+                .maxHours(hours[1])
                 .lecturer(faker.name().fullName())
                 .grade(nextGrade())
                 .semester("SS2020")
@@ -275,8 +287,8 @@ public class DatabaseInit implements ServletContextInitializer {
         Application application2 = Application.builder()
                 .module(modules[1])
                 .finalHours(nextFinalHour())
-                .minHours(faker.number().numberBetween(1, 10))
-                .maxHours(faker.number().numberBetween(10, 17))
+                .minHours(hours[0])
+                .maxHours(hours[1])
                 .lecturer(faker.name().fullName())
                 .grade(nextGrade())
                 .semester("SS2020")
