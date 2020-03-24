@@ -173,4 +173,13 @@ public class ApplicantService {
         }
         return modules;
     }
+
+    /**
+     * Finds the corrosponding applicant to the application
+     * @param application the application
+     * @return the applicant
+     */
+    public Applicant findByApplications(final Application application) {
+        return applicantRepository.findByApplications(application);
+    }
 }
