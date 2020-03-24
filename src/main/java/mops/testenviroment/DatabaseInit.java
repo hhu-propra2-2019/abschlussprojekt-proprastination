@@ -155,10 +155,10 @@ public class DatabaseInit implements ServletContextInitializer {
     }
 
     private Module[] nextModules() {
-        long value = random.nextInt(3) + 1;
-        long value2 = random.nextInt(3) + 1;
+        long value = random.nextInt(5) + 1;
+        long value2 = random.nextInt(5) + 1;
         while (value == value2) {
-            value2 = random.nextInt(3) + 1;
+            value2 = random.nextInt(5) + 1;
         }
         Module[] modules = new Module[2];
         modules[0] = moduleRepository.findById(value).get();
@@ -373,7 +373,7 @@ public class DatabaseInit implements ServletContextInitializer {
                     .nineHourLimit((1 + random.nextInt(5)) + "")
                     .seventeenHourLimit((1 + random.nextInt(5)) + "")
                     .profName(profNames[i])
-                    .hourLimit(hour[i])
+                    .hourLimit(hour[i % 3])
                     .deadline(date)
                     .build();
             moduleRepository.save(module);
