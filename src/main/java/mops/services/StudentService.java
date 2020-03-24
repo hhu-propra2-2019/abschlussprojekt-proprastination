@@ -59,7 +59,7 @@ public class StudentService {
     public Certificate buildCertificate(final WebCertificate webCertificate) {
         return Certificate.builder()
                 .name(webCertificate.getGraduation())
-                .course(webCertificate.getCourse())
+                .course(webCertificate.getGraduationcourse())
                 .build();
     }
 
@@ -175,7 +175,7 @@ public class StudentService {
      */
     public WebCertificate getExsistingCertificate(final Certificate certificate) {
         return WebCertificate.builder()
-                .course(certificate.getCourse())
+                .graduationcourse(certificate.getCourse())
                 .graduation(certificate.getName())
                 .build();
     }
