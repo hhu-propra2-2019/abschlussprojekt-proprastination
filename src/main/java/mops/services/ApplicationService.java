@@ -2,6 +2,7 @@ package mops.services;
 
 import mops.model.classes.Application;
 import mops.model.classes.Application.ApplicationBuilder;
+import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebApplication;
 import mops.repositories.ApplicationRepository;
 import org.springframework.stereotype.Service;
@@ -36,12 +37,12 @@ public class ApplicationService {
      * @return fully buildApplication
      */
     public Application buildApplication(final WebApplication webApplication) {
+        System.out.println(webApplication.getModule());
         return Application.builder()
                 //Module wird irgendwie nicht eingelesen? Mach ich später >_>
-                .module(webApplication.getModule())
-                .minHours(webApplication.getFinalHours())//HTML anpassen
-                .maxHours(webApplication.getFinalHours())//HTML anpassen
-                .finalHours(webApplication.getFinalHours())
+                .module(moduleService.findModuleByName(webApplication.getModule()))
+                .minHours(webApplication.getMinHours())//HTML anpassen
+                .maxHours(webApplication.getMaxHours())//HTML anpassen
                 .priority(webApplication.getPriority())
                 .grade(webApplication.getGrade())
                 .lecturer(webApplication.getLecturer())
@@ -60,15 +61,15 @@ public class ApplicationService {
      */
     public Application changeApplication(final WebApplication webApplication, final Application application) {
         ApplicationBuilder applicationBuilder = application.toBuilder();
-        return applicationBuilder.finalHours(webApplication.getFinalHours())
-                .maxHours(webApplication.getFinalHours())
-                .minHours(webApplication.getFinalHours())
+        return applicationBuilder
+                .maxHours(webApplication.getMinHours())
+                .minHours(webApplication.getMinHours())
                 .semester(webApplication.getSemester())
                 .comment(webApplication.getComment())
                 .grade(webApplication.getGrade())
                 .lecturer(webApplication.getLecturer())
                 .role(webApplication.getRole())
-                .module(webApplication.getModule())
+           //     .module(Module.builder().name(webApplication.getModule()).build())
                 .priority(webApplication.getPriority())
                 .build();
     }

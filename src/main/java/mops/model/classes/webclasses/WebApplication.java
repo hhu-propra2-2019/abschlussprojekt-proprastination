@@ -16,8 +16,9 @@ import mops.model.classes.Role;
 @Builder(toBuilder = true)
 public class WebApplication {
     private long id;
-    private Module module;
-    private int finalHours;
+    private String module;
+    private int minHours;
+    private int maxHours;
     private Priority priority;
     private double grade;
     private String lecturer;

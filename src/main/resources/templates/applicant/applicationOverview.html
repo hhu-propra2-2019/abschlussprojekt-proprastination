@@ -107,7 +107,7 @@
             <div class="col-sm-4" th:each="appl: ${applicant.applications}">
                 <div class="card bg-light mb-3 border-primary">
                     <div class="card-header">
-                        <label class="" th:text="${appl.module.name}"
+                        <label class="" th:text="${appl.module}"
                                style="text-overflow: ellipsis; overflow: hidden; width: 60%; white-space: nowrap">
                             Programmierung (Früher: Grundlagen der Informatik)
                         </label>
@@ -119,8 +119,12 @@
                         <div class="col-auto">
                             <div class="row">
                                 <i class="fa fa-ra"></i>
-                                <label for="worktime"><i class="fas fa-business-time"></i>Arbeitszeit:&nbsp;</label>
-                                <label id="worktime" th:text="${appl.finalHours}">24/7</label>
+                                <label for="minWorktime"><i class="fas fa-business-time"></i>Minimale Arbeitszeit:&nbsp;</label>
+                                <label id="minWorktime" th:text="${appl.minHours}">24/7</label>
+                            </div>
+                            <div class="row">
+                                <label for="maxWorktime"><i class="fas fa-business-time"></i>Maximale Arbeitszeit:&nbsp;</label>
+                                <label id="maxWorktime" th:text="${appl.maxHours}">24/7</label>
                             </div>
                             <div class="row">
                                 <label for="grade"><i class="fas fa-graduation-cap"></i>Note:&nbsp;</label>
