@@ -11,6 +11,8 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.relational.core.mapping.Table;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,5 +36,6 @@ public class Evaluation {
     private Application application;
     private int hours;
     private String comment;
+    @Enumerated(EnumType.STRING)
     private Priority priority;
 }

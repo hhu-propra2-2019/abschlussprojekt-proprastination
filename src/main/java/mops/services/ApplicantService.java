@@ -4,14 +4,20 @@ import mops.model.classes.Applicant;
 import mops.model.classes.Applicant.ApplicantBuilder;
 import mops.model.classes.Application;
 import mops.repositories.ApplicantRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
 @EnableAutoConfiguration
 public class ApplicantService {
+
+    private Logger logger = LoggerFactory.getLogger(PDFService.class);
 
     private final ApplicantRepository applicantRepository;
 
@@ -89,6 +95,17 @@ public class ApplicantService {
      * @return the applicant
      */
     public Applicant findByApplications(final Application application) {
-        return applicantRepository.findByApplications(application);
+        Optional<Applicant> applicant = applicantRepository.findByApplications(application);
+        if (applicant.isEmpty()) {
+            logger.error("Empty Applicant for Application" + application);
+        }
+        return applicant.get();
+    }
+
+    /**
+     * Delete all.
+     */
+    public void deleteAll() {
+        applicantRepository.deleteAll();
     }
 }

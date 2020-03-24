@@ -9,6 +9,7 @@ import mops.model.classes.Priority;
 import mops.model.classes.Role;
 import mops.services.ApplicantService;
 import mops.services.ModuleService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,6 +32,12 @@ class ApplicantRepositoryTest {
     Application application;
     Certificate cert;
     Address address;
+
+    @AfterEach
+    void setdown() {
+        service.deleteAll();
+        moduleService.deleteAll();
+    }
 
 
     @Test

@@ -3,6 +3,7 @@ package mops.services;
 import mops.model.classes.*;
 import mops.model.classes.Module;
 import mops.repositories.ModuleRepository;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -32,6 +33,12 @@ class ApplicantServiceTest {
     Certificate cert;
     Address address;
     Module module;
+
+    @AfterAll
+    void setdown() {
+        applicantService.deleteAll();
+        moduleRepository.deleteAll();
+    }
 
     @BeforeAll
     void setup() {

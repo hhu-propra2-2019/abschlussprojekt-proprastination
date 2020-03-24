@@ -63,9 +63,17 @@ public class ApplicationService {
 
     /**
      * finds all applications
+     *
      * @return all applications as List
      */
     public List<Application> findAll() {
         return applicationRepository.findAll();
+    }
+
+    /**
+     * Deletes all.
+     */
+    public void deleteAll() {
+        applicationRepository.deleteAll();
     }
 }
