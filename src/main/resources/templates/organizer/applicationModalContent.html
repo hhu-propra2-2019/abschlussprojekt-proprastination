@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
 </head>
@@ -10,13 +10,15 @@
         </div>
         <div class="card-body">
             <h3>Anschrift:</h3>
-            <p>Bla bla bla</p>
+            <p th:text="${appl.applicant.address.street + ' ' + appl.applicant.address.houseNumber}">Universitätsstraße 1</p>
+            <p th:text="${appl.applicant.address.zipcode + ', ' + appl.applicant.address.city}">40225, Düsseldorf</p>
+            <p th:text="${appl.applicant.address.country}">Afganistan</p>
             <h3>Geburtsdatum:</h3>
-            <p>Bla bla</p>
+            <p th:text="${appl.applicant.birthday}">31.02.1999</p>
             <h3>Geburtsort:</h3>
-            <p>Bla bla bla bla</p>
+            <p th:text="${appl.applicant.birthplace}">Neuland</p>
             <h3>Nationalität:</h3>
-            <p>Bla</p>
+            <p th:text="${appl.applicant.nationality}">Stanistan</p>
         </div>
     </div>
 
@@ -26,9 +28,9 @@
         </div>
         <div class="card-body">
             <h3>Studienfach:</h3>
-            <p>Bla bla bla</p>
+            <p th:text="${appl.applicant.certs.course}">Gleisbau</p>
             <h3>Höchster Abschluss:</h3>
-            <p>Bla bla</p>
+            <p th:text="${appl.applicant.certs.name}">Master of Schienen</p>
         </div>
     </div>
 
@@ -37,7 +39,7 @@
             <h3>Angestelltenstatus</h3>
         </div>
         <div class="card-body">
-            <p>Bla bla</p>
+            <p th:text="${appl.applicant.status}">Laborratte</p>
         </div>
     </div>
 
@@ -47,11 +49,11 @@
         </div>
         <div class="card-body">
             <h3>Bestanden in Semester:</h3>
-            <p>Wintersemester 2019</p>
+            <p th:text="${appl.semester}">Corona 2020</p>
             <h3>Note:</h3>
-            <p>1,3</p>
+            <p th:text="${appl.grade}">6,0</p>
             <h3>Dozent</h3>
-            <p>Bla bla bla</p>
+            <p th:text="${appl.lecturer}">Meister Yoda</p>
         </div>
     </div>
 
@@ -61,11 +63,13 @@
         </div>
         <div class="card-body">
             <h3>Aufgaben:</h3>
-            <p>Korrektor und Tutor</p>
-            <h3>Arbeitsstunden pro Woche:</h3>
-            <p>10</p>
+            <p th:text="${appl.role.label}">Dekan</pth:>
+            <h3>Mindestarbeitsstunden pro Woche:</h3>
+            <p th:text="${appl.minHours}">42</p>
+            <h3>Maximalarbeitsstunden pro Woche:</h3>
+            <p th:text="${appl.maxHours}">168</p>
             <h3>Modulpriorität</h3>
-            <p>2</p>
+            <p th:text="${appl.priority.label}">2</p>
         </div>
     </div>
 
@@ -74,7 +78,7 @@
             <h3>Anmerkungen</h3>
         </div>
         <div class="card-body">
-            <p>Bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla</p>
+            <p th:text="${appl.comment}">Schweinemensa-Müsli, lecker lecker, mjam mjam mjam</p>
         </div>
     </div>
 
@@ -83,9 +87,8 @@
             <h3>Weitere Bewerbungen</h3>
         </div>
         <div class="card-body">
-            <ul>
-                <li>Modul Bla</li>
-                <li>Modul Blu</li>
+            <ul th:each="app : ${appl.applicant.applications}">
+                <li th:unless="${appl.module.name == app.module.name}" th:text="${app.module.name}">Radiologische Anatomie</li>
             </ul>
         </div>
     </div>
