@@ -99,6 +99,7 @@ public class StudentService {
         ApplicantBuilder applicantBuilder = applicant.toBuilder();
         return applicantBuilder.birthday(webApplicant.getBirthday())
                 .birthplace(webApplicant.getBirthplace())
+                .address(address)
                 .gender(webApplicant.getGender())
                 .nationality(webApplicant.getNationality())
                 .course(webApplicant.getCourse())

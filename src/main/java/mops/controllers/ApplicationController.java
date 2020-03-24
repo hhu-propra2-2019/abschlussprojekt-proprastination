@@ -331,49 +331,6 @@ public class ApplicationController {
         model.addAttribute("applicant", applicant);
         return "applicant/applicationOverview";
     }
-/*    /**
-     * Overview, will be used to save the last module and shows the data the applicant filled in
-     *
-     * @param token     keycloaktone
-     * @param model     model
-     * @param applicant applicant (load from database?)
-     * @param module    the module the applicant applied last for
-     * @param workload  look above
-     * @param grade     "
-     * @param semester  "
-     * @param lecturer  "
-     *                  //  * @param tasks "
-     *                  //  * @param priority "
-     * @return overview.html
-     */
- /*   @PostMapping("/uebersicht")
-    @SuppressWarnings("checkstyle:ParameterNumber")
-    public String postOverview(final KeycloakAuthenticationToken token,
-                               final Model model,
-                               @RequestParam("applicant") final Applicant applicant,
-                               @RequestParam("module") final String module,
-                               @RequestParam("workload") final String workload,
-                               @RequestParam("grade") final String grade,
-                               @RequestParam("semesters") final String semester,
-                               @RequestParam("lecturer") final String lecturer
-                               //                           @RequestParam("tasks") final String tasks,
-                               //                           @RequestParam("priority") final String priority
-    ) {
-        if (token != null) {
-            applicantService.saveApplicant(applicant);
-            model.addAttribute("account", createAccountFromPrincipal(token));
-            Application.builder()
-                    .module(moduleService.findModuleByName(module))
-                    .lecturer(lecturer)
-                    .semester(semester)
-                    .minHours(Integer.parseInt(workload))
-                    .maxHours(Integer.parseInt(workload))
-                    .grade(Double.parseDouble(grade))
-                    .build();
-        }
-        return "applicant/applicationOverview";
-    }*/
-
 
     /**
      * The GetMapping for the edit form fot personal data
@@ -387,10 +344,48 @@ public class ApplicationController {
     public String editPersonalData(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             Account account = createAccountFromPrincipal(token);
+            Applicant applicant = applicantService.findByUniserial(account.getName());
+            Address address = applicant.getAddress();
+            WebApplicant webApplicant = studentService.getExsistingApplicant(applicant);
+            WebAddress webAddress =  studentService.getExsistingAddress(address);
+            WebCertificate webCertificate = studentService.getExsistingCertificate(applicant.getCerts());
+            model.addAttribute("countries", CSVService.getCountries());
+            model.addAttribute("courses", CSVService.getCourses());
+            model.addAttribute("webCertificate", webCertificate);
             model.addAttribute("account", account);
-            model.addAttribute("applicant", applicantService.findByUniserial(account.getName()));
+            model.addAttribute("webApplicant", webApplicant);
+            model.addAttribute("webAddress", webAddress);
         }
         return "applicant/applicationEditPersonal";
+    }
+
+    /**
+     * updates new personal data in database
+     * @param token token
+     * @param model model
+     * @param webAddress address information
+     * @param webApplicant applicant information
+     * @param webCertificate certificate information
+     * @return go back to overview
+     */
+    @PostMapping("/uebersichtnachbearbeitungPersDaten")
+    public String postEditPersonalData(final KeycloakAuthenticationToken token, final Model model,
+                                       final WebAddress webAddress, final WebApplicant webApplicant,
+                                       final WebCertificate webCertificate) {
+        if (token != null) {
+            OidcKeycloakAccount account = token.getAccount();
+            String givenName = account.getKeycloakSecurityContext().getIdToken().getGivenName();
+            String familyName = account.getKeycloakSecurityContext().getIdToken().getFamilyName();
+            Address address = studentService.buildAddress(webAddress);
+            System.out.println(address);
+            Certificate certificate = studentService.buildCertificate(webCertificate);
+            Applicant applicant = studentService.buildApplicant(token.getName(), webApplicant, address, certificate,
+                    givenName, familyName);
+            System.out.println(applicant);
+            model.addAttribute("applicant", applicant);
+            applicantService.saveApplicant(applicant);
+        }
+        return "applicant/applicationOverview";
     }
 
     /**
