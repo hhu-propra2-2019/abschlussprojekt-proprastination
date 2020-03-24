@@ -19,8 +19,8 @@
                     <table class="table">
                         <thead>
                         </thead>
-                        <tbody th:each="module : ${modules}">
-                            <tr>
+                        <tbody>
+                            <tr th:each="module : ${modules}">
                                 <td height="60" class="align-middle">
                                     <a href="#" th:href="@{/bewerbung2/organisator/{id}/ ( id = ${module.id})}" style="display:block;margin:0px;width:100%;height:100%;" th:text="${module.name}" class="align-middle">
                                         Modul 1

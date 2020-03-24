@@ -57,7 +57,7 @@
                                     </div>
                                     <div class="col">
                                         <div>
-                                            <input type="text" size="1" th:value="${applicant.distributorHours}">
+                                            <input onClick="this.select();" type="text" size="1" th:value="${applicant.distributorHours}">
                                             <label>Stunden</label>
                                         </div>
                                     </div>
@@ -98,6 +98,9 @@
                     $(this).parent().parent().parent().parent().removeClass("doneBackground");
                 }
             });
+        </script>
+        <script>
+            $(".form-search-wrapper").remove()
         </script>
     </div>
 </main>

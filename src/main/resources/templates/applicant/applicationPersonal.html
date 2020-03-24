@@ -43,7 +43,8 @@
                         </div>
                         <div class="col-md-1">
                             <input class="form-control" name="streetnumber" placeholder="Hausnummer" required
-                                   th:field="*{number}" type="text">
+                                   th:field="*{number}" th:attr="value = ${webAddress.number}"
+                                   type="text">
                         </div>
                         <div class="col-5">
                             <input th:type="text" th:name="city" th:id="city"

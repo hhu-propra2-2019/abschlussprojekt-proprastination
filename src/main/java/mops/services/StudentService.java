@@ -21,7 +21,6 @@ import java.util.List;
 public class StudentService {
 
     private ApplicantService applicantService;
-
     private ModuleService moduleService;
 
     /**
