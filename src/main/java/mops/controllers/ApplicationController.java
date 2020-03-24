@@ -163,17 +163,9 @@ public class ApplicationController {
                         final String modules) {
 
         if (token != null) {
-            OidcKeycloakAccount account = token.getAccount();
-            String givenName = account.getKeycloakSecurityContext().getIdToken().getGivenName();
-            String familyName = account.getKeycloakSecurityContext().getIdToken().getFamilyName();
 
+            Applicant applicant = studentService.savePersonalData(token, webApplicant, webAddress, webCertificate);
             Module module = moduleService.findModuleByName(modules);
-
-            Address address = studentService.buildAddress(webAddress);
-            Certificate certificate = studentService.buildCertificate(webCertificate);
-            Applicant applicant = studentService.buildApplicant(token.getName(), webApplicant,
-                    address, certificate, givenName, familyName);
-            applicantService.saveApplicant(applicant);
             List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
             availableMods.remove(module);
 
@@ -218,61 +210,19 @@ public class ApplicationController {
     /**
      * @param token
      * @param model
-     * @param street
-     * @param city
-     * @param plz
-     * @param birthplace
-     * @param nationality
-     * @param birthday
-     * @param subject
-     * @param status
-     * @param graduation
-     * @param graduationsubject
-     * @param diverse
      * @return overview formular as String
      */
 
     @SuppressWarnings("checkstyle:ParameterNumber")
     @PostMapping("/uebersichtBearbeitet")
-    public String saveOverview(final KeycloakAuthenticationToken token, final Model model,
-                               @RequestParam("address1") final String street,
-                               @RequestParam("address2") final String city,
-                               @RequestParam("plz") final String plz,
-                               @RequestParam("placeofbirth") final String birthplace,
-                               @RequestParam("nationality") final String nationality,
-                               @RequestParam("birthday") final String birthday,
-                               @RequestParam("subject") final String subject,
-                               @RequestParam("status") final String status,
-                               @RequestParam("graduation") final String graduation,
-                               @RequestParam("graduationsubject") final String graduationsubject,
-                               @RequestParam("diverse") final String diverse) {
+    public String saveOverview(final KeycloakAuthenticationToken token, final WebApplicant webApplicant,
+                               final WebAddress webAddress, final WebCertificate webCertificate, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
-            Address address = Address.builder().
-                    street(street).
-                    city(city).
-                    zipcode(plz).
-                    build();
-            Certificate cert = Certificate.builder()
-                    .name(graduation)
-                    .course(graduationsubject)
-                    .build();
-            Set<Application> appls = new HashSet<>();
-            Applicant applicant = Applicant.builder()
-                    .birthplace(birthplace)
-                    .address(address)
-                    .birthday(birthday)
-                    .nationality(nationality)
-                    .course(subject)
-                    .status("New")
-                    .certs(cert)
-                    .uniserial("has220")
-                    .applications(appls)
-                    .build();
-            studentService.updateApplicantWithoutChangingApplications(applicant);
-            model.addAttribute("applicant", applicantService.findByUniserial("has220"));
+
+            studentService.savePersonalData(token, webApplicant, webAddress, webCertificate);
         }
-        return "applicant/applicationOverview";
+        return "redirect:bewerbungsUebersicht";
     }
 
 
@@ -311,8 +261,6 @@ public class ApplicationController {
             model.addAttribute("applicant", applicant);
             model.addAttribute("modules",
                     studentService.getAllNotfilledModules(applicant, moduleService.getModules()));
-
-
         }
         return "applicant/applicationOverview";
     }
@@ -334,49 +282,6 @@ public class ApplicationController {
         model.addAttribute("applicant", applicant);
         return "applicant/applicationOverview";
     }
-/*    /**
-     * Overview, will be used to save the last module and shows the data the applicant filled in
-     *
-     * @param token     keycloaktone
-     * @param model     model
-     * @param applicant applicant (load from database?)
-     * @param module    the module the applicant applied last for
-     * @param workload  look above
-     * @param grade     "
-     * @param semester  "
-     * @param lecturer  "
-     *                  //  * @param tasks "
-     *                  //  * @param priority "
-     * @return overview.html
-     */
- /*   @PostMapping("/uebersicht")
-    @SuppressWarnings("checkstyle:ParameterNumber")
-    public String postOverview(final KeycloakAuthenticationToken token,
-                               final Model model,
-                               @RequestParam("applicant") final Applicant applicant,
-                               @RequestParam("module") final String module,
-                               @RequestParam("workload") final String workload,
-                               @RequestParam("grade") final String grade,
-                               @RequestParam("semesters") final String semester,
-                               @RequestParam("lecturer") final String lecturer
-                               //                           @RequestParam("tasks") final String tasks,
-                               //                           @RequestParam("priority") final String priority
-    ) {
-        if (token != null) {
-            applicantService.saveApplicant(applicant);
-            model.addAttribute("account", createAccountFromPrincipal(token));
-            Application.builder()
-                    .module(moduleService.findModuleByName(module))
-                    .lecturer(lecturer)
-                    .semester(semester)
-                    .minHours(Integer.parseInt(workload))
-                    .maxHours(Integer.parseInt(workload))
-                    .grade(Double.parseDouble(grade))
-                    .build();
-        }
-        return "applicant/applicationOverview";
-    }*/
-
 
     /**
      * The GetMapping for the edit form fot personal data
@@ -390,8 +295,25 @@ public class ApplicationController {
     public String editPersonalData(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             Account account = createAccountFromPrincipal(token);
+            Applicant applicant = applicantService.findByUniserial(account.getName());
+
+            WebApplicant webApplicant = (applicant == null)
+                    ? WebApplicant.builder().build() : studentService.getExsistingApplicant(applicant);
+            WebAddress webAddress = (applicant == null)
+                    ? WebAddress.builder().build() : studentService.getExsistingAddress(applicant.getAddress());
+            WebCertificate webCertificate = (applicant == null)
+                    ? WebCertificate.builder().build() : studentService.getExsistingCertificate(applicant.getCerts());
+            List<Module> modules = (applicant == null)
+                    ? moduleService.getModules() : studentService
+                    .getAllNotfilledModules(applicant, moduleService.getModules());
+
             model.addAttribute("account", account);
-            model.addAttribute("applicant", applicantService.findByUniserial(account.getName()));
+            model.addAttribute("countries", CSVService.getCountries());
+            model.addAttribute("courses", CSVService.getCourses());
+            model.addAttribute("webApplicant", webApplicant);
+            model.addAttribute("webAddress", webAddress);
+            model.addAttribute("webCertificate", webCertificate);
+            model.addAttribute("modules", modules);
         }
         return "applicant/applicationEditPersonal";
     }

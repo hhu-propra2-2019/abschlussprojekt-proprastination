@@ -10,6 +10,8 @@ import mops.model.classes.webclasses.WebAddress;
 import mops.model.classes.webclasses.WebApplicant;
 import mops.model.classes.webclasses.WebApplication;
 import mops.model.classes.webclasses.WebCertificate;
+import org.keycloak.adapters.OidcKeycloakAccount;
+import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 
@@ -235,5 +237,17 @@ public class StudentService {
                 .module(moduleService.findModuleByName(webApplication.getModule()))
                 .priority(webApplication.getPriority())
                 .build();
+    }
+
+    public Applicant savePersonalData(KeycloakAuthenticationToken token, WebApplicant webApplicant, WebAddress webAddress, WebCertificate webCertificate) {
+        OidcKeycloakAccount account = token.getAccount();
+        String givenName = account.getKeycloakSecurityContext().getIdToken().getGivenName();
+        String familyName = account.getKeycloakSecurityContext().getIdToken().getFamilyName();
+        Address address = buildAddress(webAddress);
+        Certificate certificate = buildCertificate(webCertificate);
+        Applicant applicant = buildApplicant(token.getName(), webApplicant,
+                address, certificate, givenName, familyName);
+        applicantService.saveApplicant(applicant);
+        return applicant;
     }
 }
