@@ -14,5 +14,5 @@ import javax.validation.constraints.NotBlank;
 public class WebCertificate {
     @NotBlank
     private String graduation;
-    private String course;
+    private String graduationcourse;
 }

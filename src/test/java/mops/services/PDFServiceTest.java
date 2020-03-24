@@ -4,7 +4,9 @@ import mops.model.Document;
 import mops.model.classes.Address;
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
-import mops.model.classes.Certificate;
+import mops.model.classes.Module;
+import mops.model.classes.Priority;
+import mops.model.classes.Role;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.junit.jupiter.api.Test;
@@ -13,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,10 +30,15 @@ class PDFServiceTest {
 
     @Test
     void generatePDF() throws IOException {
+        Module module = Module.builder()
+                .deadline(Instant.ofEpochSecond(100l))
+                .name("Info4")
+                .build();
+
         Application application = Application.builder()
-                .module("Divination")
-                .priority(1)
-                .role("Tutor")
+                .module(module)
+                .priority(Priority.NEGATIVE)
+                .role(Role.TUTOR)
                 .comment("asd")
                 .semester("SS2020")
                 .minHours(7)
@@ -41,7 +49,7 @@ class PDFServiceTest {
                 .houseNumber("21B")
                 .city("London")
                 .country("England")
-                .zipcode(20394)
+                .zipcode("NW1 6XE")
                 .build();
 
         Applicant applicant = Applicant.builder()

@@ -54,6 +54,8 @@ public class DistributeController {
                 return "redirect:/bewerbung2/organisator/";
             } else if (auth.equals(new SimpleGrantedAuthority("ROLE_verteiler"))) {
                 return "redirect:/bewerbung2/verteiler/";
+            } else if (auth.equals(new SimpleGrantedAuthority("ROLE_setup"))) {
+                return "redirect:/bewerbung2/setup/";
             } else if (auth.equals(new SimpleGrantedAuthority("ROLE_studentin"))) {
                 return "redirect:/bewerbung2/bewerber/";
             }

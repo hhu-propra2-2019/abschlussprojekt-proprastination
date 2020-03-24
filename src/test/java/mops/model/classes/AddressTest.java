@@ -12,7 +12,7 @@ class AddressTest {
                 .city("Düsseldorf")
                 .street("Universitätsstraße")
                 .houseNumber("1")
-                .zipcode(40225)
+                .zipcode("40225")
                 .country("Germany")
                 .build();
 
@@ -25,7 +25,7 @@ class AddressTest {
                 .city("Düsseldorf")
                 .street("Universitätsstraße")
                 .houseNumber("1")
-                .zipcode(40225)
+                .zipcode("40225")
                 .country("Germany")
                 .build();
 
@@ -33,7 +33,7 @@ class AddressTest {
                 .hasFieldOrPropertyWithValue("city", "Düsseldorf")
                 .hasFieldOrPropertyWithValue("street", "Universitätsstraße")
                 .hasFieldOrPropertyWithValue("houseNumber", "1")
-                .hasFieldOrPropertyWithValue("zipcode", 40225)
+                .hasFieldOrPropertyWithValue("zipcode", "40225")
                 .hasFieldOrPropertyWithValue("country", "Germany");
     }
 
@@ -43,7 +43,7 @@ class AddressTest {
                 .city("Düsseldorf")
                 .street("Universitätsstraße")
                 .houseNumber("1")
-                .zipcode(40225)
+                .zipcode("40225")
                 .country("Germany")
                 .build();
 
@@ -51,7 +51,7 @@ class AddressTest {
                 .city("Düsseldorf")
                 .street("Universitätsstraße")
                 .houseNumber("1")
-                .zipcode(40225)
+                .zipcode("40225")
                 .country("Germany")
                 .build();
 

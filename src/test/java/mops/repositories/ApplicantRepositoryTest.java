@@ -4,11 +4,17 @@ import mops.model.classes.Address;
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
 import mops.model.classes.Certificate;
+import mops.model.classes.Module;
+import mops.model.classes.Priority;
+import mops.model.classes.Role;
 import mops.services.ApplicantService;
+import mops.services.ModuleService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,21 +25,34 @@ class ApplicantRepositoryTest {
     @Autowired
     ApplicantService service;
 
+    @Autowired
+    ModuleService moduleService;
+
     Applicant applicant;
     Application application;
     Certificate cert;
     Address address;
 
+    @AfterEach
+    void setdown() {
+        service.deleteAll();
+        moduleService.deleteAll();
+    }
+
 
     @Test
     public void test() {
+        Module module = Module.builder()
+                .deadline(Instant.ofEpochSecond(100l))
+                .name("Info4")
+                .build();
 
         address = Address.builder()
                 .street("Allee")
                 .street("1")
                 .city("Baumberg")
                 .country("Bergland")
-                .zipcode(22222)
+                .zipcode("22222")
                 .build();
         cert = Certificate.builder()
                 .name("Uni")
@@ -42,12 +61,12 @@ class ApplicantRepositoryTest {
         application = Application.builder()
                 .minHours(7)
                 .maxHours(17)
-                .module("Info")
-                .priority(1)
+                .module(module)
+                .priority(Priority.VERYHIGH)
                 .grade(1.3)
                 .lecturer("Prof")
                 .semester("SS2020")
-                .role("Tutor")
+                .role(Role.TUTOR)
                 .build();
         Set<Application> applications = new HashSet<>();
         applications.add(application);
@@ -67,6 +86,7 @@ class ApplicantRepositoryTest {
                 .certs(cert)
                 .applications(applications).build();
 
+        moduleService.save(module);
         service.saveApplicant(applicant);
     }
 

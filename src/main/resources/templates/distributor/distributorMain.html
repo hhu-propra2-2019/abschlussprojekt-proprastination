@@ -24,12 +24,10 @@
                 ev.dataTransfer.setData("text", ev.target.id);
             }
 
-            function drop(ev) {
+            function drop(ev, el) {
                 ev.preventDefault();
-                if (!ev.target.getAttribute("ondrop"))
-                    return false;
                 var data = ev.dataTransfer.getData("text");
-                ev.target.appendChild(document.getElementById(data));
+                el.appendChild(document.getElementById(data));
             }
         </script>
     </th:block>
@@ -46,12 +44,12 @@
         <div class="col-sm-6" th:each="distribution: ${distributions}">
             <div class="card bg-light mb-3 border-primary">
                 <div class="card-header d-flex justify-content-start align-items-start" th:text="${distribution.module}">Propra</div>
-                <div class="card-body" id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div class="card-body" id="div1" ondrop="drop(event, this)" ondragover="allowDrop(event)">
                     <div th:each="applicant: ${distribution.webDistributorApplicants}">
                         <div class="card w-100 bg-light mb-1 border-primary" th:id="drag + ${applicant.username}" id="drag1" draggable="true" ondragstart="drag(event)">
-                            <div class="card-header container-fluid">
+                            <div class="card-header">
                                 <div class="row">
-                                    <div class="col">
+                                    <div class="col text-center">
                                         <button class="btn" data-toggle="collapse" th:attr="data-target='#collapse'+${applicant.username}" data-target="#collapse1"
                                                 aria-expanded="false" th:text="${applicant.username}">
                                             Mamus100
@@ -59,14 +57,12 @@
                                     </div>
                                     <div class="col">
                                         <div>
-                                            <input type="text" size="1">
+                                            <input onClick="this.select();" type="text" size="1" th:value="${applicant.distributorHours}">
                                             <label>Stunden</label>
                                         </div>
                                     </div>
-                                    <div class="col">
-                                        <div class="float-right">
-                                            <input type="checkbox">
-                                        </div>
+                                    <div class="col text-right">
+                                        <input type="checkbox">
                                     </div>
                                 </div>
                             </div>
@@ -81,8 +77,8 @@
                                     </div>
                                     <div class="row border" th:each="appl: ${applicant.webDistributorApplications}">
                                         <div class="col" th:text="${appl.module}">Modul1</div>
-                                        <div class="col" th:text="${appl.applicantPriority}">++</div>
-                                        <div class="col" th:text="${appl.organizerPriority}">+</div>
+                                        <div class="col" th:text="${appl.applicantPriority.label}">++</div>
+                                        <div class="col" th:text="${appl.organizerPriority.label}">+</div>
                                         <div class="col" th:text="${appl.organizerHours}">9</div>
                                         <div class="col" th:text="${appl.minHours} + '-' + ${appl.maxHours}">10 - 17</div>
                                     </div>
@@ -97,11 +93,14 @@
         <script>
             $("input[type='checkbox']").change(function(){
                 if($(this).is(":checked")){
-                    $(this).parent().parent().parent().parent().addClass("doneBackground");
+                    $(this).parent().parent().parent().addClass("doneBackground");
                 }else{
-                    $(this).parent().parent().parent().parent().removeClass("doneBackground");
+                    $(this).parent().parent().parent().removeClass("doneBackground");
                 }
             });
+        </script>
+        <script>
+            $(".form-search-wrapper").remove()
         </script>
     </div>
 </main>

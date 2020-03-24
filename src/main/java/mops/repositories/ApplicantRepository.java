@@ -3,9 +3,11 @@ package mops.repositories;
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
@@ -17,6 +19,7 @@ public interface ApplicantRepository extends CrudRepository<Applicant, Long> {
      * @return List of Applicants
      */
     @Override
+    @NonNull
     List<Applicant> findAll();
 
     /**
@@ -29,8 +32,9 @@ public interface ApplicantRepository extends CrudRepository<Applicant, Long> {
 
     /**
      * Finds Applicant by Application
+     *
      * @param application application
      * @return applicant
      */
-    Applicant findByApplications(Application application);
+    Optional<Applicant> findByApplications(Application application);
 }

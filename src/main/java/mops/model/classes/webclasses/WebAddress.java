@@ -19,8 +19,8 @@ import javax.validation.constraints.Max;
 public class WebAddress {
     public static final int MAX_ZIPCODE = 99999;
     @NotBlank
-    @Pattern(regexp = ".+ [0-9]+")
     private String street;
+    private String number;
     @NotBlank
     private String city;
     @NotNull

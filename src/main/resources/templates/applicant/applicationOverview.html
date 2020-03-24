@@ -2,6 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       th:replace="~{mopslayout :: html(name='Ihre Bewerbung', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}">
 <head>
+    <link href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.12.1/css/v4-shims.css" rel="stylesheet">
     <meta charset="utf-8">
     <title>Name des Subsystems</title>
     <th:block th:fragment="headcontent">
@@ -47,15 +49,17 @@
                         <div class="col-6">
                             <div class="row">
                                 <label for="name">Name:&nbsp;</label>
-                                <label id="name" th:text="${applicant.surname}">Max Mustermann</label>
+                                <label id="name" th:text="${applicant.firstName} + ' ' + ${applicant.surname}">Max
+                                    Mustermann</label>
                             </div>
                             <div class="row">
                                 <label for="email">E-Mail:&nbsp;</label>
-                                <label id="email">maxmustermann@mustermail.de</label>
+                                <label id="email" th:text="${email}">maxmustermann@mustermail.de</label>
                             </div>
                             <div class="row">
                                 <label for="streetplusnumber">Straße und Hausnummer:&nbsp;</label>
-                                <label id="streetplusnumber" th:text="${applicant.address.street}">Musterstraße
+                                <label id="streetplusnumber"
+                                       th:text="${applicant.address.street} + ' ' + ${applicant.address.houseNumber}">Musterstraße
                                     1</label>
                             </div>
                             <div class="row">
@@ -85,58 +89,85 @@
                                 <label id="graduation" th:text="${applicant.certs.name}">Bachelor</label>
                             </div>
                             <div class="row">
-                                <label for="graduationsubject">Berreits Abgeschlossenes Fach:&nbsp;</label>
+                                <label for="graduationsubject">Bereits Abgeschlossenes Fach:&nbsp;</label>
                                 <label id="graduationsubject" th:text="${applicant.certs.course}">BWL</label>
                             </div>
                             <div class="row">
                                 <label for="information">Ihre sonstigen Angaben:&nbsp;</label>
                             </div>
                             <div class="row">
-                                <label id="information">Nehmt mich, denn ich bin sehr gut ...</label>
+                                <label id="information" th:text="${applicant.comment}">Nehmt mich, denn ich bin sehr gut
+                                    ...</label>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row d-flex">
             <div class="col-sm-4" th:each="appl: ${applicant.applications}">
                 <div class="card bg-light mb-3 border-primary">
                     <div class="card-header">
-                        <label class="" th:title="${appl.module}" th:text="${appl.module}"
+                        <label class="" th:text="${appl.module.name}"
                                style="text-overflow: ellipsis; overflow: hidden; width: 60%; white-space: nowrap">
                             Programmierung (Früher: Grundlagen der Informatik)
                         </label>
-                        <a class="btn btn-outline-primary" style="float: right;" th:href="@{bearbeiteModulDaten}">
+                        <a class="btn btn-outline-primary" style="float: right; vertical-align: top"
+                           th:href="@{/bewerbung2/bewerber/bearbeiteModulDaten(module=${appl.id})}" type="submit">
                             Bearbeiten </a>
                     </div>
                     <div class="card-body">
                         <div class="col-auto">
                             <div class="row">
-                                <label for="worktime">Arbeitszeit:&nbsp;</label>
-                                <label id="worktime" th:text="${appl.hours}">24/7</label>
+                                <i class="fa fa-ra"></i>
+                                <label for="minworktime"><i class="fas fa-business-time"></i>Min.
+                                    Arbeitszeit:&nbsp;</label>
+                                <label id="minworktime" th:text="${appl.minHours}">24/7</label>
                             </div>
                             <div class="row">
-                                <label for="grade">Note:&nbsp;</label>
+                                <i class="fa fa-ra"></i>
+                                <label for="maxworktime"><i class="fas fa-business-time"></i>Max.
+                                    Arbeitszeit:&nbsp;</label>
+                                <label id="maxworktime" th:text="${appl.maxHours}">24/7</label>
+                            </div>
+                            <div class="row">
+                                <label for="grade"><i class="fas fa-graduation-cap"></i>Note:&nbsp;</label>
                                 <label id="grade" th:text="${appl.grade}">1,0</label>
                             </div>
                             <div class="row">
-                                <label for="semester">Semester:&nbsp;</label>
+                                <label for="semester"><i class="fas fa-calendar-day"></i>Semester:&nbsp;</label>
                                 <label id="semester" th:text="${appl.semester}">SoSe20</label>
                             </div>
                             <div class="row">
-                                <label for="lecturer">Dozent:&nbsp;</label>
+                                <label for="lecturer"><i class="fas fa-pray"></i>Dozent:&nbsp;</label>
                                 <label id="lecturer" th:text="${appl.lecturer}">Musterprof</label>
                             </div>
                             <div class="row">
-                                <label for="task">Aufgabe:&nbsp;</label>
-                                <label id="task" th:text="${appl.role}">Korrektor</label>
+                                <label for="task"><i class="fas fa-user-tag"></i>Aufgabe:&nbsp;</label>
+                                <label id="task" th:text="${appl.role.label}">Korrektor</label>
                             </div>
                             <div class="row">
-                                <label for="priority">Priorität:&nbsp;</label>
-                                <label id="priority" th:text="${appl.priority}">++</label>
+                                <label for="priority"><i class="fas fa-angle-double-up"></i>Priorität:&nbsp;</label>
+                                <label id="priority" th:text="${appl.priority.label}">++</label>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 text-center align-self-stretch">
+                <div class="card bg-light mb-3 border-primary align-self-stretch">
+
+                    <div class="card-header">
+                    </div>
+                    <div class="card-body justify-content-center">
+                        <div class="row justify-content-center align-self-center">
+                            <div class="col">
+
+                            </div>
+                        </div>
+
+                        <h1>+</h1>
+
                     </div>
                 </div>
             </div>

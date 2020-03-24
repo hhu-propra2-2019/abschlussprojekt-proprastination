@@ -3,6 +3,8 @@ package mops.model.classes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
+
 import static org.assertj.core.api.Assertions.*;
 
 class ApplicationTest {
@@ -13,8 +15,12 @@ class ApplicationTest {
 
     @BeforeEach
     void setup() {
+        Module module = Module.builder()
+                .deadline(Instant.ofEpochSecond(100l))
+                .name("Info4")
+                .build();
         address = Address.builder()
-                .zipcode(12345)
+                .zipcode("12345")
                 .country("USA")
                 .city("Düsseldorf")
                 .street("Street")
@@ -46,29 +52,32 @@ class ApplicationTest {
                 .minHours(2)
                 .maxHours(4)
                 .grade(1.3)
-                .priority(1)
+                .priority(Priority.VERYHIGH)
                 .lecturer("Tester")
-                .role("Korrektor")
+                .role(Role.PROOFREADER)
                 .semester("WS2020")
-                .module("ProPra")
+                .module(module)
                 .comment("")
-                .applicant(applicant)
                 .build();
     }
 
     @Test
     void TestBuilder() {
         //Arrange in BeforeEach
+        Module module = Module.builder()
+                .deadline(Instant.ofEpochSecond(100l))
+                .name("Info4")
+                .build();
 
         assertThat(application)
                 .hasFieldOrPropertyWithValue("minHours", 2)
                 .hasFieldOrPropertyWithValue("maxHours", 4)
-                .hasFieldOrPropertyWithValue("priority", 1)
+                .hasFieldOrPropertyWithValue("priority", Priority.VERYHIGH)
                 .hasFieldOrPropertyWithValue("grade", 1.3)
                 .hasFieldOrPropertyWithValue("lecturer", "Tester")
-                .hasFieldOrPropertyWithValue("role", "Korrektor")
+                .hasFieldOrPropertyWithValue("role", Role.PROOFREADER)
                 .hasFieldOrPropertyWithValue("semester", "WS2020")
-                .hasFieldOrPropertyWithValue("module", "ProPra")
+                .hasFieldOrPropertyWithValue("module", module)
                 .hasFieldOrPropertyWithValue("comment", "");
 
 
@@ -76,40 +85,33 @@ class ApplicationTest {
 
     @Test
     void testEquals() {
+        Module module = Module.builder()
+                .deadline(Instant.ofEpochSecond(100l))
+                .name("Info4")
+                .build();
         Application application1 = Application.builder()
                 .minHours(5)
                 .maxHours(10)
                 .grade(1.3)
-                .priority(1)
+                .priority(Priority.VERYHIGH)
                 .lecturer("Tester")
-                .role("Korrektor")
+                .role(Role.PROOFREADER)
                 .semester("WS2020")
-                .module("ProPra")
+                .module(module)
                 .build();
 
         Application application2 = Application.builder()
                 .minHours(5)
                 .maxHours(10)
                 .grade(1.3)
-                .priority(1)
+                .priority(Priority.VERYHIGH)
                 .lecturer("Tester")
-                .role("Korrektor")
+                .role(Role.PROOFREADER)
                 .semester("WS2020")
-                .module("ProPra")
+                .module(module)
                 .build();
 
         assertThat(application1).isEqualTo(application2);
-    }
-
-    @Test
-    void testBuilderFailsWithMissingArgument() {
-        assertThatThrownBy(() -> {
-                    Application application = Application.builder()
-                            .minHours(10)
-                            .maxHours(20)
-                            .build();
-                }
-        ).isInstanceOf(NullPointerException.class);
     }
 
     @Test
@@ -117,14 +119,10 @@ class ApplicationTest {
         //Arrange in BeforeEach
 
         assertThat(application.toString()).isEqualTo(
-                "Application(minHours=2, finalHours=0, maxHours=4, module=ProPra, " +
-                        "priority=1, grade=1.3, lecturer=Tester, semester=WS2020, " +
-                        "role=Korrektor, comment=, applicant=Applicant(uniserial=lolol420, " +
-                        "birthplace=Deutschland, firstName=Angelo, surname=Merkel, " +
-                        "address=Address(street=Street, houseNumber=999, city=Düsseldorf, " +
-                        "country=USA, zipcode=12345), gender=male, birthday=32.32.9999, " +
-                        "nationality=Russian, course=Trivial, status=irelevant, comment=Moin, " +
-                        "certs=Certificate(name=Bachelor, course=Informatik), applications=[null]))");
+                "Application(minHours=2, finalHours=0, maxHours=4, module=Module(name=Info4," +
+                        " deadline=1970-01-01T00:01:40Z, shortName=null, profName=null, sevenHourLimit=null," +
+                        " nineHourLimit=null, seventeenHourLimit=null, hourLimit=null), priority=VERYHIGH," +
+                        " grade=1.3, lecturer=Tester, semester=WS2020, role=PROOFREADER, comment=)");
 
     }
 
