@@ -39,34 +39,36 @@
                 </div>
                 <div class="card-body">
                     <div class="row form-row mb-3">
-                        <div class="col-md-4 px-md-1 align-self-center">
-                            <div class="form-group">
-                                <label th:for="minworkload">
-                                    Geben Sie bitte an wie viele Stunden Sie minimal pro Woche arbeiten möchten
-                                </label> <br>
-                                <select class="form-control" required th:attr="value = ${webApplication.minHours}"
-                                        th:field="*{minHours}"
-                                        th:id="workload" th:name="minworkload">
-                                    <option disabled hidden selected value="0">Arbeitszeit</option>
-                                    <option th:value="7">7 Stunden/Woche</option>
-                                    <option th:value="9">9 Stunden/Woche</option>
-                                    <option th:value="17">17 Stunden/Woche</option>
-                                </select>
+                        <div class="d-flex align-items-sm-center">
+                            <div class="col-md-4 px-md-1 align-self-center">
+                                <div class="form-group">
+                                    <label th:for="minworkload">
+                                        Geben Sie bitte an wie viele Stunden Sie minimal pro Woche arbeiten möchten
+                                    </label> <br>
+                                    <select class="form-control" required th:attr="value = ${webApplication.minHours}"
+                                            th:field="*{minHours}"
+                                            th:id="workload" th:name="minworkload">
+                                        <option disabled hidden selected value="0">Arbeitszeit</option>
+                                        <option th:value="7">7 Stunden/Woche</option>
+                                        <option th:value="9">9 Stunden/Woche</option>
+                                        <option th:value="17">17 Stunden/Woche</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-4 px-md-1 align-self-center">
-                            <div class="form-group">
-                                <label th:for="maxworkload">
-                                    Geben Sie bitte an wie viele Stunden Sie maximal pro Woche arbeiten möchten
-                                </label> <br>
-                                <select class="form-control" required th:attr="value = ${webApplication.maxHours}"
-                                        th:field="*{maxHours}"
-                                        th:id="workload" th:name="maxworkload">
-                                    <option disabled hidden selected value="0">Arbeitszeit</option>
-                                    <option th:value="7">7 Stunden/Woche</option>
-                                    <option th:value="9">9 Stunden/Woche</option>
-                                    <option th:value="17">17 Stunden/Woche</option>
-                                </select>
+                            <div class="col-md-4 px-md-1 align-self-center">
+                                <div class="form-group">
+                                    <label th:for="maxworkload">
+                                        Geben Sie bitte an wie viele Stunden Sie maximal pro Woche arbeiten möchten
+                                    </label> <br>
+                                    <select class="form-control" required th:attr="value = ${webApplication.maxHours}"
+                                            th:field="*{maxHours}"
+                                            th:id="workload" th:name="maxworkload">
+                                        <option disabled hidden selected value="0">Arbeitszeit</option>
+                                        <option th:value="7">7 Stunden/Woche</option>
+                                        <option th:value="9">9 Stunden/Woche</option>
+                                        <option th:value="17">17 Stunden/Woche</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-4 px-md-1 align-self-center">
@@ -91,8 +93,7 @@
                               <div th:if="${#fields.hasErrors('grade')}" class="text-danger">
                                 Bitte geben Sie eine Note an.
                               </div>
-                              <br>
-                            </div>
+                           </div>
                         </div>
                     </div>
                     <div class="row form-row">

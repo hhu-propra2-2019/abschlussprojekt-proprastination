@@ -350,10 +350,33 @@ public class ApplicationController {
         Application application = studentService.buildApplication(webApplication);
         applicant = applicant.toBuilder().application(application).build();
         applicantService.saveApplicant(applicant);
+        List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
         model.addAttribute("applicant", applicant);
+        model.addAttribute("modules", availableMods);
         return "applicant/applicationOverview";
     }
 
+    /**
+     *
+     * @param token
+     * @param model
+     * @param modules
+     * @return html
+     */
+    @PostMapping("/moduleNachUebersicht")
+    public String postModuleAfterOverview(final KeycloakAuthenticationToken token, final Model model,
+                                          @RequestParam("modules") final String modules) {
+        Module module = moduleService.findModuleByName(modules);
+        Applicant applicant = applicantService.findByUniserial(token.getName());
+        List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
+        availableMods.remove(module);
+        model.addAttribute("account", createAccountFromPrincipal(token));
+        model.addAttribute("newModule", module);
+        model.addAttribute("semesters", CSVService.getSemester());
+        model.addAttribute("modules", availableMods);
+        model.addAttribute("webApplication", WebApplication.builder().module(modules).build());
+        return "applicant/applicationModule";
+    }
     /**
      * The GetMapping for the edit form fot personal data
      *
