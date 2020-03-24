@@ -13,5 +13,6 @@ import java.util.List;
 @Builder(toBuilder = true)
 public class WebDistribution {
     private String module;
+    private String id;
     private List<WebDistributorApplicant> webDistributorApplicants;
 }

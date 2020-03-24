@@ -194,6 +194,7 @@ public class DistributionService {
                     convertApplicantToWebDistributorApplicant(distribution.getEmployees(), distribution.getModule());
             WebDistribution webDistribution = WebDistribution.builder()
                     .module(distribution.getModule().getName())
+                    .id(distribution.getId() + "")
                     .webDistributorApplicants(webDistributorApplicantList)
                     .build();
             webDistributionList.add(webDistribution);
@@ -202,6 +203,7 @@ public class DistributionService {
                 convertUnassignedApplicantsToWebDistributorApplicants(findAllUnassigned());
         WebDistribution webDistribution = WebDistribution.builder()
                 .module("unassigned")
+                .id(-1 + "")
                 .webDistributorApplicants(webDistributorApplicantList)
                 .build();
         webDistributionList.add(webDistribution);
@@ -276,5 +278,17 @@ public class DistributionService {
         }
         allApplicants.removeIf(applicant -> distributedApplicants.indexOf(applicant) != -1);
         return allApplicants;
+    }
+
+    /**
+     * moves an applicant to other distribution
+     * @param applicantId
+     * @param distributionId
+     */
+    public void move(final String applicantId, final String distributionId) {
+        Distribution newDistribution = distributionRepository.findById(Long.parseLong(distributionId));
+        applicantService.findById(Long.parseLong(applicantId));
+        List<Distribution> distributions = distributionRepository.findAll();
+        for()
     }
 }
