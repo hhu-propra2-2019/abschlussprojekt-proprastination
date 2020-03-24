@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("checkstyle:MagicNumber")
 @Component
 public class DatabaseInit implements ServletContextInitializer {
-    private static final int ENTRYNUMBER = 30;
+    private static final int ENTRYNUMBER = 100;
     private transient Random random = new Random();
 
     private transient ApplicantRepository applicantRepository;
@@ -346,7 +346,7 @@ public class DatabaseInit implements ServletContextInitializer {
         applicationRepository.findAll().forEach(application -> {
                     Evaluation evaluation = Evaluation.builder()
                             .comment(truncate(faker.yoda().quote(), 255))
-                            .hours(faker.number().numberBetween(7, 17))
+                            .hours(nextFinalHour())
                             .priority(nextPriority())
                             .application(application)
                             .build();
@@ -355,19 +355,28 @@ public class DatabaseInit implements ServletContextInitializer {
         );
     }
 
-    @SuppressWarnings("checkstyle:MagicNumber")
+    @SuppressWarnings({"checkstyle:MagicNumber", "checkstyle:HiddenField"})
     private void fakeModules(final Faker faker) {
+        Random random = new Random();
         String[] modulenames = {"Programmier Praktikum 1", "Programmier Praktikum 2",
                 "RDB",
                 "Algorithmen und Datenstrukturen", "Theoretische Informatik"};
-        for (String s : modulenames) {
+        String[] shortNames = {"ProPra1", "Propra2", "RDB", "Aldat", "Theo"};
+        String[] profNames = {"Jens", "Chris", "Ursula", "Martin", "Stefan"};
+        String[] hour = {"0", "01", "02"};
+        for (int i = 0; i < modulenames.length; i++) {
             Instant date = faker.date().future(300, 30, TimeUnit.DAYS).toInstant();
             Module module = Module.builder()
-                    .name(s)
+                    .name(modulenames[i])
+                    .shortName(shortNames[i])
+                    .sevenHourLimit((1 + random.nextInt(5)) + "")
+                    .nineHourLimit((1 + random.nextInt(5)) + "")
+                    .seventeenHourLimit((1 + random.nextInt(5)) + "")
+                    .profName(profNames[i])
+                    .hourLimit(hour[i % 3])
                     .deadline(date)
                     .build();
             moduleRepository.save(module);
         }
-
     }
 }

@@ -30,53 +30,66 @@
 </header>
 <main th:fragment="bodycontent">
     <div style="text-align: center;">
-        <!-- Restlichen Inhalt hier einfügen! -->
-        <div class="card bg-light mb-3 border-primary">
-            <div class="card-header">
-                <label><h2>Persönliche Daten</h2></label>
-                <a th:href="@{uebersicht}" class="btn btn-outline-primary" style="float: right;"> Speichern </a>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-5">
-                        <input type="text" name="adress1" id="adress1"
-                               required
-                               class="form-control" placeholder="Straße und Hausnummer"
-                               th:value="${applicant.address.street}"> <br>
-                        <br>
-                    </div>
-                    <div class="col-5">
-                        <input type="text" name="adress2" id="adress2"
-                               required
-                               class="form-control" placeholder="Ort" th:value="${applicant.address.city}"> <br>
-                    </div>
-                    <div class="col-2">
-                        <input type="text" name="plz" id="plz" class="form-control" placeholder="Postleitzahl"
-                               required pattern="^\d{5}$" minlength="5" maxlength="5"
-                               th:value="${applicant.address.zipcode}"> <br>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-5">
-                        <input type="text" name="placeofbirth" id="placeofbirth" required
-                               class="form-control" placeholder="Geburtsort, Land" th:value="${applicant.birthplace}"> <br>
-                    </div>
-                    <div class="col-5">
-                        <select name="nationality" id="nationality" class="form-control">
-                            <option th:value="${applicant.nationality}" selected th:text="${applicant.nationality}">Nationalität</option>
-                            <option th:each="country:${countries}" th:text="${country}"></option>
-                        </select> <br>
-                    </div>
-                    <div class="col-2">
-                        <input type="text" name="birthday" id="birthday" onfocus="(this.type='date')"
-                               required
-                               onblur="(this.type='text')" class="form-control" placeholder="Geburtstag"
-                               th:value="${applicant.birthday}"> <br><br>
+        <form th:action="@{uebersichtBearbeitet}" th:method="POST" th:object="${webApplicant}">
+            <div class="card bg-light mb-3 border-primary">
+                <div class="card-header"><h2>Persönliche Daten</h2></div>
+                <div class="card-body">
+                    <div class="row" th:object="${webAddress}">
+                        <div class="col-4">
+                            <input class="form-control" placeholder="Straße und Hausnummer"
+                                   required th:attr="value = ${webAddress.street}"
+                                   th:field="*{street}" th:name="street" th:type="text"> <br>
+                            <br>
+                        </div>
+                        <div class="col-md-1">
+                            <input class="form-control" name="streetnumber" placeholder="Hausnummer" required
+                                   th:field="*{number}" type="text">
+                        </div>
+                        <div class="col-5">
+                            <input placeholder="Ort" required th:attr="value = ${webAddress.city}"
+                                   th:class="form-control" th:field="*{city}"
+                                   th:id="city" th:name="city" th:type="text"> <br>
+                        </div>
+                        <div class="col-2">
+                            <input placeholder="Postleitzahl" required th:attr="value = ${webAddress.zipcode}"
+                                   th:class="form-control"
+                                   th:field="*{zipcode}"
+                                   th:id="zipcode" th:name="zipcode" type="text"> <br>
+                        </div>
                     </div>
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-5">
+                            <input placeholder="Geburtsort, Land" required th:attr="value = ${webApplicant.birthplace}"
+                                   th:class="form-control" th:field="*{birthplace}"
+                                   th:id="birthplace" th:name="birthplace" th:type="text"> <br>
+                        </div>
+                        <div class="col-5">
+                            <select required th:attr="value = ${webApplicant.nationality}" th:class="form-control"
+                                    th:field="*{nationality}" th:id="nationality" th:name="nationality">
+                                <option disabled hidden selected value="">Nationalität</option>
+                                <option th:each="country:${countries}" th:text="${country}"
+                                        th:value="${country}"></option>
+                            </select> <br>
+                        </div>
+                        <div class="col-2">
+                            <input class="form-control" id="birthday" name="birthday" onblur="(this.type='text')"
+                                   onfocus="(this.type='date')" placeholder="Geburtstag"
+                                   required th:attr="value = ${webApplicant.birthday}" th:field="*{birthday}"
+                                   type="text"> <br><br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            <select class="form-control" id="gender" name="gender"
+                                    required th:attr="value = ${webApplicant.gender}" th:field="*{gender}">
+                                <option disabled hidden selected value="">Geschlecht</option>
+                                <option value="male">männlich</option>
+                                <option value="female">weiblich</option>
+                            </select>
+                        </div>
+                        <div class="col-4">
                             <div align="right">
-                                <label for="subject">
+                                <label for="courses">
                                     Wählen Sie ihr aktuellen Studienfach aus falls Sie an der HHU immatrikuliert sind.
                                     Ansonsten wählen sie bitte die Option <br>"nicht immatrikuliert".
                                 </label> <br>
@@ -84,29 +97,32 @@
 
                         </div>
                         <div class="col-6">
-                            <select name="subject" id="subject" class="form-control">
-                                <option value="" selected th:text="${applicant.course}"></option>
+                            <select class="form-control" id="courses" name="courses"
+                                    th:field="*{course}">
+                                <option th:each="cours:${courses}" th:text="${cours}" th:value="${cours}"></option>
                             </select> <br> <br>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-6">
                             <div align="right">
-                                <label for="status">
+                                <label>
                                     Wählen sie bitte Ihren aktuellen Angestelltenstatus
                                 </label> <br>
                             </div>
                         </div>
                         <div class="col-6">
-                            <select name="status" id="status" class="form-control">
-                                <option value ="" selected th:text="${applicant.status}"></option>
-                                <option value="neueinstellung">
+                            <select th:attr="value = ${webApplicant.status}" th:class="form-control"
+                                    th:field="*{status}"
+                                    th:id="status" th:name="status"
+                            >
+                                <option th:value="Einstellung">
                                     Neueinstellung (bisher keine Anstellung an der HHU)
                                 </option>
-                                <option value="weiterbeschaeftigung">
+                                <option th:value="Weiterbeschaeftigung">
                                     Weiterbeschäftigung (bestehender Vertrag bis zum DD.MM.YYYY)
                                 </option>
-                                <option value="wiedereinstellung">
+                                <option th:value="Änderung">
                                     Wiedereinstellung (KEIN bestehender Vertrag bis zum DD.MM.YYYY)
                                 </option>
                             </select>
@@ -115,7 +131,7 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <label for="graduation">
+                            <label th:for="graduation">
                                 Was ist der bisher höchste Universitätsabschluss, den Sie erreicht haben?
                                 Bitte schreiben Sie in das Textfeld, in welchem Fach Sie Ihren Abschluss erreicht haben.
                                 Falls der Abschluss nicht an der HHU erlangt wurde, schreiben sie dies bitte dazu.
@@ -123,39 +139,53 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-6">
-                            <select class="form-control" id="graduation" name="graduation" th:field="*{graduation}"
-                                    th:object="${webCertificate}">
-                                <option selected th:text="${applicant.certs.name}"
-                                        th:value="${applicant.certs.name}"></option>
-                                <option value="bachelor">Bachelor</option>
-                                <option value="master">Master</option>
-                                <option value="diplom">Diplom</option>
-                                <option value="staatsexamen">Staatsexamen</option>
-                                <option value="else">Anderes</option>
-                                <option value="none">kein Universitätsabschluss</option>
-                            </select> <br>
-                        </div>
-                        <div class="col-6">
-                            <input type="text" name="graduationsubject" id="graduationsubject"
-                                   class="form-control" placeholder="Abschlussfach"
-                                   th:value="${applicant.certs.name}"> <br>
-                        </div>
+                        <th:block th:object="${webCertificate}">
+                            <div class="col-6">
+                                <select class="form-control" th:attr="value = ${webCertificate.graduation}"
+                                        th:field="*{graduation}"
+                                        th:id="name" th:name="graduation">
+                                    <option th:value="keins">kein Universitätsabschluss</option>
+                                    <option th:value="Bachelor">Bachelor</option>
+                                    <option th:value="Master">Master</option>
+                                    <option th:value="Diplom">Diplom</option>
+                                    <option th:value="Staatsexamen">Staatsexamen</option>
+                                    <option th:value="Anderes">Anderes</option>
+                                </select> <br>
+                            </div>
+                            <div class="col-6">
+                                <input class="form-control" placeholder="Abschlussfach" th:field="*{graduationcourse}"
+                                       th:id="graduationsubject" th:name="graduationsubject"
+                                       th:type="text" th:value="${webCertificate.graduationcourse}">
+                                <br>
+                            </div>
+                        </th:block>
                     </div>
                     <div class="row">
                         <div class="col">
-                            <label for="diverse">
+                            <label>
                                 Beschreiben Sie hier kurz Ihre bisherigen Erfahrungen und sonstige Anmerkungen:
                             </label> <br>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
-                            <textarea name="diverse" id="diverse" class="form-control" rows="6"></textarea> <br>
+                            <textarea maxlength="1000" rows="6" th:attr="value = ${webApplicant.comment}"
+                                      th:class="form-control"
+                                      th:field="*{comment}"
+                                      th:id="comment" th:name="comment"
+                            ></textarea> <br>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="card bg-light mb-3 border-primary">
+                <div class="card-body">
+                    <div class="col">
+                        <button class="btn btn-outline-primary form-control" th:type="submit"> Bestätige</button>
+                    </div>
+                </div>
+            </div>
+    </div>
         </form>
     </div>
 </main>

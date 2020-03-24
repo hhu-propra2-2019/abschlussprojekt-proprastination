@@ -1,10 +1,8 @@
 package mops.controllers;
 
 import mops.model.Account;
-import mops.model.classes.Address;
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
-import mops.model.classes.Certificate;
 import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebAddress;
 import mops.model.classes.webclasses.WebApplicant;
@@ -16,9 +14,7 @@ import mops.services.CSVService;
 import mops.services.ModuleService;
 import mops.services.StudentService;
 import org.keycloak.KeycloakPrincipal;
-import org.keycloak.adapters.OidcKeycloakAccount;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,17 +32,31 @@ import java.util.List;
 @RequestMapping("/bewerbung2/bewerber")
 public class ApplicationController {
 
-    @Autowired
     private ApplicantService applicantService;
 
-    @Autowired
     private ModuleService moduleService;
 
-    @Autowired
     private ApplicationService applicationService;
 
-    @Autowired
     private StudentService studentService;
+
+
+    /**
+     * Inits the service.
+     *
+     * @param applicantService   appservice
+     * @param moduleService      moduleservice
+     * @param applicationService appl. service
+     * @param studentService     studentservice
+     */
+    @SuppressWarnings("checkstyle:HiddenField")
+    public ApplicationController(final ApplicantService applicantService, final ModuleService moduleService,
+                                 final ApplicationService applicationService, final StudentService studentService) {
+        this.applicantService = applicantService;
+        this.moduleService = moduleService;
+        this.applicationService = applicationService;
+        this.studentService = studentService;
+    }
 
     private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
         KeycloakPrincipal principal = (KeycloakPrincipal) token.getPrincipal();
@@ -161,17 +171,9 @@ public class ApplicationController {
                         final String modules) {
 
         if (token != null) {
-            OidcKeycloakAccount account = token.getAccount();
-            String givenName = account.getKeycloakSecurityContext().getIdToken().getGivenName();
-            String familyName = account.getKeycloakSecurityContext().getIdToken().getFamilyName();
 
+            Applicant applicant = studentService.savePersonalData(token, webApplicant, webAddress, webCertificate);
             Module module = moduleService.findModuleByName(modules);
-
-            Address address = studentService.buildAddress(webAddress);
-            Certificate certificate = studentService.buildCertificate(webCertificate);
-            Applicant applicant = studentService.buildApplicant(token.getName(), webApplicant,
-                    address, certificate, givenName, familyName);
-            applicantService.saveApplicant(applicant);
             List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
             availableMods.remove(module);
 
@@ -213,6 +215,31 @@ public class ApplicationController {
         return "applicant/applicationModule";
     }
 
+
+    /**
+<<<<<<< HEAD
+=======
+     * Postmapping for editing personal data.
+     * @param token keycloak
+     * @param webApplicant applicant data
+     * @param webAddress address data
+     * @param webCertificate certificate data
+     * @param model model
+     * @return webpage
+     */
+    @SuppressWarnings("checkstyle:ParameterNumber")
+    @PostMapping("/uebersichtBearbeitet")
+    public String saveOverview(final KeycloakAuthenticationToken token, final WebApplicant webApplicant,
+                               final WebAddress webAddress, final WebCertificate webCertificate, final Model model) {
+        if (token != null) {
+            model.addAttribute("account", createAccountFromPrincipal(token));
+
+            studentService.savePersonalData(token, webApplicant, webAddress, webCertificate);
+        }
+        return "redirect:bewerbungsUebersicht";
+    }
+
+
     /**
      * The GetMapping for the overview
      *
@@ -244,12 +271,11 @@ public class ApplicationController {
         if (token != null) {
             Account account = createAccountFromPrincipal(token);
             model.addAttribute("account", account);
+            model.addAttribute("email", account.getEmail());
             Applicant applicant = applicantService.findByUniserial(account.getName());
             model.addAttribute("applicant", applicant);
             model.addAttribute("modules",
                     studentService.getAllNotfilledModules(applicant, moduleService.getModules()));
-
-
         }
         return "applicant/applicationOverview";
     }
@@ -307,8 +333,25 @@ public class ApplicationController {
     public String editPersonalData(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             Account account = createAccountFromPrincipal(token);
+            Applicant applicant = applicantService.findByUniserial(account.getName());
+
+            WebApplicant webApplicant = (applicant == null)
+                    ? WebApplicant.builder().build() : studentService.getExsistingApplicant(applicant);
+            WebAddress webAddress = (applicant == null)
+                    ? WebAddress.builder().build() : studentService.getExsistingAddress(applicant.getAddress());
+            WebCertificate webCertificate = (applicant == null)
+                    ? WebCertificate.builder().build() : studentService.getExsistingCertificate(applicant.getCerts());
+            List<Module> modules = (applicant == null)
+                    ? moduleService.getModules() : studentService
+                    .getAllNotfilledModules(applicant, moduleService.getModules());
+
             model.addAttribute("account", account);
-            model.addAttribute("applicant", applicantService.findByUniserial(account.getName()));
+            model.addAttribute("countries", CSVService.getCountries());
+            model.addAttribute("courses", CSVService.getCourses());
+            model.addAttribute("webApplicant", webApplicant);
+            model.addAttribute("webAddress", webAddress);
+            model.addAttribute("webCertificate", webCertificate);
+            model.addAttribute("modules", modules);
         }
         return "applicant/applicationEditPersonal";
     }

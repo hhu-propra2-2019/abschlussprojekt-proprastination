@@ -11,6 +11,8 @@ import mops.model.classes.webclasses.WebDistributorApplicant;
 import mops.model.classes.webclasses.WebDistributorApplication;
 import mops.repositories.DistributionRepository;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
@@ -21,23 +23,20 @@ import java.util.Set;
 @Service
 public class DistributionService {
 
-    private final DistributionRepository distributionRepository;
-    private final ModuleService moduleService;
-    private final ApplicantService applicantService;
-    private final ApplicationService applicationService;
-    private final EvaluationService evaluationService;
-    private final int numberOfPriorities = 4;
-    private final int sevenHours = 7;
-    private final int nineHours = 9;
-    private final int seventeenHours = 17;
+    private DistributionRepository distributionRepository;
+    private ModuleService moduleService;
+    private ApplicantService applicantService;
+    private ApplicationService applicationService;
+    private EvaluationService evaluationService;
 
     /**
      * Injects Services and repositories
+     *
      * @param distributionRepository the injected repository
-     * @param moduleService the services that manages modules
-     * @param applicantService the services that manages applicants
-     * @param applicationService the services that manages applications
-     * @param evaluationService the services that manages evaluations
+     * @param moduleService          the services that manages modules
+     * @param applicantService       the services that manages applicants
+     * @param applicationService     the services that manages applications
+     * @param evaluationService      the services that manages evaluations
      */
     @SuppressWarnings("checkstyle:HiddenField")
     public DistributionService(final DistributionRepository distributionRepository,
@@ -50,6 +49,13 @@ public class DistributionService {
         this.applicantService = applicantService;
         this.applicationService = applicationService;
         this.evaluationService = evaluationService;
+    }
+
+    /**
+     * Setup to init data.
+     */
+    @PostConstruct
+    public void setup() {
         distribute();
     }
 
@@ -66,6 +72,10 @@ public class DistributionService {
      * distributes the Applicants
      */
     private void distribute() {
+        final int numberOfPriorities = 4;
+        final int sevenHours = 7;
+        final int nineHours = 9;
+        final int seventeenHours = 17;
         List<Module> modules = moduleService.getModules();
         List<Applicant> allApplicants = applicantService.findAll();
         distributionRepository.deleteAll();
@@ -94,35 +104,38 @@ public class DistributionService {
             }
 
             for (int i = 0; i < numberOfPriorities; i++) {
-                sortedByOrgaPrio[i].sort(Comparator.comparing(a -> a.getApplication().getPriority()));
+                sortedByOrgaPrio[i].sort(Comparator.comparing(a -> a.getApplication().getPriority().getValue()));
             }
 
             int count7 = 0;
             int count9 = 0;
             int count17 = 0;
+            int max7 = Integer.parseInt(module.getSevenHourLimit());
+            int max9 = Integer.parseInt(module.getNineHourLimit());
+            int max17 = Integer.parseInt(module.getSeventeenHourLimit());
 
             Set<Applicant> distributedApplicants = new LinkedHashSet<>();
 
             for (int i = 0; i < numberOfPriorities; i++) {
-                if (count7 == 4 && count9 == 5 && count17 == 6) {
+                if (count7 == max7 && count9 == max9 && count17 == max17) {
                     break;
                 }
                 for (Evaluation evaluation : sortedByOrgaPrio[i]) {
-                    if (count7 == 4 && count9 == 5 && count17 == 6) {
+                    if (count7 == max7 && count9 == max9 && count17 == max17) {
                         break;
                     }
                     Applicant applicant = applicantService.findByApplications(evaluation.getApplication());
-                    if (evaluation.getHours() == sevenHours && count7 < 4) {
+                    if (evaluation.getHours() == sevenHours && count7 < max7) {
                         distributedApplicants.add(applicant);
                         allApplicants.remove(applicant);
                         changeFinalHours(evaluation);
                         count7++;
-                    } else if (evaluation.getHours() == nineHours && count9 < 5) {
+                    } else if (evaluation.getHours() == nineHours && count9 < max9) {
                         distributedApplicants.add(applicant);
                         allApplicants.remove(applicant);
                         changeFinalHours(evaluation);
                         count9++;
-                    } else if (evaluation.getHours() == seventeenHours && count17 < 6) {
+                    } else if (evaluation.getHours() == seventeenHours && count17 < max17) {
                         distributedApplicants.add(applicant);
                         allApplicants.remove(applicant);
                         changeFinalHours(evaluation);
@@ -139,7 +152,8 @@ public class DistributionService {
 
     /**
      * changes finalHours in application
-     * @param evaluation
+     *
+     * @param evaluation eval
      */
     private void changeFinalHours(final Evaluation evaluation) {
         ApplicationBuilder applicationBuilder = evaluation.getApplication().toBuilder();
@@ -239,12 +253,13 @@ public class DistributionService {
         for (Application application : applicationSet) {
             Evaluation evaluation = evaluationService.findByApplication(application);
             WebDistributorApplication webDistributorApplication = WebDistributorApplication.builder()
-                    .applicantPriority(application.getPriority() + "")
+                    .applicantPriority(application.getPriority())
                     .minHours(application.getMinHours() + "")
                     .maxHours(application.getMaxHours() + "")
                     .module(application.getModule().getName())
+                    .moduleShort(application.getModule().getShortName())
                     .organizerHours(evaluation.getHours() + "")
-                    .organizerPriority(evaluation.getPriority() + "")
+                    .organizerPriority(evaluation.getPriority())
                     .build();
             webDistributorApplicationList.add(webDistributorApplication);
         }

@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder(toBuilder = true)
 public class WebCertificate {
     private String graduation;
-    private String course;
+    private String graduationcourse;
 }

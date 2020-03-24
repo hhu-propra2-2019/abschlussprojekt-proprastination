@@ -10,6 +10,8 @@ import mops.model.classes.webclasses.WebAddress;
 import mops.model.classes.webclasses.WebApplicant;
 import mops.model.classes.webclasses.WebApplication;
 import mops.model.classes.webclasses.WebCertificate;
+import org.keycloak.adapters.OidcKeycloakAccount;
+import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 
@@ -21,8 +23,8 @@ import java.util.List;
 public class StudentService {
 
     private ApplicantService applicantService;
-
     private ModuleService moduleService;
+
 
     /**
      * Setup the applicantserives
@@ -59,7 +61,7 @@ public class StudentService {
     public Certificate buildCertificate(final WebCertificate webCertificate) {
         return Certificate.builder()
                 .name(webCertificate.getGraduation())
-                .course(webCertificate.getCourse())
+                .course(webCertificate.getGraduationcourse())
                 .build();
     }
 
@@ -175,7 +177,7 @@ public class StudentService {
      */
     public WebCertificate getExsistingCertificate(final Certificate certificate) {
         return WebCertificate.builder()
-                .course(certificate.getCourse())
+                .graduationcourse(certificate.getCourse())
                 .graduation(certificate.getName())
                 .build();
     }
@@ -232,8 +234,29 @@ public class StudentService {
                 .grade(webApplication.getGrade())
                 .lecturer(webApplication.getLecturer())
                 .role(webApplication.getRole())
-                .module(moduleService.findModuleByName(webApplication.getModule()))
                 .priority(webApplication.getPriority())
                 .build();
+    }
+
+    /**
+     * Saves personal data of applicant and returns matching applicant
+     *
+     * @param token          keycloak
+     * @param webApplicant   Applicant data
+     * @param webAddress     Address data
+     * @param webCertificate Certificate data
+     * @return applicant
+     */
+    public Applicant savePersonalData(final KeycloakAuthenticationToken token, final WebApplicant webApplicant,
+                                      final WebAddress webAddress, final WebCertificate webCertificate) {
+        OidcKeycloakAccount account = token.getAccount();
+        String givenName = account.getKeycloakSecurityContext().getIdToken().getGivenName();
+        String familyName = account.getKeycloakSecurityContext().getIdToken().getFamilyName();
+        Address address = buildAddress(webAddress);
+        Certificate certificate = buildCertificate(webCertificate);
+        Applicant applicant = buildApplicant(token.getName(), webApplicant,
+                address, certificate, givenName, familyName);
+        applicantService.saveApplicant(applicant);
+        return applicant;
     }
 }

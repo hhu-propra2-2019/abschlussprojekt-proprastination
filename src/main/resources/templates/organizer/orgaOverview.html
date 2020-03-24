@@ -12,19 +12,18 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
         <script>
-            $.fn.dataTable.ext.order['dom-select'] = function  ( settings, col )
-            {
-                return this.api().column( col, {order:'index'} ).nodes().map( function ( td, i ) {
+            $.fn.dataTable.ext.order['dom-select'] = function (settings, col) {
+                return this.api().column(col, {order: 'index'}).nodes().map(function (td, i) {
                     return $('select', td).val();
-                } );
-            }
-            $(document).ready(function() {
-                $('#table_id').DataTable( {
-                    "paging":   false,
+                });
+            };
+            $(document).ready(function () {
+                $('#table_id').DataTable({
+                    "paging": false,
                     "searching": false,
-                    "info":     false,
+                    "info": false,
                     "columns": [
-                        {"name": "ProfPrio", "orderable": true, "orderDataType": "dom-select" },
+                        {"name": "ProfPrio", "orderable": true, "orderDataType": "dom-select"},
                         {"name": "AppPrio", "orderable": true},
                         {"name": "Rolle", "orderable": true},
                         {"name": "Note", "orderable": true},
@@ -68,8 +67,10 @@
             <tr th:each="appl : ${applications}">
                 <td class="text-center">
                     <select name="priority" id="priority">
-                        <option th:each="priority : ${T(mops.model.classes.Priority).values()}" th:text="${priority.label}"
-                                th:value="${priority}" th:selected="${priority==priority.Neutral}">++</option>
+                        <option th:each="priority : ${T(mops.model.classes.Priority).values()}"
+                                th:text="${priority.label}"
+                                th:selected="${priority==priority.NEUTRAL}" th:value="${priority}">++
+                        </option>
                     </select>
                 </td>
                 <td th:text="${appl.priority.label}" class="text-center">++</td>

@@ -25,4 +25,15 @@ public interface ModuleRepository extends CrudRepository<Module, Long> {
      * @return Module.
      */
     Module findDistinctByName(String name);
+
+    /**
+     * Delete single Module by id
+     * @param id
+     */
+    void deleteById(Long id);
+
+    /**
+     * delete All entries
+     */
+    void deleteAll();
 }
