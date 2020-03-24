@@ -77,8 +77,8 @@
                                     </div>
                                     <div class="row border" th:each="appl: ${applicant.webDistributorApplications}">
                                         <div class="col" th:text="${appl.moduleShort}">Modul1</div>
-                                        <div class="col" th:text="${appl.applicantPriority}">++</div>
-                                        <div class="col" th:text="${appl.organizerPriority}">+</div>
+                                        <div class="col" th:text="${appl.applicantPriority.label}">++</div>
+                                        <div class="col" th:text="${appl.organizerPriority.label}">+</div>
                                         <div class="col" th:text="${appl.organizerHours}">9</div>
                                         <div class="col" th:text="${appl.minHours} + '-' + ${appl.maxHours}">10 - 17</div>
                                     </div>

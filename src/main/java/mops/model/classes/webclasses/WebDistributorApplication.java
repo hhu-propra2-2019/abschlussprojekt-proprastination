@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mops.model.classes.Priority;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,8 +13,8 @@ import lombok.NoArgsConstructor;
 public class WebDistributorApplication {
     private String module;
     private String moduleShort;
-    private String applicantPriority;
-    private String organizerPriority;
+    private Priority applicantPriority;
+    private Priority organizerPriority;
     private String minHours;
     private String maxHours;
     private String organizerHours;
