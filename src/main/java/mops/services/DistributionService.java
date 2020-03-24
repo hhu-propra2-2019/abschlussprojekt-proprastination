@@ -18,6 +18,7 @@ import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -276,19 +277,25 @@ public class DistributionService {
         for (Distribution distribution : allDistributions) {
             distributedApplicants.addAll(distribution.getEmployees());
         }
-        allApplicants.removeIf(applicant -> distributedApplicants.indexOf(applicant) != -1);
+        allApplicants.removeIf(distributedApplicants::contains);
         return allApplicants;
     }
 
     /**
      * moves an applicant to other distribution
-     * @param applicantId
-     * @param distributionId
+     * @param applicantId the id of the applicant being moved
+     * @param distributionId the id of the new distribution
      */
     public void move(final String applicantId, final String distributionId) {
-        Distribution newDistribution = distributionRepository.findById(Long.parseLong(distributionId));
-        applicantService.findById(Long.parseLong(applicantId));
-        List<Distribution> distributions = distributionRepository.findAll();
-        for()
+        Optional<Distribution> newDistribution = distributionRepository.findById(Long.parseLong(distributionId));
+        Applicant applicant = applicantService.findById(Long.parseLong(applicantId));
+        if (newDistribution.isPresent()) {
+            for (Distribution distribution : distributionRepository.findAll()) {
+                distribution.getEmployees().remove(applicant);
+                distributionRepository.save(distribution);
+            }
+            newDistribution.get().getEmployees().add(applicant);
+            distributionRepository.save(newDistribution.get());
+        }
     }
 }

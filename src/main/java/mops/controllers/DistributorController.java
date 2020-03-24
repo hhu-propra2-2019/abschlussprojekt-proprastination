@@ -79,6 +79,6 @@ public class DistributorController {
             model.addAttribute("account", createAccountFromPrincipal(token));
             distributionService.move(applicantId, distributionId);
         }
-        return "distributor/distributorMain";
+        return "/error";
     }
 }
