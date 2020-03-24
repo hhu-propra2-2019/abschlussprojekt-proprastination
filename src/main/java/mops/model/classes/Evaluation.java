@@ -6,6 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.relational.core.mapping.Table;
 
 import javax.persistence.Entity;
@@ -28,6 +30,7 @@ public class Evaluation {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     @OneToOne(fetch = FetchType.EAGER)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Application application;
     private int hours;
     private String comment;

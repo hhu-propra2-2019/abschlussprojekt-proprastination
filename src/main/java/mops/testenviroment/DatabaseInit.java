@@ -155,10 +155,10 @@ public class DatabaseInit implements ServletContextInitializer {
     }
 
     private Module[] nextModules() {
-        long value = random.nextInt(5) + 1;
-        long value2 = random.nextInt(5) + 1;
+        long value = random.nextInt(3) + 1;
+        long value2 = random.nextInt(3) + 1;
         while (value == value2) {
-            value2 = random.nextInt(5) + 1;
+            value2 = random.nextInt(3) + 1;
         }
         Module[] modules = new Module[2];
         modules[0] = moduleRepository.findById(value).get();
@@ -358,16 +358,26 @@ public class DatabaseInit implements ServletContextInitializer {
     @SuppressWarnings("checkstyle:MagicNumber")
     private void fakeModules(final Faker faker) {
         String[] modulenames = {"Programmier Praktikum 1", "Programmier Praktikum 2",
-                "RDB",
-                "Algorithmen und Datenstrukturen", "Theoretische Informatik"};
-        for (String s : modulenames) {
+                "Rechner, Daten, Betrieb"};
+        String[] shortNames = {"ProPra1", "Propra2", "RDB"};
+        String[] profNames = {"Jens", "Chris", "Ursula"};
+        String[] sevenHour = {"1", "2", "3"};
+        String[] nineHour = {"11", "22", "33"};
+        String[] seventeenHour = {"111", "222", "333"};
+        String[] hour = {"0", "01", "02"};
+        for (int i = 0; i < modulenames.length; i++) {
             Instant date = faker.date().future(300, 30, TimeUnit.DAYS).toInstant();
             Module module = Module.builder()
-                    .name(s)
+                    .name(modulenames[i])
+                    .shortName(shortNames[i])
+                    .profName(profNames[i])
+                    .sevenHourLimit(sevenHour[i])
+                    .nineHourLimit(nineHour[i])
+                    .seventeenHourLimit(seventeenHour[i])
+                    .hourLimit(hour[i])
                     .deadline(date)
                     .build();
             moduleRepository.save(module);
         }
-
     }
 }
