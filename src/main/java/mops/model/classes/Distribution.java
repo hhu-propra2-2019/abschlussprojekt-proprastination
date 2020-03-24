@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Singular;
 import lombok.ToString;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.relational.core.mapping.Table;
 
 import javax.persistence.Entity;
@@ -32,11 +34,13 @@ public class Distribution {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     @ManyToOne(fetch = FetchType.EAGER)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "module_id")
     private Module module;
     @OneToMany(fetch = FetchType.EAGER)
     @Singular
     @JoinColumn(name = "applicant_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Applicant> employees;
 
 }

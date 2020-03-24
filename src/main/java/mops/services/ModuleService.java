@@ -58,4 +58,12 @@ public class ModuleService {
     public void save(final Module module) {
         moduleRepository.save(module);
     }
+    /**
+     * delete single module
+     * @param name of the module to be deleted
+     */
+    public void deleteModule(final String name) {
+        Module m = moduleRepository.findDistinctByName(name);
+        moduleRepository.deleteById(m.getId());
+    }
 }
