@@ -4,7 +4,6 @@ import mops.model.Document;
 import mops.model.classes.Address;
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
-import mops.model.classes.Certificate;
 import mops.model.classes.Module;
 import mops.model.classes.Priority;
 import mops.model.classes.Role;
@@ -38,7 +37,7 @@ class PDFServiceTest {
 
         Application application = Application.builder()
                 .module(module)
-                .priority(Priority.Negative)
+                .priority(Priority.NEGATIVE)
                 .role(Role.TUTOR)
                 .comment("asd")
                 .semester("SS2020")
@@ -50,7 +49,7 @@ class PDFServiceTest {
                 .houseNumber("21B")
                 .city("London")
                 .country("England")
-                .zipcode(20394)
+                .zipcode("NW1 6XE")
                 .build();
 
         Applicant applicant = Applicant.builder()

@@ -90,24 +90,26 @@ public class DatabaseInit implements ServletContextInitializer {
     @SuppressWarnings("checkstyle:MagicNumber")
     public void fakeApplicants(final Faker faker) {
         for (int i = 0; i < ENTRYNUMBER; i++) {
+            String country = faker.address().countryCode();
             Address address = Address.builder()
                     .street(faker.address().streetName())
                     .houseNumber(faker.address().buildingNumber())
                     .city(faker.address().city())
-                    .country(faker.address().country())
-                    .zipcode(faker.number().numberBetween(10000, 99999))
+                    .country(country)
+                    .zipcode(faker.address().zipCodeByState(country))
                     .build();
 
             Certificate certificate = Certificate.builder()
-                    .course(faker.educator().course())
-                    .name(faker.funnyName().name())
+                    .course(faker.job().field())
+                    .name(faker.educator().course())
                     .build();
             Module[] modules = nextModules();
+            int[] hours = nextHours();
 
             Application application1 = Application.builder()
                     .module(modules[0])
-                    .minHours(faker.number().numberBetween(1, 10))
-                    .maxHours(faker.number().numberBetween(10, 17))
+                    .minHours(hours[0])
+                    .maxHours(hours[1])
                     .finalHours(nextFinalHour())
                     .lecturer(faker.name().fullName())
                     .grade(nextGrade())
@@ -119,8 +121,8 @@ public class DatabaseInit implements ServletContextInitializer {
 
             Application application2 = Application.builder()
                     .module(modules[1])
-                    .minHours(faker.number().numberBetween(1, 10))
-                    .maxHours(faker.number().numberBetween(10, 17))
+                    .minHours(hours[0])
+                    .maxHours(hours[1])
                     .finalHours(nextFinalHour())
                     .lecturer(faker.name().fullName())
                     .grade(nextGrade())
@@ -175,16 +177,16 @@ public class DatabaseInit implements ServletContextInitializer {
         Priority prio;
         switch (random.nextInt(4)) {
             case 0:
-                prio = Priority.SehrHoch;
+                prio = Priority.VERYHIGH;
                 break;
             case 1:
-                prio = Priority.Hoch;
+                prio = Priority.HIGH;
                 break;
             case 2:
-                prio = Priority.Neutral;
+                prio = Priority.NEUTRAL;
                 break;
             default:
-                prio = Priority.Negative;
+                prio = Priority.NEGATIVE;
                 break;
         }
         return prio;
@@ -193,6 +195,16 @@ public class DatabaseInit implements ServletContextInitializer {
     private int nextFinalHour() {
         int[] hours = {7, 9, 17};
         return hours[random.nextInt(3)];
+    }
+
+    private int[] nextHours() {
+        int[] hours = {7, 9, 17};
+        int[] ret = new int[2];
+        int x = random.nextInt(3);
+        ret[0] = hours[x];
+        int y = x + random.nextInt(3 - x);
+        ret[1] = hours[y];
+        return ret;
     }
 
     private double nextGrade() {
@@ -230,13 +242,13 @@ public class DatabaseInit implements ServletContextInitializer {
         Role ret;
         switch (random.nextInt(3)) {
             case 0:
-                ret = Role.KORREKTOR;
+                ret = Role.PROOFREADER;
                 break;
             case 1:
                 ret = Role.TUTOR;
                 break;
             default:
-                ret = Role.NONE;
+                ret = Role.BOTH;
                 break;
         }
         return ret;
@@ -244,26 +256,28 @@ public class DatabaseInit implements ServletContextInitializer {
 
     @SuppressWarnings("checkstyle:MagicNumber")
     private Applicant createMainRole(final String role, final Faker faker) {
+        String country = faker.address().countryCode();
         Address address = Address.builder()
                 .street(faker.address().streetName())
                 .houseNumber(faker.address().buildingNumber())
                 .city(faker.address().city())
-                .country(faker.address().country())
-                .zipcode(faker.number().numberBetween(10000, 99999))
+                .country(country)
+                .zipcode(faker.address().zipCodeByState(country))
                 .build();
 
         Certificate certificate = Certificate.builder()
-                .course(faker.educator().course())
-                .name("Bachelor")
+                .course(faker.job().field())
+                .name(faker.educator().course())
                 .build();
 
         Module[] modules = nextModules();
+        int[] hours = nextHours();
 
         Application application1 = Application.builder()
                 .module(modules[0])
                 .finalHours(nextFinalHour())
-                .minHours(faker.number().numberBetween(1, 10))
-                .maxHours(faker.number().numberBetween(10, 17))
+                .minHours(hours[0])
+                .maxHours(hours[1])
                 .lecturer(faker.name().fullName())
                 .grade(nextGrade())
                 .semester("SS2020")
@@ -275,8 +289,8 @@ public class DatabaseInit implements ServletContextInitializer {
         Application application2 = Application.builder()
                 .module(modules[1])
                 .finalHours(nextFinalHour())
-                .minHours(faker.number().numberBetween(1, 10))
-                .maxHours(faker.number().numberBetween(10, 17))
+                .minHours(hours[0])
+                .maxHours(hours[1])
                 .lecturer(faker.name().fullName())
                 .grade(nextGrade())
                 .semester("SS2020")

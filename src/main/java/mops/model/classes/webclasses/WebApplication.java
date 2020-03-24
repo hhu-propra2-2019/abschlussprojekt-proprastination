@@ -17,7 +17,8 @@ import mops.model.classes.Role;
 public class WebApplication {
     private long id;
     private Module module;
-    private int finalHours;
+    private int minHours;
+    private int maxHours;
     private Priority priority;
     private double grade;
     private String lecturer;

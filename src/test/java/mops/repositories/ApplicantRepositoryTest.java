@@ -45,7 +45,7 @@ class ApplicantRepositoryTest {
                 .street("1")
                 .city("Baumberg")
                 .country("Bergland")
-                .zipcode(22222)
+                .zipcode("22222")
                 .build();
         cert = Certificate.builder()
                 .name("Uni")
@@ -55,7 +55,7 @@ class ApplicantRepositoryTest {
                 .minHours(7)
                 .maxHours(17)
                 .module(module)
-                .priority(Priority.SehrHoch)
+                .priority(Priority.VERYHIGH)
                 .grade(1.3)
                 .lecturer("Prof")
                 .semester("SS2020")

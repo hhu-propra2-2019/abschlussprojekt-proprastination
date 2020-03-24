@@ -119,8 +119,15 @@
                         <div class="col-auto">
                             <div class="row">
                                 <i class="fa fa-ra"></i>
-                                <label for="worktime"><i class="fas fa-business-time"></i>Arbeitszeit:&nbsp;</label>
-                                <label id="worktime" th:text="${appl.finalHours}">24/7</label>
+                                <label for="minworktime"><i class="fas fa-business-time"></i>Min.
+                                    Arbeitszeit:&nbsp;</label>
+                                <label id="minworktime" th:text="${appl.minHours}">24/7</label>
+                            </div>
+                            <div class="row">
+                                <i class="fa fa-ra"></i>
+                                <label for="maxworktime"><i class="fas fa-business-time"></i>Max.
+                                    Arbeitszeit:&nbsp;</label>
+                                <label id="maxworktime" th:text="${appl.maxHours}">24/7</label>
                             </div>
                             <div class="row">
                                 <label for="grade"><i class="fas fa-graduation-cap"></i>Note:&nbsp;</label>

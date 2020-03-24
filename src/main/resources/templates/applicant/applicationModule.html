@@ -33,19 +33,33 @@
         <!-- Restlichen Inhalt hier einfügen! -->
         <form th:action="${weiteresModul}" th:method="POST" th:object="${webApplication}">
             <div class="card bg-light mb-3 border-primary">
-                <div class="card-header"><h2 th:text="${modul}"></h2>
-                    <input th:type="hidden" th:value="${modul}"
-                           th:field="*{module}" th:attr="value = ${webApplication.module}">
+                <div class="card-header"><h2 th:text="${module.name}"></h2>
+                    <input th:field="*{module}" th:type="hidden"
+                           th:value="${module}">
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-                            <label th:for="workload">
-                                Geben Sie bitte an wie viele Stunden pro Woche sie arbeiten möchten
+                            <label th:for="minworkload">
+                                Geben Sie bitte an wie viele Stunden Sie minimal pro Woche sie arbeiten möchten
                             </label> <br>
-                            <select th:name="workload" th:id="workload" class="form-control" required
-                            th:field="*{workload}" th:attr="value = ${webApplication.workload}">
-                                <option value="0" disabled selected hidden>Arbeitszeit</optionth>
+                            <select class="form-control" required th:attr="value = ${webApplication.minHours}"
+                                    th:field="*{minHours}"
+                                    th:id="workload" th:name="minworkload">
+                                <option disabled hidden selected value="0">Arbeitszeit</option>
+                                <option th:value="7">7 Stunden/Woche</option>
+                                <option th:value="9">9 Stunden/Woche</option>
+                                <option th:value="17">17 Stunden/Woche</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label th:for="maxworkload">
+                                Geben Sie bitte an wie viele Stunden Sie maximal pro Woche sie arbeiten möchten
+                            </label> <br>
+                            <select class="form-control" required th:attr="value = ${webApplication.maxHours}"
+                                    th:field="*{maxHours}"
+                                    th:id="workload" th:name="maxworkload">
+                                <option disabled hidden selected value="0">Arbeitszeit</option>
                                 <option th:value="7">7 Stunden/Woche</option>
                                 <option th:value="9">9 Stunden/Woche</option>
                                 <option th:value="17">17 Stunden/Woche</option>
@@ -54,19 +68,19 @@
                         <div class="col">
                             <label th:for="grade">Geben die von Ihnen in diesem Modul erreichte Note an</label> <br>
                             <select th:name="grade" th:id="grade" class="form-control" required
-                            th:field="*{grade}" th:attr="value = ${webApplication.grade}">
+                                    th:attr="value = ${webApplication.grade}" th:field="*{grade}">
                                 <option th:value="0" disabled selected hidden>Note</option>
-                                <option th:value="10">1,0</option>
-                                <option th:value="13">1,3</option>
-                                <option th:value="17">1,7</option>
-                                <option th:value="20">2,0</option>
-                                <option th:value="23">2,3</option>
-                                <option th:value="27">2,7</option>
-                                <option th:value="30">3,0</option>
-                                <option th:value="33">3,3</option>
-                                <option th:value="37">3,7</option>
-                                <option th:value="40">4,0</option>
-                                <option th:value="50">5,0</option>
+                                <option th:value="1.0">1,0</option>
+                                <option th:value="1.3">1,3</option>
+                                <option th:value="1.7">1,7</option>
+                                <option th:value="2.0">2,0</option>
+                                <option th:value="2.3">2,3</option>
+                                <option th:value="2.7">2,7</option>
+                                <option th:value="3.0">3,0</option>
+                                <option th:value="3.3">3,3</option>
+                                <option th:value="3.7">3,7</option>
+                                <option th:value="4.0">4,0</option>
+                                <option th:value="5.0">5,0</option>
                             </select> <br>
                         </div>
                     </div>
@@ -91,12 +105,9 @@
                     <div class="row">
                         <div class="col">
                             <label th:for="role">Welche Aufgaben möchten Sie übernehmen</label> <br> <br>
-                            <select th:name="role" th:id="role" class="form-control" required
-                            th:field="*{role}" th:attr="value = ${webApplication.role}">
-                                <option value="" disabled selected hidden>Aufgaben</option>
-                                <option th:value="corrctor">Korrektor</option>
-                                <option th:value="correctorandtutor">Korrektor und Tutor</option>
-                                <option th:value="nomatter">Ist mir egal</option>
+                            <select class="form-control" id="tasks" name="tasks" th:field="*{role}">
+                                <option th:each="role : ${T(mops.model.classes.Role).values()}" th:text="${role.label}"
+                                        th:value="${role}"></option>
                             </select>
                         </div>
                         <div class="col">
@@ -104,13 +115,10 @@
                                 Geben Sie bitte hier ihre Priorität für dieses Modul an,
                                 falls sie vor haben sich noch bei anderen Modulen zu bewerben
                             </label> <br>
-                            <select th:name="priority" th:id="priority" class="form-control" required
-                            th:field="*{priority}" th:attr="value = ${webApplication.priority}">
-                                <option value="0" disabled selected hidden>Priorität</option>
-                                <option th:value="1">++</option>
-                                <option th:value="2">+</option>
-                                <option th:value="3">o</option>
-                                <option th:value="3">-</option>
+                            <select class="form-control" id="priority" name="priority" th:field="*{priority}">
+                                <option th:each="module : ${T(mops.model.classes.Priority).values()}"
+                                        th:text="${module.label}" th:value="${module}">++
+                                </option>
                             </select> <br>
                         </div>
                     </div>
