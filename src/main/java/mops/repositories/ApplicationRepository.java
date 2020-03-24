@@ -11,6 +11,16 @@ import java.util.List;
 public interface ApplicationRepository extends CrudRepository<Application, Long> {
 
     /**
+     * Finds application by module and hours
+     * @param module the module
+     * @return the applications
+     */
+    List<Application> findByModule(Module module);
+
+    @Override
+    List<Application> findAll();
+
+    /**
      * Finds all applications for a module
      * @param module the module
      * @return the applications

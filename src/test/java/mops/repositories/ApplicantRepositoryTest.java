@@ -9,6 +9,7 @@ import mops.model.classes.Priority;
 import mops.model.classes.Role;
 import mops.services.ApplicantService;
 import mops.services.ModuleService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,6 +33,12 @@ class ApplicantRepositoryTest {
     Certificate cert;
     Address address;
 
+    @AfterEach
+    void setdown() {
+        service.deleteAll();
+        moduleService.deleteAll();
+    }
+
 
     @Test
     public void test() {
@@ -45,7 +52,7 @@ class ApplicantRepositoryTest {
                 .street("1")
                 .city("Baumberg")
                 .country("Bergland")
-                .zipcode(22222)
+                .zipcode("22222")
                 .build();
         cert = Certificate.builder()
                 .name("Uni")
@@ -55,7 +62,7 @@ class ApplicantRepositoryTest {
                 .minHours(7)
                 .maxHours(17)
                 .module(module)
-                .priority(Priority.SehrHoch)
+                .priority(Priority.VERYHIGH)
                 .grade(1.3)
                 .lecturer("Prof")
                 .semester("SS2020")

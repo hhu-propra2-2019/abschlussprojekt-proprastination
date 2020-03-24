@@ -1,9 +1,9 @@
 package mops.model.classes;
 
 public enum Role {
-    KORREKTOR("Korrektor"),
+    PROOFREADER("Korrektor"),
     TUTOR("Tutor"),
-    NONE("Ist mir egal");
+    BOTH("Korrektor und Tutor");
 
     private final String label;
 

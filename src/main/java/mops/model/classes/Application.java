@@ -47,9 +47,6 @@ public class Application {
     @Enumerated(EnumType.STRING)
     private Role role;
     private String comment;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Applicant applicant;
 }
 
 

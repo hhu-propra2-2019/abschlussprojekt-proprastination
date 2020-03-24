@@ -27,13 +27,13 @@ class EvaluationTest {
         Evaluation evaluation = Evaluation.builder()
                 .application(application)
                 .comment("He is awesome!")
-                .priority(Priority.SehrHoch)
+                .priority(Priority.VERYHIGH)
                 .build();
 
         assertThat(evaluation)
                 .hasFieldOrPropertyWithValue("application", application)
                 .hasFieldOrPropertyWithValue("comment", "He is awesome!")
-                .hasFieldOrPropertyWithValue("priority", Priority.SehrHoch);
+                .hasFieldOrPropertyWithValue("priority", Priority.VERYHIGH);
 
     }
 
@@ -42,15 +42,15 @@ class EvaluationTest {
         Evaluation evaluation = Evaluation.builder()
                 .application(application)
                 .comment("He is not awesome!")
-                .priority(Priority.Neutral)
+                .priority(Priority.NEUTRAL)
                 .build();
 
         String evalString = evaluation.toString();
         String expected = "Evaluation(application=Application(minHours=0, finalHours=0, maxHours=0, " +
                 "module=Module(name=Info4, deadline=1970-01-01T00:01:40Z, shortName=null, profName=null, " +
                 "sevenHourLimit=null, nineHourLimit=null, seventeenHourLimit=null, hourLimit=null), priority=null," +
-                " grade=0.0, lecturer=null, semester=null, role=null, comment=null, applicant=null), hours=0," +
-                " comment=He is not awesome!, priority=Neutral)";
+                " grade=0.0, lecturer=null, semester=null, role=null, comment=null), hours=0," +
+                " comment=He is not awesome!, priority=NEUTRAL)";
         assertThat(evalString).isEqualTo(expected);
     }
 
@@ -59,19 +59,19 @@ class EvaluationTest {
         Evaluation evaluation = Evaluation.builder()
                 .application(application)
                 .comment("He is the best")
-                .priority(Priority.SehrHoch)
+                .priority(Priority.VERYHIGH)
                 .build();
 
         Evaluation evaluation2 = Evaluation.builder()
                 .application(application)
                 .comment("He is the best")
-                .priority(Priority.SehrHoch)
+                .priority(Priority.VERYHIGH)
                 .build();
 
         Evaluation evaluation3 = Evaluation.builder()
                 .application(application)
                 .comment("He is awesome!")
-                .priority(Priority.Negative)
+                .priority(Priority.NEGATIVE)
                 .build();
 
         assertThat(evaluation).isEqualTo(evaluation2);

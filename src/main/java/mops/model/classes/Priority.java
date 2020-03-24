@@ -1,10 +1,10 @@
 package mops.model.classes;
 
 public enum Priority {
-    SehrHoch("++", 1),
-    Hoch("+", 2),
-    Neutral("O", 3),
-    Negative("-", 4);
+    VERYHIGH("++", 1),
+    HIGH("+", 2),
+    NEUTRAL("O", 3),
+    NEGATIVE("-", 4);
 
     private final String label;
     private final int value;

@@ -54,7 +54,7 @@
                             </div>
                             <div class="row">
                                 <label for="email">E-Mail:&nbsp;</label>
-                                <label id="email">maxmustermann@mustermail.de</label>
+                                <label id="email" th:text="${email}">maxmustermann@mustermail.de</label>
                             </div>
                             <div class="row">
                                 <label for="streetplusnumber">Straße und Hausnummer:&nbsp;</label>
@@ -89,14 +89,15 @@
                                 <label id="graduation" th:text="${applicant.certs.name}">Bachelor</label>
                             </div>
                             <div class="row">
-                                <label for="graduationsubject">Berreits Abgeschlossenes Fach:&nbsp;</label>
+                                <label for="graduationsubject">Bereits Abgeschlossenes Fach:&nbsp;</label>
                                 <label id="graduationsubject" th:text="${applicant.certs.course}">BWL</label>
                             </div>
                             <div class="row">
                                 <label for="information">Ihre sonstigen Angaben:&nbsp;</label>
                             </div>
                             <div class="row">
-                                <label id="information">Nehmt mich, denn ich bin sehr gut ...</label>
+                                <label id="information" th:text="${applicant.comment}">Nehmt mich, denn ich bin sehr gut
+                                    ...</label>
                             </div>
                         </div>
                     </div>
@@ -119,8 +120,15 @@
                         <div class="col-auto">
                             <div class="row">
                                 <i class="fa fa-ra"></i>
-                                <label for="worktime"><i class="fas fa-business-time"></i>Arbeitszeit:&nbsp;</label>
-                                <label id="worktime" th:text="${appl.finalHours}">24/7</label>
+                                <label for="minworktime"><i class="fas fa-business-time"></i>Min.
+                                    Arbeitszeit:&nbsp;</label>
+                                <label id="minworktime" th:text="${appl.minHours}">24/7</label>
+                            </div>
+                            <div class="row">
+                                <i class="fa fa-ra"></i>
+                                <label for="maxworktime"><i class="fas fa-business-time"></i>Max.
+                                    Arbeitszeit:&nbsp;</label>
+                                <label id="maxworktime" th:text="${appl.maxHours}">24/7</label>
                             </div>
                             <div class="row">
                                 <label for="grade"><i class="fas fa-graduation-cap"></i>Note:&nbsp;</label>

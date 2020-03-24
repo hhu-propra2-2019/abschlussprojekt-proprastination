@@ -42,7 +42,7 @@
                         </div>
                         <div class="col">
                             <h2><label class="text-center" th:text="${app.module.name}">[Modulname]</label></h2>
-                            <input th:field="*{module}" type="hidden">
+                            <input th:field="*{module}" th:value="${app.module.name}" type="hidden">
                             <input th:field="*{id}" type="hidden">
 
                         </div>
@@ -56,17 +56,27 @@
 
 
                     <div class="row">
-                        <div class="form-group col-md-6">
-                            <label for="workload">
-                                Geben Sie bitte an wie viele Stunden pro Woche sie arbeiten möchten
+                        <div class=" col-md-3">
+                            <label for="minload">
+                                Minimale Stunden pro Woche
                             </label> <br>
-                            <select class="form-control" id="workload" name="workload" th:field="*{finalHours}">
+                            <select class="form-control" id="minload" name="workload" th:field="*{minHours}">
                                 <option value="7">7 Stunden/Woche</option>
                                 <option value="9">9 Stunden/Woche</option>
                                 <option value="17">17 Stunden/Woche</option>
                             </select>
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="col-md-3">
+                            <label for="maxload">
+                                Maximale Stunden pro Woche
+                            </label> <br>
+                            <select class="form-control" id="maxload" name="workload" th:field="*{maxHours}">
+                                <option value="7">7 Stunden/Woche</option>
+                                <option value="9">9 Stunden/Woche</option>
+                                <option value="17">17 Stunden/Woche</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
                             <label for="grade">Geben die von Ihnen in diesem Modul erreichte Note an</label> <br>
 
                             <select class="form-control" id="grade" name="grade" th:field="*{grade}">
@@ -87,13 +97,13 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-md-6">
+                        <div class="col-md-6">
                             <label for="semester">In welchem Semester haben Sie dieses Modul bestanden</label> <br>
                             <input class="form-control" id="semester" name="semester" required th:field="*{semester}"
                                    type="text">
                             <br>
                         </div>
-                        <div class="form-group col-6">
+                        <div class="col-6">
                             <label for="lecturer">Bei welchem Dozent haben Sie dieses Modul bestanden</label> <br>
                             <input class="form-control" id="lecturer" name="lecturer" placeholder="Dozent" required
                                    th:field="*{lecturer}"
@@ -102,14 +112,14 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-6">
+                        <div class="col-6">
                             <label for="tasks">Welche Aufgaben möchten Sie übernehmen</label> <br> <br>
                             <select class="form-control" id="tasks" name="tasks" th:field="*{role}">
                                 <option th:each="role : ${T(mops.model.classes.Role).values()}" th:text="${role.label}"
                                         th:value="${role}"></option>
                             </select>
                         </div>
-                        <div class="form-group col-6">
+                        <div class="col-6">
                             <label for="priority">
                                 Geben Sie bitte hier ihre Priorität für dieses Modul an,
                                 falls sie vor haben sich noch bei anderen Modulen zu bewerben
@@ -119,6 +129,23 @@
                                         th:text="${module.label}" th:value="${module}">++
                                 </option>
                             </select> <br>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col">
+                                <label>
+                                    Beschreiben Sie hier kurz Ihre bisherigen Erfahrungen und sonstige Anmerkungen:
+                                </label> <br>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                            <textarea maxlength="1000" rows="6" th:attr="value = ${comment}" th:class="form-control"
+                                      th:field="*{comment}"
+                                      th:id="comment" th:name="comment"
+                            ></textarea> <br>
+                            </div>
                         </div>
                     </div>
                 </div>
