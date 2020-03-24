@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class WebAddress {
     private String street;
+    private String number;
     private String city;
-    private int zipcode;
+    private String zipcode;
 }

@@ -220,7 +220,7 @@ public class ApplicationController {
             Address address = Address.builder().
                     street(street).
                     city(city).
-                    zipcode(Integer.parseInt(plz)).
+                    zipcode(plz).
                     build();
             Certificate cert = Certificate.builder()
                     .name(graduation)

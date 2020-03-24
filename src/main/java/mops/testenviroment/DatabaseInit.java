@@ -95,7 +95,7 @@ public class DatabaseInit implements ServletContextInitializer {
                     .houseNumber(faker.address().buildingNumber())
                     .city(faker.address().city())
                     .country(faker.address().country())
-                    .zipcode(faker.number().numberBetween(10000, 99999))
+                    .zipcode(Integer.toString(faker.number().numberBetween(10000, 99999)))
                     .build();
 
             Certificate certificate = Certificate.builder()
@@ -249,7 +249,7 @@ public class DatabaseInit implements ServletContextInitializer {
                 .houseNumber(faker.address().buildingNumber())
                 .city(faker.address().city())
                 .country(faker.address().country())
-                .zipcode(faker.number().numberBetween(10000, 99999))
+                .zipcode(Integer.toString(faker.number().numberBetween(10000, 99999)))
                 .build();
 
         Certificate certificate = Certificate.builder()
