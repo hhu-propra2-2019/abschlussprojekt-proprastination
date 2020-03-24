@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder(toBuilder = true)
 public class WebDistributorApplication {
     private String module;
+    private String moduleShort;
     private String applicantPriority;
     private String organizerPriority;
     private String minHours;

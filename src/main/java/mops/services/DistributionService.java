@@ -246,6 +246,7 @@ public class DistributionService {
                     .minHours(application.getMinHours() + "")
                     .maxHours(application.getMaxHours() + "")
                     .module(application.getModule().getName())
+                    .moduleShort(application.getModule().getShortName())
                     .organizerHours(evaluation.getHours() + "")
                     .organizerPriority(evaluation.getPriority() + "")
                     .build();
