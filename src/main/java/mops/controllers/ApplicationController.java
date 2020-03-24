@@ -177,8 +177,8 @@ public class ApplicationController {
             model.addAttribute("countries", CSVService.getCountries());
             model.addAttribute("courses", CSVService.getCourses());
         }
-        if (applicantBindingResult.hasErrors() | addressBindingResult.hasErrors()
-                | certificateBindingResult.hasErrors()) {
+        if (applicantBindingResult.hasErrors() || addressBindingResult.hasErrors()
+                || certificateBindingResult.hasErrors()) {
             return "applicant/applicationPersonal";
         }
         Address address = applicantService.buildAddress(webAddress);
