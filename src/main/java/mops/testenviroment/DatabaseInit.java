@@ -90,17 +90,18 @@ public class DatabaseInit implements ServletContextInitializer {
     @SuppressWarnings("checkstyle:MagicNumber")
     public void fakeApplicants(final Faker faker) {
         for (int i = 0; i < ENTRYNUMBER; i++) {
+            String country = faker.address().countryCode();
             Address address = Address.builder()
                     .street(faker.address().streetName())
                     .houseNumber(faker.address().buildingNumber())
                     .city(faker.address().city())
-                    .country(faker.address().countryCode())
-                    .zipcode(Integer.toString(faker.number().numberBetween(10000, 99999)))
+                    .country(country)
+                    .zipcode(faker.address().zipCodeByState(country))
                     .build();
 
             Certificate certificate = Certificate.builder()
-                    .course(faker.educator().course())
-                    .name(faker.funnyName().name())
+                    .course(faker.job().field())
+                    .name(faker.educator().course())
                     .build();
             Module[] modules = nextModules();
             int[] hours = nextHours();
@@ -255,17 +256,18 @@ public class DatabaseInit implements ServletContextInitializer {
 
     @SuppressWarnings("checkstyle:MagicNumber")
     private Applicant createMainRole(final String role, final Faker faker) {
+        String country = faker.address().countryCode();
         Address address = Address.builder()
                 .street(faker.address().streetName())
                 .houseNumber(faker.address().buildingNumber())
                 .city(faker.address().city())
-                .country(faker.address().countryCode())
-                .zipcode(Integer.toString(faker.number().numberBetween(10000, 99999)))
+                .country(country)
+                .zipcode(faker.address().zipCodeByState(country))
                 .build();
 
         Certificate certificate = Certificate.builder()
-                .course(faker.educator().course())
-                .name("Bachelor")
+                .course(faker.job().field())
+                .name(faker.educator().course())
                 .build();
 
         Module[] modules = nextModules();
