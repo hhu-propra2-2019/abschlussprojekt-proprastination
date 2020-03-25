@@ -29,13 +29,13 @@
         <div class="col-sm-6" th:each="distribution: ${distributions}">
             <div class="card bg-light mb-3 border-primary">
                 <div class="card-header d-flex justify-content-start align-items-start" th:text="${distribution.module}">Propra</div>
-                <div class="card-body" id="div1"  ondrop="drop(event, this)" ondragover="allowDrop(event)">
+                <div class="card-body" id="div1" th:id="drop + ${distribution.id}" th:attr="data-distributionId=${distribution.id}" ondrop="drop(event, this)" ondragover="allowDrop(event)">
                     <div th:each="applicant: ${distribution.webDistributorApplicants}">
-                        <div class="card w-100 bg-light mb-1 border-primary" th:id="drag + ${applicant.username}" id="drag1" data-applicantId="123" th:attr="data-applicantId=${applicant.username}" draggable="true" ondragstart="drag(event, this)">
+                        <div class="card w-100 bg-light mb-1 border-primary" th:id="drag + ${applicant.id}" id="drag1" th:attr="data-applicantId=${applicant.id}" draggable="true" ondragstart="drag(event)">
                             <div class="card-header">
                                 <div class="row">
                                     <div class="col text-center">
-                                        <button class="btn" data-toggle="collapse" th:attr="data-target='#collapse'+${applicant.username}" data-target="#collapse1"
+                                        <button class="btn" data-toggle="collapse" th:attr="data-target='#collapse'+${applicant.id}" data-target="#collapse1"
                                                 aria-expanded="false" th:text="${applicant.username}">
                                             Mamus100
                                         </button>
@@ -92,16 +92,17 @@
                 ev.preventDefault();
             }
 
-            function drag(ev, el) {
+            function drag(ev) {
                 ev.dataTransfer.setData("text", ev.target.id);
-                var test = el.data('applicantId');
-                alert(test);
             }
 
             function drop(ev, el) {
+                var button = $(ev.currentTarget);
                 ev.preventDefault();
                 var data = ev.dataTransfer.getData("text");
                 el.appendChild(document.getElementById(data));
+                var test = button.getElementById(ev.target);
+                alert(test);
             }
         </script>
     </div>

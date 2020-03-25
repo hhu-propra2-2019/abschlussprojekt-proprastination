@@ -220,6 +220,7 @@ public class DistributionService {
                     createWebDistributorApplications(applicationSet);
             WebDistributorApplicant webDistributorApplicant = WebDistributorApplicant.builder()
                     .username(applicant.getUniserial())
+                    .id(applicant.getId() + "")
                     .webDistributorApplications(webDistributorApplicationList)
                     .distributorHours("0")
                     .build();
@@ -243,6 +244,7 @@ public class DistributionService {
             }
             WebDistributorApplicant webDistributorApplicant = WebDistributorApplicant.builder()
                     .username(applicant.getUniserial())
+                    .id(applicant.getId() + "")
                     .webDistributorApplications(webDistributorApplicationList)
                     .distributorHours(finalHours + "")
                     .build();
