@@ -11,6 +11,9 @@
             .doneBackground{
                 background-color: rgba(108, 179, 255, 0.51);
             }
+            .wrongPosition{
+                background-color: red;
+            }
         </style>
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -31,7 +34,7 @@
                 <div class="card-header d-flex justify-content-start align-items-start" th:text="${distribution.module}">Propra</div>
                 <div class="card-body" id="div1" th:id="drop + ${distribution.id}" th:attr="data-distributionid=${distribution.id}" ondrop="drop(event, this)" ondragover="allowDrop(event)">
                     <div th:each="applicant: ${distribution.webDistributorApplicants}">
-                        <div class="card w-100 bg-light mb-1 border-primary" th:id="drag + ${applicant.id}" id="drag1" th:attr="data-applicantId=${applicant.id}" draggable="true" ondragstart="drag(event, this)">
+                        <div class="card w-100 bg-light mb-1 border-primary" th:id="drag + ${applicant.id}" id="drag1"  th:attr="data-applicantId=${applicant.id}" draggable="true" ondragstart="drag(event, this)">
                             <div class="card-header">
                                 <div class="row">
                                     <div class="col text-center">
@@ -61,7 +64,7 @@
                                         <div class="col" title="Stundenwunsch des Bewerbers" style="text-overflow: ellipsis; overflow: hidden; width: 20%; white-space: nowrap">Stunden</div>
                                     </div>
                                     <div class="row border" th:each="appl: ${applicant.webDistributorApplications}">
-                                        <div class="col" th:text="${appl.module}">Modul1</div>
+                                        <div class="col" th:text="${appl.module}" th:on="checkPosition(${distribution.module} != ${appl.module}, ${applicant.id})">Modul1</div>
                                         <div class="col" th:text="${appl.applicantPriority.label}">++</div>
                                         <div class="col" th:text="${appl.organizerPriority.label}">+</div>
                                         <div class="col" th:text="${appl.organizerHours}">9</div>
@@ -75,6 +78,16 @@
             </div>
         </div>
 
+        <script>
+            function checkPosition(wrong, id) {
+                if(wrong) {
+                    document.getElementById(id).addClass("wrongPosition");
+                }
+                else{
+                    document.getElementById(id).removeClass("wrongPosition");
+                }
+            }
+        </script>
         <script>
             $("input[type='checkbox']").change(function(){
                 if($(this).is(":checked")){
