@@ -63,7 +63,7 @@
                         <div class="card w-100 bg-light mb-1 border-primary" th:id="drag + ${applicant.id}" id="drag1"  th:attr="data-applicantId=${applicant.id}" draggable="true" ondragstart="drag(event, this)">
                             <div class="card-header" th:style="${applicant.checked} ? 'background-color: rgba(108, 179, 255, 0.51)'">
                                 <div class="row">
-                                    <div class="col-7 text-center">
+                                    <div class="col-7 text-left">
                                         <button class="btn" data-toggle="collapse" th:attr="data-target='#collapse'+${applicant.id}" data-target="#collapse1"
                                                 aria-expanded="false" th:text="${applicant.fullName} + ' [' + ${applicant.type} + ']'">
                                             Mamus100
@@ -90,7 +90,7 @@
                                         <div class="col" title="Stundenwunsch des Bewerbers" style="text-overflow: ellipsis; overflow: hidden; width: 20%; white-space: nowrap">Stunden</div>
                                     </div>
                                     <div class="row border" th:each="appl: ${applicant.webDistributorApplications}">
-                                        <div class="col" th:text="${appl.module}">Modul1</div>
+                                        <div class="col" th:text="${appl.moduleShort}">Modul1</div>
                                         <div class="col" th:text="${appl.applicantPriority.label}">++</div>
                                         <div class="col" th:text="${appl.organizerPriority.label}">+</div>
                                         <div class="col" th:text="${appl.organizerHours}">9</div>
