@@ -72,9 +72,7 @@
                             </div>
                             <div class="col-md-4 px-md-1 align-self-center">
                                 <div class="form-group">
-                                    <label th:for="grade">
-                                        Geben die von Ihnen in diesem Modul erreichte Note an
-                                    </label> <br>
+                                    <label th:for="grade">Geben Sie von Ihnen in diesem Modul erreichte Note an</label> <br>
                                     <select class="form-control" required th:attr="value = ${webApplication.grade}"
                                             th:field="*{grade}"
                                             th:id="grade" th:name="grade">
@@ -91,10 +89,12 @@
                                         <option th:value="4.0">4,0</option>
                                         <option th:value="5.0">5,0</option>
                                     </select>
+                                    <div th:if="${#fields.hasErrors('grade')}" class="text-danger">
+                                        Bitte geben Sie eine Note an.
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                     <div class="row form-row">
                         <div class="col">
@@ -108,6 +108,9 @@
                                     <option th:each="semester:${semesters}" th:text="${semester}"
                                             th:value="${semester}"></option>
                                 </select>
+                                <div th:if="${#fields.hasErrors('semester')}" class="text-danger">
+                                Bitte geben Sie ein Semester an.
+                                </div>
                                 <br>
                             </div>
                         </div>
@@ -119,6 +122,9 @@
                                        th:attr="value = ${webApplication.lecturer}" th:field="*{lecturer}"
                                        th:id="lecturer"
                                        th:name="lecturer" th:type="text">
+                                <div th:if="${#fields.hasErrors('lecturer')}" class="text-danger">
+                                Bitte geben Sie einen Dozenten an.
+                                </div>
                                 <br>
                             </div>
                         </div>

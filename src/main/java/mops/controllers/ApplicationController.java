@@ -15,9 +15,12 @@ import mops.services.ModuleService;
 import mops.services.StudentService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,12 +28,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.context.annotation.SessionScope;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
 @SessionScope
 @RequestMapping("/bewerbung2/bewerber")
 public class ApplicationController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationController.class);
 
     private ApplicantService applicantService;
 
@@ -158,17 +164,42 @@ public class ApplicationController {
      * saves Applicant into database and waits for moduleinformation
      * @param token Keycloaktoken
      * @param webApplicant webApplicant and its data
+     * @param applicantBindingResult the result of validating webApplicant
      * @param webAddress webAddress and its data
+     * @param addressBindingResult the result of validating webAddress
      * @param webCertificate webCertificate and its data
+     * @param certificateBindingResult the result of validating webCertificate
      * @param model Model
      * @param modules the module the Applicant wants to apply for
      * @return applicationModule.html
      */
+    @SuppressWarnings("checkstyle:ParameterNumber")
     @PostMapping("/modul")
     @Secured("ROLE_studentin")
-    public String modul(final KeycloakAuthenticationToken token, final WebApplicant webApplicant,
-                        final WebAddress webAddress, final WebCertificate webCertificate, final Model model,
-                        final String modules) {
+    public String modul(final KeycloakAuthenticationToken token,
+                            @Valid final WebApplicant webApplicant, final BindingResult applicantBindingResult,
+                            @Valid final WebAddress webAddress, final BindingResult addressBindingResult,
+                            final Model model,
+                            @Valid final WebCertificate webCertificate, final BindingResult certificateBindingResult,
+                            final String modules) {
+
+        if (applicantBindingResult.hasErrors()) {
+            applicantBindingResult.getAllErrors().forEach(err -> {
+                LOGGER.info("ERROR {}", err.getDefaultMessage());
+            });
+        }
+
+        if (addressBindingResult.hasErrors()) {
+            addressBindingResult.getAllErrors().forEach(err -> {
+                LOGGER.info("ERROR {}", err.getDefaultMessage());
+            });
+        }
+
+        if (certificateBindingResult.hasErrors()) {
+            certificateBindingResult.getAllErrors().forEach(err -> {
+                LOGGER.info("ERROR {}", err.getDefaultMessage());
+            });
+        }
 
         if (token != null) {
 
@@ -183,7 +214,13 @@ public class ApplicationController {
             model.addAttribute("modules", availableMods);
             model.addAttribute("webApplication", WebApplication.builder().module(modules).build());
         }
-        return "applicant/applicationModule";
+        if (applicantBindingResult.hasErrors() || addressBindingResult.hasErrors()
+                || certificateBindingResult.hasErrors()) {
+            model.addAttribute("countries", CSVService.getCountries());
+            model.addAttribute("courses", CSVService.getCourses());
+            return "applicant/applicationPersonal";
+        }
+       return "applicant/applicationModule";
     }
 
     /**
@@ -252,7 +289,7 @@ public class ApplicationController {
                                @ModelAttribute("applicant1") final Applicant applicant1) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
-            model.addAttribute("applicant", applicantService.findByUniserial("has220"));
+            model.addAttribute("applicant", applicantService.findByUniserial("has220"));        //?!?! WHAT IS DIS
             studentService.updateApplicantWithoutChangingApplications(applicant1);
         }
         return "applicant/applicationOverview";
@@ -283,11 +320,26 @@ public class ApplicationController {
      * @param token the keycloak token
      * @param model the model
      * @param webApplication the last webApplication and its information
+     * @param bindingResult the result of validating webApplication
      * @return the overviewhtml
      */
     @PostMapping("/uebersicht")
     public String overview(final KeycloakAuthenticationToken token, final Model model,
-                           final WebApplication webApplication) {
+                           @Valid final WebApplication webApplication,
+                           final BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            bindingResult.getAllErrors().forEach(err -> {
+                LOGGER.info("ERROR {}", err.getDefaultMessage());
+            });
+            Module module = moduleService.findModuleByName(webApplication.getModule());
+            model.addAttribute("newModule", module);
+            model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("semesters", CSVService.getSemester());
+            model.addAttribute("modules", CSVService.getModules());
+            model.addAttribute("webApplication", webApplication);
+            return "applicant/applicationModule";
+        }
+
         Applicant applicant = applicantService.findByUniserial(token.getName());
         Application application = studentService.buildApplication(webApplication);
         applicant = applicant.toBuilder().application(application).build();
