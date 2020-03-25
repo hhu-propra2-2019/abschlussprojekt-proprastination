@@ -20,6 +20,7 @@ public class PDFService {
 
     private Document document;
 
+
     /**
      * Generates an Application PDF given the parameters.
      *
@@ -68,6 +69,6 @@ public class PDFService {
         document.setField("Anschrift (PLZ)", String.valueOf(address.getZipcode()));
         document.setField("Anschrift (optionaler Adresszusatz)", address.getCity());
         document.setField("Anschrift (Ort)", address.getCity());
-        document.setField("Anschrift (Land)", address.getCountry());
+        document.setField("Anschrift (Land)", CSVService.getCodeForCountry(address.getCountry()));
     }
 }
