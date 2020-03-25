@@ -34,14 +34,14 @@ class CSVServiceTest{
     @Test
     void readFromCSVTest() {
         String csvName = "src/test/java/mops/test.csv";
-        String[] module1 = {"propra","21"};
+        String[] module1 = {"propra", "21"};
         List<String[]> data = new ArrayList<>();
         data.add(module1);
         List<String[]> readData;
         final Charset charset = StandardCharsets.UTF_8;
 
-        service.writeInCSV(csvName,data);
-        readData = service.readFromCSV(csvName);
+        CSVService.writeInCSV(csvName, data);
+        readData = CSVService.readFromCSV(csvName);
 
         try {
             CSVReader csvReader = new CSVReader(new FileReader(csvName, charset));
@@ -63,7 +63,7 @@ class CSVServiceTest{
         List<String[]> readData = new ArrayList<>();
         final Charset charset = StandardCharsets.UTF_8;
 
-        service.writeInCSV(csvName,data);
+        CSVService.writeInCSV(csvName, data);
 
         try {
             CSVReader csvReader = new CSVReader(new FileReader(csvName, charset));
@@ -81,11 +81,11 @@ class CSVServiceTest{
     void getCountriesTest() {
         List<String> countries;
         String csvname = "src/main/resources/csv/countries.csv";
-        List<String[]> data = service.readFromCSV(csvname);
+        List<String[]> data = CSVService.readFromCSV(csvname);
 
-        countries = service.getCountries();
+        countries = CSVService.getCountries();
 
-        assertThat(countries.size()).isEqualTo(197);
+        assertThat(countries.size()).isEqualTo(256);
         for (int i = 0; i<countries.size();i++) {
             String[] tmp = data.get(i);
             assertThat(countries.get(i)).isEqualTo(tmp[0]);
@@ -99,7 +99,7 @@ class CSVServiceTest{
 
     @Test
     void getModuleShortNamesTest() {
-        List<String> data = service.getShortModuleNames();
+        List<String> data = CSVService.getShortModuleNames();
 
         assertThat(data.get(0)).isEqualTo("RDB");
         assertThat(data.get(1)).isEqualTo("RA");
@@ -110,9 +110,9 @@ class CSVServiceTest{
     void getModulesTest() {
         List<String> modules;
         String csvname = "src/main/resources/csv/module.csv";
-        List<String[]> data = service.readFromCSV(csvname);
+        List<String[]> data = CSVService.readFromCSV(csvname);
 
-        modules = service.getModules();
+        modules = CSVService.getModules();
 
         assertThat(modules.size()).isEqualTo(3);
         for (int i = 0; i<modules.size();i++) {
@@ -125,7 +125,7 @@ class CSVServiceTest{
     void readLimitsFromCSV() {
         List<String> limits;
 
-        limits = service.getHourLimits();
+        limits = CSVService.getHourLimits();
 
         assertThat(limits.size()).isEqualTo(3);
         assertThat(limits.get(0)).isEqualTo("80");
@@ -137,7 +137,7 @@ class CSVServiceTest{
     void getModuleProfsTest() {
         List<String> profs;
 
-        profs = service.getModuleProfs();
+        profs = CSVService.getModuleProfs();
 
         assertThat(profs.size()).isEqualTo(3);
         assertThat(profs.get(0)).isEqualTo("Jens Bendisposto");
@@ -148,7 +148,7 @@ class CSVServiceTest{
     void getProfForModuleTestNotFail() {
         String prof;
 
-        prof = service.getProfForModule("Rechnernetze Datenbanken und Betriebssysteme");
+        prof = CSVService.getProfForModule("Rechnernetze Datenbanken und Betriebssysteme");
 
         assertThat(prof).isEqualTo("Jens Bendisposto");
     }
@@ -157,7 +157,7 @@ class CSVServiceTest{
     void getProfForModuleTestFail() {
         String prof;
 
-        prof = service.getProfForModule("RDBBBB");
+        prof = CSVService.getProfForModule("RDBBBB");
 
         assertThat(prof).isEqualTo("Not found");
     }
@@ -166,7 +166,7 @@ class CSVServiceTest{
     void getModulesForProfTest() {
         List<String> modules;
 
-        modules = service.getModulesForProf("Anna Wintour");
+        modules = CSVService.getModulesForProf("Anna Wintour");
 
         assertThat(modules.get(0)).isEqualTo("Theoretische Informatik");
     }
@@ -175,9 +175,9 @@ class CSVServiceTest{
     void getCourses() {
         List<String> courses;
         String csvname = "src/main/resources/csv/courses.csv";
-        List<String[]> data = service.readFromCSV(csvname);
+        List<String[]> data = CSVService.readFromCSV(csvname);
 
-        courses = service.getCourses();
+        courses = CSVService.getCourses();
 
         assertThat(courses.size()).isEqualTo(60);
         for (int i = 0; i<courses.size();i++) {
@@ -190,9 +190,9 @@ class CSVServiceTest{
     void getSemesterTest() {
         List<String> semester;
         String csvname = "src/main/resources/csv/semester.csv";
-        List<String[]> data = service.readFromCSV(csvname);
+        List<String[]> data = CSVService.readFromCSV(csvname);
 
-        semester = service.getSemester();
+        semester = CSVService.getSemester();
 
         assertThat(semester.size()).isEqualTo(29);
         for (int i = 0; i<semester.size();i++) {

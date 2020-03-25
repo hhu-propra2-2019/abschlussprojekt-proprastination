@@ -51,7 +51,7 @@
                                    th:field="*{number}" th:attr="value = ${webAddress.number}"
                                    type="text">
                         </div>
-                        <div class="col-5">
+                        <div class="col-3">
                             <input th:type="text" th:name="city" th:id="city"
                                    th:field="*{city}" th:attr="value = ${webAddress.city}"
                                    th:class="form-control" placeholder="Ort"
@@ -61,7 +61,7 @@
                             </div>
                             <br>
                         </div>
-                        <div class="col-2">
+                        <div class="col-1">
                             <input th:field="*{zipcode}" th:id="zipcode" th:name="zipcode" type="text"
                                    th:attr="value = ${webAddress.zipcode}"
                                    th:class="form-control" placeholder="Postleitzahl"
@@ -70,6 +70,13 @@
                                 Bitte geben Sie eine gültige Postleitzahl ein.
                             </div>
                             <br>
+                        </div>
+                        <div class="col">
+                            <select required th:class="form-control" th:field="*{country}"
+                                    th:id="country" th:name="country" th:value="${webAddress.country}">
+                                <option th:each="country:${countries}" th:text="${country}"
+                                        th:value="${country}"></option>
+                            </select>
                         </div>
                     </div>
                     <div class="row">

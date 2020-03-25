@@ -18,6 +18,7 @@ public class WebAddress {
     private String number;
     @NotBlank
     private String city;
+    private String country;
     @NotBlank
     private String zipcode;
 }
