@@ -223,9 +223,19 @@ public class CSVService {
 
     /**
      * returnes semesters from semester.csv
+     *
      * @return List of all Semesters
      */
     public static List<String> getSemester() {
         return getCSVData(0, "src/main/resources/csv/semester.csv");
+    }
+
+    /**
+     * Returns list of contry_codes.csv
+     *
+     * @return List of Country Codes
+     */
+    public static Object getCountryCodes() {
+        return getCSVData(0, "src/main/resources/csv/country_codes.csv");
     }
 }
