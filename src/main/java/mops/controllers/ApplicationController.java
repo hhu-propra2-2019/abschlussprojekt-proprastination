@@ -27,8 +27,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.context.annotation.SessionScope;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.time.Instant;
 import java.util.List;
 
 @Controller
@@ -295,17 +299,22 @@ public class ApplicationController {
         return "applicant/applicationOverview";
     }
 
+
     /**
-     * getmapping for overview
-     * @param token
-     * @param model
-     * @return overview html as string
+     * Bewerbungsübersicht
+     *
+     * @param token keycloak.
+     * @param model model.
+     * @param error errormessage.
+     * @return overview page.
      */
     @GetMapping("bewerbungsUebersicht")
     @Secured("ROLE_studentin")
-    public String dashboardOverview(final KeycloakAuthenticationToken token, final Model model) {
+    public String dashboardOverview(final KeycloakAuthenticationToken token, final Model model,
+                                    @ModelAttribute("errormessage") final String error) {
         if (token != null) {
             Account account = createAccountFromPrincipal(token);
+            model.addAttribute("errormessage", error);
             model.addAttribute("account", account);
             model.addAttribute("email", account.getEmail());
             Applicant applicant = applicantService.findByUniserial(account.getName());
@@ -411,27 +420,54 @@ public class ApplicationController {
     }
 
     /**
-     * The GetMapping for the edit form for modules
-     *
-     * @param token The KeycloakAuthentication
-     * @param model The Website model
-     * @param id    module id.
-     * @return The HTML file rendered as a String
+     * @param id         id of module.
+     * @param token      keycloaktoken
+     * @param request    http request.
+     * @param attributes redirect attributes
+     * @return RedirectView.
      */
-
     @GetMapping("/bearbeiteModulDaten")
     @Secured("ROLE_studentin")
-    public String editModuleData(@RequestParam("module") final long id,
+    public RedirectView validateEdit(@RequestParam("module") final long id, final KeycloakAuthenticationToken token,
+                                     final HttpServletRequest request, final RedirectAttributes attributes) {
+        if (token != null) {
+            Account account = createAccountFromPrincipal(token);
+            attributes.addFlashAttribute("account", account);
+            Applicant applicant = applicantService.findByUniserial(account.getName());
+            Application application = applicant.getApplicationById(id);
+
+            if (application == null) {
+                attributes.addFlashAttribute("errormessage", "Diese Bewerbung gehört dir nicht!");
+                return new RedirectView("bewerbungsUebersicht", true);
+            }
+            if (application.getModule().getDeadline().isBefore(Instant.now())) {
+                attributes.addFlashAttribute("errormessage", "Der Bewerbungszeitraum ist abgelaufen");
+                return new RedirectView("bewerbungsUebersicht", true);
+            }
+            attributes.addFlashAttribute("id", Long.toString(id));
+            attributes.addFlashAttribute("hello", "hello");
+            return new RedirectView("bearbeiteModul");
+        }
+        return new RedirectView("bewerbungsUebersicht", true);
+    }
+
+    /**
+     * Edit Module data
+     *
+     * @param id    application id
+     * @param token keycloak
+     * @param model model
+     * @return Edit Module Page
+     */
+    @GetMapping("/bearbeiteModul")
+    @Secured("ROLE_studentin")
+    public String editModuleData(@ModelAttribute("id") final long id,
                                  final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
+            Application application = applicationService.findById(id);
             Account account = createAccountFromPrincipal(token);
             model.addAttribute("account", account);
             model.addAttribute("semesters", CSVService.getSemester());
-            Applicant applicant = applicantService.findByUniserial(account.getName());
-            Application application = applicant.getApplicationById(id);
-            if (application == null) {
-                return "redirect:bewerbungsUebersicht";
-            }
             model.addAttribute("app", application);
         }
         return "applicant/applicationEditModule";
