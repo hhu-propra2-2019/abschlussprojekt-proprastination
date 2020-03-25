@@ -51,7 +51,7 @@
                                 <div class="row">
                                     <div class="col text-center">
                                         <button class="btn" data-toggle="collapse" th:attr="data-target='#collapse'+${applicant.id}" data-target="#collapse1"
-                                                aria-expanded="false" th:text="${applicant.username}">
+                                                aria-expanded="false" th:text="${applicant.username} + ' [' + ${applicant.type} + ']'">
                                             Mamus100
                                         </button>
                                     </div>

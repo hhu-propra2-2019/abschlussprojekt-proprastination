@@ -240,6 +240,7 @@ public class DistributionService {
             WebDistributorApplicant webDistributorApplicant = WebDistributorApplicant.builder()
                     .username(applicant.getUniserial())
                     .id(applicant.getId() + "")
+                    .type(getTypeOfApplicant(applicant))
                     .webDistributorApplications(webDistributorApplicationList)
                     .distributorHours("0")
                     .build();
@@ -264,6 +265,7 @@ public class DistributionService {
             WebDistributorApplicant webDistributorApplicant = WebDistributorApplicant.builder()
                     .username(applicant.getUniserial())
                     .id(applicant.getId() + "")
+                    .type(getTypeOfApplicant(applicant))
                     .webDistributorApplications(webDistributorApplicationList)
                     .distributorHours(finalHours + "")
                     .build();
@@ -317,6 +319,14 @@ public class DistributionService {
             }
             newDistribution.get().getEmployees().add(applicant);
             distributionRepository.save(newDistribution.get());
+        }
+    }
+
+    private String getTypeOfApplicant(final Applicant applicant) {
+        if ("Keins".equals(applicant.getCerts().getName())) {
+            return "SHK";
+        } else {
+            return "WHB";
         }
     }
 }
