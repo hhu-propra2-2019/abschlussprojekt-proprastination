@@ -229,6 +229,7 @@ public class ApplicationController {
      * saves the current module application + calls for information for another module
      * @param token security token
      * @param webApplication the Application with its information
+     * @param bindingResult the result of validating webApplication
      * @param model model
      * @param module the module the applicant wants to apply for next
      * @return html for another Modul
@@ -236,8 +237,26 @@ public class ApplicationController {
     @PostMapping("weiteresModul")
     @Secured("ROLE_studentin")
     public String anotherModule(final KeycloakAuthenticationToken token,
-                              final WebApplication webApplication, final Model model,
+                              @Valid final WebApplication webApplication, final BindingResult bindingResult,
+                              final Model model,
                               @RequestParam("modules") final String module) {
+        if (bindingResult.hasErrors()) {
+            bindingResult.getAllErrors().forEach(err -> {
+                LOGGER.info("ERROR {}", err.getDefaultMessage());
+            });
+            Module modul = moduleService.findModuleByName(webApplication.getModule());
+            Applicant applicant = applicantService.findByUniserial(token.getName());
+            List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
+            availableMods.remove(modul);
+
+            model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("newModule", modul);
+            model.addAttribute("semesters", CSVService.getSemester());
+            model.addAttribute("modules", availableMods);
+            model.addAttribute("webApplication", webApplication);
+            return "applicant/applicationModule";
+        }
+
         Applicant applicant = applicantService.findByUniserial(token.getName());
         Application application = studentService.buildApplication(webApplication);
         applicant = applicant.toBuilder().application(application).build();
@@ -380,11 +399,14 @@ public class ApplicationController {
             bindingResult.getAllErrors().forEach(err -> {
                 LOGGER.info("ERROR {}", err.getDefaultMessage());
             });
-            Module module = moduleService.findModuleByName(webApplication.getModule());
-            model.addAttribute("newModule", module);
+            Module modul = moduleService.findModuleByName(webApplication.getModule());
+            Applicant applicant = applicantService.findByUniserial(token.getName());
+            List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
+            availableMods.remove(modul);
+            model.addAttribute("newModule", modul);
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("semesters", CSVService.getSemester());
-            model.addAttribute("modules", CSVService.getModules());
+            model.addAttribute("modules", availableMods);
             model.addAttribute("webApplication", webApplication);
             return "applicant/applicationModule";
         }
