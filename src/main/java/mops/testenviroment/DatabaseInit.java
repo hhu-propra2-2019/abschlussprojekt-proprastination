@@ -101,7 +101,7 @@ public class DatabaseInit implements ServletContextInitializer {
 
             Certificate certificate = Certificate.builder()
                     .course(faker.job().field())
-                    .name(faker.educator().course())
+                    .name(nextCertificateName(faker))
                     .build();
             Module[] modules = nextModules();
             int[] hours = nextHours();
@@ -147,11 +147,20 @@ public class DatabaseInit implements ServletContextInitializer {
                     .gender(nextGender())
                     .certs(certificate)
                     .address(address)
+                    .checked(false)
                     .build();
             applicantRepository.save(applicant);
         }
         applicantRepository.save(createMainRole("studentin", faker));
 
+    }
+
+    private String nextCertificateName(final Faker faker) {
+        if (random.nextInt(5) != 4) {
+            return "Keins";
+        } else {
+            return faker.educator().course();
+        }
     }
 
     private Module[] nextModules() {

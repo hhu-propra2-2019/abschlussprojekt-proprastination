@@ -7,29 +7,9 @@
     <title>Name des Subsystems</title>
     <th:block th:fragment="headcontent">
         <!-- Links, Skripts, Styles hier einfügen! -->
-        <style>
-            .doneBackground{
-                background-color: rgba(108, 179, 255, 0.51);
-            }
-        </style>
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-        <script>
-            function allowDrop(ev) {
-                ev.preventDefault();
-            }
-
-            function drag(ev) {
-                ev.dataTransfer.setData("text", ev.target.id);
-            }
-
-            function drop(ev, el) {
-                ev.preventDefault();
-                var data = ev.dataTransfer.getData("text");
-                el.appendChild(document.getElementById(data));
-            }
-        </script>
     </th:block>
 </head>
 <body>
@@ -43,30 +23,45 @@
     <div class="row">
         <div class="col-sm-6" th:each="distribution: ${distributions}">
             <div class="card bg-light mb-3 border-primary">
-                <div class="card-header d-flex justify-content-start align-items-start" th:text="${distribution.module}">Propra</div>
-                <div class="card-body" id="div1" ondrop="drop(event, this)" ondragover="allowDrop(event)">
+                <div class="card-header d-flex justify-content-start align-items-start">
+                    <div class="col text-left" th:text="${distribution.module}">
+                        Propra
+                    </div>
+                    <div class="col text-right">
+                        <div th:text="'7 Stunden: ' + ${distribution.hours7}">
+                            4
+                        </div>
+                        <div th:text="'9 Stunden: ' + ${distribution.hours9}">
+                            7
+                        </div>
+                        <div th:text="'17 Stunden: ' + ${distribution.hours17}">
+                            3
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body" id="div1" th:id="drop + ${distribution.id}" th:attr="data-distributionid=${distribution.id}" ondrop="drop(event, this)" ondragover="allowDrop(event)">
                     <div th:each="applicant: ${distribution.webDistributorApplicants}">
-                        <div class="card w-100 bg-light mb-1 border-primary" th:id="drag + ${applicant.username}" id="drag1" draggable="true" ondragstart="drag(event)">
-                            <div class="card-header">
+                        <div class="card w-100 bg-light mb-1 border-primary" th:id="drag + ${applicant.id}" id="drag1"  th:attr="data-applicantId=${applicant.id}" draggable="true" ondragstart="drag(event, this)">
+                            <div class="card-header" th:style="${applicant.checked} ? 'background-color: rgba(108, 179, 255, 0.51)'">
                                 <div class="row">
                                     <div class="col text-center">
-                                        <button class="btn" data-toggle="collapse" th:attr="data-target='#collapse'+${applicant.username}" data-target="#collapse1"
-                                                aria-expanded="false" th:text="${applicant.fullName}">
+                                        <button class="btn" data-toggle="collapse" th:attr="data-target='#collapse'+${applicant.id}" data-target="#collapse1"
+                                                aria-expanded="false" th:text="${applicant.fullName} + ' [' + ${applicant.type} + ']'">
                                             Mamus100
                                         </button>
                                     </div>
                                     <div class="col">
                                         <div>
-                                            <input onClick="this.select();" type="text" size="1" th:value="${applicant.distributorHours}">
+                                            <input onClick="this.select();" type="text" size="1" th:value="${applicant.distributorHours}" th:attr="data-distributionId=${distribution.id}, data-applicantId=${applicant.id}" onblur="saveHours(this)">
                                             <label>Stunden</label>
                                         </div>
                                     </div>
                                     <div class="col text-right">
-                                        <input type="checkbox">
+                                        <input type="checkbox" th:checked="${applicant.checked}" th:attr="data-applicantId=${applicant.id}" onclick="saveChecked(this)">
                                     </div>
                                 </div>
                             </div>
-                            <div th:id="collapse + ${applicant.username}" id="collapse1" class="collapse">
+                            <div th:id="collapse + ${applicant.id}" id="collapse1" class="collapse">
                                 <div class="container text-center">
                                     <div class="row border font-weight-bold">
                                         <div class="col" title="Modul" style="text-overflow: ellipsis; overflow: hidden; width: 20%; white-space: nowrap">Modul</div>
@@ -89,18 +84,45 @@
                 </div>
             </div>
         </div>
-
-        <script>
-            $("input[type='checkbox']").change(function(){
-                if($(this).is(":checked")){
-                    $(this).parent().parent().parent().addClass("doneBackground");
-                }else{
-                    $(this).parent().parent().parent().removeClass("doneBackground");
-                }
-            });
-        </script>
         <script>
             $(".form-search-wrapper").remove()
+        </script>
+        <script>
+            function allowDrop(ev) {
+                ev.preventDefault();
+            }
+
+            function drag(ev, el) {
+                ev.dataTransfer.setData("text", ev.target.id);
+                ev.dataTransfer.setData("applicantId", ev.currentTarget.id);
+                var help = el.dataset.applicantid;
+            }
+
+            function drop(ev, el) {
+                ev.preventDefault();
+                var data = ev.dataTransfer.getData("text");
+                var applicantElId = ev.dataTransfer.getData("applicantId");
+                var applicantEl = document.getElementById(applicantElId);
+                var applicantId = applicantEl.dataset.applicantid;
+                el.appendChild(document.getElementById(data));
+                var distributorId = el.dataset.distributionid;
+
+                window.location.href = "/bewerbung2/verteiler/" + distributorId + "/" + applicantId + "/"
+            }
+
+            function saveHours(el) {
+                var hour = el.value;
+                var applicantId = el.dataset.applicantid;
+                var distributionId = el.dataset.distributionid;
+                window.location.href = "/bewerbung2/verteiler/saveHours/" + distributionId + "/" + applicantId + "/" + hour + "/"
+            }
+
+            function saveChecked(el) {
+                var checked = el.checked;
+                var applicantId = el.dataset.applicantid;
+                window.location.href = "/bewerbung2/verteiler/saveChecked/" + applicantId + "/" + checked + "/"
+            }
+
         </script>
     </div>
 </main>
