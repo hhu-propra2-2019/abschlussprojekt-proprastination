@@ -124,4 +124,21 @@ public class DistributorController {
         }
         return "redirect:/bewerbung2/verteiler/";
     }
+
+    /**
+     * Calls Distribution function
+     * @param token token
+     * @param model model
+     * @return redirect on mainpage as String
+     */
+    @GetMapping("/vorverteilen")
+    @Secured("ROLE_verteiler")
+    public String distribute(final KeycloakAuthenticationToken token, final Model model) {
+        if (token != null) {
+            model.addAttribute("account", createAccountFromPrincipal(token));
+            distributionService.changeAllFinalHours();
+            distributionService.distribute();
+        }
+        return "redirect:/bewerbung2/verteiler/";
+    }
 }

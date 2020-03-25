@@ -57,8 +57,7 @@ public class DistributionService {
      */
     @PostConstruct
     public void setup() {
-        changeAllFinalHours();
-        distribute();
+        distributionRepository.deleteAll();
     }
 
     /**
@@ -73,7 +72,7 @@ public class DistributionService {
     /**
      * distributes the Applicants
      */
-    private void distribute() {
+    public void distribute() {
         final int numberOfPriorities = 4;
         final int sevenHours = 7;
         final int nineHours = 9;
@@ -219,7 +218,7 @@ public class DistributionService {
         List<WebDistributorApplicant> webDistributorApplicantList =
                 convertUnassignedApplicantsToWebDistributorApplicants(findAllUnassigned());
         WebDistribution webDistribution = WebDistribution.builder()
-                .module("unassigned")
+                .module("Nicht Zugeteilt")
                 .hours7("0")
                 .hours9("0")
                 .hours17("0")

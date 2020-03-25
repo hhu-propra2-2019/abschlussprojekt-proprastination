@@ -21,6 +21,30 @@
 <main th:fragment="bodycontent">
     <!-- Restlichen Inhalt hier einfügen! -->
     <div class="row">
+        <div class="col">
+            <div class="card bg-light mb-3 border-primary">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-2"></div>
+                        <div class="col-2 text-center">
+                            <button class="btn btn-outline-primary openBtn form-control" data-target="#distributeModal" data-toggle="modal" type="button">
+                                Verteilen
+                            </button>
+                        </div>
+                        <div class="col-2"></div>
+                        <div class="col-2"></div>
+                        <div class="col-2">
+                            <button class="btn btn-outline-primary openBtn form-control" data-target="#sendModal" data-toggle="modal" type="button">
+                                Abschicken
+                            </button>
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-sm-6" th:each="distribution: ${distributions}">
             <div class="card bg-light mb-3 border-primary">
                 <div class="card-header d-flex justify-content-start align-items-start">
@@ -44,19 +68,19 @@
                         <div class="card w-100 bg-light mb-1 border-primary" th:id="drag + ${applicant.id}" id="drag1"  th:attr="data-applicantId=${applicant.id}" draggable="true" ondragstart="drag(event, this)">
                             <div class="card-header" th:style="${applicant.checked} ? 'background-color: rgba(108, 179, 255, 0.51)'">
                                 <div class="row">
-                                    <div class="col text-center">
+                                    <div class="col-7 text-left">
                                         <button class="btn" data-toggle="collapse" th:attr="data-target='#collapse'+${applicant.id}" data-target="#collapse1"
-                                                aria-expanded="false" th:text="${applicant.fullName} + ' [' + ${applicant.type} + ']'">
+                                                aria-expanded="false" th:text="'[' + ${applicant.type} + '] ' + ${applicant.fullName}">
                                             Mamus100
                                         </button>
                                     </div>
-                                    <div class="col">
+                                    <div class="col-4">
                                         <div>
                                             <input onClick="this.select();" type="text" size="1" th:value="${applicant.distributorHours}" th:attr="data-distributionId=${distribution.id}, data-applicantId=${applicant.id}" onblur="saveHours(this)">
                                             <label>Stunden</label>
                                         </div>
                                     </div>
-                                    <div class="col text-right">
+                                    <div class="col-1 text-right">
                                         <input type="checkbox" th:checked="${applicant.checked}" th:attr="data-applicantId=${applicant.id}" onclick="saveChecked(this)">
                                     </div>
                                 </div>
@@ -71,7 +95,7 @@
                                         <div class="col" title="Stundenwunsch des Bewerbers" style="text-overflow: ellipsis; overflow: hidden; width: 20%; white-space: nowrap">Stunden</div>
                                     </div>
                                     <div class="row border" th:each="appl: ${applicant.webDistributorApplications}">
-                                        <div class="col" th:text="${appl.module}">Modul1</div>
+                                        <div class="col" th:text="${appl.moduleShort}">Modul1</div>
                                         <div class="col" th:text="${appl.applicantPriority.label}">++</div>
                                         <div class="col" th:text="${appl.organizerPriority.label}">+</div>
                                         <div class="col" th:text="${appl.organizerHours}">9</div>
@@ -84,46 +108,103 @@
                 </div>
             </div>
         </div>
-        <script>
-            $(".form-search-wrapper").remove()
-        </script>
-        <script>
-            function allowDrop(ev) {
-                ev.preventDefault();
-            }
-
-            function drag(ev, el) {
-                ev.dataTransfer.setData("text", ev.target.id);
-                ev.dataTransfer.setData("applicantId", ev.currentTarget.id);
-                var help = el.dataset.applicantid;
-            }
-
-            function drop(ev, el) {
-                ev.preventDefault();
-                var data = ev.dataTransfer.getData("text");
-                var applicantElId = ev.dataTransfer.getData("applicantId");
-                var applicantEl = document.getElementById(applicantElId);
-                var applicantId = applicantEl.dataset.applicantid;
-                el.appendChild(document.getElementById(data));
-                var distributorId = el.dataset.distributionid;
-
-                window.location.href = "/bewerbung2/verteiler/" + distributorId + "/" + applicantId + "/"
-            }
-
-            function saveHours(el) {
-                var hour = el.value;
-                var applicantId = el.dataset.applicantid;
-                var distributionId = el.dataset.distributionid;
-                window.location.href = "/bewerbung2/verteiler/saveHours/" + distributionId + "/" + applicantId + "/" + hour + "/"
-            }
-
-            function saveChecked(el) {
-                var checked = el.checked;
-                var applicantId = el.dataset.applicantid;
-                window.location.href = "/bewerbung2/verteiler/saveChecked/" + applicantId + "/" + checked + "/"
-            }
-
-        </script>
     </div>
+
+    <div class="modal fade" id="distributeModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Automatisch verteilen?</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Mit diesem Button wird automatisch eine Vorverteilung generiert.
+                    <br>
+                    Jegliche bisher getätigten Änderungen werden zurückgesetzt.
+                    <br>
+                    <br>
+                    Möchten Sie die automatische Verteilung starten?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Abbrechen</button>
+                    <form th:action="@{/}" th:method="GET">
+                        <a class="btn btn-outline-primary" name="distribute"
+                           th:href="@{/bewerbung2/verteiler/vorverteilen}" type="submit"> Verteilen </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="sendModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Verteilung abschicken?</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Mit diesem Button bestätigen Sie Ihre Verteilung und generieren die Einstellungsbögen.
+                    <br>
+                    Danach besteht keine Möglichkeit mehr, die Verteilung zu bearbeiten.
+                    <br>
+                    <br>
+                    Möchten Sie die aktuelle Verteilung abschicken?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Abbrechen</button>
+                    <form th:action="@{/}" th:method="GET">
+                        <a class="btn btn-outline-primary" name="distribute"
+                           th:href="@{/bewerbung2/verteiler/}" type="submit"> Abschicken </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(".form-search-wrapper").remove()
+    </script>
+    <script>
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev, el) {
+            ev.dataTransfer.setData("text", ev.target.id);
+            ev.dataTransfer.setData("applicantId", ev.currentTarget.id);
+            var help = el.dataset.applicantid;
+        }
+
+        function drop(ev, el) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            var applicantElId = ev.dataTransfer.getData("applicantId");
+            var applicantEl = document.getElementById(applicantElId);
+            var applicantId = applicantEl.dataset.applicantid;
+            el.appendChild(document.getElementById(data));
+            var distributorId = el.dataset.distributionid;
+
+            window.location.href = "/bewerbung2/verteiler/" + distributorId + "/" + applicantId + "/"
+        }
+
+        function saveHours(el) {
+            var hour = el.value;
+            var applicantId = el.dataset.applicantid;
+            var distributionId = el.dataset.distributionid;
+            window.location.href = "/bewerbung2/verteiler/saveHours/" + distributionId + "/" + applicantId + "/" + hour + "/"
+        }
+
+        function saveChecked(el) {
+            var checked = el.checked;
+            var applicantId = el.dataset.applicantid;
+            window.location.href = "/bewerbung2/verteiler/saveChecked/" + applicantId + "/" + checked + "/"
+        }
+
+    </script>
 </main>
 </body>
