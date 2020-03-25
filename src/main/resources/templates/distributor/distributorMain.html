@@ -25,12 +25,12 @@
             <div class="card bg-light mb-3 border-primary">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-10">
+                        <div class="col-10 text-center">
                             Beim betätigen dieses Buttons werden alle Module angezeigt und die Studenten vorverteilt. Jegliche getätigte Änderungen werden zurückgesetzt.
                         </div>
                         <div class="col-2">
                             <form th:action="@{/}" th:method="GET">
-                                <a class="btn btn-outline-primary" name="back"
+                                <a class="btn btn-outline-primary float-right" name="back"
                                    th:href="@{/bewerbung2/verteiler/vorverteilen}" type="submit"> Verteilen </a>
                             </form>
                         </div>
