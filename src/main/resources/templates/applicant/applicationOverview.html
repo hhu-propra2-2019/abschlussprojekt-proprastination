@@ -30,6 +30,9 @@
 </header>
 <main th:fragment="bodycontent">
     <!-- Restlichen Inhalt hier einfügen! -->
+    <div class="alert alert-danger" role="alert" th:if="${!errormessage.equals('')}">
+        <p th:text="${errormessage}"></p>
+    </div>
     <div style="text-align: center">
         <div class="card bg-light mb-3 border-primary">
             <div class="card-body">

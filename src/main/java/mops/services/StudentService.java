@@ -15,6 +15,7 @@ import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 
+import java.time.Instant;
 import java.util.List;
 
 
@@ -196,6 +197,7 @@ public class StudentService {
         for (Application app : applicant.getApplications()) {
             modules.remove(app.getModule());
         }
+        modules.removeIf(module -> module.getDeadline().isBefore(Instant.now()));
         return modules;
     }
 
