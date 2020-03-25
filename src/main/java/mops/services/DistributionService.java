@@ -218,7 +218,7 @@ public class DistributionService {
         List<WebDistributorApplicant> webDistributorApplicantList =
                 convertUnassignedApplicantsToWebDistributorApplicants(findAllUnassigned());
         WebDistribution webDistribution = WebDistribution.builder()
-                .module("unassigned")
+                .module("Nicht Zugeteilt")
                 .hours7("0")
                 .hours9("0")
                 .hours17("0")
