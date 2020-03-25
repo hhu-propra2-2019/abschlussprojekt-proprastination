@@ -60,7 +60,7 @@
                 <th class="text-center">Min. Arbeitszeit</th>
                 <th class="text-center">Max. Arbeitszeit</th>
                 <th class="text-center">Stundenanzahl</th>
-                <th class="text-center">Unikennung</th>
+                <th class="text-center">Name</th>
                 <th class="text-center">Ganze Bewerbung</th>
             </tr>
             </thead>
@@ -92,7 +92,7 @@
                         <option th:value="17">17 Stunden</option>
                     </select>
                 </td>
-                <td th:text="${appl.applicant.firstName + ' ' + appl.applicant.surname}" class="text-center">Mamus100</td>
+                <td th:text="${appl.firstName + ' ' + appl.surname}" class="text-center">Mamus100</td>
                 <td class="text-center">
                     <button class="btn btn-outline-dark openBtn" data-target="#applicationModal" data-toggle="modal"
                             th:attr="data-id=${appl.id},data-name=${appl.firstName + ' ' + appl.surname}" type="button">
