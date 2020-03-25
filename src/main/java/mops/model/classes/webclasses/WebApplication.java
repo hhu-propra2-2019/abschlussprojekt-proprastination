@@ -22,13 +22,13 @@ public class WebApplication {
     public static final int MAX_COMMENT_LENGTH = 1000;
     private long id;
     private String module;
-    private int minHours;
-    private int maxHours;
-    private Priority priority;
-    private String module;
     @NotNull
     @Positive
-    private int workload;
+    private int minHours;
+    @NotNull
+    @Positive
+    private int maxHours;
+    private Priority priority;
     @NotNull
     @Positive
     private double grade;

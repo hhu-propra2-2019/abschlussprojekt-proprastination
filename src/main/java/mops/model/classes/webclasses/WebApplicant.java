@@ -27,7 +27,7 @@ public class WebApplicant {
     @NotBlank
     private String course;
     @NotBlank
-    @Pattern(regexp = "neueinstellung|weiterbeschaeftigung|wiedereinstellung")
+    @Pattern(regexp = "Einstellung|Weiterbeschäftigung|Änderung")
     private String status;
     @Size(max = MAX_COMMENT_LENGTH)
     private String comment;

@@ -216,6 +216,8 @@ public class ApplicationController {
         }
         if (applicantBindingResult.hasErrors() || addressBindingResult.hasErrors()
                 || certificateBindingResult.hasErrors()) {
+            model.addAttribute("countries", CSVService.getCountries());
+            model.addAttribute("courses", CSVService.getCourses());
             return "applicant/applicationPersonal";
         }
        return "applicant/applicationModule";
@@ -329,6 +331,8 @@ public class ApplicationController {
             bindingResult.getAllErrors().forEach(err -> {
                 LOGGER.info("ERROR {}", err.getDefaultMessage());
             });
+            Module module = moduleService.findModuleByName(webApplication.getModule());
+            model.addAttribute("newModule", module);
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("semesters", CSVService.getSemester());
             model.addAttribute("modules", CSVService.getModules());

@@ -38,10 +38,10 @@
                         <div class="col-4">
                             <input th:type="text" th:name="street"
                                    th:field="*{street}" th:attr="value = ${webAddress.street}"
-                                   class="form-control" placeholder="Straße und Hausnummer"
-                                   required pattern=".+ [0-9]+">
+                                   class="form-control" placeholder="Straße"
+                                   required >
                             <div th:if="${#fields.hasErrors('street')}" class="text-danger">
-                                Bitte geben Sie eine Straße gefolgt von einer Hausnummer ein.
+                                Bitte geben Sie eine Straße ein.
                             </div>
                             <br>
                             <br>
@@ -65,9 +65,9 @@
                             <input th:field="*{zipcode}" th:id="zipcode" th:name="zipcode" type="text"
                                    th:attr="value = ${webAddress.zipcode}"
                                    th:class="form-control" placeholder="Postleitzahl"
-                                   required pattern="^\d{5}$" minlength="5" maxlength="5">
+                                   required>
                             <div th:if="${#fields.hasErrors('zipcode')}" class="text-danger">
-                                Bitte geben Sie eine fünfstellige Postleitzahl ein.
+                                Bitte geben Sie eine gültige Postleitzahl ein.
                             </div>
                             <br>
                         </div>
@@ -108,12 +108,7 @@
                     <div class="row">
                         <div class="col-2">
                             <select name="gender" id="gender" class="form-control"
-<<<<<<< HEAD
-                                    th:field="*{gender}" th:attr="value = ${webApplicant.gender}"
-                                    required>
-=======
                                     th:field="*{gender}" required>
->>>>>>> develop
                                 <option value="" disabled selected hidden>Geschlecht</option>
                                 <option th:value="male">männlich</option>
                                 <option th:value="female">weiblich</option>
@@ -158,7 +153,7 @@
                                 <option th:value="Einstellung">
                                     Neueinstellung (bisher keine Anstellung an der HHU)
                                 </option>
-                                <option th:value="Weiterbeschaeftigung">
+                                <option th:value="Weiterbeschäftigung">
                                     Weiterbeschäftigung (bestehender Vertrag bis zum DD.MM.YYYY)
                                 </option>
                                 <option th:value="Änderung">
