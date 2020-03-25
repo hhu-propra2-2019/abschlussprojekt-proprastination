@@ -241,6 +241,7 @@ public class DistributionService {
                     .username(applicant.getUniserial())
                     .id(applicant.getId() + "")
                     .type(getTypeOfApplicant(applicant))
+                    .checked(applicant.isChecked())
                     .webDistributorApplications(webDistributorApplicationList)
                     .distributorHours("0")
                     .build();
@@ -266,6 +267,7 @@ public class DistributionService {
                     .username(applicant.getUniserial())
                     .id(applicant.getId() + "")
                     .type(getTypeOfApplicant(applicant))
+                    .checked(applicant.isChecked())
                     .webDistributorApplications(webDistributorApplicationList)
                     .distributorHours(finalHours + "")
                     .build();
