@@ -31,7 +31,7 @@
                 <div class="card-header d-flex justify-content-start align-items-start" th:text="${distribution.module}">Propra</div>
                 <div class="card-body" id="div1" th:id="drop + ${distribution.id}" th:attr="data-distributionid=${distribution.id}" ondrop="drop(event, this)" ondragover="allowDrop(event)">
                     <div th:each="applicant: ${distribution.webDistributorApplicants}">
-                        <div class="card w-100 bg-light mb-1 border-primary" th:id="drag + ${applicant.id}" id="drag1" th:attr="data-applicantId=${applicant.id}" draggable="true" ondragstart="drag(event)">
+                        <div class="card w-100 bg-light mb-1 border-primary" th:id="drag + ${applicant.id}" id="drag1" th:attr="data-applicantId=${applicant.id}" draggable="true" ondragstart="drag(event, this)">
                             <div class="card-header">
                                 <div class="row">
                                     <div class="col text-center">
@@ -92,16 +92,22 @@
                 ev.preventDefault();
             }
 
-            function drag(ev) {
+            function drag(ev, el) {
                 ev.dataTransfer.setData("text", ev.target.id);
+                ev.dataTransfer.setData("applicantId", ev.currentTarget.id)
+                var help = el.dataset.applicantid;
             }
 
             function drop(ev, el) {
                 ev.preventDefault();
                 var data = ev.dataTransfer.getData("text");
+                var applicantElId = ev.dataTransfer.getData("applicantId");
+                var applicantEl = document.getElementById(applicantElId);
+                var applicantId = applicantEl.dataset.applicantid;
                 el.appendChild(document.getElementById(data));
                 var test = el.dataset.distributionid;
-                alert(test);
+                alert(test + applicantId);
+
             }
         </script>
     </div>
