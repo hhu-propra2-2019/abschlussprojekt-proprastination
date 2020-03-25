@@ -209,6 +209,9 @@ public class DistributionService {
             WebDistribution webDistribution = WebDistribution.builder()
                     .module(distribution.getModule().getName())
                     .id(distribution.getId() + "")
+                    .hours7(distribution.getModule().getSevenHourLimit())
+                    .hours9(distribution.getModule().getNineHourLimit())
+                    .hours17(distribution.getModule().getSeventeenHourLimit())
                     .webDistributorApplicants(webDistributorApplicantList)
                     .build();
             webDistributionList.add(webDistribution);
@@ -217,6 +220,9 @@ public class DistributionService {
                 convertUnassignedApplicantsToWebDistributorApplicants(findAllUnassigned());
         WebDistribution webDistribution = WebDistribution.builder()
                 .module("unassigned")
+                .hours7("0")
+                .hours9("0")
+                .hours17("0")
                 .id(-1 + "")
                 .webDistributorApplicants(webDistributorApplicantList)
                 .build();
@@ -234,6 +240,7 @@ public class DistributionService {
             WebDistributorApplicant webDistributorApplicant = WebDistributorApplicant.builder()
                     .username(applicant.getUniserial())
                     .id(applicant.getId() + "")
+                    .type(getTypeOfApplicant(applicant))
                     .webDistributorApplications(webDistributorApplicationList)
                     .distributorHours("0")
                     .build();
@@ -258,6 +265,7 @@ public class DistributionService {
             WebDistributorApplicant webDistributorApplicant = WebDistributorApplicant.builder()
                     .username(applicant.getUniserial())
                     .id(applicant.getId() + "")
+                    .type(getTypeOfApplicant(applicant))
                     .webDistributorApplications(webDistributorApplicationList)
                     .distributorHours(finalHours + "")
                     .build();
@@ -311,6 +319,14 @@ public class DistributionService {
             }
             newDistribution.get().getEmployees().add(applicant);
             distributionRepository.save(newDistribution.get());
+        }
+    }
+
+    private String getTypeOfApplicant(final Applicant applicant) {
+        if ("Keins".equals(applicant.getCerts().getName())) {
+            return "SHK";
+        } else {
+            return "WHB";
         }
     }
 }

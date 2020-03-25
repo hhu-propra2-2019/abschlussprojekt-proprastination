@@ -14,5 +14,8 @@ import java.util.List;
 public class WebDistribution {
     private String module;
     private String id;
+    private String hours7;
+    private String hours9;
+    private String hours17;
     private List<WebDistributorApplicant> webDistributorApplicants;
 }

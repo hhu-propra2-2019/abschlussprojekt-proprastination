@@ -31,7 +31,22 @@
     <div class="row">
         <div class="col-sm-6" th:each="distribution: ${distributions}">
             <div class="card bg-light mb-3 border-primary">
-                <div class="card-header d-flex justify-content-start align-items-start" th:text="${distribution.module}">Propra</div>
+                <div class="card-header d-flex justify-content-start align-items-start">
+                    <div class="col text-left" th:text="${distribution.module}">
+                        Propra
+                    </div>
+                    <div class="col text-right">
+                        <div th:text="'7 Stunden: ' + ${distribution.hours7}">
+                            4
+                        </div>
+                        <div th:text="'9 Stunden: ' + ${distribution.hours9}">
+                            7
+                        </div>
+                        <div th:text="'17 Stunden: ' + ${distribution.hours17}">
+                            3
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body" id="div1" th:id="drop + ${distribution.id}" th:attr="data-distributionid=${distribution.id}" ondrop="drop(event, this)" ondragover="allowDrop(event)">
                     <div th:each="applicant: ${distribution.webDistributorApplicants}">
                         <div class="card w-100 bg-light mb-1 border-primary" th:id="drag + ${applicant.id}" id="drag1"  th:attr="data-applicantId=${applicant.id}" draggable="true" ondragstart="drag(event, this)">
@@ -39,7 +54,7 @@
                                 <div class="row">
                                     <div class="col text-center">
                                         <button class="btn" data-toggle="collapse" th:attr="data-target='#collapse'+${applicant.id}" data-target="#collapse1"
-                                                aria-expanded="false" th:text="${applicant.username}">
+                                                aria-expanded="false" th:text="${applicant.username} + ' [' + ${applicant.type} + ']'">
                                             Mamus100
                                         </button>
                                     </div>
