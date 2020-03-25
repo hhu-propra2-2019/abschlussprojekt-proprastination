@@ -21,6 +21,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -240,6 +241,10 @@ public class ApplicationController {
                               @Valid final WebApplication webApplication, final BindingResult bindingResult,
                               final Model model,
                               @RequestParam("modules") final String module) {
+        if (webApplication.getMinHours() > webApplication.getMaxHours()) {
+            bindingResult.addError(new FieldError("WebApplication", "maxHours",
+                    "Maximale Stundenzahl darf nicht kleiner als minimale sein."));
+        }
         if (bindingResult.hasErrors()) {
             bindingResult.getAllErrors().forEach(err -> {
                 LOGGER.info("ERROR {}", err.getDefaultMessage());
@@ -395,6 +400,10 @@ public class ApplicationController {
     public String overview(final KeycloakAuthenticationToken token, final Model model,
                            @Valid final WebApplication webApplication,
                            final BindingResult bindingResult) {
+        if (webApplication.getMinHours() > webApplication.getMaxHours()) {
+            bindingResult.addError(new FieldError("webApplication", "maxHours",
+                    "Maximale Stundenzahl darf nicht kleiner als minimale sein."));
+        }
         if (bindingResult.hasErrors()) {
             bindingResult.getAllErrors().forEach(err -> {
                 LOGGER.info("ERROR {}", err.getDefaultMessage());
