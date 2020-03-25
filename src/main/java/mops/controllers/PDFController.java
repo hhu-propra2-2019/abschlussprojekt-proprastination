@@ -19,7 +19,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.annotation.SessionScope;
 
 import java.io.File;
@@ -54,7 +58,9 @@ public class PDFController {
      * @param applicationService applicationservice
      */
     @SuppressWarnings("checkstyle:HiddenField")
-    public PDFController(final ApplicantService applicantService, final PDFService pdfService, final ModuleService moduleService,
+    public PDFController(final ApplicantService applicantService,
+                         final PDFService pdfService,
+                         final ModuleService moduleService,
                          final ApplicationService applicationService) {
         this.applicantService = applicantService;
         this.pdfService = pdfService;
@@ -73,11 +79,17 @@ public class PDFController {
     }
 
 
+    /**
+     * dummy overview for pdf download
+     * @param token token
+     * @param model model
+     * @return downloadhtml
+     */
     @GetMapping("/dummy")
     public String dummyPDFDownload(final KeycloakAuthenticationToken token, final Model model) {
         List<Module> modules = moduleService.getModules();
         List<String> moduleNames = new ArrayList<>();
-        for(Module module : modules) {
+        for (Module module : modules) {
             moduleNames.add(module.getName());
         }
         model.addAttribute("modules", moduleNames);
@@ -85,6 +97,13 @@ public class PDFController {
         return "pdfhandling";
     }
 
+    /**
+     * Choose applicant after chosen module and downlaod pdf
+     * @param token token
+     * @param model model
+     * @param module module
+     * @return applicant download pdf
+     */
     @PostMapping("/dummyApplicant")
     public String postDummyStudent(final KeycloakAuthenticationToken token, final Model model,
                                    @RequestParam("modulesStudent") final String module) {
@@ -96,7 +115,7 @@ public class PDFController {
             applicants.add(applicantService.findByApplications(application));
         }
         List<String> applicantUniserials = new ArrayList<>();
-        for(Applicant applicant : applicants) {
+        for (Applicant applicant : applicants) {
             applicantUniserials.add(applicant.getUniserial());
         }
         model.addAttribute("module", module);
@@ -105,6 +124,13 @@ public class PDFController {
         return "pdfhandlingapplicant";
     }
 
+    /**
+     * download pdf with given module and applicant
+     * @param token token
+     * @param module module
+     * @param applicant applicant
+     * @return download pdf
+     */
     @PostMapping("/dummyApplicantDone")
     public String postDummyStudentDone(final KeycloakAuthenticationToken token,
                                        @RequestParam("module") final String module,
@@ -112,12 +138,24 @@ public class PDFController {
         System.out.println("modul: " + module +  " applicant: " +  applicant);
         return "redirect:download?student=" + applicant + "&module=" + module;
     }
+
+    /**
+     * download all applications for this module
+     * @param token token
+     * @param module module
+     * @return module pdf
+     */
     @PostMapping("/dummyModule")
     public String postDummyModule(final KeycloakAuthenticationToken token,
                                   @RequestParam("module") final String module) {
         return "pdfhandling";
     }
 
+    /**
+     * download all applications
+     * @param token token
+     * @return module
+     */
     @PostMapping("/dummyAll")
     public String postDummyAll(final KeycloakAuthenticationToken token) {
         return "pdfhandling";
