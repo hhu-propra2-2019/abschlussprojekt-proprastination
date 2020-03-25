@@ -3,7 +3,10 @@ package mops.controllers;
 import mops.model.Account;
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
+import mops.model.classes.Module;
 import mops.services.ApplicantService;
+import mops.services.ApplicationService;
+import mops.services.ModuleService;
 import mops.services.PDFService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
@@ -16,8 +19,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.annotation.SessionScope;
 
@@ -26,6 +31,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -38,16 +45,27 @@ public class PDFController {
 
     private PDFService pdfService;
 
+    private ModuleService moduleService;
+
+    private ApplicationService applicationService;
+
     /**
      * Initiates PDF Controller
      *
      * @param applicantService applicantservice.
      * @param pdfService       pdfService.
+     * @param moduleService    moduleService
+     * @param applicationService applicationservice
      */
     @SuppressWarnings("checkstyle:HiddenField")
-    public PDFController(final ApplicantService applicantService, final PDFService pdfService) {
+    public PDFController(final ApplicantService applicantService,
+                         final PDFService pdfService,
+                         final ModuleService moduleService,
+                         final ApplicationService applicationService) {
         this.applicantService = applicantService;
         this.pdfService = pdfService;
+        this.moduleService = moduleService;
+        this.applicationService = applicationService;
     }
 
 
@@ -60,6 +78,88 @@ public class PDFController {
                 token.getAccount().getRoles());
     }
 
+
+    /**
+     * dummy overview for pdf download
+     * @param token token
+     * @param model model
+     * @return downloadhtml
+     */
+    @GetMapping("/dummy")
+    public String dummyPDFDownload(final KeycloakAuthenticationToken token, final Model model) {
+        List<Module> modules = moduleService.getModules();
+        List<String> moduleNames = new ArrayList<>();
+        for (Module module : modules) {
+            moduleNames.add(module.getName());
+        }
+        model.addAttribute("modules", moduleNames);
+        model.addAttribute("modulesStudent", moduleNames);
+        return "pdfhandling";
+    }
+
+    /**
+     * Choose applicant after chosen module and downlaod pdf
+     * @param token token
+     * @param model model
+     * @param module module
+     * @return applicant download pdf
+     */
+    @PostMapping("/dummyApplicant")
+    public String postDummyStudent(final KeycloakAuthenticationToken token, final Model model,
+                                   @RequestParam("modulesStudent") final String module) {
+
+        Module mod = moduleService.findModuleByName(module);
+        List<Application> applications = applicationService.findApplicationsByModule(mod);
+        List<Applicant> applicants = new ArrayList<>();
+        for (Application application : applications) {
+            applicants.add(applicantService.findByApplications(application));
+        }
+        List<String> applicantUniserials = new ArrayList<>();
+        for (Applicant applicant : applicants) {
+            applicantUniserials.add(applicant.getUniserial());
+        }
+        model.addAttribute("module", module);
+        model.addAttribute("applicants", applicantUniserials);
+
+        return "pdfhandlingapplicant";
+    }
+
+    /**
+     * download pdf with given module and applicant
+     * @param token token
+     * @param module module
+     * @param applicant applicant
+     * @return download pdf
+     */
+    @PostMapping("/dummyApplicantDone")
+    public String postDummyStudentDone(final KeycloakAuthenticationToken token,
+                                       @RequestParam("module") final String module,
+                                       @RequestParam("applicants") final String applicant) {
+        System.out.println("modul: " + module +  " applicant: " +  applicant);
+        return "redirect:download?student=" + applicant + "&module=" + module;
+    }
+
+    /**
+     * download all applications for this module
+     * @param token token
+     * @param module module
+     * @return module pdf
+     */
+    @PostMapping("/dummyModule")
+    public String postDummyModule(final KeycloakAuthenticationToken token,
+                                  @RequestParam("module") final String module) {
+        return "pdfhandling";
+    }
+
+    /**
+     * download all applications
+     * @param token token
+     * @return module
+     */
+    @PostMapping("/dummyAll")
+    public String postDummyAll(final KeycloakAuthenticationToken token) {
+        return "pdfhandling";
+    }
 
     /**
      * Returns a FileStream of the requested PDF.
@@ -87,6 +187,9 @@ public class PDFController {
             Applicant applicant;
             Optional<Application> application;
             try {
+                if (module == null) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+                }
                 applicant = applicantService.findByUniserial(student);
                 application = applicant.getApplications().stream()
                         .filter(p -> p.getModule().getName().equals(module)).findFirst();
