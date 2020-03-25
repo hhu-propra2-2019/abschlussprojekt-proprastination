@@ -256,15 +256,53 @@ public class ApplicationController {
      * Postmapping for editing personal data.
      * @param token keycloak
      * @param webApplicant applicant data
+     * @param applicantBindingResult the result of validating webApplicant
      * @param webAddress address data
+     * @param addressBindingResult the result of validating webAddress
      * @param webCertificate certificate data
+     * @param certificateBindingResult the result of validating webCertificate
      * @param model model
      * @return webpage
      */
+    @SuppressWarnings("checkstyle:ParameterNumber")
     @PostMapping("/uebersichtBearbeitet")
     @Secured("ROLE_studentin")
-    public String saveOverview(final KeycloakAuthenticationToken token, final WebApplicant webApplicant,
-                               final WebAddress webAddress, final WebCertificate webCertificate, final Model model) {
+    public String saveOverview(final KeycloakAuthenticationToken token,
+                               @Valid final WebApplicant webApplicant, final BindingResult applicantBindingResult,
+                               @Valid final WebAddress webAddress, final BindingResult addressBindingResult,
+                               @Valid final WebCertificate webCertificate, final BindingResult certificateBindingResult,
+                               final Model model) {
+
+
+        if (applicantBindingResult.hasErrors()) {
+            applicantBindingResult.getAllErrors().forEach(err -> {
+                LOGGER.info("ERROR {}", err.getDefaultMessage());
+            });
+        }
+
+        if (addressBindingResult.hasErrors()) {
+            addressBindingResult.getAllErrors().forEach(err -> {
+                LOGGER.info("ERROR {}", err.getDefaultMessage());
+            });
+        }
+
+        if (certificateBindingResult.hasErrors()) {
+            certificateBindingResult.getAllErrors().forEach(err -> {
+                LOGGER.info("ERROR {}", err.getDefaultMessage());
+            });
+        }
+
+        if (applicantBindingResult.hasErrors() || addressBindingResult.hasErrors()
+                || certificateBindingResult.hasErrors()) {
+            if (token != null) {
+                model.addAttribute("countries", CSVService.getCountries());
+                model.addAttribute("courses", CSVService.getCourses());
+                model.addAttribute("webApplicant", webApplicant);
+                model.addAttribute("webAddress", webAddress);
+                model.addAttribute("webCertificate", webCertificate);
+            }
+            return "applicant/applicationEditPersonal";
+        }
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
 
@@ -441,19 +479,33 @@ public class ApplicationController {
      * Edits the given Application.
      *
      * @param webApplication Changes Data in WebApplication format.
+     * @param bindingResult  The result of validating webApplication.
      * @param token          Keycloak.
      * @param model          Model.
      * @return mainpage.
      */
     @PostMapping(value = "/bearbeiteModulDaten")
     @Secured("ROLE_studentin")
-    public String postEditModuledata(final WebApplication webApplication, final KeycloakAuthenticationToken token,
+    public String postEditModuledata(@Valid final WebApplication webApplication, final BindingResult bindingResult,
+                                     final KeycloakAuthenticationToken token,
                                      final Model model) {
+            if (bindingResult.hasErrors()) {
+                bindingResult.getAllErrors().forEach(err -> {
+                    LOGGER.info("ERROR {}", err.getDefaultMessage());
+            });
+        }
+
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
             Application application = applicationService.findById(webApplication.getId());
             Application newApplication = studentService.changeApplication(webApplication, application);
             applicationService.save(newApplication);
+        }
+
+        if (bindingResult.hasErrors()) {
+            Application application = applicationService.findById(webApplication.getId());
+            model.addAttribute("app", application);
+            return "applicant/applicationEditModule";
         }
         return "redirect:bewerbungsUebersicht";
     }

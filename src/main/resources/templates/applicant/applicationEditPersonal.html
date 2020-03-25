@@ -39,6 +39,9 @@
                             <input class="form-control" placeholder="Straße und Hausnummer"
                                    required th:attr="value = ${webAddress.street}"
                                    th:field="*{street}" th:name="street" th:type="text"> <br>
+                            <div th:if="${#fields.hasErrors('street')}" class="text-danger">
+                                Bitte geben Sie eine Straße ein.
+                            </div>
                             <br>
                         </div>
                         <div class="col-md-1">
@@ -48,13 +51,20 @@
                         <div class="col-3">
                             <input placeholder="Ort" required th:attr="value = ${webAddress.city}"
                                    th:class="form-control" th:field="*{city}"
-                                   th:id="city" th:name="city" th:type="text"> <br>
+                                   th:id="city" th:name="city" th:type="text">
+                            <div th:if="${#fields.hasErrors('city')}" class="text-danger">
+                                Bitte geben Sie eine Stadt an.
+                            </div><br>
                         </div>
                         <div class="col-1">
                             <input placeholder="Postleitzahl" required th:attr="value = ${webAddress.zipcode}"
                                    th:class="form-control"
                                    th:field="*{zipcode}"
-                                   th:id="zipcode" th:name="zipcode" type="text"> <br>
+                                   th:id="zipcode" th:name="zipcode" type="text">
+                            <div th:if="${#fields.hasErrors('zipcode')}" class="text-danger">
+                                Bitte geben Sie eine gültige Postleitzahl ein.
+                            </div>
+                            <br>
                         </div>
                         <div class="col">
                             <select required th:attr="value = ${webAddress.country}" th:class="form-control"
@@ -71,19 +81,30 @@
                                    th:class="form-control" th:field="*{birthplace}"
                                    th:id="birthplace" th:name="birthplace" th:type="text"> <br>
                         </div>
+                        <div th:if="${#fields.hasErrors('birthplace')}" class="text-danger">
+                            Bitte geben Sie einen Geburtsort an.
+                        </div>
                         <div class="col-5">
                             <select required th:attr="value = ${webApplicant.nationality}" th:class="form-control"
                                     th:field="*{nationality}" th:id="nationality" th:name="nationality">
                                 <option disabled hidden selected value="">Nationalität</option>
                                 <option th:each="country:${countries}" th:text="${country}"
                                         th:value="${country}"></option>
-                            </select> <br>
+                            </select>
+                            <div th:if="${#fields.hasErrors('nationality')}" class="text-danger">
+                                Bitte geben Sie eine Nationalität an.
+                            </div>
+                            <br>
                         </div>
                         <div class="col-2">
                             <input class="form-control" id="birthday" name="birthday" onblur="(this.type='text')"
                                    onfocus="(this.type='date')" placeholder="Geburtstag"
                                    required th:attr="value = ${webApplicant.birthday}" th:field="*{birthday}"
-                                   type="text"> <br><br>
+                                   type="text">
+                            <div th:if="${#fields.hasErrors('birthday')}" class="text-danger">
+                                Bitte geben Sie ein gültiges Geburtsdatum an.
+                            </div>
+                            <br><br>
                         </div>
                     </div>
                     <div class="row">
@@ -94,6 +115,9 @@
                                 <option value="male">männlich</option>
                                 <option value="female">weiblich</option>
                             </select>
+                            <div th:if="${#fields.hasErrors('gender')}" class="text-danger">
+                                Bitte wählen Sie ein Geschlecht.
+                            </div>
                         </div>
                         <div class="col-4">
                             <div align="right">
@@ -108,7 +132,11 @@
                             <select class="form-control" id="courses" name="courses"
                                     th:field="*{course}">
                                 <option th:each="cours:${courses}" th:text="${cours}" th:value="${cours}"></option>
-                            </select> <br> <br>
+                            </select>
+                            <div th:if="${#fields.hasErrors('course')}" class="text-danger">
+                                Bitte wählen Sie ein Studienfach.
+                            </div>
+                            <br> <br>
                         </div>
                     </div>
                     <div class="row">
@@ -123,17 +151,20 @@
                             <select th:attr="value = ${webApplicant.status}" th:class="form-control"
                                     th:field="*{status}"
                                     th:id="status" th:name="status"
-                            >
+                                    required>
                                 <option th:value="Einstellung">
                                     Neueinstellung (bisher keine Anstellung an der HHU)
                                 </option>
-                                <option th:value="Weiterbeschaeftigung">
+                                <option th:value="Weiterbeschäftigung">
                                     Weiterbeschäftigung (bestehender Vertrag bis zum DD.MM.YYYY)
                                 </option>
                                 <option th:value="Änderung">
                                     Wiedereinstellung (KEIN bestehender Vertrag bis zum DD.MM.YYYY)
                                 </option>
                             </select>
+                            <div th:if="${#fields.hasErrors('status')}" class="text-danger">
+                                Bitte wählen Sie Ihren Angestelltenstatus.
+                            </div>
                             <br><br>
                         </div>
                     </div>
@@ -181,7 +212,11 @@
                                       th:class="form-control"
                                       th:field="*{comment}"
                                       th:id="comment" th:name="comment"
-                            ></textarea> <br>
+                            ></textarea>
+                            <div th:if="${#fields.hasErrors('comment')}" class="text-danger">
+                                Die Anmerkungen dürfen maximal 1000 Zeichen lang sein.
+                            </div>
+                            <br>
                         </div>
                     </div>
                 </div>
