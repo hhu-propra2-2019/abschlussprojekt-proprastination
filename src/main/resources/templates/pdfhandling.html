@@ -40,6 +40,18 @@
         <div class="card bg-light mb-3 border-primary">
             <div class="card-header"><h2>Downloaden Sie Bewerbungen als PDFs hier!</h2></div>
         </div>
+        <div class="card bg-light mb-3 border-primary" th:if="${account.roles.contains('verteiler')}">
+            <div class="card-header"><h4>Downloaden Sie alle zugeteilten Bewerbungen hier!</h4></div>
+            <div class="card-body">
+                <div class="row form-row">
+                    <label>Oder laden Sie alle Bewerbungen hier herunter!</label><br>
+                </div>
+                <div class="row form-row">
+                    <button th:type="submit" th:formaction="@{zuteilungDownload}" th:value="Download"
+                            class="btn btn-outline-primary form-control">Zugeteilte Bewerbungen</button>
+                </div>
+            </div>
+        </div>
         <div class="card bg-light mb-3 border-primary">
             <div class="card-header"><h4>Downloaden Sie alle Bewerbung eines Moduls hier!</h4></div>
             <div class="card-body">
