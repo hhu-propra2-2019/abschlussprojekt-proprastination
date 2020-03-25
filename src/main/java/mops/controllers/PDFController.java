@@ -35,7 +35,7 @@ import java.util.Optional;
 
 @Controller
 @SessionScope
-@RequestMapping("/bewerbung2/bewerber/pdf")
+@RequestMapping("/bewerbung2/pdf")
 public class PDFController {
 
     private ApplicantService applicantService;
@@ -90,6 +90,7 @@ public class PDFController {
     @GetMapping("/dummy")
     public String dummyPDFDownload(final KeycloakAuthenticationToken token, final Model model) {
         Account account = createAccountFromPrincipal(token);
+        System.out.println(account.getRoles());
         model.addAttribute("account", account);
         List<Module> modules = moduleService.getModules();
         List<String> moduleNames = new ArrayList<>();
