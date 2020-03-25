@@ -352,4 +352,17 @@ public class DistributionService {
             }
         }
     }
+
+    /**
+     * saves ckecks that distributor sets
+     * @param applicantId applicantId
+     * @param checked checked
+     */
+    public void saveChecked(final String applicantId, final String checked) {
+        Applicant applicant = applicantService.findById(Long.parseLong(applicantId));
+        boolean checkedBoolean = Boolean.parseBoolean(checked);
+        applicantService.saveApplicant(applicant.toBuilder()
+                .checked(checkedBoolean)
+                .build());
+    }
 }

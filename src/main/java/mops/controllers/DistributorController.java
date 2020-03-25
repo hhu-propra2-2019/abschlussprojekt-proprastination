@@ -109,20 +109,21 @@ public class DistributorController {
 
     /**
      * saves the data the distributor changed
-     * @param hours hours set by distributor
-     * @param distributionId distributionId
+     * @param applicantId applicantId
+     * @param checked checked
      * @param token token
      * @param model model
      * @return redirect on mainpage as String
      */
-    @PostMapping("/saveChecked/")
+    @GetMapping("/saveChecked/{applicantId}/{checked}/")
     @Secured("ROLE_verteiler")
     public String saveChecked(
-            @RequestParam("hours") final String hours,
-            @RequestParam("distributionId") final String distributionId,
+            @PathVariable("applicantId") final String applicantId,
+            @PathVariable("checked") final String checked,
             final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
+            distributionService.saveChecked(applicantId, checked);
         }
         return "redirect:/bewerbung2/verteiler/";
     }

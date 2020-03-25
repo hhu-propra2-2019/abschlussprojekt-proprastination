@@ -65,7 +65,7 @@
                                         </div>
                                     </div>
                                     <div class="col text-right">
-                                        <input type="checkbox" th:id="check + ${applicantId}">
+                                        <input type="checkbox" th:checked="${applicant.checked}" th:attr="data-applicantId=${applicant.id}" onclick="saveChecked(this)">
                                     </div>
                                 </div>
                             </div>
@@ -104,13 +104,14 @@
             }
         </script>
         <script>
-            $("input[type='checkbox']").change(function(){
-                if($(this).is(":checked")){
-                    $(this).parent().parent().parent().addClass("doneBackground");
-                }else{
-                    $(this).parent().parent().parent().removeClass("doneBackground");
-                }
-            });
+            function changeColor(el) {
+                    if($(el).is(":checked")){
+                        $(el).parent().parent().parent().addClass("doneBackground");
+                    }else{
+                        $(el).parent().parent().parent().removeClass("doneBackground");
+                    }
+            }
+
         </script>
         <script>
             $(".form-search-wrapper").remove()
@@ -143,6 +144,12 @@
                 var applicantId = el.dataset.applicantid;
                 var distributionId = el.dataset.distributionid;
                 window.location.href = "/bewerbung2/verteiler/saveHours/" + distributionId + "/" + applicantId + "/" + hour + "/"
+            }
+
+            function saveChecked(el) {
+                var checked = el.checked;
+                var applicantId = el.dataset.applicantid;
+                window.location.href = "/bewerbung2/verteiler/saveChecked/" + applicantId + "/" + checked + "/"
             }
 
         </script>
