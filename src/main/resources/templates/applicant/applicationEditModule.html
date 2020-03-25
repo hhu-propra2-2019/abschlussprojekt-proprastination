@@ -53,8 +53,6 @@
                     </div>
                 </div>
                 <div class="card-body">
-
-
                     <div class="row">
                         <div class=" col-md-3">
                             <label for="minload">
@@ -78,7 +76,6 @@
                         </div>
                         <div class="col-md-6">
                             <label for="grade">Geben die von Ihnen in diesem Modul erreichte Note an</label> <br>
-
                             <select class="form-control" id="grade" name="grade" th:field="*{grade}">
                                 <option value="1.0">1,0</option>
                                 <option value="1.3">1,3</option>
@@ -98,9 +95,15 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <label for="semester">In welchem Semester haben Sie dieses Modul bestanden</label> <br>
-                            <input class="form-control" id="semester" name="semester" required th:field="*{semester}"
-                                   type="text">
+                            <label th:for="semesters">In welchem Semester haben Sie dieses Modul bestanden</label>
+                            <br>
+                            <select class="form-control" required
+                                    th:field="*{semester}"
+                                    th:id="semesters" th:name="semesters">
+                                <option disabled hidden selected value="">Semester</option>
+                                <option th:each="semester:${semesters}" th:text="${semester}"
+                                        th:value="${semester}"></option>
+                            </select>
                             <br>
                         </div>
                         <div class="col-6">

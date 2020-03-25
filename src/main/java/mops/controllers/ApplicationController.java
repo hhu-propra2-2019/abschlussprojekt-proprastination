@@ -374,6 +374,7 @@ public class ApplicationController {
         if (token != null) {
             Account account = createAccountFromPrincipal(token);
             model.addAttribute("account", account);
+            model.addAttribute("semesters", CSVService.getSemester());
             Applicant applicant = applicantService.findByUniserial(account.getName());
             Application application = applicant.getApplicationById(id);
             if (application == null) {
