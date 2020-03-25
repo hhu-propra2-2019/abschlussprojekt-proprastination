@@ -202,13 +202,13 @@ public class PDFController {
             if (application.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }
-            String zipPath = ZI
+            String filepath = pdfService.generatePDF(application.get(), applicant);
             File file = new File(filepath);
             Path path = Paths.get(file.getAbsolutePath());
             ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
 
 
-            header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Module.zip");
+            header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Bewerbung.pdf");
             header.add("Cache-Control", "no-cache, no-store, must-revalidate");
             header.add("Pragma", "no-cache");
             header.add("Expires", "0");
@@ -234,7 +234,7 @@ public class PDFController {
             if (module == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }
-            String filepath = .get(), applicant);
+            String filepath = pdfService.generatePDF(application.get(), applicant);
             File file = new File(filepath);
             Path path = Paths.get(file.getAbsolutePath());
             ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
