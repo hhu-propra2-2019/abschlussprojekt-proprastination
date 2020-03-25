@@ -244,7 +244,17 @@ public class ApplicationController {
             bindingResult.getAllErrors().forEach(err -> {
                 LOGGER.info("ERROR {}", err.getDefaultMessage());
             });
+            Module modul = moduleService.findModuleByName(webApplication.getModule());
+            Applicant applicant = applicantService.findByUniserial(token.getName());
+            List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
+            availableMods.remove(modul);
 
+            model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("newModule", modul);
+            model.addAttribute("semesters", CSVService.getSemester());
+            model.addAttribute("modules", availableMods);
+            model.addAttribute("webApplication", webApplication);
+            return "applicant/applicationModule";
         }
 
         Applicant applicant = applicantService.findByUniserial(token.getName());
