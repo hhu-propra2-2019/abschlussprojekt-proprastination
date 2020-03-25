@@ -97,12 +97,6 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <label for="semester">In welchem Semester haben Sie dieses Modul bestanden</label> <br>
-                            <input class="form-control" id="semester" name="semester" required th:field="*{semester}"
-                                   type="text">
-                            <div th:if="${#fields.hasErrors('semester')}" class="text-danger">
-                                Bitte geben Sie ein Semester an.
-                            </div>
                             <label th:for="semesters">In welchem Semester haben Sie dieses Modul bestanden</label>
                             <br>
                             <select class="form-control" required
