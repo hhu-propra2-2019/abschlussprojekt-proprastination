@@ -34,6 +34,7 @@ public class DocumentWithBachelor implements Document {
     @Override
     public void save(final File newFile) throws IOException {
         document.save(newFile);
+        document.close();
     }
 
     /**

@@ -11,10 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 @Service
 public class PDFService {
 
@@ -43,14 +39,8 @@ public class PDFService {
             logger.debug("Saved PDF to:" + tmpFile.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
-            logger.error("Saving PDF failed to path: " + tmpFile.getAbsolutePath());
+            logger.error("Saving PDF failed for: " + tmpFile);
         }
-        Path path = Paths.get(tmpFile.getAbsolutePath());
-/*        try {
-            Files.move(path, path.resolveSibling(applicant.getFirstName() + "_" + applicant.getSurname() + ".pdf"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
         return tmpFile;
     }
 
@@ -75,7 +65,6 @@ public class PDFService {
         document.setField("Anschrift (Straße)", address.getStreet());
         document.setField("Anschrift (Hausnummer)", address.getHouseNumber());
         document.setField("Anschrift (PLZ)", String.valueOf(address.getZipcode()));
-        document.setField("Anschrift (optionaler Adresszusatz)", address.getCity());
         document.setField("Anschrift (Ort)", address.getCity());
         document.setField("Anschrift (Land)", CSVService.getCodeForCountry(address.getCountry()));
     }
