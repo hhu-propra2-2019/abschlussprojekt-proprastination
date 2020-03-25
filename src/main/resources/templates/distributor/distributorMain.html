@@ -63,19 +63,19 @@
                         <div class="card w-100 bg-light mb-1 border-primary" th:id="drag + ${applicant.id}" id="drag1"  th:attr="data-applicantId=${applicant.id}" draggable="true" ondragstart="drag(event, this)">
                             <div class="card-header" th:style="${applicant.checked} ? 'background-color: rgba(108, 179, 255, 0.51)'">
                                 <div class="row">
-                                    <div class="col text-center">
+                                    <div class="col-7 text-center">
                                         <button class="btn" data-toggle="collapse" th:attr="data-target='#collapse'+${applicant.id}" data-target="#collapse1"
                                                 aria-expanded="false" th:text="${applicant.fullName} + ' [' + ${applicant.type} + ']'">
                                             Mamus100
                                         </button>
                                     </div>
-                                    <div class="col">
+                                    <div class="col-4">
                                         <div>
                                             <input onClick="this.select();" type="text" size="1" th:value="${applicant.distributorHours}" th:attr="data-distributionId=${distribution.id}, data-applicantId=${applicant.id}" onblur="saveHours(this)">
                                             <label>Stunden</label>
                                         </div>
                                     </div>
-                                    <div class="col text-right">
+                                    <div class="col-1 text-right">
                                         <input type="checkbox" th:checked="${applicant.checked}" th:attr="data-applicantId=${applicant.id}" onclick="saveChecked(this)">
                                     </div>
                                 </div>
