@@ -74,12 +74,76 @@ public class DistributionService {
      */
     public void distribute() {
         final int numberOfPriorities = 4;
-        final int sevenHours = 7;
-        final int nineHours = 9;
-        final int seventeenHours = 17;
+        final int numberOfHours = 3;
+        final int[] hours = {7, 9, 17};
         List<Module> modules = moduleService.getModules();
         List<Applicant> allApplicants = applicantService.findAll();
+        List<Applicant>[] applicantsPerModule = new List[modules.size()];
+        for (int i = 0; i < modules.size(); i++) {
+            applicantsPerModule[i] = new LinkedList<>();
+        }
+        int[][] maxHoursPerModule = new int[modules.size()][numberOfHours];
+        int[][] countHoursPerModule = new int[modules.size()][numberOfHours];
+        int moduleCount = 0;
         distributionRepository.deleteAll();
+        for (Module module : modules) {
+            List<Evaluation> evaluations = new LinkedList<>();
+            List<Application> preApplications = applicationService.findApplicationsByModule(module);
+            List<Application> applications = new LinkedList<>();
+            for (Application application : preApplications) {
+                if (allApplicants.indexOf(applicantService.findByApplications(application)) != -1) {
+                    applications.add(application);
+                }
+            }
+            for (Application application : applications) {
+                Evaluation evaluation = evaluationService.findByApplication(application);
+                evaluations.add(evaluation);
+            }
+
+            List<Evaluation> sortedByOrgaPrio = new LinkedList<>();
+
+            for (Evaluation evaluation : evaluations) {
+                if (evaluation.getPriority().getValue() == 1 && evaluation.getApplication().getPriority().getValue() == 1) {
+                    sortedByOrgaPrio.add(evaluation);
+                }
+            }
+
+            for (int i = 0; i < numberOfHours; i++) {
+                maxHoursPerModule[moduleCount][i] = 0;
+            }
+
+            maxHoursPerModule[moduleCount][0] = Integer.parseInt(module.getSevenHourLimit());
+            maxHoursPerModule[moduleCount][1] = Integer.parseInt(module.getNineHourLimit());
+            maxHoursPerModule[moduleCount][2] = Integer.parseInt(module.getSeventeenHourLimit());
+
+            for (Evaluation evaluation : sortedByOrgaPrio) {
+                int countSum = 0;
+                int maxSum = 0;
+                for (int i = 0; i < numberOfHours; i++) {
+                    countSum += countHoursPerModule[moduleCount][i];
+                }
+                for (int i = 0; i < numberOfHours; i++) {
+                    maxSum += maxHoursPerModule[moduleCount][i];
+                }
+
+                if (countSum == maxSum) {
+                    break;
+                }
+
+                Applicant applicant = applicantService.findByApplications(evaluation.getApplication());
+                for (int i = 0; i < numberOfHours; i++) {
+                    if (evaluation.getHours() == hours[i] && countHoursPerModule[moduleCount][i] < maxHoursPerModule[moduleCount][i]) {
+                        applicantsPerModule[moduleCount].add(applicant);
+                        allApplicants.remove(applicant);
+                        countHoursPerModule[moduleCount][i]++;
+                    }
+                }
+            }
+            moduleCount++;
+        }
+
+        moduleCount = 0;
+
         for (Module module : modules) {
             List<Evaluation> evaluations = new LinkedList<>();
             List<Application> preApplications = applicationService.findApplicationsByModule(module);
@@ -108,46 +172,47 @@ public class DistributionService {
                 sortedByOrgaPrio[i].sort(Comparator.comparing(a -> a.getApplication().getPriority().getValue()));
             }
 
-            int count7 = 0;
-            int count9 = 0;
-            int count17 = 0;
-            int max7 = Integer.parseInt(module.getSevenHourLimit());
-            int max9 = Integer.parseInt(module.getNineHourLimit());
-            int max17 = Integer.parseInt(module.getSeventeenHourLimit());
-
-            Set<Applicant> distributedApplicants = new LinkedHashSet<>();
-
-            for (int i = 0; i < numberOfPriorities; i++) {
-                if (count7 == max7 && count9 == max9 && count17 == max17) {
+            for (int x = 0; x < numberOfPriorities; x++) {
+                int countSum = 0;
+                int maxSum = 0;
+                for (int i = 0; i < numberOfHours; i++) {
+                    countSum += countHoursPerModule[moduleCount][i];
+                }
+                for (int i = 0; i < numberOfHours; i++) {
+                    maxSum += maxHoursPerModule[moduleCount][i];
+                }
+                if (countSum == maxSum) {
                     break;
                 }
-                for (Evaluation evaluation : sortedByOrgaPrio[i]) {
-                    if (count7 == max7 && count9 == max9 && count17 == max17) {
+
+                for (Evaluation evaluation : sortedByOrgaPrio[x]) {
+
+                    for (int i = 0; i < numberOfHours; i++) {
+                        countSum += countHoursPerModule[moduleCount][i];
+                    }
+                    for (int i = 0; i < numberOfHours; i++) {
+                        maxSum += maxHoursPerModule[moduleCount][i];
+                    }
+
+                    if (countSum == maxSum) {
                         break;
                     }
+
                     Applicant applicant = applicantService.findByApplications(evaluation.getApplication());
-                    if (evaluation.getHours() == sevenHours && count7 < max7) {
-                        distributedApplicants.add(applicant);
-                        allApplicants.remove(applicant);
-                        changeFinalHours(evaluation);
-                        count7++;
-                    } else if (evaluation.getHours() == nineHours && count9 < max9) {
-                        distributedApplicants.add(applicant);
-                        allApplicants.remove(applicant);
-                        changeFinalHours(evaluation);
-                        count9++;
-                    } else if (evaluation.getHours() == seventeenHours && count17 < max17) {
-                        distributedApplicants.add(applicant);
-                        allApplicants.remove(applicant);
-                        changeFinalHours(evaluation);
-                        count17++;
+                    for (int i = 0; i < numberOfHours; i++) {
+                        if (evaluation.getHours() == hours[i] && countHoursPerModule[moduleCount][i] < maxHoursPerModule[moduleCount][i]) {
+                            applicantsPerModule[moduleCount].add(applicant);
+                            allApplicants.remove(applicant);
+                            countHoursPerModule[moduleCount][i]++;
+                        }
                     }
                 }
             }
             distributionRepository.save(Distribution.builder()
-                    .employees(distributedApplicants)
+                    .employees(applicantsPerModule[moduleCount])
                     .module(module)
                     .build());
+            moduleCount++;
         }
     }
 
