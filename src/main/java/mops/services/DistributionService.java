@@ -57,6 +57,7 @@ public class DistributionService {
      */
     @PostConstruct
     public void setup() {
+        changeAllFinalHours();
         distribute();
     }
 
@@ -160,6 +161,18 @@ public class DistributionService {
         ApplicationBuilder applicationBuilder = evaluation.getApplication().toBuilder();
         Application application = applicationBuilder.finalHours(evaluation.getHours()).build();
         applicationService.save(application);
+    }
+
+
+    /**
+     * changes all FinalHours to the organizers wish
+     */
+    public void changeAllFinalHours() {
+        List<Application> applications = applicationService.findAll();
+        for (Application application : applications) {
+            Evaluation evaluation = evaluationService.findByApplication(application);
+            changeFinalHours(evaluation);
+        }
     }
 
     /**
