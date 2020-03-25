@@ -39,55 +39,60 @@
                 </div>
                 <div class="card-body">
                     <div class="row form-row mb-3">
-                        <div class="col-md-4 px-md-1 align-self-center">
-                            <div class="form-group">
-                                <label th:for="minworkload">
-                                    Geben Sie bitte an wie viele Stunden Sie minimal pro Woche arbeiten möchten
-                                </label> <br>
-                                <select class="form-control" required th:attr="value = ${webApplication.minHours}"
-                                        th:field="*{minHours}"
-                                        th:id="workload" th:name="minworkload">
-                                    <option disabled hidden selected value="0">Arbeitszeit</option>
-                                    <option th:value="7">7 Stunden/Woche</option>
-                                    <option th:value="9">9 Stunden/Woche</option>
-                                    <option th:value="17">17 Stunden/Woche</option>
-                                </select>
+                        <div class="d-flex align-items-sm-center">
+                            <div class="col-md-4 px-md-1 align-self-center">
+                                <div class="form-group">
+                                    <label th:for="minworkload">
+                                        Geben Sie bitte an wie viele Stunden Sie minimal pro Woche arbeiten möchten
+                                    </label> <br>
+                                    <select class="form-control" required th:attr="value = ${webApplication.minHours}"
+                                            th:field="*{minHours}"
+                                            th:id="workload" th:name="minworkload">
+                                        <option disabled hidden selected value="0">Arbeitszeit</option>
+                                        <option th:value="7">7 Stunden/Woche</option>
+                                        <option th:value="9">9 Stunden/Woche</option>
+                                        <option th:value="17">17 Stunden/Woche</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-4 px-md-1 align-self-center">
-                            <div class="form-group">
-                                <label th:for="maxworkload">
-                                    Geben Sie bitte an wie viele Stunden Sie maximal pro Woche arbeiten möchten
-                                </label> <br>
-                                <select class="form-control" required th:attr="value = ${webApplication.maxHours}"
-                                        th:field="*{maxHours}"
-                                        th:id="workload" th:name="maxworkload">
-                                    <option disabled hidden selected value="0">Arbeitszeit</option>
-                                    <option th:value="7">7 Stunden/Woche</option>
-                                    <option th:value="9">9 Stunden/Woche</option>
-                                    <option th:value="17">17 Stunden/Woche</option>
-                                </select>
+                            <div class="col-md-4 px-md-1 align-self-center">
+                                <div class="form-group">
+                                    <label th:for="maxworkload">
+                                        Geben Sie bitte an wie viele Stunden Sie maximal pro Woche arbeiten möchten
+                                    </label> <br>
+                                    <select class="form-control" required th:attr="value = ${webApplication.maxHours}"
+                                            th:field="*{maxHours}"
+                                            th:id="workload" th:name="maxworkload">
+                                        <option disabled hidden selected value="0">Arbeitszeit</option>
+                                        <option th:value="7">7 Stunden/Woche</option>
+                                        <option th:value="9">9 Stunden/Woche</option>
+                                        <option th:value="17">17 Stunden/Woche</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-4 px-md-1 align-self-center">
-                            <div class="form-group">
-                                <label th:for="grade">Geben die von Ihnen in diesem Modul erreichte Note an</label> <br>
-                                <select class="form-control" required th:attr="value = ${webApplication.grade}"
-                                        th:field="*{grade}"
-                                        th:id="grade" th:name="grade">
-                                    <option disabled hidden selected th:value="0">Note</option>
-                                    <option th:value="1.0">1,0</option>
-                                    <option th:value="1.3">1,3</option>
-                                    <option th:value="1.7">1,7</option>
-                                    <option th:value="2.0">2,0</option>
-                                    <option th:value="2.3">2,3</option>
-                                    <option th:value="2.7">2,7</option>
-                                    <option th:value="3.0">3,0</option>
-                                    <option th:value="3.3">3,3</option>
-                                    <option th:value="3.7">3,7</option>
-                                    <option th:value="4.0">4,0</option>
-                                    <option th:value="5.0">5,0</option>
-                                </select> <br>
+                            <div class="col-md-4 px-md-1 align-self-center">
+                                <div class="form-group">
+                                    <label th:for="grade">Geben Sie von Ihnen in diesem Modul erreichte Note an</label> <br>
+                                    <select class="form-control" required th:attr="value = ${webApplication.grade}"
+                                            th:field="*{grade}"
+                                            th:id="grade" th:name="grade">
+                                        <option disabled hidden selected th:value="0">Note</option>
+                                        <option th:value="1.0">1,0</option>
+                                        <option th:value="1.3">1,3</option>
+                                        <option th:value="1.7">1,7</option>
+                                        <option th:value="2.0">2,0</option>
+                                        <option th:value="2.3">2,3</option>
+                                        <option th:value="2.7">2,7</option>
+                                        <option th:value="3.0">3,0</option>
+                                        <option th:value="3.3">3,3</option>
+                                        <option th:value="3.7">3,7</option>
+                                        <option th:value="4.0">4,0</option>
+                                        <option th:value="5.0">5,0</option>
+                                    </select>
+                                    <div th:if="${#fields.hasErrors('grade')}" class="text-danger">
+                                        Bitte geben Sie eine Note an.
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -103,6 +108,9 @@
                                     <option th:each="semester:${semesters}" th:text="${semester}"
                                             th:value="${semester}"></option>
                                 </select>
+                                <div th:if="${#fields.hasErrors('semester')}" class="text-danger">
+                                Bitte geben Sie ein Semester an.
+                                </div>
                                 <br>
                             </div>
                         </div>
@@ -114,6 +122,9 @@
                                        th:attr="value = ${webApplication.lecturer}" th:field="*{lecturer}"
                                        th:id="lecturer"
                                        th:name="lecturer" th:type="text">
+                                <div th:if="${#fields.hasErrors('lecturer')}" class="text-danger">
+                                Bitte geben Sie einen Dozenten an.
+                                </div>
                                 <br>
                             </div>
                         </div>

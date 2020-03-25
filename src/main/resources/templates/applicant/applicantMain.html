@@ -25,7 +25,7 @@
                 </a>
             </li>
             <li>
-                <a th:href="@{offeneBewerbungen}">
+                <a th:href="@{bewerbungsUebersicht}">
                     Offene Bewerbungen
                 </a>
             </li>
@@ -112,7 +112,7 @@
                     <tr th:each="app, appNum : ${applicant?.applications}">
                         <th scope="row" th:text="${appNum.count}"></th>
                         <td th:text="${app.module.name}">Example #1</td>
-                        <td th:text="${app.module.deadline}">Example #2</td>
+                        <td th:text="${#dates.format(app.module.deadline, 'dd-MM-yyyy HH:mm')}">Example #2</td>
                         <td>Example #3</td>
                     </tr>
 

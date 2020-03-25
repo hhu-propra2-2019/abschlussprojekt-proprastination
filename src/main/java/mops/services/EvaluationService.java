@@ -21,10 +21,20 @@ public class EvaluationService {
 
     /**
      * Finds Application by evaluation
+     *
      * @param application the application
      * @return the evaluation found
      */
     public Evaluation findByApplication(final Application application) {
         return evaluationRepository.findByApplication(application);
+    }
+
+    /**
+     * Saves submitted Evaluation in DB.
+     *
+     * @param evaluation Evaluation to save.
+     */
+    public void save(final Evaluation evaluation) {
+        evaluationRepository.save(evaluation);
     }
 }

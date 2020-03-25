@@ -17,6 +17,7 @@ public class WebDistributorApplicant {
     private String id;
     private String type;
     private boolean checked;
+    private String fullName;
     private List<WebDistributorApplication> webDistributorApplications;
     private String distributorHours;
 }

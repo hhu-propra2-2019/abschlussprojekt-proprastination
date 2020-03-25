@@ -49,6 +49,7 @@ public class StudentService {
                 .houseNumber(webAddress.getNumber())
                 .city(webAddress.getCity())
                 .zipcode(webAddress.getZipcode())
+                .country(webAddress.getCountry())
                 .build();
     }
 
@@ -166,6 +167,7 @@ public class StudentService {
                 .city(address.getCity())
                 .number(address.getHouseNumber())
                 .street(address.getStreet())
+                .country(address.getCountry())
                 .zipcode(address.getZipcode())
                 .build();
     }

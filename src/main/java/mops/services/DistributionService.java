@@ -242,6 +242,7 @@ public class DistributionService {
                     .id(applicant.getId() + "")
                     .type(getTypeOfApplicant(applicant))
                     .checked(applicant.isChecked())
+                    .fullName(applicant.getFirstName() + " " + applicant.getSurname())
                     .webDistributorApplications(webDistributorApplicationList)
                     .distributorHours("0")
                     .build();
@@ -268,6 +269,7 @@ public class DistributionService {
                     .id(applicant.getId() + "")
                     .type(getTypeOfApplicant(applicant))
                     .checked(applicant.isChecked())
+                    .fullName(applicant.getFirstName() + " " + applicant.getSurname())
                     .webDistributorApplications(webDistributorApplicationList)
                     .distributorHours(finalHours + "")
                     .build();
