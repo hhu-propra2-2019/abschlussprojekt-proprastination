@@ -74,7 +74,6 @@ public class ApplicationController {
      * @param model The Website model
      * @return The HTML file rendered as a String
      */
-
     @GetMapping("/")
     @Secured("ROLE_studentin")
     public String main(final KeycloakAuthenticationToken token, final Model model) {
@@ -93,7 +92,6 @@ public class ApplicationController {
      * @param model The Website model
      * @return The HTML file rendered as a String
      */
-
     @GetMapping("/neueBewerbung")
     @Secured("ROLE_studentin")
     public String newAppl(final KeycloakAuthenticationToken token, final Model model) {
@@ -129,8 +127,8 @@ public class ApplicationController {
      * @param model The Website model
      * @return The HTML file rendered as a String
      */
-
     @GetMapping("/offeneBewerbungen")
+    @Secured("ROLE_studentin")
     public String openAppl(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
@@ -145,8 +143,8 @@ public class ApplicationController {
      * @param model The Website model
      * @return The HTML file rendered as a String
      */
-
     @GetMapping("/profil")
+    @Secured("ROLE_studentin")
     public String personal(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
@@ -195,6 +193,7 @@ public class ApplicationController {
      * @return html for another Modul
      */
     @PostMapping("weiteresModul")
+    @Secured("ROLE_studentin")
     public String anotherModule(final KeycloakAuthenticationToken token,
                               final WebApplication webApplication, final Model model,
                               @RequestParam("modules") final String module) {
@@ -227,6 +226,7 @@ public class ApplicationController {
      */
     @SuppressWarnings("checkstyle:ParameterNumber")
     @PostMapping("/uebersichtBearbeitet")
+    @Secured("ROLE_studentin")
     public String saveOverview(final KeycloakAuthenticationToken token, final WebApplicant webApplicant,
                                final WebAddress webAddress, final WebCertificate webCertificate, final Model model) {
         if (token != null) {
@@ -248,6 +248,7 @@ public class ApplicationController {
      */
 
     @PostMapping("/uebersichtDashboard")
+    @Secured("ROLE_studentin")
     public String saveOverview(final KeycloakAuthenticationToken token, final Model model,
                                @ModelAttribute("applicant1") final Applicant applicant1) {
         if (token != null) {
@@ -265,6 +266,7 @@ public class ApplicationController {
      * @return overview html as string
      */
     @GetMapping("bewerbungsUebersicht")
+    @Secured("ROLE_studentin")
     public String dashboardOverview(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             Account account = createAccountFromPrincipal(token);
@@ -286,6 +288,7 @@ public class ApplicationController {
      * @return the overviewhtml
      */
     @PostMapping("/uebersicht")
+    @Secured("ROLE_studentin")
     public String overview(final KeycloakAuthenticationToken token, final Model model,
                            final WebApplication webApplication) {
         Applicant applicant = applicantService.findByUniserial(token.getName());
@@ -306,6 +309,7 @@ public class ApplicationController {
      * @return html
      */
     @PostMapping("/moduleNachUebersicht")
+    @Secured("ROLE_studentin")
     public String postModuleAfterOverview(final KeycloakAuthenticationToken token, final Model model,
                                           @RequestParam("modules") final String modules) {
         Module module = moduleService.findModuleByName(modules);
@@ -319,6 +323,7 @@ public class ApplicationController {
         model.addAttribute("webApplication", WebApplication.builder().module(modules).build());
         return "applicant/applicationModule";
     }
+
     /**
      * The GetMapping for the edit form fot personal data
      *
@@ -326,8 +331,8 @@ public class ApplicationController {
      * @param model The Website model
      * @return The HTML file rendered as a String
      */
-
     @GetMapping("/bearbeitePersoenlicheDaten")
+    @Secured("ROLE_studentin")
     public String editPersonalData(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             Account account = createAccountFromPrincipal(token);
@@ -364,6 +369,7 @@ public class ApplicationController {
      */
 
     @GetMapping("/bearbeiteModulDaten")
+    @Secured("ROLE_studentin")
     public String editModuleData(@RequestParam("module") final long id,
                                  final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
@@ -388,6 +394,7 @@ public class ApplicationController {
      * @return mainpage.
      */
     @PostMapping(value = "/bearbeiteModulDaten")
+    @Secured("ROLE_studentin")
     public String postEditModuledata(final WebApplication webApplication, final KeycloakAuthenticationToken token,
                                      final Model model) {
         if (token != null) {
@@ -408,6 +415,7 @@ public class ApplicationController {
      * @return Mainpage.
      */
     @GetMapping("/loescheModul")
+    @Secured("ROLE_studentin")
     public String delete(@RequestParam("module") final long module,
                          final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
