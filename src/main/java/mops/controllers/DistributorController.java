@@ -70,15 +70,15 @@ public class DistributorController {
      * @param model model
      * @return html
      */
-    @PostMapping("/{distributionId}/{applicantId}/")
+    @GetMapping("/{distributionId}/{applicantId}/")
     @Secured("ROLE_verteiler")
     public String moved(@PathVariable("distributionId") final String distributionId,
                         @PathVariable("applicantId") final String applicantId,
                         final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
-            distributionService.move(applicantId, distributionId);
+            distributionService.moveApplicant(applicantId, distributionId);
         }
-        return "/error";
+        return "redirect:/bewerbung2/verteiler/";
     }
 }

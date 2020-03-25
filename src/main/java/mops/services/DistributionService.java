@@ -288,7 +288,7 @@ public class DistributionService {
      * @param applicantId the id of the applicant being moved
      * @param distributionId the id of the new distribution
      */
-    public void move(final String applicantId, final String distributionId) {
+    public void moveApplicant(final String applicantId, final String distributionId) {
         Optional<Distribution> newDistribution = distributionRepository.findById(Long.parseLong(distributionId));
         Applicant applicant = applicantService.findById(Long.parseLong(applicantId));
         if (newDistribution.isPresent()) {
