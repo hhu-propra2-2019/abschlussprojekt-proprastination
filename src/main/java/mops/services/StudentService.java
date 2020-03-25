@@ -97,6 +97,7 @@ public class StudentService {
                     .status(webApplicant.getStatus())
                     .certs(certificate)
                     .comment(webApplicant.getComment())
+                    .checked(false)
                     .build();
         }
         ApplicantBuilder applicantBuilder = applicant.toBuilder();

@@ -147,6 +147,7 @@ public class DatabaseInit implements ServletContextInitializer {
                     .gender(nextGender())
                     .certs(certificate)
                     .address(address)
+                    .checked(false)
                     .build();
             applicantRepository.save(applicant);
         }

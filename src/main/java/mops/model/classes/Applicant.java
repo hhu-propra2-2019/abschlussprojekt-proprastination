@@ -41,6 +41,7 @@ public class Applicant {
     private String surname;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Address address;
+    private boolean checked;
     private String gender;
     private String birthday;
     private String nationality;
