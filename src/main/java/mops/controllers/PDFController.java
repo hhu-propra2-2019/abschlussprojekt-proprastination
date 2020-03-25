@@ -155,7 +155,7 @@ public class PDFController {
     @PostMapping("/dummyModule")
     public String postDummyModule(final KeycloakAuthenticationToken token,
                                   @RequestParam("modules") final String module) {
-        return "redirect:zipDownload?module=" + module;
+        return "redirect:zipModuleDownload?module=" + module;
     }
 
     /**
@@ -165,7 +165,7 @@ public class PDFController {
      */
     @PostMapping("/dummyAll")
     public String postDummyAll(final KeycloakAuthenticationToken token) {
-        return "pdfhandling";
+        return "redirect:zipAllDownload";
     }
 
     /**
@@ -235,7 +235,7 @@ public class PDFController {
      * @throws IOException
      * @throws NoSuchElementException
      */
-    @RequestMapping(value = "zipDownload", method = RequestMethod.GET)
+    @RequestMapping(value = "zipModuleDownload", method = RequestMethod.GET)
     public ResponseEntity<Resource> zipSystemResource(
             @RequestParam(value = "module") final String module,
             final KeycloakAuthenticationToken token, final Model model) throws IOException, NoSuchElementException {
@@ -249,8 +249,9 @@ public class PDFController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }
 
-            Module module1 = moduleService.findModuleByName(module);
-            File file = zipService.getZipFileForModule(module1);
+            List<Module> modules = new ArrayList<>();
+            modules.add(moduleService.findModuleByName(module));
+            File file = zipService.getZipFileForModule(modules);
             Path path = Paths.get(file.getAbsolutePath());
             ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
 
@@ -268,6 +269,42 @@ public class PDFController {
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
+    /**
+     *
+     * @param module
+     * @param token
+     * @param model
+     * @return
+     * @throws IOException
+     * @throws NoSuchElementException
+     */
+    @RequestMapping(value = "zipAllDownload", method = RequestMethod.GET)
+    public ResponseEntity<Resource> zipAllSystemResource(
+            final KeycloakAuthenticationToken token, final Model model) throws IOException, NoSuchElementException {
+        if (token != null) {
+            Account account = createAccountFromPrincipal(token);
+            model.addAttribute("account", account);
 
+            HttpHeaders header = new HttpHeaders();
+
+            List<Module> modules = moduleService.getModules();
+            File file = zipService.getZipFileForModule(modules);
+            Path path = Paths.get(file.getAbsolutePath());
+            ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+
+
+            header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"download.zip\"");
+            header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+            header.add("Pragma", "no-cache");
+            header.add("Expires", "0");
+
+            return ResponseEntity.ok()
+                    .headers(header)
+                    .contentLength(file.length())
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .body(resource);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
 
 }

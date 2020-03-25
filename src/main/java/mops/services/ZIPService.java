@@ -53,23 +53,28 @@ public class ZIPService {
 
     /**
      * returns path for zipFile
-     * @param module
+     * @param modules
      * @return randomised zipPath
      */
-    public File getZipFileForModule(final Module module) {
+    public File getZipFileForModule(final List<Module> modules) {
         File file;
+        String fileName;
         Applicant applicant;
-        List<Application> applicationList = applicationService.findApplicationsByModule(module);
         File tmpFile = null;
+        List<Application> applicationList;
         try {
             tmpFile = File.createTempFile("bewerbung", ".zip");
             tmpFile.deleteOnExit();
             FileOutputStream fos = new FileOutputStream(tmpFile);
             ZipOutputStream zipOS = new ZipOutputStream(fos);
-            for (Application application : applicationList) {
+            for (Module module : modules) {
+                applicationList = applicationService.findApplicationsByModule(module);
+                 for (Application application : applicationList) {
                     applicant = applicantService.findByApplications(application);
                     file = pdfService.generatePDF(application, applicant);
-                    writeToZipFile(file, zipOS, applicant);
+                    fileName = (module.getName() + File.separator + applicant.getFirstName() + "_" + applicant.getSurname() + ".pdf");
+                    writeToZipFile(file, zipOS, fileName);
+                }
             }
             zipOS.close();
             fos.close();
@@ -78,6 +83,7 @@ public class ZIPService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return tmpFile;
     }
 
@@ -85,11 +91,8 @@ public class ZIPService {
      * @return zipPath
      */
     public File getAllZipFiles() {
-        File retZip = null;
         List<Module> modules = moduleService.getModules();
-        for (Module module : modules) {
-                retZip = getZipFileForModule(module);
-        }
+        File retZip = getZipFileForModule(modules);
         return retZip;
     }
 
@@ -97,14 +100,15 @@ public class ZIPService {
      * writes a file into a zipfile
      * @param file
      * @param zipStream
-     * @param applicant
+     * @param fileName
      * @throws FileNotFoundException
      * @throws IOException
      */
     public static void writeToZipFile(final File file,
-                                      final ZipOutputStream zipStream, final Applicant applicant) throws FileNotFoundException, IOException {
+                                      final ZipOutputStream zipStream,
+                                      final String fileName) throws FileNotFoundException, IOException {
         FileInputStream fileInputStream = new FileInputStream(file);
-        ZipEntry zipEntry = new ZipEntry(applicant.getFirstName() + "_" + applicant.getSurname() + ".pdf");
+        ZipEntry zipEntry = new ZipEntry(fileName);
         zipStream.putNextEntry(zipEntry);
         final int b = 1024;
         byte[] bytes = new byte[b];
