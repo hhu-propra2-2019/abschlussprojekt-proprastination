@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -103,7 +102,7 @@ public class DistributionService {
             List<Evaluation> sortedByOrgaPrio = new LinkedList<>();
 
             for (Evaluation evaluation : evaluations) {
-                if (evaluation.getPriority().getValue() == 1 && evaluation.getApplication().getPriority().getValue() == 1) {
+                if ((evaluation.getPriority().getValue() + evaluation.getApplication().getPriority().getValue()) == 2) {
                     sortedByOrgaPrio.add(evaluation);
                 }
             }
@@ -132,7 +131,8 @@ public class DistributionService {
 
                 Applicant applicant = applicantService.findByApplications(evaluation.getApplication());
                 for (int i = 0; i < numberOfHours; i++) {
-                    if (evaluation.getHours() == hours[i] && countHoursPerModule[moduleCount][i] < maxHoursPerModule[moduleCount][i]) {
+                    if (evaluation.getHours() == hours[i]
+                            && countHoursPerModule[moduleCount][i] < maxHoursPerModule[moduleCount][i]) {
                         applicantsPerModule[moduleCount].add(applicant);
                         allApplicants.remove(applicant);
                         countHoursPerModule[moduleCount][i]++;
@@ -200,7 +200,8 @@ public class DistributionService {
 
                     Applicant applicant = applicantService.findByApplications(evaluation.getApplication());
                     for (int i = 0; i < numberOfHours; i++) {
-                        if (evaluation.getHours() == hours[i] && countHoursPerModule[moduleCount][i] < maxHoursPerModule[moduleCount][i]) {
+                        if (evaluation.getHours() == hours[i]
+                                && countHoursPerModule[moduleCount][i] < maxHoursPerModule[moduleCount][i]) {
                             applicantsPerModule[moduleCount].add(applicant);
                             allApplicants.remove(applicant);
                             countHoursPerModule[moduleCount][i]++;
