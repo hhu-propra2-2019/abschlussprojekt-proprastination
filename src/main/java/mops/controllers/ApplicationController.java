@@ -472,18 +472,32 @@ public class ApplicationController {
      * Edits the given Application.
      *
      * @param webApplication Changes Data in WebApplication format.
+     * @param bindingResult  The result of validating webApplication.
      * @param token          Keycloak.
      * @param model          Model.
      * @return mainpage.
      */
     @PostMapping(value = "/bearbeiteModulDaten")
-    public String postEditModuledata(final WebApplication webApplication, final KeycloakAuthenticationToken token,
+    public String postEditModuledata(@Valid final WebApplication webApplication, final BindingResult bindingResult,
+                                     final KeycloakAuthenticationToken token,
                                      final Model model) {
+            if (bindingResult.hasErrors()) {
+                bindingResult.getAllErrors().forEach(err -> {
+                    LOGGER.info("ERROR {}", err.getDefaultMessage());
+            });
+        }
+
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
             Application application = applicationService.findById(webApplication.getId());
             Application newApplication = studentService.changeApplication(webApplication, application);
             applicationService.save(newApplication);
+        }
+
+        if (bindingResult.hasErrors()) {
+            Application application = applicationService.findById(webApplication.getId());
+            model.addAttribute("app", application);
+            return "applicant/applicationEditModule";
         }
         return "redirect:bewerbungsUebersicht";
     }

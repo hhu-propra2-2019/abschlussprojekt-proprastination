@@ -92,7 +92,9 @@
                                 <option value="4.0">4,0</option>
                                 <option value="5.0">5,0</option>
                             </select>
-
+                            <div th:if="${#fields.hasErrors('grade')}" class="text-danger">
+                                Bitte geben Sie eine Note an.
+                            </div>
                             <br>
                         </div>
                     </div>
@@ -101,13 +103,20 @@
                             <label for="semester">In welchem Semester haben Sie dieses Modul bestanden</label> <br>
                             <input class="form-control" id="semester" name="semester" required th:field="*{semester}"
                                    type="text">
+                            <div th:if="${#fields.hasErrors('semester')}" class="text-danger">
+                                Bitte geben Sie ein Semester an.
+                            </div>
                             <br>
                         </div>
                         <div class="col-6">
                             <label for="lecturer">Bei welchem Dozent haben Sie dieses Modul bestanden</label> <br>
-                            <input class="form-control" id="lecturer" name="lecturer" placeholder="Dozent" required
+                            <input class="form-control" id="lecturer" name="lecturer" placeholder="Dozent"
                                    th:field="*{lecturer}"
-                                   type="text">
+                                   type="text"
+                                   required>
+                            <div th:if="${#fields.hasErrors('lecturer')}" class="text-danger">
+                                Bitte geben Sie einen Dozenten an.
+                            </div>
                             <br>
                         </div>
                     </div>
