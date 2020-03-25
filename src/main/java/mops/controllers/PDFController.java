@@ -110,7 +110,7 @@ public class PDFController {
                                        @RequestParam("module") final String module,
                                        @RequestParam("applicants") final String applicant) {
         System.out.println("modul: " + module +  " applicant: " +  applicant);
-        return "pdfhandling";
+        return "redirect:download?student=" + applicant + "&module=" + module;
     }
     @PostMapping("/dummyModule")
     public String postDummyModule(final KeycloakAuthenticationToken token,
@@ -149,6 +149,9 @@ public class PDFController {
             Applicant applicant;
             Optional<Application> application;
             try {
+                if (module == null) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+                }
                 applicant = applicantService.findByUniserial(student);
                 application = applicant.getApplications().stream()
                         .filter(p -> p.getModule().getName().equals(module)).findFirst();

@@ -36,13 +36,13 @@
 </header>
 
 <main th:fragment="bodycontent">
-    <form th:action="@{dummyApplicantDone}" th:method="POST">
         <div class="card bg-light mb-3 border-primary">
             <div class="card-header"><h2>Downloaden Sie Bewerbungen als PDFs hier!</h2></div>
         </div>
         <div class="card bg-light mb-3 border-primary">
             <div class="card-header"><h4>Downloaden Sie Bewerbung als eines Studenten hier!</h4></div>
             <div class="card-body">
+                <form th:action="@{dummyApplicantDone}" th:method="POST">
                 <div class="row form-row">
                     <input th:type="hidden" th:name="module" th:id="module" th:value="${module}">
                     <label th:for="applicants">Suchen Sie hier den Studenten aus!</label><br>
@@ -52,12 +52,16 @@
                 </div>
                 <br>
                 <div class="row form-row">
-                    <button  th:ref="/bewerbung2/bewerber/pdf/download?student=${applicant}&module=${module}" th:value="Download" class="btn btn-outline-primary form-control">Download</button>
-                    <button type="submit" value="Download" class="btn btn-outline-primary form-control">Download</button>
+                    <button th:type="submit" th:value="Download" class="btn btn-outline-primary form-control">Download</button>
                 </div>
+                </form>
+                <form th:action="@{dummy}" th:method="GET">
+                    <div class="row form-row">
+                        <button th:type="submit" class="btn btn-outline-primary form-control">zurück zur Download Übersicht</button>
+                    </div>
+                </form>
             </div>
         </div>
-   </form>
 </main>
 </body>
 </html>
