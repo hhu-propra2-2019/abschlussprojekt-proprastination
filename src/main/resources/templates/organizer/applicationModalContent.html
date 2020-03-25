@@ -9,6 +9,8 @@
             <h3>Persönliche Daten</h3>
         </div>
         <div class="card-body">
+            <h3>Unikennung:</h3>
+            <p th:text="${appl.applicant.uniserial}">Stanistan</p>
             <h3>Anschrift:</h3>
             <p th:text="${appl.applicant.address.street + ' ' + appl.applicant.address.houseNumber}">Universitätsstraße 1</p>
             <p th:text="${appl.applicant.address.zipcode + ', ' + appl.applicant.address.city}">40225, Düsseldorf</p>
