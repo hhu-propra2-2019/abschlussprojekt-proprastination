@@ -29,10 +29,9 @@
                             Beim betätigen dieses Buttons werden alle Module angezeigt und die Studenten vorverteilt. Jegliche getätigte Änderungen werden zurückgesetzt.
                         </div>
                         <div class="col-2">
-                            <form th:action="@{/}" th:method="GET">
-                                <a class="btn btn-outline-primary float-right" name="back"
-                                   th:href="@{/bewerbung2/verteiler/vorverteilen}" type="submit"> Verteilen </a>
-                            </form>
+                            <button class="btn btn-outline-primary openBtn float-right" data-target="#distributeModal" data-toggle="modal" type="button">
+                                Verteilen
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -103,46 +102,75 @@
                 </div>
             </div>
         </div>
-        <script>
-            $(".form-search-wrapper").remove()
-        </script>
-        <script>
-            function allowDrop(ev) {
-                ev.preventDefault();
-            }
-
-            function drag(ev, el) {
-                ev.dataTransfer.setData("text", ev.target.id);
-                ev.dataTransfer.setData("applicantId", ev.currentTarget.id);
-                var help = el.dataset.applicantid;
-            }
-
-            function drop(ev, el) {
-                ev.preventDefault();
-                var data = ev.dataTransfer.getData("text");
-                var applicantElId = ev.dataTransfer.getData("applicantId");
-                var applicantEl = document.getElementById(applicantElId);
-                var applicantId = applicantEl.dataset.applicantid;
-                el.appendChild(document.getElementById(data));
-                var distributorId = el.dataset.distributionid;
-
-                window.location.href = "/bewerbung2/verteiler/" + distributorId + "/" + applicantId + "/"
-            }
-
-            function saveHours(el) {
-                var hour = el.value;
-                var applicantId = el.dataset.applicantid;
-                var distributionId = el.dataset.distributionid;
-                window.location.href = "/bewerbung2/verteiler/saveHours/" + distributionId + "/" + applicantId + "/" + hour + "/"
-            }
-
-            function saveChecked(el) {
-                var checked = el.checked;
-                var applicantId = el.dataset.applicantid;
-                window.location.href = "/bewerbung2/verteiler/saveChecked/" + applicantId + "/" + checked + "/"
-            }
-
-        </script>
     </div>
+
+    <div class="modal fade" id="distributeModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Automatisch verteilen?</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Beim Betätigen dieses Buttons werden alle Module angezeigt und die Studenten vorverteilt.
+                    <br>
+                    Jegliche getätigte Änderungen werden zurückgesetzt.
+                    <br>
+                    <br>
+                    Möchten Sie die automatische Verteilung starten?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Abbrechen</button>
+                    <form th:action="@{/}" th:method="GET">
+                        <a class="btn btn-outline-primary float-right" name="distribute"
+                           th:href="@{/bewerbung2/verteiler/vorverteilen}" type="submit"> Verteilen </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(".form-search-wrapper").remove()
+    </script>
+    <script>
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev, el) {
+            ev.dataTransfer.setData("text", ev.target.id);
+            ev.dataTransfer.setData("applicantId", ev.currentTarget.id);
+            var help = el.dataset.applicantid;
+        }
+
+        function drop(ev, el) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            var applicantElId = ev.dataTransfer.getData("applicantId");
+            var applicantEl = document.getElementById(applicantElId);
+            var applicantId = applicantEl.dataset.applicantid;
+            el.appendChild(document.getElementById(data));
+            var distributorId = el.dataset.distributionid;
+
+            window.location.href = "/bewerbung2/verteiler/" + distributorId + "/" + applicantId + "/"
+        }
+
+        function saveHours(el) {
+            var hour = el.value;
+            var applicantId = el.dataset.applicantid;
+            var distributionId = el.dataset.distributionid;
+            window.location.href = "/bewerbung2/verteiler/saveHours/" + distributionId + "/" + applicantId + "/" + hour + "/"
+        }
+
+        function saveChecked(el) {
+            var checked = el.checked;
+            var applicantId = el.dataset.applicantid;
+            window.location.href = "/bewerbung2/verteiler/saveChecked/" + applicantId + "/" + checked + "/"
+        }
+
+    </script>
 </main>
 </body>
