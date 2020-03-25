@@ -2,7 +2,6 @@ package mops.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import mops.model.Account;
-import mops.model.classes.Application;
 import mops.model.classes.webclasses.WebDistribution;
 import mops.services.DistributionService;
 import org.keycloak.KeycloakPrincipal;
@@ -12,9 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.List;
