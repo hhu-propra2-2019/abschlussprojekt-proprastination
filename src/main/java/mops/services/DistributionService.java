@@ -209,6 +209,9 @@ public class DistributionService {
             WebDistribution webDistribution = WebDistribution.builder()
                     .module(distribution.getModule().getName())
                     .id(distribution.getId() + "")
+                    .hours7(distribution.getModule().getSevenHourLimit())
+                    .hours9(distribution.getModule().getNineHourLimit())
+                    .hours17(distribution.getModule().getSeventeenHourLimit())
                     .webDistributorApplicants(webDistributorApplicantList)
                     .build();
             webDistributionList.add(webDistribution);
@@ -217,6 +220,9 @@ public class DistributionService {
                 convertUnassignedApplicantsToWebDistributorApplicants(findAllUnassigned());
         WebDistribution webDistribution = WebDistribution.builder()
                 .module("unassigned")
+                .hours7("0")
+                .hours9("0")
+                .hours17("0")
                 .id(-1 + "")
                 .webDistributorApplicants(webDistributorApplicantList)
                 .build();
