@@ -264,6 +264,7 @@ public class ApplicationController {
      * @param model model
      * @return webpage
      */
+    @SuppressWarnings("checkstyle:ParameterNumber")
     @PostMapping("/uebersichtBearbeitet")
     @Secured("ROLE_studentin")
     public String saveOverview(final KeycloakAuthenticationToken token,
