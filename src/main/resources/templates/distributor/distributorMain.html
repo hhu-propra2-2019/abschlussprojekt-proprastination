@@ -60,12 +60,12 @@
                                     </div>
                                     <div class="col">
                                         <div>
-                                            <input onClick="this.select();" type="text" size="1" th:value="${applicant.distributorHours}">
+                                            <input onClick="this.select();" type="text" size="1" th:value="${applicant.distributorHours}" th:attr="data-distributionId=${distribution.id}, data-applicantId=${applicant.id}" onblur="saveHours(this)">
                                             <label>Stunden</label>
                                         </div>
                                     </div>
                                     <div class="col text-right">
-                                        <input type="checkbox">
+                                        <input type="checkbox" th:id="check + ${applicantId}">
                                     </div>
                                 </div>
                             </div>
@@ -122,7 +122,7 @@
 
             function drag(ev, el) {
                 ev.dataTransfer.setData("text", ev.target.id);
-                ev.dataTransfer.setData("applicantId", ev.currentTarget.id)
+                ev.dataTransfer.setData("applicantId", ev.currentTarget.id);
                 var help = el.dataset.applicantid;
             }
 
@@ -137,6 +137,14 @@
 
                 window.location.href = "/bewerbung2/verteiler/" + distributorId + "/" + applicantId + "/"
             }
+
+            function saveHours(el) {
+                var hour = el.value;
+                var applicantId = el.dataset.applicantid;
+                var distributionId = el.dataset.distributionid;
+                window.location.href = "/bewerbung2/verteiler/saveHours/" + distributionId + "/" + applicantId + "/" + hour + "/"
+            }
+
         </script>
     </div>
 </main>

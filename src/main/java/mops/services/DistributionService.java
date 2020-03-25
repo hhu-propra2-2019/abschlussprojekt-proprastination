@@ -331,4 +331,25 @@ public class DistributionService {
             return "WHB";
         }
     }
+
+    /**
+     * saves new set hours
+     * @param applicantId applicantId
+     * @param distributionId distributionId
+     * @param hours hours
+     */
+    public void saveHours(final String applicantId, final String distributionId, final String hours) {
+        Applicant applicant = applicantService.findById(Long.parseLong(applicantId));
+        Optional<Distribution> distribution = distributionRepository.findById(Long.parseLong(distributionId));
+        if (distribution.isPresent()) {
+            for (Application application : applicant.getApplications()) {
+                if (application.getModule().equals(distribution.get().getModule())) {
+                    applicationService.save(application.toBuilder()
+                            .finalHours(Integer.parseInt(hours))
+                            .build());
+                }
+
+            }
+        }
+    }
 }
