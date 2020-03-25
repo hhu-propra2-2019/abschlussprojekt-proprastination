@@ -292,11 +292,9 @@ public class ApplicationController {
             });
         }
 
-        if (applicantBindingResult.hasErrors() | addressBindingResult.hasErrors()
-                | certificateBindingResult.hasErrors()) {
+        if (applicantBindingResult.hasErrors() || addressBindingResult.hasErrors()
+                || certificateBindingResult.hasErrors()) {
             if (token != null) {
-                Account account = createAccountFromPrincipal(token);
-                Applicant applicant = applicantService.findByUniserial(account.getName());
                 model.addAttribute("countries", CSVService.getCountries());
                 model.addAttribute("courses", CSVService.getCourses());
                 model.addAttribute("webApplicant", webApplicant);
