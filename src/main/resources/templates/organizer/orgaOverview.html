@@ -48,8 +48,8 @@
 </header>
 
 <main th:fragment="bodycontent">
-    <form th:action="@{./}" th:method="POST" th:object="${applications}">
-        <button th:type="submit" th:value="submit"></button>
+    <form th:action="@{./}" th:method="POST" th:object="${WebList}">
+        <button class="btn btn-primary" th:type="submit" th:value="submit">Speichern</button>
         <table id="table_id" class="display" style="width:100%">
             <thead>
             <tr>
@@ -65,30 +65,39 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="appl, stat : ${applications}">
+            <tr th:each="appl, stat : ${WebList.applications}">
                 <td class="text-center">
-                    <select name="priority" id="priority">
+                    <select id="priority" name="priority" th:field="*{applications[__${stat.index}__].priority}"
+                            th:name="|applications[__${stat.index}__].priority|" th:value="${appl.priority}">
                         <option th:each="priority : ${T(mops.model.classes.Priority).values()}"
                                 th:text="${priority.label}"
-                                th:selected="${priority==priority.NEUTRAL}" th:value="${priority}">++
+                                th:value="${priority}"
+                        >++
                         </option>
                     </select>
+                    <input th:field="*{applications[__${stat.index}__].id}" th:value="${appl.id}" type="hidden">
                 </td>
-                <td th:text="${appl.priority.label}" class="text-center">++</td>
+                <td class="text-center" th:text="${appl.studentPriotiry.label}"
+                    th:value="${appl.studentPriotiry.value}">++
+                </td>
                 <td th:text="${appl.grade}" class="text-center">2,7</td>
                 <td th:text="${appl.role.label}" class="text-center">Tutor</td>
                 <td th:text="${appl.minHours} + 'h'" class="text-center">7h</td>
                 <td th:text="${appl.maxHours} + 'h'" class="text-center">9h</td>
                 <td class="text-center">
-                    <select  th:value="${applications[stat.index].finalHours}" name="hours" id="hours"><!--th:field="${appl.finalHours}"-->
+                    <select id="hours" th:field="*{applications[__${stat.index}__].finalHours}"
+                            th:name="|applications[${stat.index}].finalHours|" th:value="${appl.finalHours}">
                         <option th:value="7">7 Stunden</option>
-                        <option th:value="9" selected>9 Stunden</option>
+                        <option th:value="9">9 Stunden</option>
                         <option th:value="17">17 Stunden</option>
                     </select>
                 </td>
-                <td th:text="${appl.applicant.uniserial}" class="text-center">Mamus100</td>
+                <td class="text-center" th:text="${appl.uniserial}">Mamus100</td>
                 <td class="text-center">
-                    <button type="button" class="btn btn-outline-dark openBtn" data-toggle="modal" data-target="#applicationModal" th:attr="data-id=${appl.id},data-name=${appl.applicant.firstName + ' ' + appl.applicant.surname}">Bewerbung ansehen</button>
+                    <button class="btn btn-outline-dark openBtn" data-target="#applicationModal" data-toggle="modal"
+                            th:attr="data-id=${appl.id},data-name=${appl.firstName + ' ' + appl.surname}" type="button">
+                        Bewerbung ansehen
+                    </button>
                 </td>
             </tr>
             </tbody>
