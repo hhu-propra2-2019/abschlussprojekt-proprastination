@@ -89,6 +89,8 @@ public class PDFController {
      */
     @GetMapping("/dummy")
     public String dummyPDFDownload(final KeycloakAuthenticationToken token, final Model model) {
+        Account account = createAccountFromPrincipal(token);
+        model.addAttribute("account", account);
         List<Module> modules = moduleService.getModules();
         List<String> moduleNames = new ArrayList<>();
         for (Module module : modules) {
@@ -109,6 +111,9 @@ public class PDFController {
     @PostMapping("/dummyApplicant")
     public String postDummyStudent(final KeycloakAuthenticationToken token, final Model model,
                                    @RequestParam("modulesStudent") final String module) {
+
+        Account account = createAccountFromPrincipal(token);
+        model.addAttribute("account", account);
 
         Module mod = moduleService.findModuleByName(module);
         List<Application> applications = applicationService.findApplicationsByModule(mod);
@@ -138,7 +143,7 @@ public class PDFController {
                                        @RequestParam("module") final String module,
                                        @RequestParam("applicants") final String applicant) {
         System.out.println("modul: " + module +  " applicant: " +  applicant);
-        return "redirect:download?student=" + applicant + "&module=" + module;
+        return "redirect:pdfDownload?student=" + applicant + "&module=" + module;
     }
 
     /**
@@ -149,8 +154,8 @@ public class PDFController {
      */
     @PostMapping("/dummyModule")
     public String postDummyModule(final KeycloakAuthenticationToken token,
-                                  @RequestParam("module") final String module) {
-        return "pdfhandling";
+                                  @RequestParam("modules") final String module) {
+        return "redirect:zipDownload?module=" + module;
     }
 
     /**
@@ -174,7 +179,7 @@ public class PDFController {
      * @throws IOException NoSuchElementException
      */
     @Secured({"ROLE_studentin", "ROLE_orga"})
-    @RequestMapping(value = "download", method = RequestMethod.GET)
+    @RequestMapping(value = "pdfDownload", method = RequestMethod.GET)
     public ResponseEntity<Resource> fileSystemResource(
             @RequestParam(value = "module") final String module, @RequestParam(value = "student") final String student,
             final KeycloakAuthenticationToken token, final Model model) throws IOException, NoSuchElementException {
@@ -202,8 +207,7 @@ public class PDFController {
             if (application.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }
-            String filepath = pdfService.generatePDF(application.get(), applicant);
-            File file = new File(filepath);
+            File file = pdfService.generatePDF(application.get(), applicant);
             Path path = Paths.get(file.getAbsolutePath());
             ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
 
@@ -221,7 +225,17 @@ public class PDFController {
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
-    @RequestMapping(value = "download", method = RequestMethod.GET)
+
+    /**
+     *
+     * @param module
+     * @param token
+     * @param model
+     * @return
+     * @throws IOException
+     * @throws NoSuchElementException
+     */
+    @RequestMapping(value = "zipDownload", method = RequestMethod.GET)
     public ResponseEntity<Resource> zipSystemResource(
             @RequestParam(value = "module") final String module,
             final KeycloakAuthenticationToken token, final Model model) throws IOException, NoSuchElementException {
@@ -234,13 +248,14 @@ public class PDFController {
             if (module == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }
-            String filepath = pdfService.generatePDF(application.get(), applicant);
-            File file = new File(filepath);
+
+            Module module1 = moduleService.findModuleByName(module);
+            File file = zipService.getZipFileForModule(module1);
             Path path = Paths.get(file.getAbsolutePath());
             ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
 
 
-            header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Bewerbung.pdf");
+            header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"download.zip\"");
             header.add("Cache-Control", "no-cache, no-store, must-revalidate");
             header.add("Pragma", "no-cache");
             header.add("Expires", "0");
@@ -248,7 +263,7 @@ public class PDFController {
             return ResponseEntity.ok()
                     .headers(header)
                     .contentLength(file.length())
-                    .contentType(MediaType.APPLICATION_PDF)
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
                     .body(resource);
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);

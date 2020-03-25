@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("checkstyle:MagicNumber")
 @Component
 public class DatabaseInit implements ServletContextInitializer {
-    private static final int ENTRYNUMBER = 100;
+    private static final int ENTRYNUMBER = 30;
     private transient Random random = new Random();
 
     private transient ApplicantRepository applicantRepository;

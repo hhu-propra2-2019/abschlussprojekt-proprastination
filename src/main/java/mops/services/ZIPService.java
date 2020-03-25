@@ -2,14 +2,11 @@ package mops.services;
 
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
+import mops.model.classes.Distribution;
 import mops.model.classes.Module;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -23,6 +20,7 @@ public class ZIPService {
     private ApplicationService applicationService;
     private ModuleService moduleService;
     private StudentService studentService;
+    private DistributionService distributionService;
 
     /**
      *
@@ -31,34 +29,47 @@ public class ZIPService {
      * @param applicationService
      * @param moduleService
      * @param studentService
+     * @param distributionService
      */
     public ZIPService(final PDFService pdfService, final ApplicantService applicantService,
                       final ApplicationService applicationService, final ModuleService moduleService,
-                      final StudentService studentService) {
+                      final StudentService studentService, final DistributionService distributionService) {
         this.pdfService = pdfService;
         this.applicantService = applicantService;
         this.applicationService = applicationService;
         this.moduleService = moduleService;
         this.studentService = studentService;
+        this.distributionService = distributionService;
     }
 
     /**
      *
-     * @param module
-     * @param zipPath
-     * @return zipPath
+     * @param distributions
+     * @return
      */
-    public String getZipFileForModule(final Module module, final String zipPath) {
-        String filepath;
+    public String getZipFileForDistribution(final List<Distribution> distributions) {
+        return "";
+    }
+
+    /**
+     * returns path for zipFile
+     * @param module
+     * @return randomised zipPath
+     */
+    public File getZipFileForModule(final Module module) {
+        File file;
         Applicant applicant;
         List<Application> applicationList = applicationService.findApplicationsByModule(module);
+        File tmpFile = null;
         try {
-            FileOutputStream fos = new FileOutputStream(zipPath);
+            tmpFile = File.createTempFile("bewerbung", ".zip");
+            tmpFile.deleteOnExit();
+            FileOutputStream fos = new FileOutputStream(tmpFile);
             ZipOutputStream zipOS = new ZipOutputStream(fos);
             for (Application application : applicationList) {
                     applicant = applicantService.findByApplications(application);
-                    filepath = pdfService.generatePDF(application, applicant);
-                    writeToZipFile(filepath, zipOS);
+                    file = pdfService.generatePDF(application, applicant);
+                    writeToZipFile(file, zipOS);
             }
             zipOS.close();
             fos.close();
@@ -67,35 +78,32 @@ public class ZIPService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return zipPath;
+        return tmpFile;
     }
 
     /**
-     *
-     * @param zipPath
      * @return zipPath
      */
-    public String getAllZipFiles(final String zipPath) {
-        String retZip = "";
+    public File getAllZipFiles() {
+        File retZip = null;
         List<Module> modules = moduleService.getModules();
         for (Module module : modules) {
-                retZip = getZipFileForModule(module, zipPath);
+                retZip = getZipFileForModule(module);
         }
         return retZip;
     }
 
     /**
      * writes a file into a zipfile
-     * @param path
+     * @param file
      * @param zipStream
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public static void writeToZipFile(final String path,
+    public static void writeToZipFile(final File file,
                                       final ZipOutputStream zipStream) throws FileNotFoundException, IOException {
-        File aFile = new File(path);
-        FileInputStream fileInputStream = new FileInputStream(aFile);
-        ZipEntry zipEntry = new ZipEntry(path);
+        FileInputStream fileInputStream = new FileInputStream(file);
+        ZipEntry zipEntry = new ZipEntry(file.getPath());
         zipStream.putNextEntry(zipEntry);
         final int b = 1024;
         byte[] bytes = new byte[b];

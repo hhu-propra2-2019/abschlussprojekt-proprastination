@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.UUID;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Service
 public class PDFService {
@@ -28,22 +30,28 @@ public class PDFService {
      * @param applicant   Applicant.
      * @return filepath to file.
      */
-    public String generatePDF(final Application application, final Applicant applicant) {
-        UUID uuid = UUID.randomUUID();
-        String filepath = "/tmp/" + uuid.toString() + ".pdf";
-
+    public File generatePDF(final Application application, final Applicant applicant) {
+        File tmpFile = null;
         try {
+            tmpFile = File.createTempFile("bewerbung", ".pdf");
+            tmpFile.deleteOnExit();
             document = new DocumentWithBachelor();
             addApplicationInfoToPDF(application);
             addApplicantInfoToPDF(applicant);
             document.addGeneralInfos();
-            document.save(new File(filepath));
-            logger.debug("Saved PDF to:" + filepath);
+            document.save(tmpFile);
+            logger.debug("Saved PDF to:" + tmpFile.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
-            logger.error("Saving PDF failed to path: " + filepath);
+            logger.error("Saving PDF failed to path: " + tmpFile.getAbsolutePath());
         }
-        return filepath;
+        Path path = Paths.get(tmpFile.getAbsolutePath());
+/*        try {
+            Files.move(path, path.resolveSibling(applicant.getFirstName() + "_" + applicant.getSurname() + ".pdf"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+        return tmpFile;
     }
 
     private void addApplicationInfoToPDF(final Application application) throws IOException {
