@@ -14,6 +14,7 @@ import java.util.List;
 public class WebDistributorApplicant {
 
     private String username;
+    private String fullName;
     private List<WebDistributorApplication> webDistributorApplications;
     private String distributorHours;
 }
