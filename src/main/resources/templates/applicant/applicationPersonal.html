@@ -74,7 +74,7 @@
                         <div class="col">
                             <select required th:class="form-control" th:field="*{country}"
                                     th:id="country" th:name="country" th:value="${webAddress.country}">
-                                <option th:each="country:${countrycodes}" th:text="${country}"
+                                <option th:each="country:${countries}" th:text="${country}"
                                         th:value="${country}"></option>
                             </select>
                         </div>

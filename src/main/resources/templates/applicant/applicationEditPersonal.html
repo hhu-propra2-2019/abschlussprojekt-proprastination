@@ -60,7 +60,7 @@
                             <select required th:attr="value = ${webAddress.country}" th:class="form-control"
                                     th:field="*{country}" th:id="country" th:name="country">
                                 <option disabled hidden selected value="">Land</option>
-                                <option th:each="country:${countrycodes}" th:text="${country}"
+                                <option th:each="country:${countries}" th:text="${country}"
                                         th:value="${country}"></option>
                             </select>
                         </div>

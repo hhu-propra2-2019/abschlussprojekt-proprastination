@@ -236,6 +236,6 @@ public class CSVService {
      * @return List of Country Codes
      */
     public static Object getCountryCodes() {
-        return getCSVData(0, "src/main/resources/csv/country_codes.csv");
+        return getCSVData(1, "src/main/resources/csv/countries.csv");
     }
 }

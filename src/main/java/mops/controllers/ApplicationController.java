@@ -120,7 +120,6 @@ public class ApplicationController {
             model.addAttribute("account", account);
             model.addAttribute("countries", CSVService.getCountries());
             model.addAttribute("courses", CSVService.getCourses());
-            model.addAttribute("countrycodes", CSVService.getCountryCodes());
             model.addAttribute("webApplicant", webApplicant);
             model.addAttribute("webAddress", webAddress);
             model.addAttribute("webCertificate", webCertificate);
@@ -398,7 +397,6 @@ public class ApplicationController {
 
             model.addAttribute("account", account);
             model.addAttribute("countries", CSVService.getCountries());
-            model.addAttribute("countrycodes", CSVService.getCountryCodes());
             model.addAttribute("courses", CSVService.getCourses());
             model.addAttribute("webApplicant", webApplicant);
             model.addAttribute("webAddress", webAddress);
