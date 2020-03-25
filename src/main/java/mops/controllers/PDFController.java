@@ -3,7 +3,10 @@ package mops.controllers;
 import mops.model.Account;
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
+import mops.model.classes.Module;
 import mops.services.ApplicantService;
+import mops.services.ApplicationService;
+import mops.services.ModuleService;
 import mops.services.PDFService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
@@ -16,9 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.SessionScope;
 
 import java.io.File;
@@ -26,6 +27,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -38,16 +41,25 @@ public class PDFController {
 
     private PDFService pdfService;
 
+    private ModuleService moduleService;
+
+    private ApplicationService applicationService;
+
     /**
      * Initiates PDF Controller
      *
      * @param applicantService applicantservice.
      * @param pdfService       pdfService.
+     * @param moduleService    moduleService
+     * @param applicationService applicationservice
      */
     @SuppressWarnings("checkstyle:HiddenField")
-    public PDFController(final ApplicantService applicantService, final PDFService pdfService) {
+    public PDFController(final ApplicantService applicantService, final PDFService pdfService, final ModuleService moduleService,
+                         final ApplicationService applicationService) {
         this.applicantService = applicantService;
         this.pdfService = pdfService;
+        this.moduleService = moduleService;
+        this.applicationService = applicationService;
     }
 
 
@@ -60,6 +72,56 @@ public class PDFController {
                 token.getAccount().getRoles());
     }
 
+
+    @GetMapping("/dummy")
+    public String dummyPDFDownload(final KeycloakAuthenticationToken token, final Model model) {
+        List<Module> modules = moduleService.getModules();
+        List<String> moduleNames = new ArrayList<>();
+        for(Module module : modules) {
+            moduleNames.add(module.getName());
+        }
+        model.addAttribute("modules", moduleNames);
+        model.addAttribute("modulesStudent", moduleNames);
+        return "pdfhandling";
+    }
+
+    @PostMapping("/dummyApplicant")
+    public String postDummyStudent(final KeycloakAuthenticationToken token, final Model model,
+                                   @RequestParam("modulesStudent") final String module) {
+
+        Module mod = moduleService.findModuleByName(module);
+        List<Application> applications = applicationService.findApplicationsByModule(mod);
+        List<Applicant> applicants = new ArrayList<>();
+        for (Application application : applications) {
+            applicants.add(applicantService.findByApplications(application));
+        }
+        List<String> applicantUniserials = new ArrayList<>();
+        for(Applicant applicant : applicants) {
+            applicantUniserials.add(applicant.getUniserial());
+        }
+        model.addAttribute("module", module);
+        model.addAttribute("applicants", applicantUniserials);
+
+        return "pdfhandlingapplicant";
+    }
+
+    @PostMapping("/dummyApplicantDone")
+    public String postDummyStudentDone(final KeycloakAuthenticationToken token,
+                                       @RequestParam("module") final String module,
+                                       @RequestParam("applicants") final String applicant) {
+        System.out.println("modul: " + module +  " applicant: " +  applicant);
+        return "pdfhandling";
+    }
+    @PostMapping("/dummyModule")
+    public String postDummyModule(final KeycloakAuthenticationToken token,
+                                  @RequestParam("module") final String module) {
+        return "pdfhandling";
+    }
+
+    @PostMapping("/dummyAll")
+    public String postDummyAll(final KeycloakAuthenticationToken token) {
+        return "pdfhandling";
+    }
 
     /**
      * Returns a FileStream of the requested PDF.
