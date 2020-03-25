@@ -13,5 +13,6 @@ public class WebAddress {
     private String street;
     private String number;
     private String city;
+    private String country;
     private String zipcode;
 }

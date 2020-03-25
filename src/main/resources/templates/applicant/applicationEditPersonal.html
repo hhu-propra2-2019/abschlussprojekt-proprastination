@@ -45,16 +45,24 @@
                             <input class="form-control" name="streetnumber" placeholder="Hausnummer" required
                                    th:field="*{number}" type="text">
                         </div>
-                        <div class="col-5">
+                        <div class="col-3">
                             <input placeholder="Ort" required th:attr="value = ${webAddress.city}"
                                    th:class="form-control" th:field="*{city}"
                                    th:id="city" th:name="city" th:type="text"> <br>
                         </div>
-                        <div class="col-2">
+                        <div class="col-1">
                             <input placeholder="Postleitzahl" required th:attr="value = ${webAddress.zipcode}"
                                    th:class="form-control"
                                    th:field="*{zipcode}"
                                    th:id="zipcode" th:name="zipcode" type="text"> <br>
+                        </div>
+                        <div class="col">
+                            <select required th:attr="value = ${webAddress.country}" th:class="form-control"
+                                    th:field="*{country}" th:id="country" th:name="country">
+                                <option disabled hidden selected value="">Land</option>
+                                <option th:each="country:${countries}" th:text="${country}"
+                                        th:value="${country}"></option>
+                            </select>
                         </div>
                     </div>
                     <div class="row">
