@@ -4,10 +4,7 @@ import mops.model.Account;
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
 import mops.model.classes.Module;
-import mops.services.ApplicantService;
-import mops.services.ApplicationService;
-import mops.services.ModuleService;
-import mops.services.PDFService;
+import mops.services.*;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.core.io.ByteArrayResource;
@@ -49,6 +46,8 @@ public class PDFController {
 
     private ApplicationService applicationService;
 
+    private ZIPService zipService;
+
     /**
      * Initiates PDF Controller
      *
@@ -56,16 +55,19 @@ public class PDFController {
      * @param pdfService       pdfService.
      * @param moduleService    moduleService
      * @param applicationService applicationservice
+     * @param zipService zipservice
      */
     @SuppressWarnings("checkstyle:HiddenField")
     public PDFController(final ApplicantService applicantService,
                          final PDFService pdfService,
                          final ModuleService moduleService,
-                         final ApplicationService applicationService) {
+                         final ApplicationService applicationService,
+                         final ZIPService zipService) {
         this.applicantService = applicantService;
         this.pdfService = pdfService;
         this.moduleService = moduleService;
         this.applicationService = applicationService;
+        this.zipService = zipService;
     }
 
 
@@ -200,7 +202,39 @@ public class PDFController {
             if (application.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }
-            String filepath = pdfService.generatePDF(application.get(), applicant);
+            String zipPath = ZI
+            File file = new File(filepath);
+            Path path = Paths.get(file.getAbsolutePath());
+            ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+
+
+            header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Module.zip");
+            header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+            header.add("Pragma", "no-cache");
+            header.add("Expires", "0");
+
+            return ResponseEntity.ok()
+                    .headers(header)
+                    .contentLength(file.length())
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .body(resource);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+    @RequestMapping(value = "download", method = RequestMethod.GET)
+    public ResponseEntity<Resource> zipSystemResource(
+            @RequestParam(value = "module") final String module,
+            final KeycloakAuthenticationToken token, final Model model) throws IOException, NoSuchElementException {
+        if (token != null) {
+            Account account = createAccountFromPrincipal(token);
+            model.addAttribute("account", account);
+
+            HttpHeaders header = new HttpHeaders();
+
+            if (module == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+            String filepath = .get(), applicant);
             File file = new File(filepath);
             Path path = Paths.get(file.getAbsolutePath());
             ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
@@ -219,5 +253,6 @@ public class PDFController {
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
+
 
 }
