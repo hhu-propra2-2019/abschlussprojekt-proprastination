@@ -69,7 +69,7 @@ public class ZIPService {
             for (Application application : applicationList) {
                     applicant = applicantService.findByApplications(application);
                     file = pdfService.generatePDF(application, applicant);
-                    writeToZipFile(file, zipOS);
+                    writeToZipFile(file, zipOS, applicant);
             }
             zipOS.close();
             fos.close();
@@ -97,13 +97,14 @@ public class ZIPService {
      * writes a file into a zipfile
      * @param file
      * @param zipStream
+     * @param applicant
      * @throws FileNotFoundException
      * @throws IOException
      */
     public static void writeToZipFile(final File file,
-                                      final ZipOutputStream zipStream) throws FileNotFoundException, IOException {
+                                      final ZipOutputStream zipStream, final Applicant applicant) throws FileNotFoundException, IOException {
         FileInputStream fileInputStream = new FileInputStream(file);
-        ZipEntry zipEntry = new ZipEntry(file.getPath());
+        ZipEntry zipEntry = new ZipEntry(applicant.getFirstName() + "_" + applicant.getSurname() + ".pdf");
         zipStream.putNextEntry(zipEntry);
         final int b = 1024;
         byte[] bytes = new byte[b];
