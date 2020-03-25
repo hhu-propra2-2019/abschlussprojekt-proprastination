@@ -195,9 +195,28 @@ public class CSVService {
     }
 
     /**
+     * Returns Country Code for given Country
+     *
+     * @param country Country
+     * @return countrycode
+     */
+    public static String getCodeForCountry(final String country) {
+        List<String[]> data = readFromCSV("src/main/resources/csv/countries.csv");
+        String[] strArr;
+        for (String[] datum : data) {
+            strArr = datum;
+            if (strArr[0].equals(country)) {
+                return strArr[1];
+            }
+        }
+        return "Not found";
+    }
+
+    /**
      * Get modules asserted to prof/organizer
-     * @return modules as list
+     *
      * @param profName name of the professor/organizer
+     * @return modules as list
      */
 
     public static List<String> getModulesForProf(final String profName) {
@@ -228,14 +247,5 @@ public class CSVService {
      */
     public static List<String> getSemester() {
         return getCSVData(0, "src/main/resources/csv/semester.csv");
-    }
-
-    /**
-     * Returns list of contry_codes.csv
-     *
-     * @return List of Country Codes
-     */
-    public static Object getCountryCodes() {
-        return getCSVData(1, "src/main/resources/csv/countries.csv");
     }
 }
