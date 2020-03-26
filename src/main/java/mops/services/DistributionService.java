@@ -218,6 +218,27 @@ public class DistributionService {
         }
     }
 
+    private void sortApplicationsInDistributions() {
+        List<Distribution> distributions = findAll();
+        for (Distribution distribution : distributions) {
+            List<Applicant> applicants = distribution.getEmployees();
+            for (Applicant applicant : applicants) {
+
+            }
+            applicants.sort(Comparator.comparing(a -> evaluationService.findByApplication(applicationService.findB(distribution
+        }
+    }
+
+    private Evaluation getEvaluationByApplicantAndModule(Applicant applicant, Module module) {
+        Set<Application> applications = applicant.getApplications();
+        for (Application application :
+                applications) {
+            if (application.getModule().equals(module)) {
+                return evaluationService.findByApplication(application);
+            }
+        }
+    }
+
     /**
      * changes finalHours in application
      *
