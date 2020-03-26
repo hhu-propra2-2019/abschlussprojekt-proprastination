@@ -13,7 +13,7 @@
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
+        <script src="/scroll-sneak.js"></script>
         <script src="/turbolinks.js"></script>
     </th:block>
 </head>
@@ -73,7 +73,7 @@
                             </div>
                     </div>
                 </div>
-                <div class="card-body" id="div1" th:id="drop + ${distribution.id}" th:attr="data-distributionid=${distribution.id}" ondrop="drop(event, this)" ondragover="allowDrop(event)">
+                <div class="card-body sneaky" id="div1" th:id="drop + ${distribution.id}" th:attr="data-distributionid=${distribution.id}" ondrop="drop(event, this)" ondragover="allowDrop(event)">
                     <div th:each="applicant: ${distribution.webDistributorApplicants}">
                         <div class="card w-100 bg-light mb-1 border-primary" th:id="drag + ${applicant.id}" id="drag1"  th:attr="data-applicantId=${applicant.id}" draggable="true" ondragstart="drag(event, this)">
                             <div class="card-header" th:style="${applicant.distributorHours == '0' && distribution.id != '-1'} ? 'background-color: rgba(255, 0, 0, 0.51)' : (${applicant.checked} ? 'background-color: rgba(108, 179, 255, 0.51)')">
@@ -151,19 +151,27 @@
         $(".form-search-wrapper").remove()
     </script>
     <script>
+        (function() {
+            var sneaky = new ScrollSneak(location.hostname);
+            var sneakyList = document.getElementsByClassName("sneaky");
+            var len = sneakyList.length;
+            for(var i; i < len; i++) {
+                alert("test");
+                sneakyList[i].ondrop = sneaky.sneak;
+            }
+        })();
+
         function allowDrop(ev) {
             ev.preventDefault();
         }
 
         function drag(ev, el) {
-            console.log("drag")
             ev.dataTransfer.setData("text", ev.target.id);
 
             ev.dataTransfer.setData("applicantId", ev.currentTarget.id);
         }
 
         function drop(ev, el) {
-            console.log("drop")
             ev.preventDefault();
             var data = ev.dataTransfer.getData("text");
             el.appendChild(document.getElementById(data));
@@ -172,8 +180,7 @@
             var applicantEl = document.getElementById(applicantElId);
             var applicantId = applicantEl.dataset.applicantid;
             var distributorId = el.dataset.distributionid;
-
-            var targetLocation = "/bewerbung2/verteiler/" + distributorId + "/" + applicantId + "/"
+            var targetLocation = "/bewerbung2/verteiler/" + distributorId + "/" + applicantId + "/";
             Turbolinks.visit(targetLocation)
         }
 
@@ -181,17 +188,16 @@
             var hour = el.value;
             var applicantId = el.dataset.applicantid;
             var distributionId = el.dataset.distributionid;
-            var targetLocation = "/bewerbung2/verteiler/saveHours/" + distributionId + "/" + applicantId + "/" + hour + "/"
+            var targetLocation = "/bewerbung2/verteiler/saveHours/" + distributionId + "/" + applicantId + "/" + hour + "/";
             Turbolinks.visit(targetLocation)
         }
 
         function saveChecked(el) {
             var checked = el.checked;
             var applicantId = el.dataset.applicantid;
-            var targetLocation = "/bewerbung2/verteiler/saveChecked/" + applicantId + "/" + checked + "/"
+            var targetLocation = "/bewerbung2/verteiler/saveChecked/" + applicantId + "/" + checked + "/";
             Turbolinks.visit(targetLocation)
         }
-
     </script>
     <script>
         $("#distributeModal").keyup(function(event) {
@@ -201,7 +207,8 @@
         });
 
         $("#distributeButton").click(function() {
-            window.location.href = "/bewerbung2/verteiler/vorverteilen"
+            var targetLocation = "/bewerbung2/verteiler/vorverteilen";
+            Turbolinks.visit(targetLocation)
         });
     </script>
 </main>
