@@ -199,17 +199,13 @@ public class PDFController {
         if (token != null) {
             Account account = createAccountFromPrincipal(token);
             model.addAttribute("account", account);
-            if (distributionService.findAll() != null) {
-                List<Distribution> distributions = distributionService.findAll();
-                List<String> moduleNames = new ArrayList<>();
-                for (Distribution distribution : distributions) {
-                    moduleNames.add(distribution.getModule().getName());
-                }
-                model.addAttribute("modules", moduleNames);
-                model.addAttribute("modulesStudent", moduleNames);
-            } else {
-                return "pdfhandling";
+            List<Distribution> distributions = distributionService.findAll();
+            List<String> moduleNames = new ArrayList<>();
+            for (Distribution distribution : distributions) {
+                moduleNames.add(distribution.getModule().getName());
             }
+            model.addAttribute("modules", moduleNames);
+            model.addAttribute("modulesStudent", moduleNames);
         }
         return "pdfhandlingdistribution";
     }

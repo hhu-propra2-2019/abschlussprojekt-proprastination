@@ -24,7 +24,6 @@ public class ZIPService {
     private ApplicantService applicantService;
     private ApplicationService applicationService;
     private ModuleService moduleService;
-    private StudentService studentService;
     private DistributionService distributionService;
 
     /**
@@ -33,17 +32,15 @@ public class ZIPService {
      * @param applicantService
      * @param applicationService
      * @param moduleService
-     * @param studentService
      * @param distributionService
      */
     public ZIPService(final PDFService pdfService, final ApplicantService applicantService,
                       final ApplicationService applicationService, final ModuleService moduleService,
-                      final StudentService studentService, final DistributionService distributionService) {
+                      final DistributionService distributionService) {
         this.pdfService = pdfService;
         this.applicantService = applicantService;
         this.applicationService = applicationService;
         this.moduleService = moduleService;
-        this.studentService = studentService;
         this.distributionService = distributionService;
     }
 
@@ -142,16 +139,17 @@ public class ZIPService {
     public static void writeToZipFile(final File file,
                                       final ZipOutputStream zipStream,
                                       final String fileName) throws FileNotFoundException, IOException {
-        FileInputStream fileInputStream = new FileInputStream(file);
-        ZipEntry zipEntry = new ZipEntry(fileName);
-        zipStream.putNextEntry(zipEntry);
         final int b = 1024;
         byte[] bytes = new byte[b];
         int length;
+        FileInputStream fileInputStream = new FileInputStream(file);
+        ZipEntry zipEntry = new ZipEntry(fileName);
+        zipStream.putNextEntry(zipEntry);
         while ((length = fileInputStream.read(bytes)) >= 0) {
             zipStream.write(bytes, 0, length);
         }
         zipStream.closeEntry();
+        zipStream.close();
         fileInputStream.close();
     }
 }
