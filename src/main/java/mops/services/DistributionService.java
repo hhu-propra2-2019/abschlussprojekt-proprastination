@@ -295,45 +295,6 @@ public class DistributionService {
         return webDistributionList;
     }
 
-    /**
-     * Sorts the WebDistributorApplicants by Matches
-     * @param applicantList List with all WebDistributorApplicants for Distribution
-     * @param module module of distribution
-     * @return sortet List of Applicants
-     */
-    private List<WebDistributorApplicant> sort(final List<WebDistributorApplicant> applicantList, final String module) {
-        final int numberOfOrgaPrios = 4;
-        final int numberOfApplPrio = 4;
-        List<WebDistributorApplicant> sortedApplicants = new LinkedList<>();
-        LinkedList<WebDistributorApplicant>[][] orgaPrios = new LinkedList[numberOfOrgaPrios][numberOfApplPrio];
-        LinkedList<WebDistributorApplicant> wrongApplicants = new LinkedList<>();
-        wrongApplicants.addAll(applicantList);
-        for (int i = 0; i < numberOfOrgaPrios; i++) {
-            for (int j = 0; j < numberOfApplPrio; j++) {
-                orgaPrios[i][j] = new LinkedList<>();
-            }
-        }
-        for (WebDistributorApplicant applicant : applicantList) {
-            for (WebDistributorApplication application : applicant.getWebDistributorApplications()) {
-                if (module.equals(application.getModule())) {
-                    int orgaPrio = application.getOrganizerPriority().getValue();
-                    int applPrio = application.getApplicantPriority().getValue();
-                    orgaPrios[orgaPrio - 1][applPrio - 1].add(applicant);
-                    wrongApplicants.remove(applicant);
-                }
-            }
-        }
-        for (int i = 0; i < numberOfOrgaPrios; i++) {
-            for (int j = 0; j < numberOfApplPrio; j++) {
-                sortedApplicants.addAll(orgaPrios[i][j]);
-            }
-        }
-        sortedApplicants.addAll(wrongApplicants);
-        return sortedApplicants;
-    }
-
-
-
     private List<WebDistributorApplicant> convertUnassignedApplicantsToWebDistributorApplicants(
             final List<Applicant> applicants) {
         List<WebDistributorApplicant> webDistributorApplicantList = new ArrayList<>();
@@ -428,6 +389,43 @@ public class DistributionService {
             newDistribution.get().getEmployees().add(applicant);
             distributionRepository.save(newDistribution.get());
         }
+    }
+
+    /**
+     * Sorts the WebDistributorApplicants by Matches
+     * @param applicantList List with all WebDistributorApplicants for Distribution
+     * @param module module of distribution
+     * @return sortet List of Applicants
+     */
+    private List<WebDistributorApplicant> sort(final List<WebDistributorApplicant> applicantList, final String module) {
+        final int numberOfOrgaPrios = 4;
+        final int numberOfApplPrio = 4;
+        List<WebDistributorApplicant> sortedApplicants = new LinkedList<>();
+        LinkedList<WebDistributorApplicant>[][] orgaPrios = new LinkedList[numberOfOrgaPrios][numberOfApplPrio];
+        LinkedList<WebDistributorApplicant> wrongApplicants = new LinkedList<>();
+        wrongApplicants.addAll(applicantList);
+        for (int i = 0; i < numberOfOrgaPrios; i++) {
+            for (int j = 0; j < numberOfApplPrio; j++) {
+                orgaPrios[i][j] = new LinkedList<>();
+            }
+        }
+        for (WebDistributorApplicant applicant : applicantList) {
+            for (WebDistributorApplication application : applicant.getWebDistributorApplications()) {
+                if (module.equals(application.getModule())) {
+                    int orgaPrio = application.getOrganizerPriority().getValue();
+                    int applPrio = application.getApplicantPriority().getValue();
+                    orgaPrios[orgaPrio - 1][applPrio - 1].add(applicant);
+                    wrongApplicants.remove(applicant);
+                }
+            }
+        }
+        for (int i = 0; i < numberOfOrgaPrios; i++) {
+            for (int j = 0; j < numberOfApplPrio; j++) {
+                sortedApplicants.addAll(orgaPrios[i][j]);
+            }
+        }
+        sortedApplicants.addAll(wrongApplicants);
+        return sortedApplicants;
     }
 
     private String getTypeOfApplicant(final Applicant applicant) {
