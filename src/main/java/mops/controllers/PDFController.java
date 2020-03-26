@@ -45,6 +45,7 @@ public class PDFController {
     private ApplicationService applicationService;
     private ZIPService zipService;
     private DistributionService distributionService;
+    private EMailService eMailService;
 
     /**
      * Initiates PDF Controller
@@ -55,6 +56,7 @@ public class PDFController {
      * @param applicationService applicationservice
      * @param zipService zipservice
      * @param distributionService distributionservice
+     * @param eMailService emailservice
      */
     @SuppressWarnings("checkstyle:HiddenField")
     public PDFController(final ApplicantService applicantService,
@@ -62,13 +64,15 @@ public class PDFController {
                          final ModuleService moduleService,
                          final ApplicationService applicationService,
                          final ZIPService zipService,
-                         final DistributionService distributionService) {
+                         final DistributionService distributionService,
+                         final EMailService eMailService) {
         this.applicantService = applicantService;
         this.pdfService = pdfService;
         this.moduleService = moduleService;
         this.applicationService = applicationService;
         this.zipService = zipService;
         this.distributionService = distributionService;
+        this.eMailService = eMailService;
     }
 
 
@@ -132,14 +136,20 @@ public class PDFController {
     /**
      * download pdf with given module and applicant
      * @param token token
+     * @param model model
      * @param module module
      * @param applicant applicant
      * @return download pdf
      */
     @PostMapping("/downloadBewerberFertig")
     public String downloadApplicantDone(final KeycloakAuthenticationToken token,
+                                       final Model model,
                                        @RequestParam("module") final String module,
                                        @RequestParam("applicants") final String applicant) {
+        if (token != null) {
+            Account account = createAccountFromPrincipal(token);
+            model.addAttribute("account", account);
+        }
         return "redirect:pdfDownload?student=" + applicant + "&module=" + module;
     }
 
@@ -220,14 +230,37 @@ public class PDFController {
     /**
      *
      * @param token
-     * @return
+     * @param model
+     * @return download
      */
     @PostMapping("/downloadAllesZugeteilt")
-    public String distributeDownloadAll(final KeycloakAuthenticationToken token) {
-
-        return "";
+    public String distributeDownloadAll(final KeycloakAuthenticationToken token, final Model model) {
+        if (token != null) {
+            Account account = createAccountFromPrincipal(token);
+            model.addAttribute("account", account);
+        }
+        return "redirect:zipAllDistributedDownload";
     }
 
+    /**
+     *
+     * @param token
+     * @param model
+     * @param eMail
+     * @return
+     */
+    @PostMapping("/versenden")
+    public String sendApplications(final KeycloakAuthenticationToken token,
+                                   final Model model,
+                                   @RequestParam("email") final String eMail) {
+       if (token != null) {
+           Account account = createAccountFromPrincipal(token);
+           model.addAttribute("account", account);
+           File file = zipService.getZipFileForAllDistributions();
+           eMailService.sendEmailToRecipient(eMail, file);
+       }
+        return "redirect:zuteilungUebersicht";
+    }
     /**
      * Returns a FileStream of the requested PDF.
      *
@@ -349,6 +382,41 @@ public class PDFController {
 
             List<Module> modules = moduleService.getModules();
             File file = zipService.getZipFileForModule(modules);
+            Path path = Paths.get(file.getAbsolutePath());
+            ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+
+
+            header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"download.zip\"");
+            header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+            header.add("Pragma", "no-cache");
+            header.add("Expires", "0");
+
+            return ResponseEntity.ok()
+                    .headers(header)
+                    .contentLength(file.length())
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .body(resource);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+    /**
+     *
+     * @param token
+     * @param model
+     * @return
+     * @throws IOException
+     * @throws NoSuchElementException
+     */
+    @RequestMapping(value = "zipAllDistributedDownload", method = RequestMethod.GET)
+    public ResponseEntity<Resource> zipAllDistributedSystemResource(
+            final KeycloakAuthenticationToken token, final Model model) throws IOException, NoSuchElementException {
+        if (token != null) {
+            Account account = createAccountFromPrincipal(token);
+            model.addAttribute("account", account);
+
+            HttpHeaders header = new HttpHeaders();
+
+            File file = zipService.getZipFileForAllDistributions();
             Path path = Paths.get(file.getAbsolutePath());
             ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
 
