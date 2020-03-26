@@ -13,7 +13,7 @@
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-        <script src="/scroll-sneak.js"></script>
+        <script type="text/javascript" src="/scroll_sneak.js"></script>
         <script src="/turbolinks.js"></script>
     </th:block>
 </head>
@@ -139,20 +139,15 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Abbrechen</button>
-                        <button class="btn btn-outline-primary" id="distributeButton" name="distribute"
-                            type="submit"> Bestätigen </button>
+                        <button class="btn btn-outline-primary" id="distributeButton" name="distribute" type="submit"> Bestätigen </button>
                 </div>
             </div>
         </div>
     </div>
 
-
-    <script>
-        $(".form-search-wrapper").remove()
-    </script>
     <script>
 
-        (function() {
+        /*(function() {
             var sneaky = new ScrollSneak(location.hostname);
             var sneakyList = document.getElementsByClassName("sneaky");
             var len = sneakyList.length;
@@ -160,13 +155,22 @@
                 alert("test");
                 sneakyList[i].ondrop = sneaky.sneak;
             }
-        })();
+        })();*/
 
         $('#drag1').draggable({
             scroll: true,
             scrollSensivity: 40,
             scrollSpeed: 40
         })
+
+        $(document).ready(function(){
+            var sneaky = new ScrollSneak(location.hostname);
+
+            alert("test");
+            $('.sneaky').each(function(){
+                this.ondrop = sneaky.sneak;
+            });
+        });
     </script>
     <script>
         function allowDrop(ev) {
