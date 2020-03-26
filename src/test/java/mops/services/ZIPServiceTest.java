@@ -111,7 +111,7 @@ class ZIPServiceTest {
     }
 
     @Test
-    void getZipFileForAllDistributions() {
+    void getZipFileForAllDistributions() throws IOException {
         File file = zipService.getZipFileForAllDistributions();
 
         assertThat(file).exists();
@@ -122,7 +122,7 @@ class ZIPServiceTest {
     }
 
     @Test
-    void getZipFileForModule() {
+    void getZipFileForModule() throws IOException {
         File file = zipService.getZipFileForModule(Arrays.asList(Module.builder().build()));
 
         assertThat(file).exists();
