@@ -20,6 +20,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailSendException;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +30,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.annotation.SessionScope;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.File;
 import java.io.IOException;
@@ -109,6 +112,7 @@ public class PDFController {
         for (Module module : modules) {
             moduleNames.add(module.getName());
         }
+        model.addAttribute("verteilt", distributionService.getSize());
         model.addAttribute("modules", moduleNames);
         model.addAttribute("modulesStudent", moduleNames);
         return "pdfhandling";
@@ -200,6 +204,10 @@ public class PDFController {
             Account account = createAccountFromPrincipal(token);
             model.addAttribute("account", account);
             List<Distribution> distributions = distributionService.findAll();
+            if (distributions.size() == 0) {
+                return "redirect:uebersicht";
+            }
+
             List<String> moduleNames = new ArrayList<>();
             for (Distribution distribution : distributions) {
                 moduleNames.add(distribution.getModule().getName());
@@ -255,25 +263,37 @@ public class PDFController {
     }
 
     /**
-     *
-     * @param token token
-     * @param model model
-     * @param eMail email
+     * @param token      token
+     * @param attributes model
+     * @param eMail      email
      * @return webpage
      */
     @Secured({"ROLE_verteiler", "ROLE_orga"})
     @PostMapping("/versenden")
-    public String sendApplications(final KeycloakAuthenticationToken token,
-                                   final Model model,
-                                   @RequestParam("email") final String eMail) {
-       if (token != null) {
-           Account account = createAccountFromPrincipal(token);
-           model.addAttribute("account", account);
-           File file = zipService.getZipFileForAllDistributions();
-           eMailService.sendEmailToRecipient(eMail, file);
-       }
-        return "redirect:zuteilungUebersicht";
+    public RedirectView sendApplications(final KeycloakAuthenticationToken token,
+                                         final RedirectAttributes attributes,
+                                         @RequestParam("email") final String eMail) {
+        if (token != null) {
+            Account account = createAccountFromPrincipal(token);
+            attributes.addFlashAttribute("account", account);
+            String message;
+            String type;
+            try {
+                File file = zipService.getZipFileForAllDistributions();
+                eMailService.sendEmailToRecipient(eMail, file);
+                message = "Die Email wurde erfolgreich versendet";
+                type = "success";
+            } catch (MailSendException | IOException e) {
+                message = e.getMessage();
+                type = "danger";
+            }
+            attributes.addFlashAttribute("message", message);
+            attributes.addFlashAttribute("type", type);
+
+        }
+        return new RedirectView("zuteilungUebersicht", true);
     }
+
     /**
      * Returns a FileStream of the requested PDF.
      *
@@ -334,8 +354,9 @@ public class PDFController {
 
     /**
      * Downloads all applications for a module
+     *
      * @param module module
-     * @param token token
+     * @param token  token
      * @param model
      * @return file
      * @throws IOException
