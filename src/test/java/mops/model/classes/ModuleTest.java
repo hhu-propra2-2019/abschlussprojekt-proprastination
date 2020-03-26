@@ -114,4 +114,15 @@ class ModuleTest {
         assertNotEquals(hashCode, newHashCode);
     }
 
+    @Test
+    void testToString() {
+        String expected = "Module(name=Introduction to Logic, deadline=2018-11-30T18:35:24Z, "
+                + "shortName=Logic, profName=Hershel Layton, sevenHourLimit=7, "
+                + "nineHourLimit=9, seventeenHourLimit=17, hourLimit=42)";
+
+        String result = module.toString();
+
+        assertEquals(expected, result);
+    }
+
 }
