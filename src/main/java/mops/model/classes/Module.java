@@ -40,7 +40,6 @@ public class Module {
     private String sevenHourLimit;
     private String nineHourLimit;
     private String seventeenHourLimit;
-    private String hourLimit;
     /**
      * Transfer Module into WebModule
      * @return WebModule
@@ -53,7 +52,6 @@ public class Module {
                 .sevenHourLimit(this.sevenHourLimit)
                 .nineHourLimit(this.nineHourLimit)
                 .seventeenHourLimit(this.seventeenHourLimit)
-                .hourLimit(this.hourLimit)
                 .build();
     }
 }

@@ -384,7 +384,6 @@ public class DatabaseInit implements ServletContextInitializer {
         String[] shortNames = {"ProPra1", "Propra2", "RDB", "Aldat", "Theo"};
         String[] profSerial = {"orga", "bewerbung2_all_roles", "bewerbung2_studentin_orga",
                 "bewerbung2_verteiler_orga", "Stefan"};
-        String[] hour = {"0", "01", "02"};
         for (int i = 0; i < modulenames.length; i++) {
             Instant date = faker.date().future(300, 30, TimeUnit.DAYS).toInstant();
             Module module = Module.builder()
@@ -394,7 +393,6 @@ public class DatabaseInit implements ServletContextInitializer {
                     .nineHourLimit((1 + random.nextInt(5)) + "")
                     .seventeenHourLimit((1 + random.nextInt(5)) + "")
                     .profSerial(profSerial[i])
-                    .hourLimit(hour[i % 3])
                     .deadline(date)
                     .build();
             moduleRepository.save(module);

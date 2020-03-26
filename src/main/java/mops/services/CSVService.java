@@ -26,7 +26,6 @@ public class CSVService {
     private static final int SEVEN_HOUR_LIMIT = 3;
     private static final int NINE_HOUR_LIMIT = 4;
     private static final int SEVENTEEN_HOUR_LIMIT = 5;
-    private static final int HOUR_LIMIT = 6;
 
     /**
      * Reads from CSV-file
@@ -137,14 +136,6 @@ public class CSVService {
     }
 
     /**
-     * return hour limit for modules
-     * @return List of all limits
-     */
-    public static List<String> getHourLimits() {
-        return getCSVData(HOUR_LIMIT, "src/main/resources/csv/module.csv");
-    }
-
-    /**
      * Get modules with all details
      * @return return module with details as list of Modules
      */
@@ -161,7 +152,6 @@ public class CSVService {
                     .sevenHourLimit(tmp[SEVEN_HOUR_LIMIT])
                     .nineHourLimit(tmp[NINE_HOUR_LIMIT])
                     .seventeenHourLimit(tmp[SEVENTEEN_HOUR_LIMIT])
-                    .hourLimit(tmp[HOUR_LIMIT])
                     .build();
             moduleList.add(newModule);
         }

@@ -2,7 +2,6 @@ package mops.services;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
-import mops.model.classes.webclasses.WebModule;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,18 +121,6 @@ class CSVServiceTest{
     }
 
     @Test
-    void readLimitsFromCSV() {
-        List<String> limits;
-
-        limits = CSVService.getHourLimits();
-
-        assertThat(limits.size()).isEqualTo(3);
-        assertThat(limits.get(0)).isEqualTo("80");
-        assertThat(limits.get(1)).isEqualTo("120");
-        assertThat(limits.get(2)).isEqualTo("60");
-    }
-
-    @Test
     void getModuleProfsTest() {
         List<String> profs;
 
@@ -144,6 +131,7 @@ class CSVServiceTest{
         assertThat(profs.get(1)).isEqualTo("Christian Meter");
         assertThat(profs.get(2)).isEqualTo("Anna Wintour");
     }
+
     @Test
     void getProfForModuleTestNotFail() {
         String prof;
