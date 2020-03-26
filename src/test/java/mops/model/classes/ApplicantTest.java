@@ -75,9 +75,9 @@ class ApplicantTest {
                 " surname=J, address=Address(street=Baker Street, houseNumber=21B, city=London, country=England," +
                 " zipcode=NW1 6XE), checked=false, gender=null, birthday=01.01.2001, nationality=English, course=Arts, status=New," +
                 " comment=null, certs=Certificate(name=Bachelor, course=Harvard), applications=[Application" +
-                "(minHours=0, finalHours=0, maxHours=0, module=Module(name=Info4, deadline=1970-01-01T00:01:40Z, " +
-                "shortName=null, profName=null, sevenHourLimit=null, nineHourLimit=null, seventeenHourLimit=null, " +
-                "hourLimit=null), priority=null, grade=0.0, lecturer=null, semester=null, role=null, comment=null" +
+                "(minHours=0, finalHours=0, maxHours=0, module=Module(name=Info4, deadline=1970-01-01T00:01:40Z," +
+                " shortName=null, profSerial=null, sevenHourLimit=null, nineHourLimit=null, seventeenHourLimit=null)," +
+                " priority=null, grade=0.0, lecturer=null, semester=null, role=null, comment=null" +
                 ")])");
     }
 }

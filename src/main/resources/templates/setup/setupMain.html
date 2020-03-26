@@ -67,11 +67,10 @@
                         <form th:action="@{modulBearbeiten}" th:method="POST">
                             <input id="name" name="name" type="hidden" th:value="${module.name}">
                             <input id="shortName" name="shortName" type="hidden" th:value="${module.shortName}">
-                            <input id="profName" name="profName" type="hidden" th:value="${module.profName}">
+                            <input id="profSerial" name="profSerial" type="hidden" th:value="${module.profSerial}">
                             <input id="sevenHourLimit" name="sevenHourLimit" type="hidden" th:value="${module.sevenHourLimit}">
                             <input id="nineHourLimit" name="nineHourLimit" type="hidden" th:value="${module.nineHourLimit}">
                             <input id="seventeenHourLimit" name="seventeenHourLimit" type="hidden" th:value="${module.seventeenHourLimit}">
-                            <input id="hourLimit" name="hourLimit" type="hidden" th:value="${module.hourLimit}">
                             <button class="btn btn-outline-primary btn-sm float-right" type="submit">Bearbeiten</button>
                         </form>
                     </div>
@@ -81,24 +80,23 @@
                 <div class="row">
                     <div class="col-3">
                         <div>Kurzform: </div>
-                        <div>Zugeordnete Person: </div>
-                        <div>Stundenlimit Gesamt: </div>
+                        <div>Zugeordnete Person (Unikennung): </div>
                     </div>
-                    <div class="col-3">
+                    <div class="col-2">
                         <div th:text="${module.shortName}"></div>
-                        <div th:text="${module.profName}"></div>
-                        <div th:text="${module.hourLimit}"></div>
+                        <div th:text="${module.profSerial}"></div>
                     </div>
-                    <div class="col-3">
+                    <div class="col-2">
                         <div>Personenanzahl 7 Std: </div>
                         <div>Personenanzahl 9 Std: </div>
                         <div>Personenanzahl 17 Std: </div>
                     </div>
-                    <div class="col-3">
+                    <div class="col-1">
                         <div th:text="${module.sevenHourLimit}"></div>
                         <div th:text="${module.nineHourLimit}"></div>
                         <div th:text="${module.seventeenHourLimit}"></div>
                     </div>
+                    <div class="col-4"></div>
                 </div>
             </div>
         </div><br>

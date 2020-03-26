@@ -149,7 +149,7 @@
                                     Geben Sie bitte hier ihre Priorität für dieses Modul an,
                                     falls sie vor haben sich noch bei anderen Modulen zu bewerben
                                 </label> <br>
-                                <select class="form-control" id="priority" name="priority" th:field="*{priority}">
+                                <select class="form-control" id="priority" name="priority" th:field="*{priority}" th:unless="${module.value} == 4">
                                     <option th:each="module : ${T(mops.model.classes.Priority).values()}"
                                             th:text="${module.label}" th:value="${module}">++
                                     </option>

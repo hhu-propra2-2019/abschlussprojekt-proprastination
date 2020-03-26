@@ -55,8 +55,9 @@
                         <div class="card-text">Kurzform des Moduls</div>
                     </div>
                     <div class="col-3">
-                        <div class="card-text">Zugeordnete Person</div>
+                        <div class="card-text">Zugeordnete Person (Unikennung)</div>
                     </div>
+                    <div class="col-3"></div>
                 </div>
                 <div class="row container-fluid">
                     <input id="oldName" name="oldName" type="hidden" th:value="${module.name}">
@@ -69,9 +70,10 @@
                                th:value="${module.shortName}" th:placeholder="${module.shortName}" th:field="${module.shortName}">
                     </div>
                     <div class="col-3">
-                        <input type="text" name="profName" id="profName"
-                               th:value="${module.profName}" th:placeholder="${module.profName}" th:field="${module.profName}">
+                        <input type="text" name="profSeriale" id="profSerial"
+                               th:value="${module.profSerial}" th:placeholder="${module.profSerial}" th:field="${module.profSerial}">
                     </div>
+                    <div class="col-3"></div>
                 </div><br>
                 <div class="row container-fluid">
                     <div class="col-3">
@@ -83,9 +85,7 @@
                     <div class="col-3">
                         <div class="card-text">Personenanzahl 17 Std: </div>
                     </div>
-                    <div class="col-3">
-                        <div class="card-text">Stundenlimit Gesamt</div>
-                    </div>
+                    <div class="col-3"></div>
                 </div>
                 <div class="row container-fluid">
                     <div class="col-3">
@@ -103,11 +103,7 @@
                                th:value="${module.seventeenHourLimit}" th:placeholder="${module.seventeenHourLimit}"
                                th:field="${module.seventeenHourLimit}">
                     </div>
-                    <div class="col-3">
-                        <input type="number" name="hourLimit" id="hourLimit"
-                               th:value="${module.hourLimit}" th:placeholder="${module.hourLimit}"
-                               th:field="${module.hourLimit}">
-                    </div>
+                    <div class="col-3"></div>
                 </div>
             </div>
         </div>

@@ -54,8 +54,8 @@
                                class="form-control" placeholder="Abkürzung des Moduls" th:field="*{shortName}">
                     </div>
                     <div class="col float-right">
-                        <input type="text" name="profName" id="profName"
-                               class="form-control" placeholder="Zugeordnete Person" th:field="*{profName}">
+                        <input type="text" name="profSerial" id="profSerial"
+                               class="form-control" placeholder="Zugeordnete Person (Unikennung)" th:field="*{profSerial}">
                     </div>
                 </div><br><br>
                 <div class="row">
@@ -78,10 +78,6 @@
                     <div class="col">
                         <input type="number" name="seventeenHourLimit" id="seventeenHourLimit"
                                class="form-control" placeholder="Tutoren mit 17 Stunden" th:field="*{seventeenHourLimit}">
-                    </div>
-                    <div class="col">
-                        <input type="number" name="hourLimit" id="hourLimit"
-                               class="form-control" placeholder="Stundenlimit Gesamt" th:field="*{hourLimit}">
                     </div>
                 </div>
             </div>

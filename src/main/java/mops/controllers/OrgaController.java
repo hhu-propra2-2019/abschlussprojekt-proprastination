@@ -1,6 +1,7 @@
 package mops.controllers;
 
 import mops.model.Account;
+import mops.model.classes.Module;
 import mops.model.classes.orgaWebClasses.WebList;
 import mops.model.classes.orgaWebClasses.WebListClass;
 import mops.services.ModuleService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.annotation.SessionScope;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @SessionScope
@@ -61,8 +63,15 @@ public class OrgaController {
     public String index(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
+            List<Module> modules = new ArrayList<>();
+            for (Module module : moduleService.getModules()) {
+                if (module.getProfSerial().equals(token.getName())) {
+                    modules.add(module);
+                }
+            }
+            model.addAttribute("modules", modules);
         }
-        model.addAttribute("modules", moduleService.getModules());
+
         return "organizer/orgaMain";
     }
 

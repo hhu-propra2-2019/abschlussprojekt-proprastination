@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("checkstyle:MagicNumber")
 @Component
 public class DatabaseInit implements ServletContextInitializer {
-    private static final int ENTRYNUMBER = 30;
+    private static final int ENTRYNUMBER = 100;
     private transient Random random = new Random();
 
     private transient ApplicantRepository applicantRepository;
@@ -117,7 +117,7 @@ public class DatabaseInit implements ServletContextInitializer {
                     .semester("SS2020")
                     .comment(truncate(faker.rickAndMorty().quote(), 255))
                     .role(getRole())
-                    .priority(nextPriority())
+                    .priority(nextPriorityApplicant())
                     .build();
 
             Application application2 = Application.builder()
@@ -130,7 +130,7 @@ public class DatabaseInit implements ServletContextInitializer {
                     .semester("SS2020")
                     .comment(truncate(faker.rickAndMorty().quote(), 255))
                     .role(getRole())
-                    .priority(nextPriority())
+                    .priority(nextPriorityApplicant())
                     .build();
 
             Applicant applicant = Applicant.builder()
@@ -155,15 +155,6 @@ public class DatabaseInit implements ServletContextInitializer {
         applicantRepository.save(createMainRole("studentin", faker));
 
     }
-
-    private String nextCertificateName(final Faker faker) {
-        if (random.nextInt(5) != 4) {
-            return "Keins";
-        } else {
-            return faker.educator().course();
-        }
-    }
-
 
     private Module[] nextModules() {
         long value = random.nextInt(5) + 1;
@@ -198,6 +189,22 @@ public class DatabaseInit implements ServletContextInitializer {
                 break;
             default:
                 prio = Priority.NEGATIVE;
+                break;
+        }
+        return prio;
+    }
+
+    private Priority nextPriorityApplicant() {
+        Priority prio;
+        switch (random.nextInt(3)) {
+            case 0:
+                prio = Priority.VERYHIGH;
+                break;
+            case 1:
+                prio = Priority.HIGH;
+                break;
+            default:
+                prio = Priority.NEUTRAL;
                 break;
         }
         return prio;
@@ -296,7 +303,7 @@ public class DatabaseInit implements ServletContextInitializer {
                 .semester("SS2020")
                 .comment(truncate(faker.rickAndMorty().quote(), 255))
                 .role(getRole())
-                .priority(nextPriority())
+                .priority(nextPriorityApplicant())
                 .build();
 
         Application application2 = Application.builder()
@@ -309,7 +316,7 @@ public class DatabaseInit implements ServletContextInitializer {
                 .semester("SS2020")
                 .comment(truncate(faker.rickAndMorty().quote(), 255))
                 .role(getRole())
-                .priority(nextPriority())
+                .priority(nextPriorityApplicant())
                 .build();
 
         return Applicant.builder()
@@ -375,8 +382,8 @@ public class DatabaseInit implements ServletContextInitializer {
                 "RDB",
                 "Algorithmen und Datenstrukturen", "Theoretische Informatik"};
         String[] shortNames = {"ProPra1", "Propra2", "RDB", "Aldat", "Theo"};
-        String[] profNames = {"Jens", "Chris", "Ursula", "Martin", "Stefan"};
-        String[] hour = {"0", "01", "02"};
+        String[] profSerial = {"orga", "bewerbung2_all_roles", "bewerbung2_studentin_orga",
+                "bewerbung2_verteiler_orga", "Stefan"};
         for (int i = 0; i < modulenames.length; i++) {
             Instant date = faker.date().future(300, 30, TimeUnit.DAYS).toInstant();
             Module module = Module.builder()
@@ -385,8 +392,7 @@ public class DatabaseInit implements ServletContextInitializer {
                     .sevenHourLimit((1 + random.nextInt(5)) + "")
                     .nineHourLimit((1 + random.nextInt(5)) + "")
                     .seventeenHourLimit((1 + random.nextInt(5)) + "")
-                    .profName(profNames[i])
-                    .hourLimit(hour[i % 3])
+                    .profSerial(profSerial[i])
                     .deadline(date)
                     .build();
             moduleRepository.save(module);
