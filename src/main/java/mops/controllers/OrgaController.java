@@ -1,11 +1,9 @@
 package mops.controllers;
 
 import mops.model.Account;
-import mops.model.classes.Module;
 import mops.model.classes.Organizer;
 import mops.model.classes.orgaWebClasses.WebList;
 import mops.model.classes.orgaWebClasses.WebListClass;
-import mops.model.classes.webclasses.WebModule;
 import mops.services.ModuleService;
 import mops.services.OrgaService;
 import mops.services.OrganizerService;
@@ -17,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.SessionScope;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @SessionScope
@@ -66,22 +63,8 @@ public class OrgaController {
     public String index(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
-            List<Module> modules = new ArrayList<>();
-            for (Module module : moduleService.getModules()) {
-                if (module.getProfSerial().equals(token.getName())) {
-                    modules.add(module);
-                }
-            }
-            model.addAttribute("modules", modules);
-            Organizer organizer = organizerService.findByUniserial(token.getName());
-            if (organizer == null) {
-                organizer = Organizer.builder()
-                        .uniserial(token.getName())
-                        .phonenumber("Bitte speichern Sie Ihre Telefonnummer!")
-                        .build();
-                organizerService.save(organizer);
-            }
-            model.addAttribute("organizer", organizer);
+            model.addAttribute("modules", organizerService.getOrganizerModulesByName(token.getName()));
+            model.addAttribute("organizer", organizerService.getOrganizerOrNewOrganizer(token.getName()));
         }
 
         return "organizer/orgaMain";
@@ -102,9 +85,7 @@ public class OrgaController {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
         }
-        List<WebList> applications = orgaService.getAllListEntrys(id);
-        WebListClass webListClass = new WebListClass(applications);
-        model.addAttribute("WebList", webListClass);
+        model.addAttribute("WebList", new WebListClass(orgaService.getAllListEntrys(id)));
         return "organizer/orgaOverview";
     }
 
@@ -134,12 +115,7 @@ public class OrgaController {
     public String postEditedModule(final KeycloakAuthenticationToken token, final Model model,
                                    @RequestParam("phone") final String phone) {
         if (token != null) {
-            Organizer oldOrganizer = organizerService.findByUniserial(token.getName());
-            organizerService.save(Organizer.builder()
-                    .id(oldOrganizer.getId())
-                    .uniserial(oldOrganizer.getUniserial())
-                    .phonenumber(phone)
-                    .build());
+            organizerService.changePhonenumber(token.getName(), phone);
         }
         return "redirect:/bewerbung2/organisator/";
     }
