@@ -126,7 +126,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    Mit diesem Button wird automatisch eine Vorverteilung generiert.
+                    Wenn Sie bestätigen, wird automatisch eine Vorverteilung generiert.
                     <br>
                     Jegliche bisher getätigten Änderungen werden zurückgesetzt.
                     <br>
@@ -137,7 +137,7 @@
                     <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Abbrechen</button>
                     <form th:action="@{/}" th:method="GET">
                         <a class="btn btn-outline-primary" name="distribute"
-                           th:href="@{/bewerbung2/verteiler/vorverteilen}" type="submit"> Verteilen </a>
+                           th:href="@{/bewerbung2/verteiler/vorverteilen}" type="submit"> Bestätigen </a>
                     </form>
                 </div>
             </div>
