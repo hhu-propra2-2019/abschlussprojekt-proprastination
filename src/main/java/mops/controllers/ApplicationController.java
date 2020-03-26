@@ -556,7 +556,11 @@ public class ApplicationController {
     public String postEditModuledata(@Valid final WebApplication webApplication, final BindingResult bindingResult,
                                      final KeycloakAuthenticationToken token,
                                      final Model model) {
-            if (bindingResult.hasErrors()) {
+        if (webApplication.getMinHours() > webApplication.getMaxHours()) {
+            bindingResult.addError(new FieldError("webApplication", "maxHours",
+                    "Maximale Stundenzahl darf nicht kleiner als minimale sein."));
+        }
+        if (bindingResult.hasErrors()) {
                 bindingResult.getAllErrors().forEach(err -> {
                     LOGGER.info("ERROR {}", err.getDefaultMessage());
             });
@@ -572,6 +576,7 @@ public class ApplicationController {
         if (bindingResult.hasErrors()) {
             Application application = applicationService.findById(webApplication.getId());
             model.addAttribute("app", application);
+            model.addAttribute("semesters", CSVService.getSemester());
             return "applicant/applicationEditModule";
         }
         return "redirect:bewerbungsUebersicht";
