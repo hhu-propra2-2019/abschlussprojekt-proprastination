@@ -2,7 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       th:replace="~{mopslayout :: html(name='Verteilung', title='Optional: Verteilung', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}">
+
 <head>
+
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <title>Name des Subsystems</title>
@@ -11,6 +13,8 @@
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+        <script src="/turbolinks.js"></script>
     </th:block>
 </head>
 <body>
@@ -150,12 +154,14 @@
         }
 
         function drag(ev, el) {
+            console.log("drag")
             ev.dataTransfer.setData("text", ev.target.id);
 
             ev.dataTransfer.setData("applicantId", ev.currentTarget.id);
         }
 
         function drop(ev, el) {
+            console.log("drop")
             ev.preventDefault();
             var data = ev.dataTransfer.getData("text");
             el.appendChild(document.getElementById(data));
@@ -165,20 +171,23 @@
             var applicantId = applicantEl.dataset.applicantid;
             var distributorId = el.dataset.distributionid;
 
-            window.location.href = "/bewerbung2/verteiler/" + distributorId + "/" + applicantId + "/"
+            var targetLocation = "/bewerbung2/verteiler/" + distributorId + "/" + applicantId + "/"
+            Turbolinks.visit(targetLocation)
         }
 
         function saveHours(el) {
             var hour = el.value;
             var applicantId = el.dataset.applicantid;
             var distributionId = el.dataset.distributionid;
-            window.location.href = "/bewerbung2/verteiler/saveHours/" + distributionId + "/" + applicantId + "/" + hour + "/"
+            var targetLocation = "/bewerbung2/verteiler/saveHours/" + distributionId + "/" + applicantId + "/" + hour + "/"
+            Turbolinks.visit(targetLocation)
         }
 
         function saveChecked(el) {
             var checked = el.checked;
             var applicantId = el.dataset.applicantid;
-            window.location.href = "/bewerbung2/verteiler/saveChecked/" + applicantId + "/" + checked + "/"
+            var targetLocation = "/bewerbung2/verteiler/saveChecked/" + applicantId + "/" + checked + "/"
+            Turbolinks.visit(targetLocation)
         }
 
     </script>
