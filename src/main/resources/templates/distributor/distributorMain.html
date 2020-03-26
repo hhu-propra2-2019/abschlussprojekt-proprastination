@@ -32,17 +32,17 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-2"></div>
-                        <div class="col-2 text-center">
+                        <div class="col-3 text-center">
                             <button class="btn btn-outline-primary openBtn form-control" data-target="#distributeModal" data-toggle="modal" type="button">
                                 Verteilen
                             </button>
                         </div>
                         <div class="col-2"></div>
-                        <div class="col-2"></div>
-                        <div class="col-2">
-                            <button class="btn btn-outline-primary openBtn form-control" data-target="#sendModal" data-toggle="modal" type="button">
-                                Abschicken
-                            </button>
+                        <div class="col-3">
+                            <form th:action="@{/}" th:method="GET">
+                                <a class="btn btn-outline-primary"
+                                   th:href="@{/bewerbung2/pdf/zuteilungUebersicht}" type="submit"> Zu den Einstellungsbögen </a>
+                            </form>
                         </div>
                         <div class="col-2"></div>
                     </div>
@@ -126,7 +126,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    Mit diesem Button wird automatisch eine Vorverteilung generiert.
+                    Wenn Sie bestätigen, wird automatisch eine Vorverteilung generiert.
                     <br>
                     Jegliche bisher getätigten Änderungen werden zurückgesetzt.
                     <br>
@@ -137,40 +137,13 @@
                     <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Abbrechen</button>
                     <form th:action="@{/}" th:method="GET">
                         <a class="btn btn-outline-primary" name="distribute"
-                           th:href="@{/bewerbung2/verteiler/vorverteilen}" type="submit"> Verteilen </a>
+                           th:href="@{/bewerbung2/verteiler/vorverteilen}" type="submit"> Bestätigen </a>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="sendModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 class="modal-title">Verteilung abschicken?</h2>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Mit diesem Button bestätigen Sie Ihre Verteilung und generieren die Einstellungsbögen.
-                    <br>
-                    Danach besteht keine Möglichkeit mehr, die Verteilung zu bearbeiten.
-                    <br>
-                    <br>
-                    Möchten Sie die aktuelle Verteilung abschicken?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Abbrechen</button>
-                    <form th:action="@{/}" th:method="GET">
-                        <a class="btn btn-outline-primary" name="distribute"
-                           th:href="@{/bewerbung2/pdf/zuteilungsUebersicht}" type="submit"> Abschicken </a>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <script>
         $(".form-search-wrapper").remove()
