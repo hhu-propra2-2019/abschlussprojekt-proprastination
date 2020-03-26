@@ -120,7 +120,7 @@ class ApplicationTest {
 
         assertThat(application.toString()).isEqualTo(
                 "Application(minHours=2, finalHours=0, maxHours=4, module=Module(name=Info4," +
-                        " deadline=1970-01-01T00:01:40Z, shortName=null, profName=null, sevenHourLimit=null," +
+                        " deadline=1970-01-01T00:01:40Z, shortName=null, profSerial=null, sevenHourLimit=null," +
                         " nineHourLimit=null, seventeenHourLimit=null, hourLimit=null), priority=VERYHIGH," +
                         " grade=1.3, lecturer=Tester, semester=WS2020, role=PROOFREADER, comment=)");
 
