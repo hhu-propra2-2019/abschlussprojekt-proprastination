@@ -65,7 +65,7 @@ public class PDFService {
         document.setField("Geburtsort", applicant.getBirthplace());
         document.setField("Staatsangehörigkeit", applicant.getNationality());
         document.setField("Studiengang", applicant.getCourse());
-        document.setField("Vertragsart", applicant.getStatus());
+        document.setField("Vertragsart", getContract(applicant.getStatus()));
         document.setGender("männlich");
         addApplicantAdressInfoToPDF(applicant.getAddress());
     }
@@ -83,6 +83,19 @@ public class PDFService {
         Date date = parser.parse(idate);
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
         return formatter.format(date);
+    }
+
+    /**
+     * Compensates that there are actually only two options
+     *
+     * @param status status in applicant.
+     * @return correct status
+     */
+    private String getContract(final String status) {
+        if (status.equals("Einstellung")) {
+            return "Einstellung";
+        }
+        return "Weiterbeschäftigung";
     }
 
 }

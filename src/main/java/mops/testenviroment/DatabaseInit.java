@@ -156,15 +156,6 @@ public class DatabaseInit implements ServletContextInitializer {
 
     }
 
-    private String nextCertificateName(final Faker faker) {
-        if (random.nextInt(5) != 4) {
-            return "Keins";
-        } else {
-            return faker.educator().course();
-        }
-    }
-
-
     private Module[] nextModules() {
         long value = random.nextInt(5) + 1;
         long value2 = random.nextInt(5) + 1;

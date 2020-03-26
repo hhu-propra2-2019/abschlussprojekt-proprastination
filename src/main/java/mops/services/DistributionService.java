@@ -469,4 +469,13 @@ public class DistributionService {
                 .checked(checkedBoolean)
                 .build());
     }
+
+    /**
+     * Returns number of distribution entrys. Faster than getting all first.
+     *
+     * @return long number.
+     */
+    public long getSize() {
+        return distributionRepository.count();
+    }
 }
