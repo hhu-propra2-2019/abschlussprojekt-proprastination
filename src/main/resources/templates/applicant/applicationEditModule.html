@@ -59,6 +59,9 @@
                                 <option value="9">9 Stunden/Woche</option>
                                 <option value="17">17 Stunden/Woche</option>
                             </select>
+                            <div th:if="${#fields.hasErrors('minHours')}" class="text-danger">
+                                Bitte geben Sie ein gültiges Stundenminimum an.
+                            </div>
                         </div>
                         <div class="col-md-3">
                             <label for="maxload">
@@ -69,6 +72,10 @@
                                 <option value="9">9 Stunden/Woche</option>
                                 <option value="17">17 Stunden/Woche</option>
                             </select>
+                            <div th:if="${#fields.hasErrors('maxHours')}" class="text-danger">
+                                Bitte geben Sie ein gültiges Stundenmaximum an, das nicht kleiner als das
+                                Minimum ist.
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <label for="grade">Geben die von Ihnen in diesem Modul erreichte Note an</label> <br>
