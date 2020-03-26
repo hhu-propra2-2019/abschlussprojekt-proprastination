@@ -134,6 +134,7 @@ public class DistributionService {
                     if (evaluation.getHours() == hours[i]
                             && countHoursPerModule[moduleCount][i] < maxHoursPerModule[moduleCount][i]) {
                         applicantsPerModule[moduleCount].add(applicant);
+                        saveChecked(applicant.getId() + "", "true");
                         allApplicants.remove(applicant);
                         countHoursPerModule[moduleCount][i]++;
                     }
