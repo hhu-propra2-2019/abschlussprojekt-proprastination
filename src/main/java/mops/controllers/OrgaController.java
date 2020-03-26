@@ -92,9 +92,7 @@ public class OrgaController {
             if (!token.getName().equals(moduleService.findById(Long.parseLong(id)).getProfSerial())) {
                 return "redirect:/bewerbung2/organisator/";
             }
-                List<WebList> applications = orgaService.getAllListEntrys(id);
-                WebListClass webListClass = new WebListClass(applications);
-                model.addAttribute("WebList", webListClass);
+            model.addAttribute("WebList", new WebListClass(orgaService.getAllListEntrys(id)));
         }
         return "organizer/orgaOverview";
     }
