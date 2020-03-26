@@ -108,4 +108,13 @@ public class ApplicantService {
     public void deleteAll() {
         applicantRepository.deleteAll();
     }
+
+    /**
+     * find Applicant by ID
+     * @param applicantId id
+     * @return applicant
+     */
+    public Applicant findById(final long applicantId) {
+        return applicantRepository.findById(applicantId);
+    }
 }

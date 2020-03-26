@@ -37,4 +37,11 @@ public interface ApplicantRepository extends CrudRepository<Applicant, Long> {
      * @return applicant
      */
     Optional<Applicant> findByApplications(Application application);
+
+    /**
+     * Finds Applicant by ID
+     * @param id id
+     * @return applicant
+     */
+    Applicant findById(long id);
 }

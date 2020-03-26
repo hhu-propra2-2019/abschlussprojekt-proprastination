@@ -20,22 +20,21 @@
 <body>
 <header>
     <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
+        <ul th:if="${account.roles.size() > 1}">
+            <li th:if="${account.roles.contains('verteiler')}"><a th:href="@{/bewerbung2/verteiler/}">Verteiler Übersicht</a></li>
+            <li th:if="${account.roles.contains('orga')}"><a th:href="@{/bewerbung2/organisator/}">Organisator Übersicht</a></li>
+            <li th:if="${account.roles.contains('setup')}"><a th:href="@{/bewerbung2/setup/}">Ersteller Übersicht</a></li>
+            <li th:if="${account.roles.contains('studentin')}"><a th:href="@{/bewerbung2/bewerber/}">Bewerber Übersicht</a></li>
+        </ul>
         <ul>
-            <li>
-                <a th:href="@{/}">
-                    Startseite
-                </a>
-            </li>
-            <li>
-                <a th:href="@{./}">
-                    Dashboard
-                </a>
-            </li>
+            <li><a th:href="@{/}">Startseite</a></li>
+            <li><a th:href="@{./}">Übersicht</a></li>
         </ul>
     </nav>
 </header>
 
 <main th:fragment="bodycontent">
+
         <div class="card bg-light mb-3 border-primary">
             <div class="card-header"><h2>Downloaden Sie Bewerbungen als PDFs hier!</h2></div>
         </div>
@@ -43,6 +42,7 @@
             <div class="card-header"><h4>Downloaden Sie Bewerbung als eines Studenten hier!</h4></div>
             <div class="card-body">
                 <form th:action="@{downloadBewerberFertig}" th:method="POST">
+
                 <div class="row form-row">
                     <input th:type="hidden" th:name="module" th:id="module" th:value="${module}">
                     <label th:for="applicants">Suchen Sie hier den Studenten aus!</label><br>
@@ -62,6 +62,7 @@
                 </form>
             </div>
         </div>
+    </div>
 </main>
 </body>
 </html>

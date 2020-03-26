@@ -15,9 +15,9 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -56,7 +56,7 @@ public class DistributionService {
      */
     @PostConstruct
     public void setup() {
-        distribute();
+        distributionRepository.deleteAll();
     }
 
     /**
@@ -71,14 +71,79 @@ public class DistributionService {
     /**
      * distributes the Applicants
      */
-    private void distribute() {
+    public void distribute() {
         final int numberOfPriorities = 4;
-        final int sevenHours = 7;
-        final int nineHours = 9;
-        final int seventeenHours = 17;
+        final int numberOfHours = 3;
+        final int[] hours = {7, 9, 17};
         List<Module> modules = moduleService.getModules();
         List<Applicant> allApplicants = applicantService.findAll();
+        List<Applicant>[] applicantsPerModule = new List[modules.size()];
+        for (int i = 0; i < modules.size(); i++) {
+            applicantsPerModule[i] = new LinkedList<>();
+        }
+        int[][] maxHoursPerModule = new int[modules.size()][numberOfHours];
+        int[][] countHoursPerModule = new int[modules.size()][numberOfHours];
+        int moduleCount = 0;
         distributionRepository.deleteAll();
+        for (Module module : modules) {
+            List<Evaluation> evaluations = new LinkedList<>();
+            List<Application> preApplications = applicationService.findApplicationsByModule(module);
+            List<Application> applications = new LinkedList<>();
+            for (Application application : preApplications) {
+                if (allApplicants.indexOf(applicantService.findByApplications(application)) != -1) {
+                    applications.add(application);
+                }
+            }
+            for (Application application : applications) {
+                Evaluation evaluation = evaluationService.findByApplication(application);
+                evaluations.add(evaluation);
+            }
+
+            List<Evaluation> sortedByOrgaPrio = new LinkedList<>();
+
+            for (Evaluation evaluation : evaluations) {
+                if ((evaluation.getPriority().getValue() + evaluation.getApplication().getPriority().getValue()) == 2) {
+                    sortedByOrgaPrio.add(evaluation);
+                }
+            }
+
+            for (int i = 0; i < numberOfHours; i++) {
+                maxHoursPerModule[moduleCount][i] = 0;
+            }
+
+            maxHoursPerModule[moduleCount][0] = Integer.parseInt(module.getSevenHourLimit());
+            maxHoursPerModule[moduleCount][1] = Integer.parseInt(module.getNineHourLimit());
+            maxHoursPerModule[moduleCount][2] = Integer.parseInt(module.getSeventeenHourLimit());
+
+            for (Evaluation evaluation : sortedByOrgaPrio) {
+                int countSum = 0;
+                int maxSum = 0;
+                for (int i = 0; i < numberOfHours; i++) {
+                    countSum += countHoursPerModule[moduleCount][i];
+                }
+                for (int i = 0; i < numberOfHours; i++) {
+                    maxSum += maxHoursPerModule[moduleCount][i];
+                }
+
+                if (countSum == maxSum) {
+                    break;
+                }
+
+                Applicant applicant = applicantService.findByApplications(evaluation.getApplication());
+                for (int i = 0; i < numberOfHours; i++) {
+                    if (evaluation.getHours() == hours[i]
+                            && countHoursPerModule[moduleCount][i] < maxHoursPerModule[moduleCount][i]) {
+                        applicantsPerModule[moduleCount].add(applicant);
+                        allApplicants.remove(applicant);
+                        countHoursPerModule[moduleCount][i]++;
+                    }
+                }
+            }
+            moduleCount++;
+        }
+
+        moduleCount = 0;
+
         for (Module module : modules) {
             List<Evaluation> evaluations = new LinkedList<>();
             List<Application> preApplications = applicationService.findApplicationsByModule(module);
@@ -107,46 +172,48 @@ public class DistributionService {
                 sortedByOrgaPrio[i].sort(Comparator.comparing(a -> a.getApplication().getPriority().getValue()));
             }
 
-            int count7 = 0;
-            int count9 = 0;
-            int count17 = 0;
-            int max7 = Integer.parseInt(module.getSevenHourLimit());
-            int max9 = Integer.parseInt(module.getNineHourLimit());
-            int max17 = Integer.parseInt(module.getSeventeenHourLimit());
-
-            Set<Applicant> distributedApplicants = new LinkedHashSet<>();
-
-            for (int i = 0; i < numberOfPriorities; i++) {
-                if (count7 == max7 && count9 == max9 && count17 == max17) {
+            for (int x = 0; x < numberOfPriorities; x++) {
+                int countSum = 0;
+                int maxSum = 0;
+                for (int i = 0; i < numberOfHours; i++) {
+                    countSum += countHoursPerModule[moduleCount][i];
+                }
+                for (int i = 0; i < numberOfHours; i++) {
+                    maxSum += maxHoursPerModule[moduleCount][i];
+                }
+                if (countSum == maxSum) {
                     break;
                 }
-                for (Evaluation evaluation : sortedByOrgaPrio[i]) {
-                    if (count7 == max7 && count9 == max9 && count17 == max17) {
+
+                for (Evaluation evaluation : sortedByOrgaPrio[x]) {
+
+                    for (int i = 0; i < numberOfHours; i++) {
+                        countSum += countHoursPerModule[moduleCount][i];
+                    }
+                    for (int i = 0; i < numberOfHours; i++) {
+                        maxSum += maxHoursPerModule[moduleCount][i];
+                    }
+
+                    if (countSum == maxSum) {
                         break;
                     }
+
                     Applicant applicant = applicantService.findByApplications(evaluation.getApplication());
-                    if (evaluation.getHours() == sevenHours && count7 < max7) {
-                        distributedApplicants.add(applicant);
-                        allApplicants.remove(applicant);
-                        changeFinalHours(evaluation);
-                        count7++;
-                    } else if (evaluation.getHours() == nineHours && count9 < max9) {
-                        distributedApplicants.add(applicant);
-                        allApplicants.remove(applicant);
-                        changeFinalHours(evaluation);
-                        count9++;
-                    } else if (evaluation.getHours() == seventeenHours && count17 < max17) {
-                        distributedApplicants.add(applicant);
-                        allApplicants.remove(applicant);
-                        changeFinalHours(evaluation);
-                        count17++;
+                    for (int i = 0; i < numberOfHours; i++) {
+                        if (evaluation.getHours() == hours[i]
+                                && countHoursPerModule[moduleCount][i] < maxHoursPerModule[moduleCount][i]) {
+                            applicantsPerModule[moduleCount].add(applicant);
+                            allApplicants.remove(applicant);
+                            countHoursPerModule[moduleCount][i]++;
+                        }
                     }
                 }
             }
             distributionRepository.save(Distribution.builder()
-                    .employees(distributedApplicants)
+                    .employees(applicantsPerModule[moduleCount])
                     .module(module)
                     .build());
+            moduleCount++;
         }
     }
 
@@ -159,6 +226,18 @@ public class DistributionService {
         ApplicationBuilder applicationBuilder = evaluation.getApplication().toBuilder();
         Application application = applicationBuilder.finalHours(evaluation.getHours()).build();
         applicationService.save(application);
+    }
+
+
+    /**
+     * changes all FinalHours to the organizers wish
+     */
+    public void changeAllFinalHours() {
+        List<Application> applications = applicationService.findAll();
+        for (Application application : applications) {
+            Evaluation evaluation = evaluationService.findByApplication(application);
+            changeFinalHours(evaluation);
+        }
     }
 
     /**
@@ -194,6 +273,10 @@ public class DistributionService {
                     convertApplicantToWebDistributorApplicant(distribution.getEmployees(), distribution.getModule());
             WebDistribution webDistribution = WebDistribution.builder()
                     .module(distribution.getModule().getName())
+                    .id(distribution.getId() + "")
+                    .hours7(distribution.getModule().getSevenHourLimit())
+                    .hours9(distribution.getModule().getNineHourLimit())
+                    .hours17(distribution.getModule().getSeventeenHourLimit())
                     .webDistributorApplicants(webDistributorApplicantList)
                     .build();
             webDistributionList.add(webDistribution);
@@ -201,7 +284,11 @@ public class DistributionService {
         List<WebDistributorApplicant> webDistributorApplicantList =
                 convertUnassignedApplicantsToWebDistributorApplicants(findAllUnassigned());
         WebDistribution webDistribution = WebDistribution.builder()
-                .module("unassigned")
+                .module("Nicht Zugeteilt")
+                .hours7("0")
+                .hours9("0")
+                .hours17("0")
+                .id(-1 + "")
                 .webDistributorApplicants(webDistributorApplicantList)
                 .build();
         webDistributionList.add(webDistribution);
@@ -217,6 +304,10 @@ public class DistributionService {
                     createWebDistributorApplications(applicationSet);
             WebDistributorApplicant webDistributorApplicant = WebDistributorApplicant.builder()
                     .username(applicant.getUniserial())
+                    .id(applicant.getId() + "")
+                    .type(getTypeOfApplicant(applicant))
+                    .checked(applicant.isChecked())
+                    .fullName(applicant.getFirstName() + " " + applicant.getSurname())
                     .webDistributorApplications(webDistributorApplicationList)
                     .distributorHours("0")
                     .build();
@@ -240,6 +331,10 @@ public class DistributionService {
             }
             WebDistributorApplicant webDistributorApplicant = WebDistributorApplicant.builder()
                     .username(applicant.getUniserial())
+                    .id(applicant.getId() + "")
+                    .type(getTypeOfApplicant(applicant))
+                    .checked(applicant.isChecked())
+                    .fullName(applicant.getFirstName() + " " + applicant.getSurname())
                     .webDistributorApplications(webDistributorApplicationList)
                     .distributorHours(finalHours + "")
                     .build();
@@ -274,7 +369,67 @@ public class DistributionService {
         for (Distribution distribution : allDistributions) {
             distributedApplicants.addAll(distribution.getEmployees());
         }
-        allApplicants.removeIf(applicant -> distributedApplicants.indexOf(applicant) != -1);
+        allApplicants.removeIf(distributedApplicants::contains);
         return allApplicants;
+    }
+
+    /**
+     * moves an applicant to other distribution
+     * @param applicantId the id of the applicant being moved
+     * @param distributionId the id of the new distribution
+     */
+    public void moveApplicant(final String applicantId, final String distributionId) {
+        Optional<Distribution> newDistribution = distributionRepository.findById(Long.parseLong(distributionId));
+        Applicant applicant = applicantService.findById(Long.parseLong(applicantId));
+        if (newDistribution.isPresent()) {
+            for (Distribution distribution : distributionRepository.findAll()) {
+                distribution.getEmployees().remove(applicant);
+                distributionRepository.save(distribution);
+            }
+            newDistribution.get().getEmployees().add(applicant);
+            distributionRepository.save(newDistribution.get());
+        }
+    }
+
+    private String getTypeOfApplicant(final Applicant applicant) {
+        if ("Keins".equals(applicant.getCerts().getName())) {
+            return "SHK";
+        } else {
+            return "WHB";
+        }
+    }
+
+    /**
+     * saves new set hours
+     * @param applicantId applicantId
+     * @param distributionId distributionId
+     * @param hours hours
+     */
+    public void saveHours(final String applicantId, final String distributionId, final String hours) {
+        Applicant applicant = applicantService.findById(Long.parseLong(applicantId));
+        Optional<Distribution> distribution = distributionRepository.findById(Long.parseLong(distributionId));
+        if (distribution.isPresent()) {
+            for (Application application : applicant.getApplications()) {
+                if (application.getModule().equals(distribution.get().getModule())) {
+                    applicationService.save(application.toBuilder()
+                            .finalHours(Integer.parseInt(hours))
+                            .build());
+                }
+
+            }
+        }
+    }
+
+    /**
+     * saves ckecks that distributor sets
+     * @param applicantId applicantId
+     * @param checked checked
+     */
+    public void saveChecked(final String applicantId, final String checked) {
+        Applicant applicant = applicantService.findById(Long.parseLong(applicantId));
+        boolean checkedBoolean = Boolean.parseBoolean(checked);
+        applicantService.saveApplicant(applicant.toBuilder()
+                .checked(checkedBoolean)
+                .build());
     }
 }
