@@ -375,7 +375,8 @@ public class DatabaseInit implements ServletContextInitializer {
                 "RDB",
                 "Algorithmen und Datenstrukturen", "Theoretische Informatik"};
         String[] shortNames = {"ProPra1", "Propra2", "RDB", "Aldat", "Theo"};
-        String[] profNames = {"Jens", "Chris", "Ursula", "Martin", "Stefan"};
+        String[] profNames = {"orga", "bewerbung2_all_roles", "bewerbung2_studentin_orga",
+                "bewerbung2_verteiler_orga", "Stefan"};
         String[] hour = {"0", "01", "02"};
         for (int i = 0; i < modulenames.length; i++) {
             Instant date = faker.date().future(300, 30, TimeUnit.DAYS).toInstant();
