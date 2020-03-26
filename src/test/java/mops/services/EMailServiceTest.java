@@ -37,7 +37,7 @@ class EMailServiceTest {
     void checkMethodCallToRecipient() {
         String file = System.getProperty("user.dir") + File.separator + "323_Antrag_Beschaeftigung_wiss_Hilfskraefte_mit_BA.pdf";
 
-        eMailService.sendEmailToRecipient("test@example.com", file);
+        eMailService.sendEmailToRecipient("test@example.com", new File(file));
 
         verify(javaMailSender, atLeastOnce()).send((MimeMessage) any());
 

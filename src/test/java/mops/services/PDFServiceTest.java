@@ -65,9 +65,9 @@ class PDFServiceTest {
                 .application(application)
                 .build();
 
-        String file = service.generatePDF(application, applicant);
+        File file = service.generatePDF(application, applicant);
 
-        PDDocument document1 = PDDocument.load(new File(file));
+        PDDocument document1 = PDDocument.load(file);
         document1.setAllSecurityToBeRemoved(true);
         PDAcroForm acroForm = document1.getDocumentCatalog().getAcroForm();
 

@@ -65,20 +65,22 @@ public class EMailService {
      * Sends PDF via Email to single recipent.
      *
      * @param recipient Recipients Email.
-     * @param filepath  Filepath to PDF file.
+     * @param zipfile   Filepath to PDF file.
      */
-    public void sendEmailToRecipient(final String recipient, final String filepath) {
+    public void sendEmailToRecipient(final String recipient, final File zipfile) {
 
         try {
             MimeMessage message = emailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setFrom(senderEmail);
-            helper.setSubject("Deine Tutorenbewerbung");
+            helper.setSubject("Alle Tutorenbewerbung");
             helper.setTo(recipient);
-            helper.setText("Anbei erhalten Sie Ihre automatisch generierte Tutorenbewerbung");
-
-            FileSystemResource file = new FileSystemResource(new File(filepath));
-            helper.addAttachment("Tutorenbewerbung.pdf", file);
+            helper.setText("<p>Hallo Verteiler!</p>\n"
+                    + "<p>Anbei erhalten Sie alle automatisch gernerierten PDFs.</p>\n"
+                    + "<p>Liebe Gr&uuml;&szlig;e,</p>\n"
+                    + "<p>Ihr Mops-Bwerbungs2-Team!</p>");
+            FileSystemResource file = new FileSystemResource(zipfile);
+            helper.addAttachment("Tutorenbewerbungen.zip", file);
             emailSender.send(message);
         } catch (MessagingException e) {
             e.printStackTrace();
