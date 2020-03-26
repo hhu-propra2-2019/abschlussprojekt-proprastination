@@ -76,4 +76,42 @@ class ModuleTest {
         assertNotEquals(newModule, module);
     }
 
+    @Test
+    void testHashCode() {
+        Module newModule = Module.builder()
+                .name("Introduction to Logic")
+                .deadline(Instant.parse("2018-11-30T18:35:24.00Z"))
+                .shortName("Logic")
+                .profName("Hershel Layton")
+                .sevenHourLimit("7")
+                .nineHourLimit("9")
+                .seventeenHourLimit("17")
+                .hourLimit("42")
+                .build();
+
+        int hashCode = module.hashCode();
+        int newHashCode = newModule.hashCode();
+
+        assertEquals(hashCode, newHashCode);
+    }
+
+    @Test
+    void testHashCodeNotEqual() {
+        Module newModule = Module.builder()
+                .name("Introduction to Puzzle Solving")
+                .deadline(Instant.parse("2018-11-30T18:35:24.00Z"))
+                .shortName("Logic")
+                .profName("Hershel Layton")
+                .sevenHourLimit("7")
+                .nineHourLimit("9")
+                .seventeenHourLimit("17")
+                .hourLimit("42")
+                .build();
+
+        int hashCode = module.hashCode();
+        int newHashCode = newModule.hashCode();
+
+        assertNotEquals(hashCode, newHashCode);
+    }
+
 }
