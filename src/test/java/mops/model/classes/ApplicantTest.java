@@ -246,4 +246,23 @@ class ApplicantTest {
 
         assertNotEquals(newHashCode, hashCode);
     }
+
+    @Test
+    void testNoArgsConstuctor() {
+        Applicant emptyApplicant = new Applicant();
+
+        assertNull(emptyApplicant.getAddress());
+        assertNull(emptyApplicant.getApplications());
+        assertNull(emptyApplicant.getBirthday());
+        assertNull(emptyApplicant.getBirthplace());
+        assertNull(emptyApplicant.getCerts());
+        assertNull(emptyApplicant.getComment());
+        assertNull(emptyApplicant.getCourse());
+        assertNull(emptyApplicant.getFirstName());
+        assertNull(emptyApplicant.getGender());
+        assertNull(emptyApplicant.getNationality());
+        assertNull(emptyApplicant.getStatus());
+        assertNull(emptyApplicant.getSurname());
+        assertNull(emptyApplicant.getUniserial());
+    }
 }
