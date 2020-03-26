@@ -3,8 +3,7 @@ package mops.model.classes;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CertificateTest {
 
@@ -96,6 +95,14 @@ class CertificateTest {
         int hashCode2 = cert2.hashCode();
 
         assertNotEquals(hashCode1, hashCode2);
+    }
+
+    @Test
+    void testNoArgsConstructor() {
+        Certificate emptyCertificate = new Certificate();
+
+        assertNull(emptyCertificate.getName());
+        assertNull(emptyCertificate.getCourse());
     }
 
 }
