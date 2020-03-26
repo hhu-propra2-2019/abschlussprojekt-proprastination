@@ -89,14 +89,18 @@ public class OrgaController {
                            final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
+            if (!token.getName().equals(moduleService.findById(Long.parseLong(id)).getProfSerial())) {
+                return "redirect:/bewerbung2/organisator/";
+            }
+                List<WebList> applications = orgaService.getAllListEntrys(id);
+                WebListClass webListClass = new WebListClass(applications);
+                model.addAttribute("WebList", webListClass);
         }
-        List<WebList> applications = orgaService.getAllListEntrys(id);
-        WebListClass webListClass = new WebListClass(applications);
-        model.addAttribute("WebList", webListClass);
         return "organizer/orgaOverview";
     }
 
     /**
+     * @param token token
      * @param applications WebListClass applications
      * @param id           module id
      * @param model        model
@@ -104,9 +108,13 @@ public class OrgaController {
      */
     @PostMapping("/{id}/")
     @Secured("ROLE_orga")
-    public String applicationInfoPost(@ModelAttribute final WebListClass applications,
+    public String applicationInfoPost(final KeycloakAuthenticationToken token,
+                                      @ModelAttribute final WebListClass applications,
                                       @PathVariable("id") final String id, final Model model) {
-        orgaService.saveEvaluations(applications);
+        if (token != null) {
+            model.addAttribute("account", createAccountFromPrincipal(token));
+            orgaService.saveEvaluations(applications);
+        }
         return "redirect:/bewerbung2/organisator/" + id + "/";
     }
 
