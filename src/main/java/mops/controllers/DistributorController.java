@@ -142,24 +142,25 @@ public class DistributorController {
         return "redirect:/bewerbung2/verteiler/";
     }
 
-    /**
-     *
+ /*   /**
+     * AHHHH NOT WORKING
      * @param token
      * @param model
      * @param applicantId
      * @param distributionId
-     * @return
+     * @return AHHHH
      */
-    @GetMapping("/duplicate/{applicantId}/{distributionId}")
+ /*   @GetMapping("/duplicate/{applicantId}/{distributionId}/")
     @Secured("ROLE_verteiler")
     public String duplicate(final KeycloakAuthenticationToken token, final Model model,
                             @PathVariable("applicantId") final String applicantId,
                             @PathVariable("distributionId") final String distributionId) {
-        if(token != null) {
+        if (token != null) {
+            System.out.println(applicantId + distributionId);
             model.addAttribute("account", createAccountFromPrincipal(token));
             distributionService.addApplicant(applicantId, distributionId);
         }
 
-        return "redirect:/bewerbung2/verteiler";
-    }
+        return "redirect:/bewerbung2/verteiler/";
+    }*/
 }

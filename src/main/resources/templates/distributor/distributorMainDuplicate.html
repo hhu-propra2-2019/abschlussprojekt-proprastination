@@ -110,6 +110,11 @@
                                         <div class="col" th:text="${appl.organizerHours}">9</div>
                                         <div class="col" th:text="${appl.minHours} + '-' + ${appl.maxHours}">10 - 17</div>
                                     </div>
+                                    <div class="row border">
+                                        <button class="btn btn-outline-primary"
+                                                th:attr="data-distributionId=${distribution.id}, data-applicantId=${applicant.id}" onclick="duplicateApplicant(this)"
+                                        >Verdoppeln Sie den Bewerber um ihm noch einem weiteren Modul zuzuordnen</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -191,6 +196,13 @@
             Turbolinks.visit(targetLocation)
         }
 
+        function duplicateApplicant(el) {
+            var applicantId = el.dataset.applicantid;
+            var distributionId = el.dataset.distributionid;
+            var targetLocation = "/bewerbung2/verteiler/duplicate/" + applicantId + "/" + distributionId + "/"
+            Turbolinks.visit(targetLocation);
+        }
+
     </script>
     <script>
         $("#distributeModal").keyup(function(event) {
@@ -205,3 +217,4 @@
     </script>
 </main>
 </body>
+
