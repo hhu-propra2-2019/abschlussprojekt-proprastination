@@ -2,6 +2,7 @@ package mops.controllers;
 
 import mops.model.Account;
 import mops.model.classes.orgaWebClasses.WebListClass;
+import mops.services.ModuleService;
 import mops.services.OrgaService;
 import mops.services.OrganizerService;
 import org.keycloak.KeycloakPrincipal;
@@ -25,17 +26,21 @@ public class OrgaController {
 
     private final OrgaService orgaService;
     private final OrganizerService organizerService;
+    private final ModuleService moduleService;
 
     /**
      * Lets Spring inject the services
      * @param organizerService organizerService
      * @param orgaService   orgaService
+     * @param moduleService moduleService
      */
     @SuppressWarnings("checkstyle:HiddenField")
     public OrgaController(final OrgaService orgaService,
-                          final OrganizerService organizerService) {
+                          final OrganizerService organizerService,
+                          final ModuleService moduleService) {
         this.orgaService = orgaService;
         this.organizerService = organizerService;
+        this.moduleService = moduleService;
     }
 
     private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
