@@ -20,17 +20,15 @@
 <body>
 <header>
     <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
+        <ul th:if="${account.roles.size() > 1}">
+            <li th:if="${account.roles.contains('verteiler')}"><a th:href="@{/bewerbung2/verteiler/}">Verteiler Übersicht</a></li>
+            <li th:if="${account.roles.contains('orga')}"><a th:href="@{/bewerbung2/organisator/}">Organisator Übersicht</a></li>
+            <li th:if="${account.roles.contains('setup')}"><a th:href="@{/bewerbung2/setup/}">Ersteller Übersicht</a></li>
+            <li th:if="${account.roles.contains('studentin')}"><a th:href="@{/bewerbung2/bewerber/}">Bewerber Übersicht</a></li>
+        </ul>
         <ul>
-            <li>
-                <a th:href="@{/}">
-                    Startseite
-                </a>
-            </li>
-            <li>
-                <a th:href="@{neuesModul}">
-                    Neues Modul
-                </a>
-            </li>
+            <li><a th:href="@{/}">Startseite</a></li>
+            <li><a th:href="@{neuesModul}">Neues Modul</a></li>
         </ul>
     </nav>
 </header>
@@ -44,8 +42,8 @@
             <div class="card-body">
                 <div class="row container-fluid">
                     <div class="col-8">
-                    <p class="card-text">Bisher sind noch keine Module vorhanden.
-                        Es sollten bis zum Bewerbungsbeginn Module eingetragen werden. Mit dem Button können sie ein neues Modul erstellen.</p>
+                        <p class="card-text">Bisher sind noch keine Module vorhanden.
+                            Es sollten bis zum Bewerbungsbeginn Module eingetragen werden. Mit dem Button können sie ein neues Modul erstellen.</p>
                     </div>
                     <div class="col-4">
                         <a class="btn btn-outline-primary float-right" th:href="@{neuesModul}">Neues Modul</a>
@@ -81,26 +79,26 @@
             </div>
             <div class="card-body" th:object="${module}">
                 <div class="row">
-                <div class="col-3">
-                    <div>Kurzform: </div>
-                    <div>Zugeordnete Person: </div>
-                    <div>Stundenlimit Gesamt: </div>
-                </div>
-                <div class="col-3">
-                    <div th:text="${module.shortName}"></div>
-                    <div th:text="${module.profName}"></div>
-                    <div th:text="${module.hourLimit}"></div>
-                </div>
-                <div class="col-3">
-                    <div>Personenanzahl 7 Std: </div>
-                    <div>Personenanzahl 9 Std: </div>
-                    <div>Personenanzahl 17 Std: </div>
-                </div>
-                <div class="col-3">
-                    <div th:text="${module.sevenHourLimit}"></div>
-                    <div th:text="${module.nineHourLimit}"></div>
-                    <div th:text="${module.seventeenHourLimit}"></div>
-                </div>
+                    <div class="col-3">
+                        <div>Kurzform: </div>
+                        <div>Zugeordnete Person: </div>
+                        <div>Stundenlimit Gesamt: </div>
+                    </div>
+                    <div class="col-3">
+                        <div th:text="${module.shortName}"></div>
+                        <div th:text="${module.profName}"></div>
+                        <div th:text="${module.hourLimit}"></div>
+                    </div>
+                    <div class="col-3">
+                        <div>Personenanzahl 7 Std: </div>
+                        <div>Personenanzahl 9 Std: </div>
+                        <div>Personenanzahl 17 Std: </div>
+                    </div>
+                    <div class="col-3">
+                        <div th:text="${module.sevenHourLimit}"></div>
+                        <div th:text="${module.nineHourLimit}"></div>
+                        <div th:text="${module.seventeenHourLimit}"></div>
+                    </div>
                 </div>
             </div>
         </div><br>
