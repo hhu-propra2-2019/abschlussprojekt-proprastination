@@ -138,18 +138,38 @@ public class ZIPService {
      */
     public static void writeToZipFile(final File file,
                                       final ZipOutputStream zipStream,
-                                      final String fileName) throws FileNotFoundException, IOException {
+                                      final String fileName) {
         final int b = 1024;
         byte[] bytes = new byte[b];
         int length;
-        FileInputStream fileInputStream = new FileInputStream(file);
-        ZipEntry zipEntry = new ZipEntry(fileName);
-        zipStream.putNextEntry(zipEntry);
-        while ((length = fileInputStream.read(bytes)) >= 0) {
-            zipStream.write(bytes, 0, length);
+        FileInputStream fileInputStream = null;
+        try {
+            fileInputStream = new FileInputStream(file);
+            ZipEntry zipEntry = new ZipEntry(fileName);
+            zipStream.putNextEntry(zipEntry);
+            while ((length = fileInputStream.read(bytes)) >= 0) {
+                zipStream.write(bytes, 0, length);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (zipStream != null) {
+                try {
+                    zipStream.closeEntry();
+                    zipStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (fileInputStream != null) {
+                try {
+                    fileInputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        zipStream.closeEntry();
-        zipStream.close();
-        fileInputStream.close();
-    }
+   }
 }
