@@ -1,5 +1,6 @@
 package mops.model.classes;
 
+import mops.model.classes.webclasses.WebModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -136,6 +137,23 @@ class ModuleTest {
         assertNull(emptyModule.getNineHourLimit());
         assertNull(emptyModule.getSeventeenHourLimit());
         assertNull(emptyModule.getHourLimit());
+    }
+
+    @Test
+    void testToWebModule() {
+        WebModule expected = WebModule.builder()
+                .name("Introduction to Logic")
+                .shortName("Logic")
+                .profName("Hershel Layton")
+                .sevenHourLimit("7")
+                .nineHourLimit("9")
+                .seventeenHourLimit("17")
+                .hourLimit("42")
+                .build();
+
+        WebModule result = module.toWebModule();
+
+        assertEquals(expected, result);
     }
 
 }
