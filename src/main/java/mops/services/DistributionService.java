@@ -327,23 +327,24 @@ public class DistributionService {
 
     private List<WebDistributorApplicant> sort(final List<WebDistributorApplicant> applicantList, final String module) {
         List<WebDistributorApplicant> sortedApplicants = new LinkedList<>();
-        LinkedList<WebDistributorApplicant>[] orgaPrios = new LinkedList[4];
+        LinkedList<WebDistributorApplicant>[][] orgaPrios = new LinkedList[4][4];
         for (int i = 0; i < 4; i++) {
-            orgaPrios[i] = new LinkedList<>();
+            for (int j = 0; j < 4; j++) {
+                orgaPrios[i][j] = new LinkedList<>();
+            }
         }
         for (WebDistributorApplicant applicant : applicantList) {
             for (WebDistributorApplication application : applicant.getWebDistributorApplications()) {
                 if (module.equals(application.getModule())) {
-                    orgaPrios[application.getOrganizerPriority().getValue() - 1].add(applicant);
+                    orgaPrios[application.getOrganizerPriority().getValue() - 1][application.getApplicantPriority().getValue() - 1].add(applicant);
                 }
             }
         }
-        for (int i = 0; i < 4; i++) {
-            orgaPrios[i].sort(Comparator.comparing(a -> a.getWebDistributorApplications().getPriority().getValue()));
-        }
 
         for (int i = 0; i < 4; i++) {
-            sortedApplicants.addAll(orgaPrios[i]);
+            for (int j = 0; j < 4; j++) {
+                sortedApplicants.addAll(orgaPrios[i][j]);
+            }
         }
         return sortedApplicants;
     }
