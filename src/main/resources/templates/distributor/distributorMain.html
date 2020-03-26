@@ -58,20 +58,22 @@
         <div class="col-sm-6" th:each="distribution: ${distributions}">
             <div class="card bg-light mb-3 border-primary">
                 <div class="card-header d-flex justify-content-start align-items-start">
-                    <button class="btn btn-link col-3 text-left col-8" data-toggle="collapse" th:attr="data-target='#drop'+${distribution.id}" data-target="#div1" th:text="${distribution.module}"></button>
-                    <div class="col">
-                        <div class="text-right">
-                            <div th:text="'7 Stunden: ' + ${distribution.hours7}"></div>
-                        </div>
-                        <div class="text-right">
-                            <div th:text="'9 Stunden: ' + ${distribution.hours9}"></div>
-                        </div>
-                        <div class="text-right">
-                            <div th:text="'17 Stunden: ' + ${distribution.hours17}"></div>
-                        </div>
+                    <div class="col text-left" th:text="${distribution.module}">
+                        Propra
+                    </div>
+                    <div class="col text-right">
+                            <div th:text="'7 Stunden: ' + ${distribution.hours7}">
+                                4
+                            </div>
+                            <div th:text="'9 Stunden: ' + ${distribution.hours9}">
+                                7
+                            </div>
+                            <div th:text="'17 Stunden: ' + ${distribution.hours17}">
+                                3
+                            </div>
                     </div>
                 </div>
-                <div class="card-body collapse-in" id="div1" th:id="drop + ${distribution.id}" th:attr="data-distributionid=${distribution.id}" ondrop="drop(event, this)" ondragover="allowDrop(event)">
+                <div class="card-body" id="div1" th:id="drop + ${distribution.id}" th:attr="data-distributionid=${distribution.id}" ondrop="drop(event, this)" ondragover="allowDrop(event)">
                     <div th:each="applicant: ${distribution.webDistributorApplicants}">
                         <div class="card w-100 bg-light mb-1 border-primary" th:id="drag + ${applicant.id}" id="drag1"  th:attr="data-applicantId=${applicant.id}" draggable="true" ondragstart="drag(event, this)">
                             <div class="card-header" th:style="${applicant.distributorHours == '0' && distribution.id != '-1'} ? 'background-color: rgba(255, 0, 0, 0.51)' : (${applicant.checked} ? 'background-color: rgba(108, 179, 255, 0.51)')">
