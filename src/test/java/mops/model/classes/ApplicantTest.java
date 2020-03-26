@@ -168,4 +168,82 @@ class ApplicantTest {
 
         assertNull(result);
     }
+
+    @Test
+    void testHashCode() {
+        Module newModule = Module.builder()
+                .deadline(Instant.ofEpochSecond(100l))
+                .name("Info4")
+                .build();
+        Application newApplication = Application.builder().module(newModule).build();
+        Set<Application> newApplicationList = new HashSet<>();
+        newApplicationList.add(newApplication);
+        Certificate newCerts = Certificate.builder()
+                .name("Bachelor")
+                .course("Harvard")
+                .build();
+        Address newAddress = Address.builder()
+                .street("Baker Street")
+                .houseNumber("21B")
+                .city("London")
+                .country("England")
+                .zipcode("NW1 6XE")
+                .build();
+
+        Applicant newApplicant = Applicant.builder()
+                .surname("J")
+                .address(newAddress)
+                .birthday("01.01.2001")
+                .birthplace("Wakanda")
+                .course("Arts")
+                .nationality("English")
+                .status("New")
+                .certs(newCerts)
+                .applications(newApplicationList)
+                .build();
+
+        int hashCode = applicant.hashCode();
+        int newHashCode = newApplicant.hashCode();
+
+        assertEquals(newHashCode, hashCode);
+    }
+
+    @Test
+    void testHashCodeDifferentSurname() {
+        Module newModule = Module.builder()
+                .deadline(Instant.ofEpochSecond(100l))
+                .name("Info4")
+                .build();
+        Application newApplication = Application.builder().module(newModule).build();
+        Set<Application> newApplicationList = new HashSet<>();
+        newApplicationList.add(newApplication);
+        Certificate newCerts = Certificate.builder()
+                .name("Bachelor")
+                .course("Harvard")
+                .build();
+        Address newAddress = Address.builder()
+                .street("Baker Street")
+                .houseNumber("21B")
+                .city("London")
+                .country("England")
+                .zipcode("NW1 6XE")
+                .build();
+
+        Applicant newApplicant = Applicant.builder()
+                .surname("Kerry")
+                .address(newAddress)
+                .birthday("01.01.2001")
+                .birthplace("Wakanda")
+                .course("Arts")
+                .nationality("English")
+                .status("New")
+                .certs(newCerts)
+                .applications(newApplicationList)
+                .build();
+
+        int hashCode = applicant.hashCode();
+        int newHashCode = newApplicant.hashCode();
+
+        assertNotEquals(newHashCode, hashCode);
+    }
 }
