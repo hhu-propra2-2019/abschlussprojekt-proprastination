@@ -141,4 +141,25 @@ public class DistributorController {
         }
         return "redirect:/bewerbung2/verteiler/";
     }
+
+    /**
+     *
+     * @param token
+     * @param model
+     * @param applicantId
+     * @param distributionId
+     * @return
+     */
+    @GetMapping("/duplicate/{applicantId}/{distributionId}")
+    @Secured("ROLE_verteiler")
+    public String duplicate(final KeycloakAuthenticationToken token, final Model model,
+                            @PathVariable("applicantId") final String applicantId,
+                            @PathVariable("distributionId") final String distributionId) {
+        if(token != null) {
+            model.addAttribute("account", createAccountFromPrincipal(token));
+            distributionService.addApplicant(applicantId, distributionId);
+        }
+
+        return "redirect:/bewerbung2/verteiler";
+    }
 }

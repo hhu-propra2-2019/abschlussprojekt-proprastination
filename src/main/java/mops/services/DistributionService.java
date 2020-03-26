@@ -392,6 +392,21 @@ public class DistributionService {
     }
 
     /**
+     * AHHHHHHHHHHHHHHHHHHHHHHH
+     * @param applicantId
+     * @param distributionId
+     */
+    public void addApplicant(final String applicantId, final String distributionId) {
+        Optional<Distribution> newDistribution = distributionRepository.findById(Long.parseLong(distributionId));
+        Applicant applicant = applicantService.findById(Long.parseLong(applicantId));
+        if (newDistribution.isPresent()) {
+            distributionRepository.save(newDistribution.get());
+            newDistribution.get().getEmployees().add(applicant);
+            distributionRepository.save(newDistribution.get());
+        }
+    }
+
+    /**
      * Sorts the WebDistributorApplicants by Matches
      * @param applicantList List with all WebDistributorApplicants for Distribution
      * @param module module of distribution

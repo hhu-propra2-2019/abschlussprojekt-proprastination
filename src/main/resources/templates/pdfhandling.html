@@ -20,7 +20,7 @@
 <body>
 <header>
     <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
-        <ul th:if="${account.roles.size() > 1}">
+        <ul th:if="${account.roles.size() > 0}">
             <li th:if="${account.roles.contains('verteiler')}"><a th:href="@{/bewerbung2/verteiler/}">Verteiler Übersicht</a></li>
             <li th:if="${account.roles.contains('orga')}"><a th:href="@{/bewerbung2/organisator/}">Organisator Übersicht</a></li>
             <li th:if="${account.roles.contains('setup')}"><a th:href="@{/bewerbung2/setup/}">Ersteller Übersicht</a></li>
@@ -28,7 +28,6 @@
         </ul>
         <ul>
             <li><a th:href="@{/}">Startseite</a></li>
-            <li><a th:href="@{/details}">Details</a></li>
         </ul>
     </nav>
 </header>
