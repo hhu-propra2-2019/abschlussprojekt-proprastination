@@ -382,7 +382,7 @@ public class DatabaseInit implements ServletContextInitializer {
                 "RDB",
                 "Algorithmen und Datenstrukturen", "Theoretische Informatik"};
         String[] shortNames = {"ProPra1", "Propra2", "RDB", "Aldat", "Theo"};
-        String[] profNames = {"orga", "bewerbung2_all_roles", "bewerbung2_studentin_orga",
+        String[] profSerial = {"orga", "bewerbung2_all_roles", "bewerbung2_studentin_orga",
                 "bewerbung2_verteiler_orga", "Stefan"};
         String[] hour = {"0", "01", "02"};
         for (int i = 0; i < modulenames.length; i++) {
@@ -393,7 +393,7 @@ public class DatabaseInit implements ServletContextInitializer {
                     .sevenHourLimit((1 + random.nextInt(5)) + "")
                     .nineHourLimit((1 + random.nextInt(5)) + "")
                     .seventeenHourLimit((1 + random.nextInt(5)) + "")
-                    .profName(profNames[i])
+                    .profSerial(profSerial[i])
                     .hourLimit(hour[i % 3])
                     .deadline(date)
                     .build();
