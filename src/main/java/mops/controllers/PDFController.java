@@ -5,7 +5,13 @@ import mops.model.classes.Applicant;
 import mops.model.classes.Application;
 import mops.model.classes.Distribution;
 import mops.model.classes.Module;
-import mops.services.*;
+import mops.services.ApplicantService;
+import mops.services.ApplicationService;
+import mops.services.DistributionService;
+import mops.services.EMailService;
+import mops.services.ModuleService;
+import mops.services.PDFService;
+import mops.services.ZIPService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.core.io.ByteArrayResource;
@@ -181,9 +187,10 @@ public class PDFController {
     }
 
     /**
+     * Views main page
      *
-     * @param token
-     * @param model
+     * @param token keycloak
+     * @param model model
      * @return html
      */
     @Secured({"ROLE_verteiler", "ROLE_orga"})
@@ -235,6 +242,7 @@ public class PDFController {
     }
 
     /**
+     * Redirect to download all
      *
      * @param token
      * @param model
@@ -252,10 +260,10 @@ public class PDFController {
 
     /**
      *
-     * @param token
-     * @param model
-     * @param eMail
-     * @return
+     * @param token token
+     * @param model model
+     * @param eMail email
+     * @return webpage
      */
     @Secured({"ROLE_verteiler", "ROLE_orga"})
     @PostMapping("/versenden")
@@ -329,11 +337,11 @@ public class PDFController {
     }
 
     /**
-     *
-     * @param module
-     * @param token
+     * Downloads all applications for a module
+     * @param module module
+     * @param token token
      * @param model
-     * @return
+     * @return file
      * @throws IOException
      * @throws NoSuchElementException
      */
@@ -374,10 +382,10 @@ public class PDFController {
     }
 
     /**
-     *
-     * @param token
-     * @param model
-     * @return
+     * Downloads all applications as zip
+     * @param token token
+     * @param model model
+     * @return file
      * @throws IOException
      * @throws NoSuchElementException
      */
@@ -410,11 +418,12 @@ public class PDFController {
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
+
     /**
-     *
-     * @param token
-     * @param model
-     * @return
+     * Downloads all distributed as zip
+     * @param token token
+     * @param model model
+     * @return Zip file
      * @throws IOException
      * @throws NoSuchElementException
      */
