@@ -6,6 +6,7 @@ import mops.model.classes.Application.ApplicationBuilder;
 import mops.model.classes.Distribution;
 import mops.model.classes.Evaluation;
 import mops.model.classes.Module;
+import mops.model.classes.webclasses.WebApplication;
 import mops.model.classes.webclasses.WebDistribution;
 import mops.model.classes.webclasses.WebDistributorApplicant;
 import mops.model.classes.webclasses.WebDistributorApplication;
@@ -306,7 +307,7 @@ public class DistributionService {
                     .hours7(distribution.getModule().getSevenHourLimit())
                     .hours9(distribution.getModule().getNineHourLimit())
                     .hours17(distribution.getModule().getSeventeenHourLimit())
-                    .webDistributorApplicants(webDistributorApplicantList)
+                    .webDistributorApplicants(sort(webDistributorApplicantList, distribution.getModule().getName()))
                     .build();
             webDistributionList.add(webDistribution);
         }
@@ -323,6 +324,31 @@ public class DistributionService {
         webDistributionList.add(webDistribution);
         return webDistributionList;
     }
+
+    private List<WebDistributorApplicant> sort(final List<WebDistributorApplicant> applicantList, final String module) {
+        List<WebDistributorApplicant> sortedApplicants = new LinkedList<>();
+        LinkedList<WebDistributorApplicant>[] orgaPrios = new LinkedList[4];
+        for (int i = 0; i < 4; i++) {
+            orgaPrios[i] = new LinkedList<>();
+        }
+        for (WebDistributorApplicant applicant : applicantList) {
+            for (WebDistributorApplication application : applicant.getWebDistributorApplications()) {
+                if (module.equals(application.getModule())) {
+                    orgaPrios[application.getOrganizerPriority().getValue() - 1].add(applicant);
+                }
+            }
+        }
+        for (int i = 0; i < 4; i++) {
+            orgaPrios[i].sort(Comparator.comparing(a -> a.getWebDistributorApplications().getPriority().getValue()));
+        }
+
+        for (int i = 0; i < 4; i++) {
+            sortedApplicants.addAll(orgaPrios[i]);
+        }
+        return sortedApplicants;
+    }
+
+
 
     private List<WebDistributorApplicant> convertUnassignedApplicantsToWebDistributorApplicants(
             final List<Applicant> applicants) {
