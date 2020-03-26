@@ -157,7 +157,7 @@ public class CSVService {
             WebModule newModule = WebModule.builder()
                     .name(tmp[NAME])
                     .shortName(tmp[SHORT_NAME])
-                    .profName(tmp[PROF_NAME])
+                    .profSerial(tmp[PROF_NAME])
                     .sevenHourLimit(tmp[SEVEN_HOUR_LIMIT])
                     .nineHourLimit(tmp[NINE_HOUR_LIMIT])
                     .seventeenHourLimit(tmp[SEVENTEEN_HOUR_LIMIT])

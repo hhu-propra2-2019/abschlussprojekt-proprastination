@@ -65,7 +65,7 @@ public class OrgaController {
             model.addAttribute("account", createAccountFromPrincipal(token));
             List<Module> modules = new ArrayList<>();
             for (Module module : moduleService.getModules()) {
-                if (module.getProfName().equals(token.getName())) {
+                if (module.getProfSerial().equals(token.getName())) {
                     modules.add(module);
                 }
             }
