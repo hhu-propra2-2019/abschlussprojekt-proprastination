@@ -135,10 +135,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Abbrechen</button>
-                    <form th:action="@{/}" th:method="GET">
-                        <a class="btn btn-outline-primary" name="distribute"
-                           th:href="@{/bewerbung2/verteiler/vorverteilen}" type="submit"> Bestätigen </a>
-                    </form>
+                        <button class="btn btn-outline-primary" id="distributeButton" name="distribute"
+                            type="submit"> Bestätigen </button>
                 </div>
             </div>
         </div>
@@ -184,6 +182,17 @@
             window.location.href = "/bewerbung2/verteiler/saveChecked/" + applicantId + "/" + checked + "/"
         }
 
+    </script>
+    <script>
+        $("#distributeModal").keyup(function(event) {
+            if (event.keyCode === 13) {
+                $("#distributeButton").click();
+            }
+        });
+
+        $("#distributeButton").click(function() {
+            window.location.href = "/bewerbung2/verteiler/vorverteilen"
+        });
     </script>
 </main>
 </body>
