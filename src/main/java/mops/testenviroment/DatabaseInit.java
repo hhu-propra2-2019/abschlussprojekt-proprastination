@@ -116,7 +116,7 @@ public class DatabaseInit implements ServletContextInitializer {
                     .semester("SS2020")
                     .comment(truncate(faker.rickAndMorty().quote(), 255))
                     .role(getRole())
-                    .priority(nextPriority())
+                    .priority(nextPriorityApplicant())
                     .build();
 
             Application application2 = Application.builder()
@@ -129,7 +129,7 @@ public class DatabaseInit implements ServletContextInitializer {
                     .semester("SS2020")
                     .comment(truncate(faker.rickAndMorty().quote(), 255))
                     .role(getRole())
-                    .priority(nextPriority())
+                    .priority(nextPriorityApplicant())
                     .build();
 
             Applicant applicant = Applicant.builder()
@@ -196,6 +196,22 @@ public class DatabaseInit implements ServletContextInitializer {
                 break;
             default:
                 prio = Priority.NEGATIVE;
+                break;
+        }
+        return prio;
+    }
+
+    private Priority nextPriorityApplicant() {
+        Priority prio;
+        switch (random.nextInt(3)) {
+            case 0:
+                prio = Priority.VERYHIGH;
+                break;
+            case 1:
+                prio = Priority.HIGH;
+                break;
+            default:
+                prio = Priority.NEUTRAL;
                 break;
         }
         return prio;
@@ -292,7 +308,7 @@ public class DatabaseInit implements ServletContextInitializer {
                 .semester("SS2020")
                 .comment(truncate(faker.rickAndMorty().quote(), 255))
                 .role(getRole())
-                .priority(nextPriority())
+                .priority(nextPriorityApplicant())
                 .build();
 
         Application application2 = Application.builder()
@@ -305,7 +321,7 @@ public class DatabaseInit implements ServletContextInitializer {
                 .semester("SS2020")
                 .comment(truncate(faker.rickAndMorty().quote(), 255))
                 .role(getRole())
-                .priority(nextPriority())
+                .priority(nextPriorityApplicant())
                 .build();
 
         return Applicant.builder()
