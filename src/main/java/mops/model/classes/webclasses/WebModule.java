@@ -13,7 +13,7 @@ import mops.model.classes.Module;
 public class WebModule {
     private String name;
     private String shortName;
-    private String profName;
+    private String profSerial;
     private String sevenHourLimit;
     private String nineHourLimit;
     private String seventeenHourLimit;
@@ -23,7 +23,7 @@ public class WebModule {
      * @return returns module as String Array
      */
     public String[] toStringArray() {
-        return new String[]{name, shortName, profName, sevenHourLimit,
+        return new String[]{name, shortName, profSerial, sevenHourLimit,
                 nineHourLimit, seventeenHourLimit, hourLimit};
     }
 
@@ -32,15 +32,14 @@ public class WebModule {
      * @return Module
      */
     public Module toModule() {
-        Module m = Module.builder()
+        return Module.builder()
                 .name(this.name)
                 .shortName(this.shortName)
-                .profName(this.profName)
+                .profSerial(this.profSerial)
                 .sevenHourLimit(this.sevenHourLimit)
                 .nineHourLimit(this.nineHourLimit)
                 .seventeenHourLimit(this.seventeenHourLimit)
                 .hourLimit(this.hourLimit)
                 .build();
-        return m;
     }
 }

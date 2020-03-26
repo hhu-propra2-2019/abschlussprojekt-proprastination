@@ -46,40 +46,20 @@ public class ZIPService {
      * @param file
      * @param zipStream
      * @param fileName
-     * @throws FileNotFoundException
      * @throws IOException
      */
     public static void writeToZipFile(final File file,
                                       final ZipOutputStream zipStream,
-                                      final String fileName) {
+                                      final String fileName) throws IOException {
         final int b = 1024;
         byte[] bytes = new byte[b];
         int length;
-        FileInputStream fileInputStream = null;
-        try {
-            fileInputStream = new FileInputStream(file);
+
+        try (FileInputStream fileInputStream = new FileInputStream(file)) {
             ZipEntry zipEntry = new ZipEntry(fileName);
             zipStream.putNextEntry(zipEntry);
             while ((length = fileInputStream.read(bytes)) >= 0) {
                 zipStream.write(bytes, 0, length);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (zipStream != null) {
-                try {
-                    zipStream.closeEntry();
-                    zipStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (fileInputStream != null) {
-                try {
-                    fileInputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         }
     }
@@ -89,16 +69,18 @@ public class ZIPService {
      *
      * @return Zip File
      */
-    public File getZipFileForAllDistributions() {
+    public File getZipFileForAllDistributions() throws IOException {
         File file;
         String fileName;
         File tmpFile = null;
         List<Distribution> distributions = distributionService.findAll();
+        FileOutputStream fos = null;
+        ZipOutputStream zipOS = null;
         try {
             tmpFile = File.createTempFile("bewerbung", ".zip");
             tmpFile.deleteOnExit();
-            FileOutputStream fos = new FileOutputStream(tmpFile);
-            ZipOutputStream zipOS = new ZipOutputStream(fos);
+            fos = new FileOutputStream(tmpFile);
+            zipOS = new ZipOutputStream(fos);
             for (Distribution distribution : distributions) {
                 for (Applicant applicant : distribution.getEmployees()) {
                     Optional<Application> application = applicant.getApplications().stream()
@@ -111,10 +93,15 @@ public class ZIPService {
                     }
                 }
             }
-            zipOS.close();
-            fos.close();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            if (zipOS != null) {
+                zipOS.close();
+            }
+            if (fos != null) {
+                fos.close();
+            }
         }
 
         return tmpFile;
@@ -122,10 +109,11 @@ public class ZIPService {
 
     /**
      * returns path for zipFile
+     *
      * @param modules
      * @return randomised zipPath
      */
-    public File getZipFileForModule(final List<Module> modules) {
+    public File getZipFileForModule(final List<Module> modules) throws IOException {
         File file;
         String fileName;
         Applicant applicant;
@@ -134,8 +122,13 @@ public class ZIPService {
         try {
             tmpFile = File.createTempFile("bewerbung", ".zip");
             tmpFile.deleteOnExit();
-            FileOutputStream fos = new FileOutputStream(tmpFile);
-            ZipOutputStream zipOS = new ZipOutputStream(fos);
+        } catch (Exception e) {
+            return null;
+        }
+        try (FileOutputStream fos = new FileOutputStream(tmpFile);
+             ZipOutputStream zipOS = new ZipOutputStream(fos)
+        ) {
+
             for (Module module : modules) {
                 applicationList = applicationService.findApplicationsByModule(module);
                 for (Application application : applicationList) {
@@ -146,8 +139,6 @@ public class ZIPService {
                     writeToZipFile(file, zipOS, fileName);
                 }
             }
-            zipOS.close();
-            fos.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

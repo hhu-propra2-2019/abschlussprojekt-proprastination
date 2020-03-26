@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("checkstyle:MagicNumber")
 @Component
 public class DatabaseInit implements ServletContextInitializer {
-    private static final int ENTRYNUMBER = 30;
+    private static final int ENTRYNUMBER = 100;
     private transient Random random = new Random();
 
     private transient ApplicantRepository applicantRepository;
@@ -155,15 +155,6 @@ public class DatabaseInit implements ServletContextInitializer {
         applicantRepository.save(createMainRole("studentin", faker));
 
     }
-
-    private String nextCertificateName(final Faker faker) {
-        if (random.nextInt(5) != 4) {
-            return "Keins";
-        } else {
-            return faker.educator().course();
-        }
-    }
-
 
     private Module[] nextModules() {
         long value = random.nextInt(5) + 1;
@@ -391,7 +382,7 @@ public class DatabaseInit implements ServletContextInitializer {
                 "RDB",
                 "Algorithmen und Datenstrukturen", "Theoretische Informatik"};
         String[] shortNames = {"ProPra1", "Propra2", "RDB", "Aldat", "Theo"};
-        String[] profNames = {"orga", "bewerbung2_all_roles", "bewerbung2_studentin_orga",
+        String[] profSerial = {"orga", "bewerbung2_all_roles", "bewerbung2_studentin_orga",
                 "bewerbung2_verteiler_orga", "Stefan"};
         String[] hour = {"0", "01", "02"};
         for (int i = 0; i < modulenames.length; i++) {
@@ -402,7 +393,7 @@ public class DatabaseInit implements ServletContextInitializer {
                     .sevenHourLimit((1 + random.nextInt(5)) + "")
                     .nineHourLimit((1 + random.nextInt(5)) + "")
                     .seventeenHourLimit((1 + random.nextInt(5)) + "")
-                    .profName(profNames[i])
+                    .profSerial(profSerial[i])
                     .hourLimit(hour[i % 3])
                     .deadline(date)
                     .build();

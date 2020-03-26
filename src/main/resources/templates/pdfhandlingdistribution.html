@@ -36,32 +36,54 @@
 </header>
 
 <main th:fragment="bodycontent">
-    <form th:action="@{downloadAlles}" th:method="POST">
-        <div class="card bg-light mb-3 border-primary">
-            <div class="card-header"><h2>Downloaden Sie alle verteilten Bewerbungen als PDFs hier!</h2></div>
+    <form th:action="@{downloadAllesZugeteilt}" th:method="POST">
+        <div role="alert" th:class="${'alert alert-' + type}" th:unless="${message} == null or ${message.isEmpty()}">
+            <label th:text="${message}"></label>
         </div>
         <div class="card bg-light mb-3 border-primary">
-            <div class="card-header"><h4>Sie wollen nur alle Bewerbungen abschicken? Klicken Sie hier!</h4></div>
+            <div class="card-header"><h2><b>Downloaden</b> Sie alle <b>verteilten</b> Bewerbungen als PDFs hier!</h2>
+            </div>
+        </div>
+        <div class="card bg-light mb-3 border-primary">
+            <div class="card-header"><h4>Senden Sie <b>alle verteilten</b> Bewerbungen als Email!</h4></div>
             <div class="card-body">
-                <div class="row form-row">
-                    <div class="align-content-center">
-                        <label th:for="email">Bitte geben Sie zusätzlich die E-Mail-Adresse an, an die Sie die Bewerbungen schicken wollen</label>
-                        <br>
-                        <input th:type="text" th:id="email" th:name="email">
+                <div class="row">
+                    <div class="col-auto">
+                        <label>Achtung, der EMailversand kann bei großer Bewerberanzahl fehlschlagen!</label>
                     </div>
                 </div>
-                <br>
                 <div class="row form-row">
-                    <button th:type="submit" th:formaction="@{versenden}" th:value="absenden"
-                            class="btn btn-outline-primary form-control">Absenden</button>
+                    <label th:for="email">Bitte geben Sie zusätzlich die E-Mail-Adresse an, an die Sie die Bewerbungen
+                        schicken wollen</label>
+                    <br>
+                    <div class="col form-inline">
+                        <input th:id="email" th:name="email" th:type="text">
+                        <button class="btn btn-outline-primary form-control" th:formaction="@{versenden}"
+                                th:type="submit"
+                                th:value="absenden">Absenden
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="card bg-light mb-3 border-primary">
-            <div class="card-header"><h4>Downloaden Sie alle Bewerbung eines Moduls hier!</h4></div>
+            <div class="card-header"><h4>Downloaden Sie alle Bewerbungen hier!</h4></div>
             <div class="card-body">
                 <div class="row form-row">
-                    <label th:for="modules">Suchen Sie hier aus, für welches Modul sie die Bewerbungen downloaden wollen!</label><br>
+                    <label>Oder laden Sie <b>alle</b> Bewerbungen hier herunter!</label><br>
+                </div>
+                <div class="row form-row">
+                    <button class="btn btn-outline-primary form-control" th:type="submit" th:value="Download">Download
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="card bg-light mb-3 border-primary">
+            <div class="card-header"><h4>Downloaden Sie alle Bewerbung <b>eines Moduls</b> hier!</h4></div>
+            <div class="card-body">
+                <div class="row form-row">
+                    <label th:for="modules">Suchen Sie hier aus, für welches Modul sie die Bewerbungen downloaden
+                        wollen!</label><br>
                     <select th:name="modules" th:id="modules" class="form-control">
                         <option th:each="module : ${modules}" th:value="${module}" th:text="${module}">Modul a</option>
                     </select>
@@ -74,7 +96,7 @@
             </div>
         </div>
         <div class="card bg-light mb-3 border-primary">
-            <div class="card-header"><h4>Downloaden Sie eine Bewerbung eines Studenten hier!</h4></div>
+            <div class="card-header"><h4>Downloaden Sie <b>eine</b> Bewerbung eines Studenten hier!</h4></div>
             <div class="card-body">
                 <div class="row form-row">
                     <label th:for="modulesStudent">Suchen Sie hier zuerst aus, für welches Modul sie die Bewerbung downloaden wollen!</label><br>
@@ -86,17 +108,6 @@
                 <div class="row form-row">
                     <button th:type="submit" th:value="Download" th:formaction="@{downloadBewerberZugeteilt}"
                             class="btn btn-outline-primary form-control">Download</button>
-                </div>
-            </div>
-        </div>
-        <div class="card bg-light mb-3 border-primary">
-            <div class="card-header"><h4>Downloaden Sie alle Bewerbungen hier!</h4></div>
-            <div class="card-body">
-                <div class="row form-row">
-                    <label>Oder laden Sie alle Bewerbungen hier herunter!</label><br>
-                </div>
-                <div class="row form-row">
-                    <button th:type="submit" th:value="Download" class="btn btn-outline-primary form-control">Download</button>
                 </div>
             </div>
         </div>

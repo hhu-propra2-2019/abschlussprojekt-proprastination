@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -67,7 +68,7 @@ public class EMailService {
      * @param recipient Recipients Email.
      * @param zipfile   Filepath to PDF file.
      */
-    public void sendEmailToRecipient(final String recipient, final File zipfile) {
+    public void sendEmailToRecipient(final String recipient, final File zipfile) throws MailSendException {
 
         try {
             MimeMessage message = emailSender.createMimeMessage();
@@ -75,16 +76,19 @@ public class EMailService {
             helper.setFrom(senderEmail);
             helper.setSubject("Alle Tutorenbewerbung");
             helper.setTo(recipient);
-            helper.setText("<p>Hallo Verteiler!</p>\n"
+            helper.setText("<!DOCTYPE html>\n"
+                    + "<html xmlns=\"http://www.w3.org/1999/xhtml\">"
+                    + "<p>Hallo Verteiler!</p>\n"
                     + "<p>Anbei erhalten Sie alle automatisch gernerierten PDFs.</p>\n"
                     + "<p>Liebe Gr&uuml;&szlig;e,</p>\n"
-                    + "<p>Ihr Mops-Bwerbungs2-Team!</p>");
+                    + "<p>Ihr Mops-Bwerbungs2-Team!</p>"
+                    + "</html>", true);
             FileSystemResource file = new FileSystemResource(zipfile);
             helper.addAttachment("Tutorenbewerbungen.zip", file);
             emailSender.send(message);
-        } catch (MessagingException e) {
-            e.printStackTrace();
-            logger.error("Email-Selbstversand fehlgeschlagen an " + recipient);
+        } catch (Exception e) {
+            logger.error("Email-Selbstversand fehlgeschlagen an " + recipient + "\n" + e.getMessage());
+            throw new MailSendException("Email-Selbstversand fehlgeschlagen an " + recipient + "\n" + e.getMessage());
         }
         logger.info("Email an " + recipient + " erfolgreich versendet.");
     }

@@ -37,22 +37,27 @@
         <div class="card bg-light mb-3 border-primary">
             <div class="card-header"><h2>Downloaden Sie Bewerbungen als PDFs hier!</h2></div>
         </div>
-        <div class="card bg-light mb-3 border-primary" th:if="${account.roles.contains('verteiler')}">
-            <div class="card-header"><h4>Downloaden Sie alle zugeteilten Bewerbungen hier!</h4></div>
+        <div class="alert alert-danger" role="alert" th:if="${verteilt} == 0">
+            Es ist noch <b>keine Zuteilung</b> vorgenommen worden!
+        </div>
+        <div class="card bg-light mb-3 border-primary"
+             th:if="${account.roles.contains('verteiler')} and ${verteilt} ne 0">
+            <div class="card-header"><h4>Downloaden Sie alle <b>zugeteilten</b> Bewerbungen hier!</h4></div>
             <div class="card-body">
                 <div class="row form-row">
                     <label>Oder laden Sie alle Bewerbungen hier herunter!</label><br>
                 </div>
                 <div class="row form-row">
                     <button th:type="submit" th:value="Download"
-                            class="btn btn-outline-primary form-control">Zugeteilte Bewerbungen</button>
+                            class="btn btn-outline-primary form-control">Zugeteilte Bewerbungen
+                    </button>
                 </div>
             </div>
         </div>
     </form>
     <form th:action="@{downloadAlles}" th:method="POST">
         <div class="card bg-light mb-3 border-primary">
-            <div class="card-header"><h4>Downloaden Sie alle Bewerbung eines Moduls hier!</h4></div>
+            <div class="card-header"><h4>Downloaden Sie alle Bewerbung <b>eines Moduls</b> hier!</h4></div>
             <div class="card-body">
                 <div class="row form-row">
                     <label th:for="modules">Suchen Sie hier aus, für welches Modul sie die Bewerbungen downloaden wollen!</label><br>
@@ -68,7 +73,7 @@
             </div>
         </div>
         <div class="card bg-light mb-3 border-primary">
-            <div class="card-header"><h4>Downloaden Sie eine Bewerbung eines Studenten hier!</h4></div>
+            <div class="card-header"><h4>Downloaden Sie eine Bewerbung <b>eines Studenten</b> hier!</h4></div>
             <div class="card-body">
                 <div class="row form-row">
                     <label th:for="modulesStudent">Suchen Sie hier zuerst aus, für welches Modul sie die Bewerbung downloaden wollen!</label><br>
@@ -87,7 +92,7 @@
             <div class="card-header"><h4>Downloaden Sie alle Bewerbungen hier!</h4></div>
             <div class="card-body">
                 <div class="row form-row">
-                    <label>Oder laden Sie alle Bewerbungen hier herunter!</label><br>
+                    <label>Oder laden Sie <b>alle</b> Bewerbungen hier herunter!</label><br>
                 </div>
                 <div class="row form-row">
                     <button th:type="submit" th:value="Download" class="btn btn-outline-primary form-control">Download</button>
