@@ -2,9 +2,20 @@ package mops.model.classes;
 
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CourseTest {
+
+    @Test
+    void testBuilder() {
+        Course course = Course.builder()
+                .name("Daydreaming")
+                .build();
+
+        assertThat(course)
+                .hasFieldOrPropertyWithValue("name", "Daydreaming");
+    }
 
     @Test
     void testEquals() {
