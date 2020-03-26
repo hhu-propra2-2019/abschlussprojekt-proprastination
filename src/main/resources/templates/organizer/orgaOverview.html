@@ -43,7 +43,12 @@
 
 <header>
     <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
-        <!-- Navigation als ungeordnete Liste mit einfachen Links hier einfügen! -->
+        <ul th:if="${account.roles.size() > 1}">
+            <li th:if="${account.roles.contains('verteiler')}"><a th:href="@{/bewerbung2/verteiler/}">Verteiler Übersicht</a></li>
+            <li th:if="${account.roles.contains('orga')}"><a th:href="@{/bewerbung2/organisator/}">Organisator Übersicht</a></li>
+            <li th:if="${account.roles.contains('setup')}"><a th:href="@{/bewerbung2/setup/}">Ersteller Übersicht</a></li>
+            <li th:if="${account.roles.contains('studentin')}"><a th:href="@{/bewerbung2/bewerber/}">Bewerber Übersicht</a></li>
+        </ul>
     </nav>
 </header>
 
@@ -60,7 +65,7 @@
                 <th class="text-center">Min. Arbeitszeit</th>
                 <th class="text-center">Max. Arbeitszeit</th>
                 <th class="text-center">Stundenanzahl</th>
-                <th class="text-center">Unikennung</th>
+                <th class="text-center">Name</th>
                 <th class="text-center">Ganze Bewerbung</th>
             </tr>
             </thead>
@@ -92,7 +97,7 @@
                         <option th:value="17">17 Stunden</option>
                     </select>
                 </td>
-                <td class="text-center" th:text="${appl.uniserial}">Mamus100</td>
+                <td th:text="${appl.firstName + ' ' + appl.surname}" class="text-center">Mamus100</td>
                 <td class="text-center">
                     <button class="btn btn-outline-dark openBtn" data-target="#applicationModal" data-toggle="modal"
                             th:attr="data-id=${appl.id},data-name=${appl.firstName + ' ' + appl.surname}" type="button">

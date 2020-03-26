@@ -12,20 +12,16 @@
 <body>
 <header>
     <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
-        <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
-            <ul>
-                <li>
-                    <a th:href="@{/}">
-                        Startseite
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{./}">
-                        Dashboard
-                    </a>
-                </li>
-            </ul>
-        </nav>
+        <ul th:if="${account.roles.size() > 1}">
+            <li th:if="${account.roles.contains('verteiler')}"><a th:href="@{/bewerbung2/verteiler/}">Verteiler Übersicht</a></li>
+            <li th:if="${account.roles.contains('orga')}"><a th:href="@{/bewerbung2/organisator/}">Organisator Übersicht</a></li>
+            <li th:if="${account.roles.contains('setup')}"><a th:href="@{/bewerbung2/setup/}">Ersteller Übersicht</a></li>
+            <li th:if="${account.roles.contains('studentin')}"><a th:href="@{/bewerbung2/bewerber/}">Bewerber Übersicht</a></li>
+        </ul>
+        <ul>
+            <li><a th:href="@{/}">Startseite</a></li>
+            <li><a th:href="@{./}">Dashboard</a></li>
+        </ul>
     </nav>
 </header>
 <main th:fragment="bodycontent">
@@ -53,6 +49,9 @@
                                         <option th:value="9">9 Stunden/Woche</option>
                                         <option th:value="17">17 Stunden/Woche</option>
                                     </select>
+                                    <div th:if="${#fields.hasErrors('minHours')}" class="text-danger">
+                                        Bitte geben Sie ein gültiges Stundenminimum an.
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-4 px-md-1 align-self-center">
@@ -68,6 +67,10 @@
                                         <option th:value="9">9 Stunden/Woche</option>
                                         <option th:value="17">17 Stunden/Woche</option>
                                     </select>
+                                    <div th:if="${#fields.hasErrors('maxHours')}" class="text-danger">
+                                        Bitte geben Sie ein gültiges Stundenmaximum an, das nicht kleiner als das
+                                        Minimum ist.
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-4 px-md-1 align-self-center">
@@ -109,7 +112,7 @@
                                             th:value="${semester}"></option>
                                 </select>
                                 <div th:if="${#fields.hasErrors('semester')}" class="text-danger">
-                                Bitte geben Sie ein Semester an.
+                                    Bitte geben Sie ein Semester an.
                                 </div>
                                 <br>
                             </div>
@@ -123,7 +126,7 @@
                                        th:id="lecturer"
                                        th:name="lecturer" th:type="text">
                                 <div th:if="${#fields.hasErrors('lecturer')}" class="text-danger">
-                                Bitte geben Sie einen Dozenten an.
+                                    Bitte geben Sie einen Dozenten an.
                                 </div>
                                 <br>
                             </div>

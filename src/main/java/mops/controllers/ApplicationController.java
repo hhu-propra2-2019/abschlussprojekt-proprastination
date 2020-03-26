@@ -21,14 +21,19 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.context.annotation.SessionScope;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.time.Instant;
 import java.util.List;
 
 @Controller
@@ -225,6 +230,7 @@ public class ApplicationController {
      * saves the current module application + calls for information for another module
      * @param token security token
      * @param webApplication the Application with its information
+     * @param bindingResult the result of validating webApplication
      * @param model model
      * @param module the module the applicant wants to apply for next
      * @return html for another Modul
@@ -232,8 +238,30 @@ public class ApplicationController {
     @PostMapping("weiteresModul")
     @Secured("ROLE_studentin")
     public String anotherModule(final KeycloakAuthenticationToken token,
-                              final WebApplication webApplication, final Model model,
+                              @Valid final WebApplication webApplication, final BindingResult bindingResult,
+                              final Model model,
                               @RequestParam("modules") final String module) {
+        if (webApplication.getMinHours() > webApplication.getMaxHours()) {
+            bindingResult.addError(new FieldError("WebApplication", "maxHours",
+                    "Maximale Stundenzahl darf nicht kleiner als minimale sein."));
+        }
+        if (bindingResult.hasErrors()) {
+            bindingResult.getAllErrors().forEach(err -> {
+                LOGGER.info("ERROR {}", err.getDefaultMessage());
+            });
+            Module modul = moduleService.findModuleByName(webApplication.getModule());
+            Applicant applicant = applicantService.findByUniserial(token.getName());
+            List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
+            availableMods.remove(modul);
+
+            model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("newModule", modul);
+            model.addAttribute("semesters", CSVService.getSemester());
+            model.addAttribute("modules", availableMods);
+            model.addAttribute("webApplication", webApplication);
+            return "applicant/applicationModule";
+        }
+
         Applicant applicant = applicantService.findByUniserial(token.getName());
         Application application = studentService.buildApplication(webApplication);
         applicant = applicant.toBuilder().application(application).build();
@@ -256,15 +284,53 @@ public class ApplicationController {
      * Postmapping for editing personal data.
      * @param token keycloak
      * @param webApplicant applicant data
+     * @param applicantBindingResult the result of validating webApplicant
      * @param webAddress address data
+     * @param addressBindingResult the result of validating webAddress
      * @param webCertificate certificate data
+     * @param certificateBindingResult the result of validating webCertificate
      * @param model model
      * @return webpage
      */
+    @SuppressWarnings("checkstyle:ParameterNumber")
     @PostMapping("/uebersichtBearbeitet")
     @Secured("ROLE_studentin")
-    public String saveOverview(final KeycloakAuthenticationToken token, final WebApplicant webApplicant,
-                               final WebAddress webAddress, final WebCertificate webCertificate, final Model model) {
+    public String saveOverview(final KeycloakAuthenticationToken token,
+                               @Valid final WebApplicant webApplicant, final BindingResult applicantBindingResult,
+                               @Valid final WebAddress webAddress, final BindingResult addressBindingResult,
+                               @Valid final WebCertificate webCertificate, final BindingResult certificateBindingResult,
+                               final Model model) {
+
+
+        if (applicantBindingResult.hasErrors()) {
+            applicantBindingResult.getAllErrors().forEach(err -> {
+                LOGGER.info("ERROR {}", err.getDefaultMessage());
+            });
+        }
+
+        if (addressBindingResult.hasErrors()) {
+            addressBindingResult.getAllErrors().forEach(err -> {
+                LOGGER.info("ERROR {}", err.getDefaultMessage());
+            });
+        }
+
+        if (certificateBindingResult.hasErrors()) {
+            certificateBindingResult.getAllErrors().forEach(err -> {
+                LOGGER.info("ERROR {}", err.getDefaultMessage());
+            });
+        }
+
+        if (applicantBindingResult.hasErrors() || addressBindingResult.hasErrors()
+                || certificateBindingResult.hasErrors()) {
+            if (token != null) {
+                model.addAttribute("countries", CSVService.getCountries());
+                model.addAttribute("courses", CSVService.getCourses());
+                model.addAttribute("webApplicant", webApplicant);
+                model.addAttribute("webAddress", webAddress);
+                model.addAttribute("webCertificate", webCertificate);
+            }
+            return "applicant/applicationEditPersonal";
+        }
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
 
@@ -295,17 +361,22 @@ public class ApplicationController {
         return "applicant/applicationOverview";
     }
 
+
     /**
-     * getmapping for overview
-     * @param token
-     * @param model
-     * @return overview html as string
+     * Bewerbungsübersicht
+     *
+     * @param token keycloak.
+     * @param model model.
+     * @param error errormessage.
+     * @return overview page.
      */
     @GetMapping("bewerbungsUebersicht")
     @Secured("ROLE_studentin")
-    public String dashboardOverview(final KeycloakAuthenticationToken token, final Model model) {
+    public String dashboardOverview(final KeycloakAuthenticationToken token, final Model model,
+                                    @ModelAttribute("errormessage") final String error) {
         if (token != null) {
             Account account = createAccountFromPrincipal(token);
+            model.addAttribute("errormessage", error);
             model.addAttribute("account", account);
             model.addAttribute("email", account.getEmail());
             Applicant applicant = applicantService.findByUniserial(account.getName());
@@ -329,15 +400,22 @@ public class ApplicationController {
     public String overview(final KeycloakAuthenticationToken token, final Model model,
                            @Valid final WebApplication webApplication,
                            final BindingResult bindingResult) {
+        if (webApplication.getMinHours() > webApplication.getMaxHours()) {
+            bindingResult.addError(new FieldError("webApplication", "maxHours",
+                    "Maximale Stundenzahl darf nicht kleiner als minimale sein."));
+        }
         if (bindingResult.hasErrors()) {
             bindingResult.getAllErrors().forEach(err -> {
                 LOGGER.info("ERROR {}", err.getDefaultMessage());
             });
-            Module module = moduleService.findModuleByName(webApplication.getModule());
-            model.addAttribute("newModule", module);
+            Module modul = moduleService.findModuleByName(webApplication.getModule());
+            Applicant applicant = applicantService.findByUniserial(token.getName());
+            List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
+            availableMods.remove(modul);
+            model.addAttribute("newModule", modul);
             model.addAttribute("account", createAccountFromPrincipal(token));
             model.addAttribute("semesters", CSVService.getSemester());
-            model.addAttribute("modules", CSVService.getModules());
+            model.addAttribute("modules", availableMods);
             model.addAttribute("webApplication", webApplication);
             return "applicant/applicationModule";
         }
@@ -411,26 +489,54 @@ public class ApplicationController {
     }
 
     /**
-     * The GetMapping for the edit form for modules
-     *
-     * @param token The KeycloakAuthentication
-     * @param model The Website model
-     * @param id    module id.
-     * @return The HTML file rendered as a String
+     * @param id         id of module.
+     * @param token      keycloaktoken
+     * @param request    http request.
+     * @param attributes redirect attributes
+     * @return RedirectView.
      */
-
     @GetMapping("/bearbeiteModulDaten")
     @Secured("ROLE_studentin")
-    public String editModuleData(@RequestParam("module") final long id,
-                                 final KeycloakAuthenticationToken token, final Model model) {
+    public RedirectView validateEdit(@RequestParam("module") final long id, final KeycloakAuthenticationToken token,
+                                     final HttpServletRequest request, final RedirectAttributes attributes) {
         if (token != null) {
             Account account = createAccountFromPrincipal(token);
-            model.addAttribute("account", account);
+            attributes.addFlashAttribute("account", account);
             Applicant applicant = applicantService.findByUniserial(account.getName());
             Application application = applicant.getApplicationById(id);
+
             if (application == null) {
-                return "redirect:bewerbungsUebersicht";
+                attributes.addFlashAttribute("errormessage", "Diese Bewerbung gehört dir nicht!");
+                return new RedirectView("bewerbungsUebersicht", true);
             }
+            if (application.getModule().getDeadline().isBefore(Instant.now())) {
+                attributes.addFlashAttribute("errormessage", "Der Bewerbungszeitraum ist abgelaufen");
+                return new RedirectView("bewerbungsUebersicht", true);
+            }
+            attributes.addFlashAttribute("id", Long.toString(id));
+            attributes.addFlashAttribute("hello", "hello");
+            return new RedirectView("bearbeiteModul");
+        }
+        return new RedirectView("bewerbungsUebersicht", true);
+    }
+
+    /**
+     * Edit Module data
+     *
+     * @param id    application id
+     * @param token keycloak
+     * @param model model
+     * @return Edit Module Page
+     */
+    @GetMapping("/bearbeiteModul")
+    @Secured("ROLE_studentin")
+    public String editModuleData(@ModelAttribute("id") final long id,
+                                 final KeycloakAuthenticationToken token, final Model model) {
+        if (token != null) {
+            Application application = applicationService.findById(id);
+            Account account = createAccountFromPrincipal(token);
+            model.addAttribute("account", account);
+            model.addAttribute("semesters", CSVService.getSemester());
             model.addAttribute("app", application);
         }
         return "applicant/applicationEditModule";
@@ -440,19 +546,38 @@ public class ApplicationController {
      * Edits the given Application.
      *
      * @param webApplication Changes Data in WebApplication format.
+     * @param bindingResult  The result of validating webApplication.
      * @param token          Keycloak.
      * @param model          Model.
      * @return mainpage.
      */
     @PostMapping(value = "/bearbeiteModulDaten")
     @Secured("ROLE_studentin")
-    public String postEditModuledata(final WebApplication webApplication, final KeycloakAuthenticationToken token,
+    public String postEditModuledata(@Valid final WebApplication webApplication, final BindingResult bindingResult,
+                                     final KeycloakAuthenticationToken token,
                                      final Model model) {
+        if (webApplication.getMinHours() > webApplication.getMaxHours()) {
+            bindingResult.addError(new FieldError("webApplication", "maxHours",
+                    "Maximale Stundenzahl darf nicht kleiner als minimale sein."));
+        }
+        if (bindingResult.hasErrors()) {
+                bindingResult.getAllErrors().forEach(err -> {
+                    LOGGER.info("ERROR {}", err.getDefaultMessage());
+            });
+        }
+
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
             Application application = applicationService.findById(webApplication.getId());
             Application newApplication = studentService.changeApplication(webApplication, application);
             applicationService.save(newApplication);
+        }
+
+        if (bindingResult.hasErrors()) {
+            Application application = applicationService.findById(webApplication.getId());
+            model.addAttribute("app", application);
+            model.addAttribute("semesters", CSVService.getSemester());
+            return "applicant/applicationEditModule";
         }
         return "redirect:bewerbungsUebersicht";
     }

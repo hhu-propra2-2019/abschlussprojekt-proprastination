@@ -12,20 +12,16 @@
 <body>
 <header>
     <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
-        <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
-            <ul>
-                <li>
-                    <a th:href="@{/}">
-                        Startseite
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{./}">
-                        Dashboard
-                    </a>
-                </li>
-            </ul>
-        </nav>
+        <ul th:if="${account.roles.size() > 1}">
+            <li th:if="${account.roles.contains('verteiler')}"><a th:href="@{/bewerbung2/verteiler/}">Verteiler Übersicht</a></li>
+            <li th:if="${account.roles.contains('orga')}"><a th:href="@{/bewerbung2/organisator/}">Organisator Übersicht</a></li>
+            <li th:if="${account.roles.contains('setup')}"><a th:href="@{/bewerbung2/setup/}">Ersteller Übersicht</a></li>
+            <li th:if="${account.roles.contains('studentin')}"><a th:href="@{/bewerbung2/bewerber/}">Bewerber Übersicht</a></li>
+        </ul>
+        <ul>
+            <li><a th:href="@{/}">Startseite</a></li>
+            <li><a th:href="@{./}">Dashboard</a></li>
+        </ul>
     </nav>
 </header>
 <main th:fragment="bodycontent">
@@ -53,8 +49,6 @@
                     </div>
                 </div>
                 <div class="card-body">
-
-
                     <div class="row">
                         <div class=" col-md-3">
                             <label for="minload">
@@ -65,6 +59,9 @@
                                 <option value="9">9 Stunden/Woche</option>
                                 <option value="17">17 Stunden/Woche</option>
                             </select>
+                            <div th:if="${#fields.hasErrors('minHours')}" class="text-danger">
+                                Bitte geben Sie ein gültiges Stundenminimum an.
+                            </div>
                         </div>
                         <div class="col-md-3">
                             <label for="maxload">
@@ -75,10 +72,13 @@
                                 <option value="9">9 Stunden/Woche</option>
                                 <option value="17">17 Stunden/Woche</option>
                             </select>
+                            <div th:if="${#fields.hasErrors('maxHours')}" class="text-danger">
+                                Bitte geben Sie ein gültiges Stundenmaximum an, das nicht kleiner als das
+                                Minimum ist.
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <label for="grade">Geben die von Ihnen in diesem Modul erreichte Note an</label> <br>
-
                             <select class="form-control" id="grade" name="grade" th:field="*{grade}">
                                 <option value="1.0">1,0</option>
                                 <option value="1.3">1,3</option>
@@ -92,22 +92,37 @@
                                 <option value="4.0">4,0</option>
                                 <option value="5.0">5,0</option>
                             </select>
-
+                            <div th:if="${#fields.hasErrors('grade')}" class="text-danger">
+                                Bitte geben Sie eine Note an.
+                            </div>
                             <br>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <label for="semester">In welchem Semester haben Sie dieses Modul bestanden</label> <br>
-                            <input class="form-control" id="semester" name="semester" required th:field="*{semester}"
-                                   type="text">
+                            <label th:for="semesters">In welchem Semester haben Sie dieses Modul bestanden</label>
+                            <br>
+                            <select class="form-control" required
+                                    th:field="*{semester}"
+                                    th:id="semesters" th:name="semesters">
+                                <option disabled hidden selected value="">Semester</option>
+                                <option th:each="semester:${semesters}" th:text="${semester}"
+                                        th:value="${semester}"></option>
+                            </select>
+                            <div th:if="${#fields.hasErrors('semester')}" class="text-danger">
+                                Bitte geben Sie ein Semester an.
+                            </div>
                             <br>
                         </div>
                         <div class="col-6">
                             <label for="lecturer">Bei welchem Dozent haben Sie dieses Modul bestanden</label> <br>
-                            <input class="form-control" id="lecturer" name="lecturer" placeholder="Dozent" required
+                            <input class="form-control" id="lecturer" name="lecturer" placeholder="Dozent"
                                    th:field="*{lecturer}"
-                                   type="text">
+                                   type="text"
+                                   required>
+                            <div th:if="${#fields.hasErrors('lecturer')}" class="text-danger">
+                                Bitte geben Sie einen Dozenten an.
+                            </div>
                             <br>
                         </div>
                     </div>
