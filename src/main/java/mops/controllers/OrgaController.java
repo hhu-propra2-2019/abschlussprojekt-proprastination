@@ -2,20 +2,19 @@ package mops.controllers;
 
 import mops.model.Account;
 import mops.model.classes.Module;
+import mops.model.classes.Organizer;
 import mops.model.classes.orgaWebClasses.WebList;
 import mops.model.classes.orgaWebClasses.WebListClass;
+import mops.model.classes.webclasses.WebModule;
 import mops.services.ModuleService;
 import mops.services.OrgaService;
+import mops.services.OrganizerService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.ArrayList;
@@ -28,6 +27,7 @@ public class OrgaController {
 
     private final ModuleService moduleService;
     private final OrgaService orgaService;
+    private final OrganizerService organizerService;
 
     /**
      * Lets Spring inject the services
@@ -36,9 +36,12 @@ public class OrgaController {
      * @param orgaService   orgaService
      */
     @SuppressWarnings("checkstyle:HiddenField")
-    public OrgaController(final ModuleService moduleService, final OrgaService orgaService) {
+    public OrgaController(final ModuleService moduleService,
+                          final OrgaService orgaService,
+                          final OrganizerService organizerService) {
         this.moduleService = moduleService;
         this.orgaService = orgaService;
+        this.organizerService = organizerService;
     }
 
     private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
@@ -70,6 +73,15 @@ public class OrgaController {
                 }
             }
             model.addAttribute("modules", modules);
+            Organizer organizer = organizerService.findByUniserial(token.getName());
+            if (organizer == null) {
+                organizer = Organizer.builder()
+                        .uniserial(token.getName())
+                        .phonenumber("Bitte speichern Sie Ihre Telefonnummer!")
+                        .build();
+                organizerService.save(organizer);
+            }
+            model.addAttribute("organizer", organizer);
         }
 
         return "organizer/orgaMain";
@@ -109,6 +121,29 @@ public class OrgaController {
         orgaService.saveEvaluations(applications);
         return "redirect:/bewerbung2/organisator/" + id + "/";
     }
+
+    /**
+     * Post mapping for saving edited phone number
+     * @param token The KeycloakAuthentication
+     * @param model The Website model
+     * @param phone The new phone number
+     * @return redirects to orgaMain
+     */
+    @PostMapping("/")
+    @Secured("ROLE_orga")
+    public String postEditedModule(final KeycloakAuthenticationToken token, final Model model,
+                                   @RequestParam("phone") final String phone) {
+        if (token != null) {
+            Organizer oldOrganizer = organizerService.findByUniserial(token.getName());
+            organizerService.save(Organizer.builder()
+                    .id(oldOrganizer.getId())
+                    .uniserial(oldOrganizer.getUniserial())
+                    .phonenumber(phone)
+                    .build());
+        }
+        return "redirect:/bewerbung2/organisator/";
+    }
+
 
     /**
      * Needed to display additional information about each application on the overview page.
