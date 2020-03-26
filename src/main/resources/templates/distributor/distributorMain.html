@@ -40,8 +40,8 @@
                         <div class="col-2"></div>
                         <div class="col-3">
                             <form th:action="@{/}" th:method="GET">
-                                <a class="btn btn-outline-primary"
-                                   th:href="@{/bewerbung2/pdf/zuteilungUebersicht}" type="submit"> Zu den Einstellungsbögen </a>
+                                <button class="btn btn-outline-primary"
+                                   th:href="@{/bewerbung2/pdf/zuteilungUebersicht}" type="submit"> Zu den Einstellungsbögen </button>
                             </form>
                         </div>
                         <div class="col-2"></div>
@@ -133,10 +133,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Abbrechen</button>
-                    <form th:action="@{/}" th:method="GET">
-                        <a class="btn btn-outline-primary" name="distribute"
-                           th:href="@{/bewerbung2/verteiler/vorverteilen}" type="submit"> Bestätigen </a>
-                    </form>
+                        <button class="btn btn-outline-primary" id="distributeButton" name="distribute"
+                            type="submit"> Bestätigen </button>
                 </div>
             </div>
         </div>
@@ -153,17 +151,18 @@
 
         function drag(ev, el) {
             ev.dataTransfer.setData("text", ev.target.id);
+
             ev.dataTransfer.setData("applicantId", ev.currentTarget.id);
-            var help = el.dataset.applicantid;
         }
 
         function drop(ev, el) {
             ev.preventDefault();
             var data = ev.dataTransfer.getData("text");
+            el.appendChild(document.getElementById(data));
+
             var applicantElId = ev.dataTransfer.getData("applicantId");
             var applicantEl = document.getElementById(applicantElId);
             var applicantId = applicantEl.dataset.applicantid;
-            el.appendChild(document.getElementById(data));
             var distributorId = el.dataset.distributionid;
 
             window.location.href = "/bewerbung2/verteiler/" + distributorId + "/" + applicantId + "/"
@@ -182,6 +181,17 @@
             window.location.href = "/bewerbung2/verteiler/saveChecked/" + applicantId + "/" + checked + "/"
         }
 
+    </script>
+    <script>
+        $("#distributeModal").keyup(function(event) {
+            if (event.keyCode === 13) {
+                $("#distributeButton").click();
+            }
+        });
+
+        $("#distributeButton").click(function() {
+            window.location.href = "/bewerbung2/verteiler/vorverteilen"
+        });
     </script>
 </main>
 </body>
