@@ -18,15 +18,6 @@ class SetupControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-
-    @Test
-    @WithMockKeycloackAuth(name = "setup", roles = "setup")
-    void setupHasAccess() throws Exception {
-        mockMvc.perform(get("/bewerbung2/setup/"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.modules").exists());
-    }
-
     @Test
     @WithMockKeycloackAuth(name = "setup", roles = "setup")
     void indexTest() throws Exception {
