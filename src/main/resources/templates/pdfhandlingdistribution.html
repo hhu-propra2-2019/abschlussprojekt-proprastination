@@ -20,37 +20,43 @@
 <body>
 <header>
     <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
-        <ul th:if="${account.roles.size() > 1}">
-            <li th:if="${account.roles.contains('verteiler')}"><a th:href="@{/bewerbung2/verteiler/}">Verteiler Übersicht</a></li>
-            <li th:if="${account.roles.contains('orga')}"><a th:href="@{/bewerbung2/organisator/}">Organisator Übersicht</a></li>
-            <li th:if="${account.roles.contains('setup')}"><a th:href="@{/bewerbung2/setup/}">Ersteller Übersicht</a></li>
-            <li th:if="${account.roles.contains('studentin')}"><a th:href="@{/bewerbung2/bewerber/}">Bewerber Übersicht</a></li>
-        </ul>
         <ul>
-            <li><a th:href="@{/}">Startseite</a></li>
-            <li><a th:href="@{/details}">Details</a></li>
+            <li>
+                <a th:href="@{/}">
+                    Startseite
+                </a>
+            </li>
+            <li>
+                <a th:href="@{./}">
+                    Dashboard
+                </a>
+            </li>
         </ul>
     </nav>
 </header>
+
 <main th:fragment="bodycontent">
-    <form th:action="@{zuteilungUebersicht}" th:method="GET">
+    <form th:action="@{downloadAlles}" th:method="POST">
         <div class="card bg-light mb-3 border-primary">
-            <div class="card-header"><h2>Downloaden Sie Bewerbungen als PDFs hier!</h2></div>
+            <div class="card-header"><h2>Downloaden Sie alle verteilten Bewerbungen als PDFs hier!</h2></div>
         </div>
-        <div class="card bg-light mb-3 border-primary" th:if="${account.roles.contains('verteiler')}">
-            <div class="card-header"><h4>Downloaden Sie alle zugeteilten Bewerbungen hier!</h4></div>
+        <div class="card bg-light mb-3 border-primary">
+            <div class="card-header"><h4>Sie wollen nur alle Bewerbungen abschicken? Klicken Sie hier!</h4></div>
             <div class="card-body">
                 <div class="row form-row">
-                    <label>Oder laden Sie alle Bewerbungen hier herunter!</label><br>
+                    <div class="align-content-center">
+                        <label th:for="email">Bitte geben Sie zusätzlich die E-Mail-Adresse an, an die Sie die Bewerbungen schicken wollen</label>
+                        <br>
+                        <input th:type="text" th:id="email" th:name="email">
+                    </div>
                 </div>
+                <br>
                 <div class="row form-row">
-                    <button th:type="submit" th:value="Download"
-                            class="btn btn-outline-primary form-control">Zugeteilte Bewerbungen</button>
+                    <button th:type="submit" th:formaction="@{versenden}" th:value="absenden"
+                            class="btn btn-outline-primary form-control">Absenden</button>
                 </div>
             </div>
         </div>
-    </form>
-    <form th:action="@{downloadAlles}" th:method="POST">
         <div class="card bg-light mb-3 border-primary">
             <div class="card-header"><h4>Downloaden Sie alle Bewerbung eines Moduls hier!</h4></div>
             <div class="card-body">
@@ -78,7 +84,7 @@
                 </div>
                 <br>
                 <div class="row form-row">
-                    <button th:type="submit" th:value="Download" th:formaction="@{downloadBewerber}"
+                    <button th:type="submit" th:value="Download" th:formaction="@{downloadBewerberZugeteilt}"
                             class="btn btn-outline-primary form-control">Download</button>
                 </div>
             </div>

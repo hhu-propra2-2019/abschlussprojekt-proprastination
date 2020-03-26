@@ -15,6 +15,7 @@ import mops.repositories.ApplicationRepository;
 import mops.repositories.DistributionRepository;
 import mops.repositories.EvaluationRepository;
 import mops.repositories.ModuleRepository;
+import mops.services.CSVService;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.stereotype.Component;
 
@@ -32,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("checkstyle:MagicNumber")
 @Component
 public class DatabaseInit implements ServletContextInitializer {
-    private static final int ENTRYNUMBER = 100;
+    private static final int ENTRYNUMBER = 30;
     private transient Random random = new Random();
 
     private transient ApplicantRepository applicantRepository;
@@ -90,18 +91,18 @@ public class DatabaseInit implements ServletContextInitializer {
     @SuppressWarnings("checkstyle:MagicNumber")
     public void fakeApplicants(final Faker faker) {
         for (int i = 0; i < ENTRYNUMBER; i++) {
-            String country = faker.address().countryCode();
+            String country = CSVService.getCountries().get(random.nextInt(255));
             Address address = Address.builder()
                     .street(faker.address().streetName())
                     .houseNumber(faker.address().buildingNumber())
                     .city(faker.address().city())
                     .country(country)
-                    .zipcode(faker.address().zipCodeByState(country))
+                    .zipcode(faker.address().zipCode())
                     .build();
 
             Certificate certificate = Certificate.builder()
                     .course(faker.job().field())
-                    .name(nextCertificateName(faker))
+                    .name(getCertName())
                     .build();
             Module[] modules = nextModules();
             int[] hours = nextHours();
@@ -139,7 +140,7 @@ public class DatabaseInit implements ServletContextInitializer {
                     .comment(truncate(faker.yoda().quote(), 255))
                     .course(faker.educator().course())
                     .nationality(faker.nation().nationality())
-                    .birthday(getDate(faker.date().birthday()))
+                    .birthday(new SimpleDateFormat("yyyy-mm-dd").format(faker.date().birthday()))
                     .status(getStatus())
                     .application(application1)
                     .application(application2)
@@ -162,6 +163,7 @@ public class DatabaseInit implements ServletContextInitializer {
             return faker.educator().course();
         }
     }
+
 
     private Module[] nextModules() {
         long value = random.nextInt(5) + 1;
@@ -223,18 +225,20 @@ public class DatabaseInit implements ServletContextInitializer {
 
     private String getStatus() {
         String ret;
-        switch (random.nextInt(3)) {
-            case 0:
-                ret = "Neueinstellung";
-                break;
-            case 1:
-                ret = "Weiterbeschäftigung";
-                break;
-            default:
-                ret = "Änderung";
-                break;
+        if (random.nextInt(3) == 0) {
+            ret = "Einstellung";
+        } else {
+            ret = "Weiterbeschäftigung";
         }
         return ret;
+    }
+
+    private String getCertName() {
+        String[] arr = {"Keins", "Bachelor", "Master", "Diplom", "Staatsexamen", "Anderes"};
+        if (random.nextInt(5) > 1) {
+            return arr[0];
+        }
+        return arr[random.nextInt(5) + 1];
     }
 
     private String truncate(final String s, final int num) {
@@ -265,18 +269,18 @@ public class DatabaseInit implements ServletContextInitializer {
 
     @SuppressWarnings("checkstyle:MagicNumber")
     private Applicant createMainRole(final String role, final Faker faker) {
-        String country = faker.address().countryCode();
+        String country = CSVService.getCountries().get(random.nextInt(255));
         Address address = Address.builder()
                 .street(faker.address().streetName())
                 .houseNumber(faker.address().buildingNumber())
                 .city(faker.address().city())
                 .country(country)
-                .zipcode(faker.address().zipCodeByState(country))
+                .zipcode(faker.address().zipCode())
                 .build();
 
         Certificate certificate = Certificate.builder()
                 .course(faker.job().field())
-                .name(faker.educator().course())
+                .name(getCertName())
                 .build();
 
         Module[] modules = nextModules();
@@ -315,7 +319,7 @@ public class DatabaseInit implements ServletContextInitializer {
                 .comment(truncate(faker.yoda().quote(), 255))
                 .course("Informatik")
                 .nationality(faker.nation().nationality())
-                .birthday(getDate(faker.date().birthday()))
+                .birthday(new SimpleDateFormat("yyyy-mm-dd").format(faker.date().birthday()))
                 .status("Einstellung")
                 .application(application1)
                 .application(application2)

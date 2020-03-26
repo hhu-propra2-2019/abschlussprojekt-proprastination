@@ -77,7 +77,7 @@ public class DocumentWithoutBachelor implements Document {
     }
 
     private String getCurrentDateAsString() {
-        return new SimpleDateFormat("dd/MM/yyyy").format(new Date());
+        return new SimpleDateFormat("dd.MM.yyyy").format(new Date());
     }
 
     /**

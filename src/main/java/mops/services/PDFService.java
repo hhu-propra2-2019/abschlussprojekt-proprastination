@@ -2,6 +2,7 @@ package mops.services;
 
 import mops.model.Document;
 import mops.model.DocumentWithBachelor;
+import mops.model.DocumentWithoutBachelor;
 import mops.model.classes.Address;
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
@@ -11,7 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.UUID;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Service
 public class PDFService {
@@ -28,37 +31,41 @@ public class PDFService {
      * @param applicant   Applicant.
      * @return filepath to file.
      */
-    public String generatePDF(final Application application, final Applicant applicant) {
-        UUID uuid = UUID.randomUUID();
-        String filepath = "/tmp/" + uuid.toString() + ".pdf";
-
+    public File generatePDF(final Application application, final Applicant applicant) {
+        File tmpFile = null;
         try {
-            document = new DocumentWithBachelor();
+            tmpFile = File.createTempFile("bewerbung", ".pdf");
+            tmpFile.deleteOnExit();
+            if (applicant.getCerts().getName().equals("Keins")) {
+                document = new DocumentWithoutBachelor();
+            } else {
+                document = new DocumentWithBachelor();
+            }
             addApplicationInfoToPDF(application);
             addApplicantInfoToPDF(applicant);
             document.addGeneralInfos();
-            document.save(new File(filepath));
-            logger.debug("Saved PDF to:" + filepath);
-        } catch (IOException e) {
+            document.save(tmpFile);
+            logger.debug("Saved PDF to:" + tmpFile.getAbsolutePath());
+        } catch (IOException | ParseException e) {
             e.printStackTrace();
-            logger.error("Saving PDF failed to path: " + filepath);
+            logger.error("Saving PDF failed for: " + tmpFile);
         }
-        return filepath;
+        return tmpFile;
     }
 
     private void addApplicationInfoToPDF(final Application application) throws IOException {
         document.setField("Stunden", String.valueOf(application.getFinalHours()));
-        document.setField("Vertragsart", "Einstellung");
     }
 
-    private void addApplicantInfoToPDF(final Applicant applicant) throws IOException {
+    private void addApplicantInfoToPDF(final Applicant applicant) throws IOException, ParseException {
         document.setField("E-Mail", applicant.getUniserial() + "@hhu.de");
         document.setField("Vorname", applicant.getFirstName());
         document.setField("Name", applicant.getSurname());
-        document.setField("Geburtsdatum", applicant.getBirthday());
+        document.setField("Geburtsdatum", formatDate(applicant.getBirthday()));
         document.setField("Geburtsort", applicant.getBirthplace());
         document.setField("Staatsangehörigkeit", applicant.getNationality());
         document.setField("Studiengang", applicant.getCourse());
+        document.setField("Vertragsart", applicant.getStatus());
         document.setGender("männlich");
         addApplicantAdressInfoToPDF(applicant.getAddress());
     }
@@ -67,8 +74,15 @@ public class PDFService {
         document.setField("Anschrift (Straße)", address.getStreet());
         document.setField("Anschrift (Hausnummer)", address.getHouseNumber());
         document.setField("Anschrift (PLZ)", String.valueOf(address.getZipcode()));
-        document.setField("Anschrift (optionaler Adresszusatz)", address.getCity());
         document.setField("Anschrift (Ort)", address.getCity());
         document.setField("Anschrift (Land)", CSVService.getCodeForCountry(address.getCountry()));
     }
+
+    private String formatDate(final String idate) throws ParseException {
+        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = parser.parse(idate);
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+        return formatter.format(date);
+    }
+
 }

@@ -34,6 +34,7 @@ public class DocumentWithBachelor implements Document {
     @Override
     public void save(final File newFile) throws IOException {
         document.save(newFile);
+        document.close();
     }
 
     /**
@@ -80,7 +81,7 @@ public class DocumentWithBachelor implements Document {
     }
 
     private String getCurrentDateAsString() {
-        return new SimpleDateFormat("dd/MM/yyyy").format(new Date());
+        return new SimpleDateFormat("dd.MM.yyyy").format(new Date());
     }
 
     /**

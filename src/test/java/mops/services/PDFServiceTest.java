@@ -4,6 +4,7 @@ import mops.model.Document;
 import mops.model.classes.Address;
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
+import mops.model.classes.Certificate;
 import mops.model.classes.Module;
 import mops.model.classes.Priority;
 import mops.model.classes.Role;
@@ -35,6 +36,9 @@ class PDFServiceTest {
                 .name("Info4")
                 .build();
 
+        Certificate cert = Certificate.builder()
+                .name("Keins").build();
+
         Application application = Application.builder()
                 .module(module)
                 .priority(Priority.NEGATIVE)
@@ -57,17 +61,18 @@ class PDFServiceTest {
                 .surname("J")
                 .firstName("WAUWAU")
                 .address(address)
-                .birthday("01.01.2001")
+                .birthday("2001-02-02")
                 .birthplace("Wakanda")
+                .certs(cert)
                 .course("Arts")
                 .nationality("English")
-                .status("New")
+                .status("Einstellung")
                 .application(application)
                 .build();
 
-        String file = service.generatePDF(application, applicant);
+        File file = service.generatePDF(application, applicant);
 
-        PDDocument document1 = PDDocument.load(new File(file));
+        PDDocument document1 = PDDocument.load(file);
         document1.setAllSecurityToBeRemoved(true);
         PDAcroForm acroForm = document1.getDocumentCatalog().getAcroForm();
 

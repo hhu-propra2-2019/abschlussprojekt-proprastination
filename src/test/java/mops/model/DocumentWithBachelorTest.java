@@ -82,7 +82,7 @@ class DocumentWithBachelorTest {
         assertThat(acroForm.getField("Group3").getValueAsString()).isEqualTo("6");
         assertThat(acroForm.getField("sonstiges").getValueAsString()).isEqualTo("Veranstaltungsgebundene Tutorentätigkeit"
                 + "                                                                 ");
-        assertThat(acroForm.getField("Antragsdatum").getValueAsString()).isEqualTo(new SimpleDateFormat("dd/MM/yyyy").format(new Date())
+        assertThat(acroForm.getField("Antragsdatum").getValueAsString()).isEqualTo(new SimpleDateFormat("dd.MM.yyyy").format(new Date())
                 + "                                                     ");
     }
 }
