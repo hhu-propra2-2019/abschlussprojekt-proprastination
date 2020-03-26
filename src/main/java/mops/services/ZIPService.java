@@ -22,7 +22,6 @@ public class ZIPService {
     private PDFService pdfService;
     private ApplicantService applicantService;
     private ApplicationService applicationService;
-    private ModuleService moduleService;
     private DistributionService distributionService;
 
     /**
@@ -30,16 +29,14 @@ public class ZIPService {
      * @param pdfService
      * @param applicantService
      * @param applicationService
-     * @param moduleService
      * @param distributionService
      */
     public ZIPService(final PDFService pdfService, final ApplicantService applicantService,
-                      final ApplicationService applicationService, final ModuleService moduleService,
+                      final ApplicationService applicationService,
                       final DistributionService distributionService) {
         this.pdfService = pdfService;
         this.applicantService = applicantService;
         this.applicationService = applicationService;
-        this.moduleService = moduleService;
         this.distributionService = distributionService;
     }
 
@@ -49,7 +46,6 @@ public class ZIPService {
      * @param file
      * @param zipStream
      * @param fileName
-     * @throws FileNotFoundException
      * @throws IOException
      */
     public static void writeToZipFile(final File file,
@@ -148,14 +144,5 @@ public class ZIPService {
         }
 
         return tmpFile;
-    }
-
-    /**
-     * @return zipPath
-     */
-    public File getAllZipFiles() throws IOException {
-        List<Module> modules = moduleService.getModules();
-        File retZip = getZipFileForModule(modules);
-        return retZip;
     }
 }

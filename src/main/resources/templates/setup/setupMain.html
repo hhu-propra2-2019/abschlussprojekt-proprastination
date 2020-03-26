@@ -71,7 +71,6 @@
                             <input id="sevenHourLimit" name="sevenHourLimit" type="hidden" th:value="${module.sevenHourLimit}">
                             <input id="nineHourLimit" name="nineHourLimit" type="hidden" th:value="${module.nineHourLimit}">
                             <input id="seventeenHourLimit" name="seventeenHourLimit" type="hidden" th:value="${module.seventeenHourLimit}">
-                            <input id="hourLimit" name="hourLimit" type="hidden" th:value="${module.hourLimit}">
                             <button class="btn btn-outline-primary btn-sm float-right" type="submit">Bearbeiten</button>
                         </form>
                     </div>
@@ -82,23 +81,22 @@
                     <div class="col-3">
                         <div>Kurzform: </div>
                         <div>Zugeordnete Person (Unikennung): </div>
-                        <div>Stundenlimit Gesamt: </div>
                     </div>
-                    <div class="col-3">
+                    <div class="col-2">
                         <div th:text="${module.shortName}"></div>
                         <div th:text="${module.profSerial}"></div>
-                        <div th:text="${module.hourLimit}"></div>
                     </div>
-                    <div class="col-3">
+                    <div class="col-2">
                         <div>Personenanzahl 7 Std: </div>
                         <div>Personenanzahl 9 Std: </div>
                         <div>Personenanzahl 17 Std: </div>
                     </div>
-                    <div class="col-3">
+                    <div class="col-1">
                         <div th:text="${module.sevenHourLimit}"></div>
                         <div th:text="${module.nineHourLimit}"></div>
                         <div th:text="${module.seventeenHourLimit}"></div>
                     </div>
+                    <div class="col-4"></div>
                 </div>
             </div>
         </div><br>

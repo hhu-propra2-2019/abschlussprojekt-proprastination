@@ -17,14 +17,13 @@ public class WebModule {
     private String sevenHourLimit;
     private String nineHourLimit;
     private String seventeenHourLimit;
-    private String hourLimit;
 
     /**
      * @return returns module as String Array
      */
     public String[] toStringArray() {
         return new String[]{name, shortName, profSerial, sevenHourLimit,
-                nineHourLimit, seventeenHourLimit, hourLimit};
+                nineHourLimit, seventeenHourLimit};
     }
 
     /**
@@ -39,7 +38,6 @@ public class WebModule {
                 .sevenHourLimit(this.sevenHourLimit)
                 .nineHourLimit(this.nineHourLimit)
                 .seventeenHourLimit(this.seventeenHourLimit)
-                .hourLimit(this.hourLimit)
                 .build();
     }
 }

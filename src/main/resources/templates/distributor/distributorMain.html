@@ -151,6 +151,7 @@
         $(".form-search-wrapper").remove()
     </script>
     <script>
+
         (function() {
             var sneaky = new ScrollSneak(location.hostname);
             var sneakyList = document.getElementsByClassName("sneaky");
@@ -161,6 +162,13 @@
             }
         })();
 
+        $('#drag1').draggable({
+            scroll: true,
+            scrollSensivity: 40,
+            scrollSpeed: 40
+        })
+    </script>
+    <script>
         function allowDrop(ev) {
             ev.preventDefault();
         }

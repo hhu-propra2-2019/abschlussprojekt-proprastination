@@ -75,7 +75,7 @@
             </div>
         </div>
     </div>
-    <div class="card bg-light mb-3 border-primary">
+    <div class="card bg-light mb-3 border-primary" th:if="${applicant} and ${applicant.applications.size()} > 0">
         <div class="card-header d-flex justify-content-between align-items-start">
             <div>
                 <h3 class="col">Offene Bewerbungen</h3>
