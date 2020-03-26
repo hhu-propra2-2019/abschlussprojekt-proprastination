@@ -153,17 +153,18 @@
 
         function drag(ev, el) {
             ev.dataTransfer.setData("text", ev.target.id);
+
             ev.dataTransfer.setData("applicantId", ev.currentTarget.id);
-            var help = el.dataset.applicantid;
         }
 
         function drop(ev, el) {
             ev.preventDefault();
             var data = ev.dataTransfer.getData("text");
+            el.appendChild(document.getElementById(data));
+
             var applicantElId = ev.dataTransfer.getData("applicantId");
             var applicantEl = document.getElementById(applicantElId);
             var applicantId = applicantEl.dataset.applicantid;
-            el.appendChild(document.getElementById(data));
             var distributorId = el.dataset.distributionid;
 
             window.location.href = "/bewerbung2/verteiler/" + distributorId + "/" + applicantId + "/"
