@@ -4,12 +4,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 class ApplicantTest {
@@ -79,5 +80,92 @@ class ApplicantTest {
                 "shortName=null, profName=null, sevenHourLimit=null, nineHourLimit=null, seventeenHourLimit=null, " +
                 "hourLimit=null), priority=null, grade=0.0, lecturer=null, semester=null, role=null, comment=null" +
                 ")])");
+    }
+
+    @Test
+    void testGetApplicationById() {
+        Application applicationMock = mock(Application.class);
+        when(applicationMock.getId()).thenReturn((long) 1);
+        Set<Application> newApplicationList = new HashSet<>();
+        newApplicationList.add(applicationMock);
+        Applicant testApplicant = Applicant.builder()
+                .surname("J")
+                .address(address)
+                .birthday("01.01.2001")
+                .birthplace("Wakanda")
+                .course("Arts")
+                .nationality("English")
+                .status("New")
+                .certs(certs)
+                .applications(newApplicationList)
+                .build();
+
+        Application result = testApplicant.getApplicationById(1);
+
+        assertEquals(applicationMock, result);
+    }
+
+    @Test
+    void testGetApplicationByIdMultipleApplications() {
+        Application applicationMock1 = mock(Application.class);
+        when(applicationMock1.getId()).thenReturn((long) 1);
+        Application applicationMock2 = mock(Application.class);
+        when(applicationMock2.getId()).thenReturn((long) 2);
+        Application applicationMock3 = mock(Application.class);
+        when(applicationMock3.getId()).thenReturn((long) 3);
+
+        Set<Application> newApplicationList = new HashSet<>();
+        newApplicationList.add(applicationMock1);
+        newApplicationList.add(applicationMock2);
+        newApplicationList.add(applicationMock3);
+        Applicant testApplicant = Applicant.builder()
+                .surname("J")
+                .address(address)
+                .birthday("01.01.2001")
+                .birthplace("Wakanda")
+                .course("Arts")
+                .nationality("English")
+                .status("New")
+                .certs(certs)
+                .applications(newApplicationList)
+                .build();
+
+        Application result1 = testApplicant.getApplicationById(1);
+        Application result2 = testApplicant.getApplicationById(2);
+        Application result3 = testApplicant.getApplicationById(3);
+
+        assertEquals(applicationMock1, result1);
+        assertEquals(applicationMock2, result2);
+        assertEquals(applicationMock3, result3);
+    }
+
+    @Test
+    void testGetApplicationByIdApplicationNotFound() {
+        Application applicationMock = mock(Application.class);
+        when(applicationMock.getId()).thenReturn((long) 1);
+        Set<Application> newApplicationList = new HashSet<>();
+        newApplicationList.add(applicationMock);
+        Applicant testApplicant = Applicant.builder()
+                .surname("J")
+                .address(address)
+                .birthday("01.01.2001")
+                .birthplace("Wakanda")
+                .course("Arts")
+                .nationality("English")
+                .status("New")
+                .certs(certs)
+                .applications(newApplicationList)
+                .build();
+
+        Application result = testApplicant.getApplicationById(2);
+
+        assertNull(result);
+    }
+
+    @Test
+    void testGetApplicationByIdApplicantHasNoApplications() {
+        Application result = applicant.getApplicationById(1);
+
+        assertNull(result);
     }
 }
