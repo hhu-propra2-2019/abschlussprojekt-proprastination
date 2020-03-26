@@ -1,9 +1,7 @@
 package mops.model.classes.webclasses;
 
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.annotation.Bean;
 import mops.model.classes.Module;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,11 +15,10 @@ class WebModuleTest {
         webmodule = WebModule.builder()
                 .name("Programmier Praktikum")
                 .shortName("ProPra")
-                .profName("Jens")
+                .profSerial("Jens")
                 .sevenHourLimit("2")
                 .nineHourLimit("7")
                 .seventeenHourLimit("1")
-                .hourLimit("20")
                 .build();
     }
 
@@ -37,11 +34,10 @@ class WebModuleTest {
         Module module = Module.builder()
                 .name("Programmier Praktikum")
                 .shortName("ProPra")
-                .profName("Jens")
+                .profSerial("Jens")
                 .sevenHourLimit("2")
                 .nineHourLimit("7")
                 .seventeenHourLimit("1")
-                .hourLimit("20")
                 .build();
 
         assertThat(webmodule.toModule()).isEqualTo(module);

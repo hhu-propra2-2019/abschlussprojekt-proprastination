@@ -3,14 +3,12 @@ package mops.services;
 import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebModule;
 import mops.repositories.ModuleRepository;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@EnableAutoConfiguration
 public class WebModuleService {
 
     private final ModuleRepository moduleRepository;

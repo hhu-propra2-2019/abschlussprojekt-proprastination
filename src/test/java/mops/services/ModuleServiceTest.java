@@ -42,11 +42,10 @@ class ModuleServiceTest {
                 .id(01)
                 .name("Programmier Praktikum")
                 .shortName("ProPra")
-                .profName("Jens")
+                .profSerial("Jens")
                 .sevenHourLimit("2")
                 .nineHourLimit("3")
                 .seventeenHourLimit("2")
-                .hourLimit("10")
                 .deadline(deadline)
                 .build();
 
