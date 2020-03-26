@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class DistributionTest {
     Distribution dist;
@@ -79,5 +80,12 @@ class DistributionTest {
                 "nineHourLimit=null, seventeenHourLimit=null, hourLimit=null), priority=null, grade=0.0, " +
                 "lecturer=null, semester=null, role=null, comment=null)])])"
         );
+    }
+
+    @Test
+    void testNoArgsConstructor() {
+        Distribution emptyDistribution = new Distribution();
+        assertNull(emptyDistribution.getModule());
+        assertNull(emptyDistribution.getEmployees());
     }
 }
