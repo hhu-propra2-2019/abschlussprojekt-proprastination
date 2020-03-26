@@ -43,7 +43,7 @@
                             <br>
                         </div>
                         <div class="col-md-1">
-                            <input class="form-control" name="streetnumber" placeholder="Hausnummer" required
+                            <input class="form-control" name="streetnumber" placeholder="Nr." required
                                    th:field="*{number}" th:attr="value = ${webAddress.number}"
                                    type="text">
                         </div>
@@ -57,7 +57,7 @@
                             </div>
                             <br>
                         </div>
-                        <div class="col-1">
+                        <div class="col-2">
                             <input th:field="*{zipcode}" th:id="zipcode" th:name="zipcode" type="text"
                                    th:attr="value = ${webAddress.zipcode}"
                                    th:class="form-control" placeholder="Postleitzahl"
