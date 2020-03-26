@@ -1,10 +1,7 @@
 package mops.controllers;
 
 import mops.model.Account;
-import mops.model.classes.Organizer;
-import mops.model.classes.orgaWebClasses.WebList;
 import mops.model.classes.orgaWebClasses.WebListClass;
-import mops.services.ModuleService;
 import mops.services.OrgaService;
 import mops.services.OrganizerService;
 import org.keycloak.KeycloakPrincipal;
@@ -12,31 +9,31 @@ import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.annotation.SessionScope;
 
-import java.util.List;
 
 @SessionScope
 @Controller
 @RequestMapping("/bewerbung2/organisator")
 public class OrgaController {
 
-    private final ModuleService moduleService;
     private final OrgaService orgaService;
     private final OrganizerService organizerService;
 
     /**
      * Lets Spring inject the services
-     *
-     * @param moduleService moduleService
+     * @param organizerService organizerService
      * @param orgaService   orgaService
      */
     @SuppressWarnings("checkstyle:HiddenField")
-    public OrgaController(final ModuleService moduleService,
-                          final OrgaService orgaService,
+    public OrgaController(final OrgaService orgaService,
                           final OrganizerService organizerService) {
-        this.moduleService = moduleService;
         this.orgaService = orgaService;
         this.organizerService = organizerService;
     }
