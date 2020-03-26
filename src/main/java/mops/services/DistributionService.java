@@ -217,34 +217,6 @@ public class DistributionService {
                     .build());
             moduleCount++;
         }
-        //sortApplicationsInDistributions();
-    }
-
-    private void sortApplicationsInDistributions() {
-        List<Distribution> distributions = findAll();
-        for (Distribution distribution : distributions) {
-            List<Applicant> applicants = distribution.getEmployees();
-            List<Application> applications = new LinkedList<>();
-            for (Applicant applicant : applicants) {
-                Set<Application> allApplications = applicant.getApplications();
-                for (Application application : allApplications) {
-                    if (application.getModule().equals(distribution.getModule())) {
-                        applications.add(application);
-                    }
-                }
-            }
-            applications.sort(Comparator.comparing(a -> evaluationService.findByApplication(a).getPriority().getValue()));
-            Module module = distribution.getModule();
-            List<Applicant> sortedApplicants = new LinkedList<>();
-            for (Application application : applications) {
-                sortedApplicants.add(applicantService.findByApplications(application));
-            }
-            distributionRepository.delete(distribution);
-            distributionRepository.save(Distribution.builder()
-                    .employees(sortedApplicants)
-                    .module(module)
-                    .build());
-        }
     }
 
     /**
