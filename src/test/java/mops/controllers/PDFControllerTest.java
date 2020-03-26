@@ -71,22 +71,21 @@ class PDFControllerTest {
                 .build();
         Applicant applicant = Applicant.builder().application(application).build();
 
-        String filepath = File.pathSeparator + "tmp" + File.separator + "testfiles" + File.separator + "Test.txt";
-        File file = new File(filepath);
-        boolean ignore = file.getParentFile().mkdirs();
-        boolean metoo = file.createNewFile();
+
+        File file = File.createTempFile("xxxx", ".tmp");
+        file.deleteOnExit();
 
         FileWriter writer = new FileWriter(file);
         writer.write("Test data");
         writer.close();
 
         when(appService.findByUniserial(any(String.class))).thenReturn(applicant);
-        when(service.generatePDF(any(Application.class), any(Applicant.class))).thenReturn(file.getPath());
+        when(service.generatePDF(any(Application.class), any(Applicant.class))).thenReturn(file);
 
 
         //mvc.perform(get("/bewerbung2/bewerber/pdf/download?module=test")).andExpect(status().isOk());
 
-        mvc.perform(get("/bewerbung2/bewerber/pdf/download?module=test?student=name")).andExpect(status().is4xxClientError());
+        mvc.perform(get("/bewerbung2/pdf/pfdDownload?module=test?student=name")).andExpect(status().is4xxClientError());
 
         verify(appService, times(1)).findByUniserial(any(String.class));
         verify(service, times(1)).generatePDF(any(Application.class), any(Applicant.class));
@@ -104,10 +103,14 @@ class PDFControllerTest {
                 .module(module)
                 .build();
         Applicant applicant = Applicant.builder().application(application).build();
-        when(appService.findByUniserial(any(String.class))).thenReturn(applicant);
-        when(service.generatePDF(any(Application.class), any(Applicant.class))).thenReturn("NO");
 
-        mvc.perform(get("/bewerbung2/bewerber/pdf/download?module=Baum?student=baum")).andExpect(status().isBadRequest());
+        File file = File.createTempFile("bbbb", ".tmp");
+        file.deleteOnExit();
+
+        when(appService.findByUniserial(any(String.class))).thenReturn(applicant);
+        when(service.generatePDF(any(Application.class), any(Applicant.class))).thenReturn(file);
+
+        mvc.perform(get("/bewerbung2/pdf/pdfDownload?module=Baum?student=baum")).andExpect(status().isBadRequest());
 
     }
 
@@ -116,7 +119,7 @@ class PDFControllerTest {
     void missingParam() throws Exception {
 
 
-        mvc.perform(get("/bewerbung2/bewerber/pdf/download")).andExpect(status().isBadRequest());
+        mvc.perform(get("/bewerbung2/pdf/pdfDownload")).andExpect(status().isBadRequest());
 
     }
 
