@@ -148,12 +148,22 @@ public class DatabaseInit implements ServletContextInitializer {
                     .gender(nextGender())
                     .certs(certificate)
                     .address(address)
+                    .checked(false)
                     .build();
             applicantRepository.save(applicant);
         }
         applicantRepository.save(createMainRole("studentin", faker));
 
     }
+
+    private String nextCertificateName(final Faker faker) {
+        if (random.nextInt(5) != 4) {
+            return "Keins";
+        } else {
+            return faker.educator().course();
+        }
+    }
+
 
     private Module[] nextModules() {
         long value = random.nextInt(5) + 1;
