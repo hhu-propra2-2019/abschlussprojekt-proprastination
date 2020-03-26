@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class ApplicationTest {
     Application application;
@@ -123,6 +125,23 @@ class ApplicationTest {
                         " deadline=1970-01-01T00:01:40Z, shortName=null, profName=null, sevenHourLimit=null," +
                         " nineHourLimit=null, seventeenHourLimit=null, hourLimit=null), priority=VERYHIGH," +
                         " grade=1.3, lecturer=Tester, semester=WS2020, role=PROOFREADER, comment=)");
+
+    }
+
+    @Test
+    void testNoArgsConstructor() {
+        Application emptyApplication = new Application();
+
+        assertNull(emptyApplication.getComment());
+        assertEquals(0, emptyApplication.getFinalHours());
+        assertEquals(0, emptyApplication.getGrade());
+        assertNull(emptyApplication.getLecturer());
+        assertEquals(0, emptyApplication.getMaxHours());
+        assertEquals(0, emptyApplication.getMinHours());
+        assertNull(emptyApplication.getModule());
+        assertNull(emptyApplication.getRole());
+        assertNull(emptyApplication.getPriority());
+        assertNull(emptyApplication.getSemester());
 
     }
 
