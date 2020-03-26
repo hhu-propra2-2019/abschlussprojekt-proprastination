@@ -6,8 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ModuleTest {
 
@@ -123,6 +122,20 @@ class ModuleTest {
         String result = module.toString();
 
         assertEquals(expected, result);
+    }
+
+    @Test
+    void testNoArgsController() {
+        Module emptyModule = new Module();
+
+        assertNull(emptyModule.getName());
+        assertNull(emptyModule.getDeadline());
+        assertNull(emptyModule.getShortName());
+        assertNull(emptyModule.getProfName());
+        assertNull(emptyModule.getSevenHourLimit());
+        assertNull(emptyModule.getNineHourLimit());
+        assertNull(emptyModule.getSeventeenHourLimit());
+        assertNull(emptyModule.getHourLimit());
     }
 
 }
