@@ -3,6 +3,7 @@ package mops.controllers;
 import mops.model.Account;
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
+import mops.model.classes.Distribution;
 import mops.model.classes.Module;
 import mops.services.*;
 import org.keycloak.KeycloakPrincipal;
@@ -39,14 +40,11 @@ import java.util.Optional;
 public class PDFController {
 
     private ApplicantService applicantService;
-
     private PDFService pdfService;
-
     private ModuleService moduleService;
-
     private ApplicationService applicationService;
-
     private ZIPService zipService;
+    private DistributionService distributionService;
 
     /**
      * Initiates PDF Controller
@@ -56,18 +54,21 @@ public class PDFController {
      * @param moduleService    moduleService
      * @param applicationService applicationservice
      * @param zipService zipservice
+     * @param distributionService distributionservice
      */
     @SuppressWarnings("checkstyle:HiddenField")
     public PDFController(final ApplicantService applicantService,
                          final PDFService pdfService,
                          final ModuleService moduleService,
                          final ApplicationService applicationService,
-                         final ZIPService zipService) {
+                         final ZIPService zipService,
+                         final DistributionService distributionService) {
         this.applicantService = applicantService;
         this.pdfService = pdfService;
         this.moduleService = moduleService;
         this.applicationService = applicationService;
         this.zipService = zipService;
+        this.distributionService = distributionService;
     }
 
 
@@ -87,8 +88,8 @@ public class PDFController {
      * @param model model
      * @return downloadhtml
      */
-    @GetMapping("/dummy")
-    public String dummyPDFDownload(final KeycloakAuthenticationToken token, final Model model) {
+    @GetMapping("/uebersicht")
+    public String overviewPDFDownload(final KeycloakAuthenticationToken token, final Model model) {
         Account account = createAccountFromPrincipal(token);
         System.out.println(account.getRoles());
         model.addAttribute("account", account);
@@ -109,8 +110,8 @@ public class PDFController {
      * @param module module
      * @return applicant download pdf
      */
-    @PostMapping("/dummyApplicant")
-    public String postDummyStudent(final KeycloakAuthenticationToken token, final Model model,
+    @PostMapping("/downloadBewerber")
+    public String downloadApplicant(final KeycloakAuthenticationToken token, final Model model,
                                    @RequestParam("modulesStudent") final String module) {
 
         Account account = createAccountFromPrincipal(token);
@@ -118,13 +119,9 @@ public class PDFController {
 
         Module mod = moduleService.findModuleByName(module);
         List<Application> applications = applicationService.findApplicationsByModule(mod);
-        List<Applicant> applicants = new ArrayList<>();
-        for (Application application : applications) {
-            applicants.add(applicantService.findByApplications(application));
-        }
         List<String> applicantUniserials = new ArrayList<>();
-        for (Applicant applicant : applicants) {
-            applicantUniserials.add(applicant.getUniserial());
+        for (Application application : applications) {
+            applicantUniserials.add(applicantService.findByApplications(application).getUniserial());
         }
         model.addAttribute("module", module);
         model.addAttribute("applicants", applicantUniserials);
@@ -139,11 +136,10 @@ public class PDFController {
      * @param applicant applicant
      * @return download pdf
      */
-    @PostMapping("/dummyApplicantDone")
-    public String postDummyStudentDone(final KeycloakAuthenticationToken token,
+    @PostMapping("/downloadBewerberFertig")
+    public String downloadApplicantDone(final KeycloakAuthenticationToken token,
                                        @RequestParam("module") final String module,
                                        @RequestParam("applicants") final String applicant) {
-        System.out.println("modul: " + module +  " applicant: " +  applicant);
         return "redirect:pdfDownload?student=" + applicant + "&module=" + module;
     }
 
@@ -153,8 +149,8 @@ public class PDFController {
      * @param module module
      * @return module pdf
      */
-    @PostMapping("/dummyModule")
-    public String postDummyModule(final KeycloakAuthenticationToken token,
+    @PostMapping("/downloadModul")
+    public String downloadModule(final KeycloakAuthenticationToken token,
                                   @RequestParam("modules") final String module) {
         return "redirect:zipModuleDownload?module=" + module;
     }
@@ -164,9 +160,72 @@ public class PDFController {
      * @param token token
      * @return module
      */
-    @PostMapping("/dummyAll")
-    public String postDummyAll(final KeycloakAuthenticationToken token) {
+    @PostMapping("/downloadAlles")
+    public String downloadAll(final KeycloakAuthenticationToken token) {
         return "redirect:zipAllDownload";
+    }
+
+    /**
+     *
+     * @param token
+     * @param model
+     * @return html
+     */
+    @GetMapping("/zuteilungUebersicht")
+    public String distributerOverview(final KeycloakAuthenticationToken token, final Model model) {
+        if (token != null) {
+            Account account = createAccountFromPrincipal(token);
+            model.addAttribute("account", account);
+            if (distributionService.findAll() != null) {
+                List<Distribution> distributions = distributionService.findAll();
+                List<String> moduleNames = new ArrayList<>();
+                for (Distribution distribution : distributions) {
+                    moduleNames.add(distribution.getModule().getName());
+                }
+                model.addAttribute("modules", moduleNames);
+                model.addAttribute("modulesStudent", moduleNames);
+            } else {
+                return "pdfhandling";
+            }
+        }
+        return "pdfhandlingdistribution";
+    }
+
+    /**
+     * Choose applicant after chosen module and downlaod pdf
+     * @param token token
+     * @param model model
+     * @param module module
+     * @return applicant download pdf
+     */
+    @PostMapping("/downloadBewerberZugeteilt")
+    public String downloadApplicantDistributed(final KeycloakAuthenticationToken token, final Model model,
+                                    @RequestParam("modulesStudent") final String module) {
+        Account account = createAccountFromPrincipal(token);
+        model.addAttribute("account", account);
+
+        Module mod = moduleService.findModuleByName(module);
+        Distribution distribution = distributionService.findByModule(mod);
+        List<Applicant> applicants = distribution.getEmployees();
+        List<String> applicantUniserials = new ArrayList<>();
+        for (Applicant applicant : applicants) {
+            applicantUniserials.add(applicant.getUniserial());
+        }
+        model.addAttribute("module", module);
+        model.addAttribute("applicants", applicantUniserials);
+
+        return "pdfhandlingapplicant";
+    }
+
+    /**
+     *
+     * @param token
+     * @return
+     */
+    @PostMapping("/downloadAllesZugeteilt")
+    public String distributeDownloadAll(final KeycloakAuthenticationToken token) {
+
+        return "";
     }
 
     /**
@@ -270,9 +329,9 @@ public class PDFController {
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
+
     /**
      *
-     * @param module
      * @param token
      * @param model
      * @return
@@ -307,5 +366,4 @@ public class PDFController {
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
-
 }

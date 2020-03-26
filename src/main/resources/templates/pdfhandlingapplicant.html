@@ -27,8 +27,8 @@
                 </a>
             </li>
             <li>
-                <a th:href="@{/details}">
-                    Details
+                <a th:href="@{./}">
+                    Dashboard
                 </a>
             </li>
         </ul>
@@ -42,7 +42,7 @@
         <div class="card bg-light mb-3 border-primary">
             <div class="card-header"><h4>Downloaden Sie Bewerbung als eines Studenten hier!</h4></div>
             <div class="card-body">
-                <form th:action="@{dummyApplicantDone}" th:method="POST">
+                <form th:action="@{downloadBewerberFertig}" th:method="POST">
                 <div class="row form-row">
                     <input th:type="hidden" th:name="module" th:id="module" th:value="${module}">
                     <label th:for="applicants">Suchen Sie hier den Studenten aus!</label><br>
@@ -55,7 +55,7 @@
                     <button th:type="submit" th:value="Download" class="btn btn-outline-primary form-control">Download</button>
                 </div>
                 </form>
-                <form th:action="@{dummy}" th:method="GET">
+                <form th:action="@{uebersicht}" th:method="GET">
                     <div class="row form-row">
                         <button th:type="submit" class="btn btn-outline-primary form-control">zurück zur Download Übersicht</button>
                     </div>
