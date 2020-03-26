@@ -38,7 +38,8 @@ public class DistributeController {
     public String index(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
             model.addAttribute("account", distributeService.createAccountFromPrincipal(token));
+            return distributeService.getRedirectForRole(token);
         }
-        return distributeService.getRedirectForRole(token);
+        return "redirect:/error";
     }
 }
