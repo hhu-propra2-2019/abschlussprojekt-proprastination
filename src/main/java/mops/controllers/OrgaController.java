@@ -2,6 +2,7 @@ package mops.controllers;
 
 import mops.model.Account;
 import mops.model.classes.orgaWebClasses.WebListClass;
+import mops.services.ModuleService;
 import mops.services.OrgaService;
 import mops.services.OrganizerService;
 import org.keycloak.KeycloakPrincipal;
@@ -25,17 +26,21 @@ public class OrgaController {
 
     private final OrgaService orgaService;
     private final OrganizerService organizerService;
+    private final ModuleService moduleService;
 
     /**
      * Lets Spring inject the services
      * @param organizerService organizerService
      * @param orgaService   orgaService
+     * @param moduleService moduleService
      */
     @SuppressWarnings("checkstyle:HiddenField")
     public OrgaController(final OrgaService orgaService,
-                          final OrganizerService organizerService) {
+                          final OrganizerService organizerService,
+                          final ModuleService moduleService) {
         this.orgaService = orgaService;
         this.organizerService = organizerService;
+        this.moduleService = moduleService;
     }
 
     private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
@@ -81,12 +86,16 @@ public class OrgaController {
                            final Model model) {
         if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
+            if (!token.getName().equals(moduleService.findById(Long.parseLong(id)).getProfSerial())) {
+                return "redirect:/bewerbung2/organisator/";
+            }
+            model.addAttribute("WebList", new WebListClass(orgaService.getAllListEntrys(id)));
         }
-        model.addAttribute("WebList", new WebListClass(orgaService.getAllListEntrys(id)));
         return "organizer/orgaOverview";
     }
 
     /**
+     * @param token token
      * @param applications WebListClass applications
      * @param id           module id
      * @param model        model
@@ -94,9 +103,13 @@ public class OrgaController {
      */
     @PostMapping("/{id}/")
     @Secured("ROLE_orga")
-    public String applicationInfoPost(@ModelAttribute final WebListClass applications,
+    public String applicationInfoPost(final KeycloakAuthenticationToken token,
+                                      @ModelAttribute final WebListClass applications,
                                       @PathVariable("id") final String id, final Model model) {
-        orgaService.saveEvaluations(applications);
+        if (token != null) {
+            model.addAttribute("account", createAccountFromPrincipal(token));
+            orgaService.saveEvaluations(applications);
+        }
         return "redirect:/bewerbung2/organisator/" + id + "/";
     }
 
