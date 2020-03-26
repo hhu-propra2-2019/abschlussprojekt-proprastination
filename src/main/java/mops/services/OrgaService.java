@@ -69,11 +69,11 @@ public class OrgaService {
                 .maxHours(application.getMaxHours())
                 .studentPriotiry(application.getPriority())
                 .role(application.getRole())
-                .priority(BASEPRIORITY)
+                .priority(BASEPRIORITY.getValue())
                 .finalHours(BASEHOURS)
                 .build();
         evaluation.ifPresent(eval -> {
-            webList.setPriority(eval.getPriority());
+            webList.setPriority(eval.getPriority().getValue());
             webList.setFinalHours(eval.getHours());
         });
         return webList;
@@ -126,7 +126,7 @@ public class OrgaService {
             Application application = applicationService.findById(eval.getId());
             Evaluation evaluation = evaluationService.findByApplication(application);
             Evaluation newEvaluatoin = evaluation.toBuilder()
-                    .priority(eval.getPriority())
+                    .priority(Priority.get(eval.getPriority()))
                     .hours(eval.getFinalHours())
                     .build();
             evaluationService.save(newEvaluatoin);

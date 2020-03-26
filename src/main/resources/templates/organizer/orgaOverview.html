@@ -88,9 +88,9 @@
                     <tr th:each="appl, stat : ${WebList.applications}">
                         <td class="text-center">
                             <select id="priority" name="priority"
-                                    th:field="*{applications[__${stat.index}__].priority.value}"
+                                    th:field="*{applications[__${stat.index}__].priority}"
                                     th:name="|applications[__${stat.index}__].priority|"
-                                    th:value="${appl.priority.value}">
+                                    th:value="${appl.priority}">
                                 <option th:each="priority : ${T(mops.model.classes.Priority).values()}"
                                         th:text="${priority.label}"
                                         th:value="${priority.value}"
