@@ -92,6 +92,7 @@ public class PDFController {
      * @param model model
      * @return downloadhtml
      */
+    @Secured({"ROLE_verteiler", "ROLE_orga"})
     @GetMapping("/uebersicht")
     public String overviewPDFDownload(final KeycloakAuthenticationToken token, final Model model) {
         Account account = createAccountFromPrincipal(token);
@@ -114,6 +115,7 @@ public class PDFController {
      * @param module module
      * @return applicant download pdf
      */
+    @Secured({"ROLE_verteiler", "ROLE_orga"})
     @PostMapping("/downloadBewerber")
     public String downloadApplicant(final KeycloakAuthenticationToken token, final Model model,
                                    @RequestParam("modulesStudent") final String module) {
@@ -142,6 +144,7 @@ public class PDFController {
      * @return download pdf
      */
     @PostMapping("/downloadBewerberFertig")
+    @Secured({"ROLE_orga", "ROLE_verteiler"})
     public String downloadApplicantDone(final KeycloakAuthenticationToken token,
                                        final Model model,
                                        @RequestParam("module") final String module,
@@ -159,6 +162,7 @@ public class PDFController {
      * @param module module
      * @return module pdf
      */
+    @Secured({"ROLE_verteiler", "ROLE_orga"})
     @PostMapping("/downloadModul")
     public String downloadModule(final KeycloakAuthenticationToken token,
                                   @RequestParam("modules") final String module) {
@@ -170,6 +174,7 @@ public class PDFController {
      * @param token token
      * @return module
      */
+    @Secured({"ROLE_verteiler", "ROLE_orga"})
     @PostMapping("/downloadAlles")
     public String downloadAll(final KeycloakAuthenticationToken token) {
         return "redirect:zipAllDownload";
@@ -181,6 +186,7 @@ public class PDFController {
      * @param model
      * @return html
      */
+    @Secured({"ROLE_verteiler", "ROLE_orga"})
     @GetMapping("/zuteilungUebersicht")
     public String distributerOverview(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
@@ -208,6 +214,7 @@ public class PDFController {
      * @param module module
      * @return applicant download pdf
      */
+    @Secured({"ROLE_verteiler", "ROLE_orga"})
     @PostMapping("/downloadBewerberZugeteilt")
     public String downloadApplicantDistributed(final KeycloakAuthenticationToken token, final Model model,
                                     @RequestParam("modulesStudent") final String module) {
@@ -233,6 +240,7 @@ public class PDFController {
      * @param model
      * @return download
      */
+    @Secured({"ROLE_verteiler", "ROLE_orga"})
     @PostMapping("/downloadAllesZugeteilt")
     public String distributeDownloadAll(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
@@ -249,6 +257,7 @@ public class PDFController {
      * @param eMail
      * @return
      */
+    @Secured({"ROLE_verteiler", "ROLE_orga"})
     @PostMapping("/versenden")
     public String sendApplications(final KeycloakAuthenticationToken token,
                                    final Model model,
@@ -271,7 +280,7 @@ public class PDFController {
      * @return InputStreamResource
      * @throws IOException NoSuchElementException
      */
-    @Secured({"ROLE_studentin", "ROLE_orga"})
+    @Secured({"ROLE_verteiler", "ROLE_orga"})
     @RequestMapping(value = "pdfDownload", method = RequestMethod.GET)
     public ResponseEntity<Resource> fileSystemResource(
             @RequestParam(value = "module") final String module, @RequestParam(value = "student") final String student,
@@ -328,6 +337,7 @@ public class PDFController {
      * @throws IOException
      * @throws NoSuchElementException
      */
+    @Secured({"ROLE_verteiler", "ROLE_orga"})
     @RequestMapping(value = "zipModuleDownload", method = RequestMethod.GET)
     public ResponseEntity<Resource> zipSystemResource(
             @RequestParam(value = "module") final String module,
@@ -371,6 +381,7 @@ public class PDFController {
      * @throws IOException
      * @throws NoSuchElementException
      */
+    @Secured({"ROLE_verteiler", "ROLE_orga"})
     @RequestMapping(value = "zipAllDownload", method = RequestMethod.GET)
     public ResponseEntity<Resource> zipAllSystemResource(
             final KeycloakAuthenticationToken token, final Model model) throws IOException, NoSuchElementException {
@@ -407,6 +418,7 @@ public class PDFController {
      * @throws IOException
      * @throws NoSuchElementException
      */
+    @Secured({"ROLE_verteiler", "ROLE_orga"})
     @RequestMapping(value = "zipAllDistributedDownload", method = RequestMethod.GET)
     public ResponseEntity<Resource> zipAllDistributedSystemResource(
             final KeycloakAuthenticationToken token, final Model model) throws IOException, NoSuchElementException {

@@ -44,8 +44,13 @@
             <div class="card-header"><h4>Sie wollen nur alle Bewerbungen abschicken? Klicken Sie hier!</h4></div>
             <div class="card-body">
                 <div class="row form-row">
-                    <input th:type="text" th:id="email" th:name="email">
+                    <div class="align-content-center">
+                        <label th:for="email">Bitte geben Sie zusätzlich die E-Mail-Adresse an, an die Sie die Bewerbungen schicken wollen</label>
+                        <br>
+                        <input th:type="text" th:id="email" th:name="email">
+                    </div>
                 </div>
+                <br>
                 <div class="row form-row">
                     <button th:type="submit" th:formaction="@{versenden}" th:value="absenden"
                             class="btn btn-outline-primary form-control">Absenden</button>
