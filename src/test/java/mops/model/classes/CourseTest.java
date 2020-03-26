@@ -77,4 +77,11 @@ class CourseTest {
 
         assertEquals(expected, result);
     }
+
+    @Test
+    void testNoArgsConstructor() {
+        Course emptyCourse = new Course();
+
+        assertNull(emptyCourse.getName());
+    }
 }
