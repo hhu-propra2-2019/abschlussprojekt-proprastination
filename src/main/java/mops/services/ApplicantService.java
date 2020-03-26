@@ -98,6 +98,7 @@ public class ApplicantService {
         Optional<Applicant> applicant = applicantRepository.findByApplications(application);
         if (applicant.isEmpty()) {
             logger.error("Empty Applicant for Application" + application);
+            return null;
         }
         return applicant.get();
     }
