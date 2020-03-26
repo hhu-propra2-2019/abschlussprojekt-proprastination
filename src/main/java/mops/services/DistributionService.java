@@ -399,7 +399,7 @@ public class DistributionService {
      */
     private List<WebDistributorApplicant> sort(final List<WebDistributorApplicant> applicantList, final String module) {
         final int numberOfOrgaPrios = 4;
-        final int numberOfApplPrio = 4;
+        final int numberOfApplPrio = 3;
         List<WebDistributorApplicant> sortedApplicants = new LinkedList<>();
         LinkedList<WebDistributorApplicant>[][] orgaPrios = new LinkedList[numberOfOrgaPrios][numberOfApplPrio];
         LinkedList<WebDistributorApplicant> wrongApplicants = new LinkedList<>();
