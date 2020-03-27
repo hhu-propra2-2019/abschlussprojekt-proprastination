@@ -24,7 +24,7 @@ class CSVServiceTest{
     void cleanTestCSV(){
         final Charset charset = StandardCharsets.UTF_8;
         try {
-            new FileWriter("src/test/java/mops/test.csv", charset).close();
+            new FileWriter("src/creatNewApplicantIfNoneWasFound/java/mops/creatNewApplicantIfNoneWasFound.csv", charset).close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -32,7 +32,7 @@ class CSVServiceTest{
 
     @Test
     void readFromCSVTest() {
-        String csvName = "src/test/java/mops/test.csv";
+        String csvName = "src/creatNewApplicantIfNoneWasFound/java/mops/creatNewApplicantIfNoneWasFound.csv";
         String[] module1 = {"propra", "21"};
         List<String[]> data = new ArrayList<>();
         data.add(module1);
@@ -55,7 +55,7 @@ class CSVServiceTest{
 
     @Test
     void writeInCSVTest(){
-        String csvName = "src/test/java/mops/test.csv";
+        String csvName = "src/creatNewApplicantIfNoneWasFound/java/mops/creatNewApplicantIfNoneWasFound.csv";
         String[] module1 = {"propra","22"};
         List<String[]> data = new ArrayList<>();
         data.add(module1);

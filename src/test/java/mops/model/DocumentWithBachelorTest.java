@@ -27,9 +27,9 @@ class DocumentWithBachelorTest {
     void save() throws IOException {
         Document document = new DocumentWithBachelor();
 
-        document.save(new File("/tmp/test.pdf"));
+        document.save(new File("/tmp/creatNewApplicantIfNoneWasFound.pdf"));
 
-        PDDocument document1 = PDDocument.load(new File("/tmp/test.pdf"));
+        PDDocument document1 = PDDocument.load(new File("/tmp/creatNewApplicantIfNoneWasFound.pdf"));
         document1.setAllSecurityToBeRemoved(true);
         PDAcroForm acroForm = document1.getDocumentCatalog().getAcroForm();
         assertThat(acroForm.getField("Tutorentätigkeit").getValueAsString()).isEqualTo("Off");
@@ -41,9 +41,9 @@ class DocumentWithBachelorTest {
 
 
         document.setField("Tutorentätigkeit", "On");
-        document.save(new File("/tmp/test.pdf"));
+        document.save(new File("/tmp/creatNewApplicantIfNoneWasFound.pdf"));
 
-        PDDocument document1 = PDDocument.load(new File("/tmp/test.pdf"));
+        PDDocument document1 = PDDocument.load(new File("/tmp/creatNewApplicantIfNoneWasFound.pdf"));
         document1.setAllSecurityToBeRemoved(true);
         PDAcroForm acroForm = document1.getDocumentCatalog().getAcroForm();
 
@@ -56,9 +56,9 @@ class DocumentWithBachelorTest {
         Document document = new DocumentWithBachelor();
 
         document.setGender("weiblich");
-        document.save(new File("/tmp/test.pdf"));
+        document.save(new File("/tmp/creatNewApplicantIfNoneWasFound.pdf"));
 
-        PDDocument document1 = PDDocument.load(new File("/tmp/test.pdf"));
+        PDDocument document1 = PDDocument.load(new File("/tmp/creatNewApplicantIfNoneWasFound.pdf"));
         document1.setAllSecurityToBeRemoved(true);
         PDAcroForm acroForm = document1.getDocumentCatalog().getAcroForm();
 
@@ -70,9 +70,9 @@ class DocumentWithBachelorTest {
     void addGeneralInfos() throws IOException {
         Document document = new DocumentWithBachelor();
         document.addGeneralInfos();
-        document.save(new File("/tmp/test.pdf"));
+        document.save(new File("/tmp/creatNewApplicantIfNoneWasFound.pdf"));
 
-        PDDocument document1 = PDDocument.load(new File("/tmp/test.pdf"));
+        PDDocument document1 = PDDocument.load(new File("/tmp/creatNewApplicantIfNoneWasFound.pdf"));
         document1.setAllSecurityToBeRemoved(true);
         PDAcroForm acroForm = document1.getDocumentCatalog().getAcroForm();
 

@@ -37,7 +37,7 @@ class EMailServiceTest {
     void checkMethodCallToRecipient() {
         String file = System.getProperty("user.dir") + File.separator + "323_Antrag_Beschaeftigung_wiss_Hilfskraefte_mit_BA.pdf";
 
-        eMailService.sendEmailToRecipient("test@example.com", new File(file));
+        eMailService.sendEmailToRecipient("creatNewApplicantIfNoneWasFound@example.com", new File(file));
 
         verify(javaMailSender, atLeastOnce()).send((MimeMessage) any());
 
@@ -49,7 +49,7 @@ class EMailServiceTest {
 
         String file = System.getProperty("user.dir") + File.separator + "323_Antrag_Beschaeftigung_wiss_Hilfskraefte_mit_BA.pdf";
 
-        String[] array = {"test@example.com", "test2@example.com"};
+        String[] array = {"creatNewApplicantIfNoneWasFound@example.com", "test2@example.com"};
         eMailService.sendEmailToD3(array, "itsme@example.com", file);
 
         verify(javaMailSender, atLeastOnce()).send((MimeMessage) any());

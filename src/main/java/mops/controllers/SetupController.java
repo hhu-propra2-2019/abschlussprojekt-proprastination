@@ -3,7 +3,8 @@ package mops.controllers;
 import mops.model.Account;
 import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebModule;
-import mops.services.WebModuleService;
+import mops.services.webServices.AccountGenerator;
+import mops.services.webServices.WebModuleService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +23,11 @@ import java.util.List;
 @SessionScope
 @RequestMapping("/bewerbung2/setup")
 public class SetupController {
-    @Autowired
-    private WebModuleService webService;
 
-    private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
-        KeycloakPrincipal principal = (KeycloakPrincipal) token.getPrincipal();
-        return new Account(
-                principal.getName(),
-                principal.getKeycloakSecurityContext().getIdToken().getEmail(),
-                null,
-                token.getAccount().getRoles());
+    private final WebModuleService webService;
+
+    public SetupController(WebModuleService webService) {
+        this.webService = webService;
     }
 
     /**
@@ -46,7 +42,7 @@ public class SetupController {
         if (token != null) {
             List<WebModule> modules = webService.getModules();
             model.addAttribute("modules", modules);
-            model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             model.addAttribute("module", Module.builder().build());
         }
         return "setup/setupMain";
@@ -79,7 +75,7 @@ public class SetupController {
     @Secured("ROLE_setup")
     public String newModule(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
-            model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             model.addAttribute("Module", WebModule.builder().build());
         }
         return "setup/neuesModul";
@@ -112,7 +108,7 @@ public class SetupController {
     public String postEditModule(final KeycloakAuthenticationToken token, final Model model,
                                  final WebModule oldModule) {
         model.addAttribute("module", oldModule);
-        model.addAttribute("account", createAccountFromPrincipal(token));
+        model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
         return "/setup/modulBearbeiten";
     }
 

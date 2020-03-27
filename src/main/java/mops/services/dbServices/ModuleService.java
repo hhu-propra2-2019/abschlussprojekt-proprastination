@@ -1,10 +1,11 @@
-package mops.services;
+package mops.services.dbServices;
 
 import mops.model.classes.Module;
 import mops.repositories.ModuleRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ModuleService {
@@ -74,5 +75,21 @@ public class ModuleService {
      */
     public void deleteAll() {
         moduleRepository.deleteAll();
+    }
+
+    public List<Module> findAll() {
+        return moduleRepository.findAll();
+    }
+
+    public Module findDistinctByName(String oldName) {
+        return moduleRepository.findDistinctByName(oldName);
+    }
+
+    public void deleteById(long id) {
+        moduleRepository.deleteById(id);
+    }
+
+    public List<String> getModuleNames() {
+        return moduleRepository.findAll().stream().map(Module::getName).collect(Collectors.toList());
     }
 }

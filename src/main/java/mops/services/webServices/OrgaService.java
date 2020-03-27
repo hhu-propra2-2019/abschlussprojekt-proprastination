@@ -1,4 +1,4 @@
-package mops.services;
+package mops.services.webServices;
 
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
@@ -7,6 +7,9 @@ import mops.model.classes.Priority;
 import mops.model.classes.orgaWebClasses.WebList;
 import mops.model.classes.orgaWebClasses.OrgaApplication;
 import mops.model.classes.orgaWebClasses.WebListClass;
+import mops.services.dbServices.ApplicantService;
+import mops.services.dbServices.ApplicationService;
+import mops.services.dbServices.EvaluationService;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
