@@ -81,9 +81,9 @@ class PDFControllerTest {
         when(service.generatePDF(any(Application.class), any(Applicant.class))).thenReturn(file);
 
 
-        //mvc.perform(get("/bewerbung2/bewerber/pdf/download?module=creatNewApplicantIfNoneWasFound")).andExpect(status().isOk());
+        //mvc.perform(get("/bewerbung2/bewerber/pdf/download?module=createNewApplicantIfNoneWasFound")).andExpect(status().isOk());
 
-        mvc.perform(get("/bewerbung2/pdf/pfdDownload?module=creatNewApplicantIfNoneWasFound?student=name")).andExpect(status().is4xxClientError());
+        mvc.perform(get("/bewerbung2/pdf/pfdDownload?module=createNewApplicantIfNoneWasFound?student=name")).andExpect(status().is4xxClientError());
 
         verify(appService, times(1)).findByUniserial(any(String.class));
         verify(service, times(1)).generatePDF(any(Application.class), any(Applicant.class));

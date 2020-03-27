@@ -96,7 +96,7 @@ public class ApplicationController {
     @Secured("ROLE_studentin")
     public String newAppl(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
-            webApplicationService.creatNewApplicantIfNoneWasFound(
+            webApplicationService.createNewApplicantIfNoneWasFound(
                     AccountGenerator.createAccountFromPrincipal(token), model);
         }
         return "applicant/applicationPersonal";
@@ -188,7 +188,7 @@ public class ApplicationController {
                                 @Valid final WebApplication webApplication, final BindingResult bindingResult,
                                 final Model model,
                                 @RequestParam("modules") final String module) {
-        webApplicationService.returnErrorifMaxSmallerThenMin(webApplication, bindingResult, "WebApplication");
+        webApplicationService.returnErrorIfMaxSmallerThenMin(webApplication, bindingResult, "WebApplication");
         if (bindingResult.hasErrors()) {
             webApplicationService.printErrorsIfPresent(bindingResult);
 
@@ -336,7 +336,7 @@ public class ApplicationController {
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
 
 
-            webApplicationService.returnErrorifMaxSmallerThenMin(webApplication, bindingResult, "webApplication");
+            webApplicationService.returnErrorIfMaxSmallerThenMin(webApplication, bindingResult, "webApplication");
             if (bindingResult.hasErrors()) {
                 bindingResult.getAllErrors().forEach(err -> {
                     LOGGER.info("ERROR {}", err.getDefaultMessage());
@@ -398,7 +398,7 @@ public class ApplicationController {
     @Secured("ROLE_studentin")
     public String editPersonalData(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
-            webApplicationService.creatNewApplicantIfNoneWasFound(
+            webApplicationService.createNewApplicantIfNoneWasFound(
                     AccountGenerator.createAccountFromPrincipal(token), model);
         }
         return "applicant/applicationEditPersonal";
@@ -473,7 +473,7 @@ public class ApplicationController {
                                      final KeycloakAuthenticationToken token,
                                      final Model model) {
 
-        webApplicationService.returnErrorifMaxSmallerThenMin(webApplication, bindingResult, "webApplication");
+        webApplicationService.returnErrorIfMaxSmallerThenMin(webApplication, bindingResult, "webApplication");
 
         webApplicationService.printBindingResultErrorsToLog(bindingResult);
 

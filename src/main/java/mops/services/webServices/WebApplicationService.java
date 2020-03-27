@@ -66,7 +66,7 @@ public class WebApplicationService {
      * @param account
      * @param model
      */
-    public void creatNewApplicantIfNoneWasFound(final Account account, final Model model) {
+    public void createNewApplicantIfNoneWasFound(final Account account, final Model model) {
 
         Applicant applicant = applicantService.findByUniserial(account.getName());
 
@@ -147,7 +147,7 @@ public class WebApplicationService {
      * @param bindingResult
      * @param webApplication2
      */
-    public void returnErrorifMaxSmallerThenMin(final WebApplication webApplication,
+    public void returnErrorIfMaxSmallerThenMin(final WebApplication webApplication,
                                                final BindingResult bindingResult,
                                                final String webApplication2) {
         if (webApplication.getMinHours() > webApplication.getMaxHours()) {
