@@ -13,6 +13,7 @@ import java.util.Set;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest
@@ -196,6 +197,16 @@ class ApplicantServiceTest {
 
         Applicant resultApplicant = applicantService.findByUniserial(testApplicant.getUniserial());
         assertThat(resultApplicant.getApplications()).isEmpty();
+    }
+
+    @Test
+    void testFindByApplications() {
+        moduleRepository.save(module);
+        applicantService.saveApplicant(applicant);
+
+        Applicant result = applicantService.findByApplications(application1);
+
+        assertEquals(applicant.getId(), result.getId());
     }
 
 }
