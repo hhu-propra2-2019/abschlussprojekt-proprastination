@@ -246,8 +246,8 @@ public class CSVService {
      */
     public void deleteCSVFile(final String csvName) {
         File file = new File(csvName);
-        if (file != null) {
-            file.delete();
+        if (file.delete()) {
+            System.out.println("File was deleted");
         } else {
             System.out.println("Couldn't delete File");
         }
