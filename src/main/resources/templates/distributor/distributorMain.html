@@ -7,14 +7,24 @@
 
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta name="turbolinks-cache-control" content="no-preview">
     <title>Name des Subsystems</title>
     <th:block th:fragment="headcontent">
         <!-- Links, Skripts, Styles hier einfügen! -->
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-        <script type="text/javascript" src="/scroll_sneak.js"></script>
+        <script src="/scroll_sneak.js"></script>
         <script src="/turbolinks.js"></script>
+        <script>
+            (function() {
+                var sneaky = new ScrollSneak(location.hostname), list = document.getElementsByClassName('sneaky'), i = 0, len = list.length;
+                for (; i < len; i++) {
+                    alert('test');
+                    list[i].onclick = sneaky.sneak;
+                }
+            })();
+        </script>
     </th:block>
 </head>
 <body>
@@ -155,7 +165,7 @@
                 alert("test");
                 sneakyList[i].ondrop = sneaky.sneak;
             }
-        })();*/
+        })();
 
         $('#drag1').draggable({
             scroll: true,
@@ -163,14 +173,14 @@
             scrollSpeed: 40
         })
 
-        $(document).ready(function(){
+        <!--$(document).(function(){
             var sneaky = new ScrollSneak(location.hostname);
 
             alert("test");
             $('.sneaky').each(function(){
                 this.ondrop = sneaky.sneak;
             });
-        });
+        });*/
     </script>
     <script>
         function allowDrop(ev) {
@@ -207,8 +217,9 @@
         function saveChecked(el) {
             var checked = el.checked;
             var applicantId = el.dataset.applicantid;
-            var targetLocation = "/bewerbung2/verteiler/saveChecked/" + applicantId + "/" + checked + "/";
-            Turbolinks.visit(targetLocation)
+            reloadWithTurbolinks();
+            //var targetLocation = "/bewerbung2/verteiler/saveChecked/" + applicantId + "/" + checked + "/";
+            //Turbolinks.visit(targetLocation)
         }
     </script>
     <script>
@@ -222,6 +233,25 @@
             var targetLocation = "/bewerbung2/verteiler/vorverteilen";
             Turbolinks.visit(targetLocation)
         });
+    </script>
+    <script>
+        var reloadWithTurbolinks = (function () {
+            var scrollPosition
+
+            function reload () {
+                scrollPosition = [window.scrollX, window.scrollY]
+                Turbolinks.visit(window.location.toString(), { action: 'replace' })
+            }
+
+            document.addEventListener('turbolinks:load', function () {
+                if (scrollPosition) {
+                    window.scrollTo.apply(window, scrollPosition)
+                    scrollPosition = null
+                }
+            })
+
+            return reload
+        })()
     </script>
 </main>
 </body>
