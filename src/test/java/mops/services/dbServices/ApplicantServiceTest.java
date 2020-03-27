@@ -3,7 +3,6 @@ package mops.services.dbServices;
 import mops.model.classes.*;
 import mops.model.classes.Module;
 import mops.repositories.ModuleRepository;
-import mops.services.dbServices.ApplicantService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -106,7 +105,9 @@ class ApplicantServiceTest {
         moduleRepository.save(module);
         applicantService.saveApplicant(applicant);
 
-        var test = applicantService.findByUniserial(applicant.getUniserial());
+        Applicant test = applicantService.findByUniserial(applicant.getUniserial());
+
+        assertThat(test).isEqualTo(applicant);
     }
 
     @Test
@@ -130,34 +131,7 @@ class ApplicantServiceTest {
     }
 
     @Test
-    void createApplicant() {
-    }
+    void testDeleteApplication() {
 
-    @Test
-    void save() {
-    }
-
-    @Test
-    void testSave() {
-    }
-
-    @Test
-    void findByUsername() {
-    }
-
-    @Test
-    void getAllApplications() {
-    }
-
-    @Test
-    void getAllApplicationsByModule() {
-    }
-
-    @Test
-    void getAllIterable() {
-    }
-
-    @Test
-    void getAll() {
     }
 }
