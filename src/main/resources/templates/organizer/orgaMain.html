@@ -82,11 +82,13 @@
                             </div>
                         </td>
                     </tr>
-                    <tr>
+                    <tr th:style="${organizer.phonenumber} == '' ? 'background-color: rgba(227, 74, 74)' : _">
                         <td scope="col" height="60" class="align-middle">Telefon</td>
-                        <td scope="col" height="60" class="align-middle" th:text="${organizer.phonenumber}">0123/456789</td>
+                        <td scope="col" height="60" class="align-middle"
+                            th:text="${organizer.phonenumber} == '' ? 'Bitte speichern Sie Ihre Telefonnummer!' : ${organizer.phonenumber}">0123/456789</td>
                         <td height="60" class="align-middle">
-                            <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#editModal">Bearbeiten</button>
+                            <button type="button" class="btn btn-sm" data-toggle="modal" data-target="#editModal"
+                                    th:classappend="${organizer.phonenumber} == '' ? 'btn-primary' : 'btn-outline-primary'">Bearbeiten</button>
                         </td>
                     </tr>
                     <div class="modal fade" id="editModal" tabindex="-1" role="dialog">
