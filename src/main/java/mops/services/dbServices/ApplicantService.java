@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -70,7 +72,9 @@ public class ApplicantService {
      */
     public void deleteApplication(final Application application, final Applicant applicant) {
         Set<Application> applications = applicant.getApplications();
-        applications.remove(application);
+        ArrayList<Application> list = new ArrayList<>(applications);
+        list.remove(application);
+        applications = new HashSet<>(list);
         ApplicantBuilder applicantBuilder = applicant.toBuilder();
         Applicant newApplicant = applicantBuilder.clearApplications().applications(applications).build();
         applicantRepository.save(newApplicant);

@@ -132,6 +132,12 @@ class ApplicantServiceTest {
 
     @Test
     void testDeleteApplication() {
+        moduleRepository.save(module);
+        applicantService.saveApplicant(applicant);
 
+        applicantService.deleteApplication(application1, applicant);
+
+        Applicant resultApplicant = applicantService.findByUniserial(applicant.getUniserial());
+        assertThat(resultApplicant.getApplications()).doesNotContain(application1);
     }
 }
