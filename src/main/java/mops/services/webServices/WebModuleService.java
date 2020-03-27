@@ -45,7 +45,7 @@ public class WebModuleService {
      * @param webmodule module.
      */
     public void save(final WebModule webmodule) {
-        moduleService.save(webmodule.toModule());
+        moduleService.save(toModule(webmodule));
     }
     /**
      * saves an updated version of Module
@@ -54,7 +54,7 @@ public class WebModuleService {
      */
     public void update(final WebModule webmodule, final String oldName) {
         Module m = moduleService.findModuleByName(oldName);
-        Module updated = webmodule.toModule();
+        Module updated = toModule(webmodule);
         updated.setId(m.getId());
         moduleService.save(updated);
     }
@@ -86,6 +86,31 @@ public class WebModuleService {
                 .sevenHourLimit(module.getSevenHourLimit())
                 .nineHourLimit(module.getNineHourLimit())
                 .seventeenHourLimit(module.getSeventeenHourLimit())
+                .build();
+    }
+
+    /**
+     * @param module Module
+     * @return returns module as String Array
+     */
+    public String[] toStringArray(Module module) {
+        return new String[]{module.getName(), module.getShortName(), module.getProfSerial(), module.getSevenHourLimit(),
+                module.getNineHourLimit(), module.getSeventeenHourLimit()};
+    }
+
+    /**
+     * Return WebModule as module
+     * @param webModule webmodule
+     * @return Module generated Module
+     */
+    public Module toModule(WebModule webModule) {
+        return Module.builder()
+                .name(webModule.getName())
+                .shortName(webModule.getShortName())
+                .profSerial(webModule.getProfSerial())
+                .sevenHourLimit(webModule.getSevenHourLimit())
+                .nineHourLimit(webModule.getNineHourLimit())
+                .seventeenHourLimit(webModule.getSeventeenHourLimit())
                 .build();
     }
 }
