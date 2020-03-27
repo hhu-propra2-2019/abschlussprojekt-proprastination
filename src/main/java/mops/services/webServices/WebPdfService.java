@@ -139,7 +139,8 @@ public class WebPdfService {
      * @return -
      * @throws IOException
      */
-    public ResponseEntity<Resource> generatePdfForDownload(final String module, final String student) throws IOException {
+    public ResponseEntity<Resource> generatePdfForDownload(final String module,
+                                                           final String student) throws IOException {
         Applicant applicant;
         Optional<Application> application;
         try {

@@ -31,6 +31,7 @@ public class OrgaController {
      * Lets Spring inject the services
      * @param orgaService   orgaService
      * @param webOrganizerService
+     * @param moduleService moduleservice
      */
     @SuppressWarnings("checkstyle:HiddenField")
     public OrgaController(final OrgaService orgaService, final WebOrganizerService webOrganizerService,
