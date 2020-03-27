@@ -95,7 +95,7 @@ public class ApplicantService {
     }*/
 
     /**
-     * Finds the corrosponding applicant to the application
+     * Finds the corresponding applicant to the application
      * @param application the application
      * @return the applicant
      */
