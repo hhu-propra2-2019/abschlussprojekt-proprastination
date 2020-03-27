@@ -266,12 +266,12 @@ public class DistributionService {
         Optional<Distribution> newDistribution = dbDistributionService.findById(Long.parseLong(distributionId));
         Applicant applicant = applicantService.findById(Long.parseLong(applicantId));
         for (Application application : applicant.getApplications()) {
-            if (application.getModule().equals(newDistribution.get().getModule())) {
                 if (newDistribution.isPresent()) {
-                    for (Distribution distribution : dbDistributionService.findAll()) {
-                        distribution.getEmployees().remove(applicant);
-                        dbDistributionService.save(distribution);
-                    }
+                    if (application.getModule().equals(newDistribution.get().getModule())) {
+                        for (Distribution distribution : dbDistributionService.findAll()) {
+                            distribution.getEmployees().remove(applicant);
+                            dbDistributionService.save(distribution);
+                        }
                     newDistribution.get().getEmployees().add(applicant);
                     dbDistributionService.save(newDistribution.get());
                 }
