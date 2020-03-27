@@ -1,7 +1,12 @@
 package mops.controllers;
 
+import mops.model.Account;
+import mops.model.classes.Applicant;
 import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebModule;
+import mops.services.dbServices.DeletionService;
+import mops.services.dbServices.ApplicantService;
+import mops.services.dbServices.ModuleService;
 import mops.services.webServices.AccountGenerator;
 import mops.services.webServices.WebModuleService;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
@@ -13,10 +18,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.annotation.SessionScope;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -25,17 +33,30 @@ import java.util.List;
 @SessionScope
 @RequestMapping("/bewerbung2/setup")
 public class SetupController {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(SetupController.class);
     private final WebModuleService webService;
 
+    private final ApplicantService applicantService;
+
+    private final ModuleService moduleService;
+
+    private final DeletionService deletionService;
+
     /**
      * Constructor
-     * @param webService
+     *
+     * @param webService       webservice
+     * @param applicantService applicantservice
+     * @param moduleService    moduleservice
+     * @param deletionService  deletionservice
      */
     @SuppressWarnings("checkstyle:HiddenField")
-    public SetupController(final WebModuleService webService) {
+    public SetupController(final WebModuleService webService, final ApplicantService applicantService,
+                           final ModuleService moduleService, final DeletionService deletionService) {
         this.webService = webService;
+        this.applicantService = applicantService;
+        this.moduleService = moduleService;
+        this.deletionService = deletionService;
     }
 
     /**
@@ -71,9 +92,7 @@ public class SetupController {
                                    @RequestParam("oldName") final String oldName,
                                    @Valid final WebModule module, final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            bindingResult.getAllErrors().forEach(err -> {
-                LOGGER.info("ERROR {}", err.getDefaultMessage());
-            });
+            bindingResult.getAllErrors().forEach(err -> LOGGER.info("ERROR {}", err.getDefaultMessage()));
             model.addAttribute("oldName", oldName);
             model.addAttribute("module", module);
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
@@ -112,9 +131,7 @@ public class SetupController {
     public String postNewModule(final KeycloakAuthenticationToken token, final Model model,
                                 @Valid final WebModule module, final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            bindingResult.getAllErrors().forEach(err -> {
-                LOGGER.info("ERROR {}", err.getDefaultMessage());
-            });
+            bindingResult.getAllErrors().forEach(err -> LOGGER.info("ERROR {}", err.getDefaultMessage()));
             if (token != null) {
                 model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
                 model.addAttribute("Module", WebModule.builder().build());
@@ -169,4 +186,102 @@ public class SetupController {
         webService.deleteAll();
         return index(token, model);
     }
+
+    /**
+     * Deletion Mainpage
+     *
+     * @param token Keycloak token
+     * @param model Model
+     * @return returns deletion Mainpage
+     */
+    @GetMapping("/loeschen")
+    @Secured("ROLE_setup")
+    public String deleteMain(final KeycloakAuthenticationToken token, final Model model) {
+        if (token != null) {
+            Account account = AccountGenerator.createAccountFromPrincipal(token);
+            List<Module> modules = moduleService.getModules();
+            List<Applicant> applicants = applicantService.findAll();
+            model.addAttribute("account", account);
+            model.addAttribute("modules", modules);
+            model.addAttribute("applicants", applicants);
+        }
+        return "setup/deleteMain";
+    }
+
+    /**
+     * Mapping to delete everything.
+     *
+     * @param token      keycloaktoken
+     * @param attributes redirect attribute.
+     * @return redirect to deletion mainpage
+     */
+    @GetMapping("/loescheAlles")
+    @Secured("ROLE_setup")
+    public RedirectView deleteAll(final KeycloakAuthenticationToken token, final RedirectAttributes attributes) {
+        if (token != null) {
+            Account account = AccountGenerator.createAccountFromPrincipal(token);
+            attributes.addFlashAttribute("message", deletionService.deleteAll(account));
+        }
+        return new RedirectView("loeschen", true);
+    }
+
+    /**
+     * Mapping to delete Module
+     *
+     * @param module     modulename
+     * @param token      keycloaktoken
+     * @param attributes redirect attribute
+     * @return redirect to mainpage
+     */
+    @PostMapping("/loescheModul")
+    @Secured("ROLE_setup")
+    public RedirectView deleteModule(@ModelAttribute("module") final String module,
+                                     final KeycloakAuthenticationToken token, final RedirectAttributes attributes) {
+        if (token != null) {
+            Account account = AccountGenerator.createAccountFromPrincipal(token);
+            attributes.addFlashAttribute("message", deletionService.deleteModule(module, account));
+        }
+        return new RedirectView("loeschen", true);
+    }
+
+    /**
+     * Mapping to delete Applicant
+     *
+     * @param applicant  Applicant uniserial
+     * @param token      keycloaktoken
+     * @param attributes redirect attributes
+     * @return redirect to mainpage
+     */
+    @PostMapping("/loescheApplicant")
+    @Secured("ROLE_setup")
+    public RedirectView deleteApplicant(@ModelAttribute("applicant") final String applicant,
+                                        final KeycloakAuthenticationToken token, final RedirectAttributes attributes) {
+        if (token != null) {
+            Account account = AccountGenerator.createAccountFromPrincipal(token);
+            attributes.addFlashAttribute("message", deletionService.deleteApplicant(applicant, account));
+        }
+        return new RedirectView("loeschen", true);
+    }
+
+    /**
+     * Mapping for deletion of application
+     *
+     * @param application application id
+     * @param token       keycloak token
+     * @param attributes  redirect attributes
+     * @return redirects to deletion mainpage
+     */
+    @PostMapping("/loescheApplication")
+    @Secured("ROLE_setup")
+    public RedirectView deleteApplication(@ModelAttribute("application") final long application,
+                                          final KeycloakAuthenticationToken token,
+                                          final RedirectAttributes attributes) {
+        if (token != null) {
+            Account account = AccountGenerator.createAccountFromPrincipal(token);
+            attributes.addFlashAttribute("message", deletionService.deleteApplication(application, account));
+        }
+        return new RedirectView("loeschen", true);
+    }
+
+
 }
