@@ -81,28 +81,16 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-3">
-                        <div>Kurzform: </div>
-                        <div>Zugeordnete Person (Unikennung): </div>
-                        <div>Bewerbungsfrist: </div>
+                    <div class="col-6">
+                        <div th:text="'Kurzform: &ensp;' + *{shortName}"></div>
+                        <span th:text="'Bewerbungsfrist: &ensp;' + *{deadlineDate}"></span><span th:text="*{deadlineTime}"></span>
+                        <div th:text="'Zugeordnete Person (Unikennung): &ensp;' + *{profSerial}"></div>
                     </div>
-                    <div class="col-2">
-                        <div th:text="*{shortName}"></div>
-                        <div th:text="*{profSerial}"></div>
-                        <span th:text="*{deadlineDate}"></span>
-                        <span th:text="*{deadlineTime}"></span>
+                    <div class="col-6">
+                        <div th:text="'Personenanzahl 7 Std: &ensp;' + *{sevenHourLimit}"></div>
+                        <div th:text="'Personenanzahl 9 Std: &ensp;' + *{nineHourLimit}"></div>
+                        <div th:text="'Personenanzahl 17 Std: ' + *{seventeenHourLimit}"></div>
                     </div>
-                    <div class="col-2">
-                        <div>Personenanzahl 7 Std: </div>
-                        <div>Personenanzahl 9 Std: </div>
-                        <div>Personenanzahl 17 Std: </div>
-                    </div>
-                    <div class="col-1">
-                        <div th:text="*{sevenHourLimit}"></div>
-                        <div th:text="*{nineHourLimit}"></div>
-                        <div th:text="*{seventeenHourLimit}"></div>
-                    </div>
-                    <div class="col-4"></div>
                 </div>
             </div>
         </div><br>
