@@ -34,7 +34,7 @@ public class WebModuleService {
         List<Module> list = moduleService.getModules();
         List<WebModule> webList = new ArrayList<>();
         for (Module m: list) {
-            webList.add(m.toWebModule());
+            webList.add(toWebModule(m));
         }
         return webList;
     }
@@ -71,5 +71,21 @@ public class WebModuleService {
      */
     public void deleteAll() {
         moduleService.deleteAll();
+    }
+
+    /**
+     * Transfer Module into WebModule
+     * @param module
+     * @return WebModule
+     */
+    public WebModule toWebModule(final Module module) {
+        return WebModule.builder()
+                .name(module.getName())
+                .shortName(module.getShortName())
+                .profSerial(module.getProfSerial())
+                .sevenHourLimit(module.getSevenHourLimit())
+                .nineHourLimit(module.getNineHourLimit())
+                .seventeenHourLimit(module.getSeventeenHourLimit())
+                .build();
     }
 }

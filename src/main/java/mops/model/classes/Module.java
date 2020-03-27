@@ -37,18 +37,4 @@ public class Module {
     private String sevenHourLimit;
     private String nineHourLimit;
     private String seventeenHourLimit;
-    /**
-     * Transfer Module into WebModule
-     * @return WebModule
-     */
-    public WebModule toWebModule() {
-        return WebModule.builder()
-                .name(this.name)
-                .shortName(this.shortName)
-                .profSerial(this.profSerial)
-                .sevenHourLimit(this.sevenHourLimit)
-                .nineHourLimit(this.nineHourLimit)
-                .seventeenHourLimit(this.seventeenHourLimit)
-                .build();
-    }
 }
