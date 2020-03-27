@@ -15,7 +15,6 @@ import mops.services.dbServices.ModuleService;
 import mops.services.webServices.AccountGenerator;
 import mops.services.webServices.StudentService;
 import mops.services.webServices.WebApplicationService;
-import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +22,6 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -105,7 +102,8 @@ public class ApplicationController {
     @Secured("ROLE_studentin")
     public String newAppl(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
-            webApplicationService.creatNewApplicantIfNoneWasFound(AccountGenerator.createAccountFromPrincipal(token), model);
+            webApplicationService.creatNewApplicantIfNoneWasFound(
+                    AccountGenerator.createAccountFromPrincipal(token), model);
         }
         return "applicant/applicationPersonal";
     }
@@ -168,7 +166,8 @@ public class ApplicationController {
         webApplicationService.printBindingResultErrorsToLog(addressBindingResult);
         webApplicationService.printBindingResultErrorsToLog(certificateBindingResult);
         if (token != null) {
-            webApplicationService.removeCurrentModuleFromListOfAvailebleModuleToApplyTo(token, webApplicant, webAddress, model, modules, webCertificate);
+            webApplicationService.removeCurrentModuleFromListOfAvailebleModuleToApplyTo(
+                    token, webApplicant, webAddress, model, modules, webCertificate);
         }
         if (applicantBindingResult.hasErrors() || addressBindingResult.hasErrors()
                 || certificateBindingResult.hasErrors()) {
@@ -405,7 +404,8 @@ public class ApplicationController {
     @Secured("ROLE_studentin")
     public String editPersonalData(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
-            webApplicationService.creatNewApplicantIfNoneWasFound(AccountGenerator.createAccountFromPrincipal(token), model);
+            webApplicationService.creatNewApplicantIfNoneWasFound(
+                    AccountGenerator.createAccountFromPrincipal(token), model);
         }
         return "applicant/applicationEditPersonal";
     }

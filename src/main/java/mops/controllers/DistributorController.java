@@ -1,15 +1,9 @@
 package mops.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import mops.model.Account;
-import mops.model.classes.webclasses.WebDistribution;
-import mops.services.dbServices.DbDistributionService;
 import mops.services.logicServices.DistributionService;
 import mops.services.webServices.AccountGenerator;
 import mops.services.webServices.WebDistributionService;
-import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,8 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.annotation.SessionScope;
-
-import java.util.List;
 
 
 @SessionScope
@@ -32,9 +24,11 @@ public class DistributorController {
     /**
      * Constructor
      * @param webDistributionService
+     * @param distributionService
      */
     @SuppressWarnings("checkstyle:HiddenField")
-    public DistributorController(final WebDistributionService webDistributionService, DistributionService distributionService) {
+    public DistributorController(final WebDistributionService webDistributionService,
+                                 final DistributionService distributionService) {
         this.webDistributionService = webDistributionService;
         this.distributionService = distributionService;
     }

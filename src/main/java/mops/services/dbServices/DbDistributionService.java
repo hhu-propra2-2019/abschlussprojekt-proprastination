@@ -3,7 +3,6 @@ package mops.services.dbServices;
 import mops.model.classes.Distribution;
 import mops.model.classes.Module;
 import mops.repositories.DistributionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +13,12 @@ public class DbDistributionService {
 
     private final DistributionRepository distributionRepository;
 
-    public DbDistributionService(DistributionRepository distributionRepository) {
+    /**
+     * Constructor
+     * @param distributionRepository
+     */
+    @SuppressWarnings("checkstyle:HiddenField")
+    public DbDistributionService(final DistributionRepository distributionRepository) {
         this.distributionRepository = distributionRepository;
     }
 
@@ -37,18 +41,34 @@ public class DbDistributionService {
         return distributionRepository.findAll();
     }
 
+    /**
+     * -
+     */
     public void deleteAll() {
         distributionRepository.deleteAll();
     }
 
-    public void save(Distribution distribution) {
+    /**
+     * -
+     * @param distribution
+     */
+    public void save(final Distribution distribution) {
         distributionRepository.save(distribution);
     }
 
-    public Optional<Distribution> findById(long id) {
+    /**
+     * -
+     * @param id
+     * @return -
+     */
+    public Optional<Distribution> findById(final long id) {
         return distributionRepository.findById(id);
     }
 
+    /**
+     * -
+     * @return -
+     */
     public long count() {
         return distributionRepository.count();
     }

@@ -4,6 +4,7 @@ import mops.model.Account;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 
+@SuppressWarnings("checkstyle:HideUtilityClassConstructor")
 public class AccountGenerator {
 
     /**

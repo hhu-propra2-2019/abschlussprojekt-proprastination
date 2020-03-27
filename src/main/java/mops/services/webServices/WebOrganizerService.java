@@ -4,7 +4,6 @@ import mops.model.classes.Module;
 import mops.model.classes.Organizer;
 import mops.services.dbServices.ModuleService;
 import mops.services.dbServices.OrganizerService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,7 +15,13 @@ public class WebOrganizerService {
     private final ModuleService moduleService;
     private final OrganizerService organizerService;
 
-    public WebOrganizerService(ModuleService moduleService, OrganizerService organizerService) {
+    /**
+     * Constructor
+     * @param moduleService
+     * @param organizerService
+     */
+    @SuppressWarnings("checkstyle:HiddenField")
+    public WebOrganizerService(final ModuleService moduleService, final OrganizerService organizerService) {
         this.moduleService = moduleService;
         this.organizerService = organizerService;
     }

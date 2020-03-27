@@ -3,7 +3,6 @@ package mops.services.webServices;
 import mops.controllers.ApplicationController;
 import mops.model.Account;
 import mops.model.classes.Applicant;
-import mops.model.classes.Application;
 import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebAddress;
 import mops.model.classes.webclasses.WebApplicant;
@@ -22,9 +21,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 
-import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class WebApplicationService {
@@ -35,15 +33,27 @@ public class WebApplicationService {
     private final ApplicationService applicationService;
     private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationController.class);
 
-    public WebApplicationService(ApplicantService applicantService, StudentService studentService,
-                                 ModuleService moduleService, ApplicationService applicationService) {
+    /**
+     * Constructor
+     * @param applicantService
+     * @param studentService
+     * @param moduleService
+     * @param applicationService
+     */
+    @SuppressWarnings("checkstyle:HiddenField")
+    public WebApplicationService(final ApplicantService applicantService, final StudentService studentService,
+                                 final ModuleService moduleService, final ApplicationService applicationService) {
         this.applicantService = applicantService;
         this.studentService = studentService;
         this.moduleService = moduleService;
         this.applicationService = applicationService;
     }
 
-    public void printBindingResultErrorsToLog(BindingResult applicantBindingResult) {
+    /**
+     * -
+     * @param applicantBindingResult
+     */
+    public void printBindingResultErrorsToLog(final BindingResult applicantBindingResult) {
         if (applicantBindingResult.hasErrors()) {
             applicantBindingResult.getAllErrors().forEach(err -> {
                 LOGGER.info("ERROR {}", err.getDefaultMessage());
@@ -51,7 +61,12 @@ public class WebApplicationService {
         }
     }
 
-    public void creatNewApplicantIfNoneWasFound(Account account, Model model) {
+    /**
+     * -
+     * @param account
+     * @param model
+     */
+    public void creatNewApplicantIfNoneWasFound(final Account account, final Model model) {
 
         Applicant applicant = applicantService.findByUniserial(account.getName());
 
@@ -74,16 +89,36 @@ public class WebApplicationService {
         model.addAttribute("modules", modules);
     }
 
-    public List<String> getApplicantUniserialsByModule(String module) {
-        List<String> applicantUniserials = new ArrayList<>();
-        for (Application application : applicationService.findApplicationsByModule(moduleService.findModuleByName(module))) {
-            applicantUniserials.add(applicantService.findByApplications(application).getUniserial());
-        }
-        return applicantUniserials;
+    /**
+     * -
+     * @param module
+     * @return -
+     */
+    public List<String> getApplicantUniserialsByModule(final String module) {
+        return applicationService.
+                findApplicationsByModule(moduleService
+                        .findModuleByName(module))
+                .stream()
+                .map(application -> applicantService
+                        .findByApplications(application)
+                        .getUniserial())
+                .collect(Collectors.toList());
     }
 
-    public void removeCurrentModuleFromListOfAvailebleModuleToApplyTo(KeycloakAuthenticationToken token, WebApplicant webApplicant,
-                                                                      WebAddress webAddress, Model model, String modules, WebCertificate webCertificate) {
+    /**
+     * -
+     * @param token
+     * @param webApplicant
+     * @param webAddress
+     * @param model
+     * @param modules
+     * @param webCertificate
+     */
+    public void removeCurrentModuleFromListOfAvailebleModuleToApplyTo(final KeycloakAuthenticationToken token,
+                                                                      final WebApplicant webApplicant,
+                                                                      final WebAddress webAddress,
+                                                                      final Model model, final String modules,
+                                                                      final WebCertificate webCertificate) {
         Applicant applicant = studentService.savePersonalData(token, webApplicant, webAddress, webCertificate);
         Module module = moduleService.findModuleByName(modules);
         List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
@@ -96,13 +131,25 @@ public class WebApplicationService {
         model.addAttribute("webApplication", WebApplication.builder().module(modules).build());
     }
 
-    public void printErrorsIfPresent(BindingResult bindingResult) {
+    /**
+     * -
+     * @param bindingResult
+     */
+    public void printErrorsIfPresent(final BindingResult bindingResult) {
         for (ObjectError err : bindingResult.getAllErrors()) {
             LOGGER.info("ERROR {}", err.getDefaultMessage());
         }
     }
 
-    public void returnErrorifMaxSmallerThenMin(WebApplication webApplication, BindingResult bindingResult, String webApplication2) {
+    /**
+     * -
+     * @param webApplication
+     * @param bindingResult
+     * @param webApplication2
+     */
+    public void returnErrorifMaxSmallerThenMin(final WebApplication webApplication,
+                                               final BindingResult bindingResult,
+                                               final String webApplication2) {
         if (webApplication.getMinHours() > webApplication.getMaxHours()) {
             bindingResult.addError(new FieldError(webApplication2, "maxHours",
                     "Maximale Stundenzahl darf nicht kleiner als minimale sein."));

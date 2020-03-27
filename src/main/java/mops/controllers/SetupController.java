@@ -1,13 +1,10 @@
 package mops.controllers;
 
-import mops.model.Account;
 import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebModule;
 import mops.services.webServices.AccountGenerator;
 import mops.services.webServices.WebModuleService;
-import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,7 +23,12 @@ public class SetupController {
 
     private final WebModuleService webService;
 
-    public SetupController(WebModuleService webService) {
+    /**
+     * Constructor
+     * @param webService
+     */
+    @SuppressWarnings("checkstyle:HiddenField")
+    public SetupController(final WebModuleService webService) {
         this.webService = webService;
     }
 

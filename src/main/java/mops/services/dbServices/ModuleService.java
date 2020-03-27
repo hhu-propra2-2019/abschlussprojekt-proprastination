@@ -77,18 +77,35 @@ public class ModuleService {
         moduleRepository.deleteAll();
     }
 
+    /**
+     * -
+     * @return -
+     */
     public List<Module> findAll() {
         return moduleRepository.findAll();
     }
 
-    public Module findDistinctByName(String oldName) {
+    /**
+     * -
+     * @param oldName
+     * @return -
+     */
+    public Module findDistinctByName(final String oldName) {
         return moduleRepository.findDistinctByName(oldName);
     }
 
-    public void deleteById(long id) {
+    /**
+     * -
+     * @param id
+     */
+    public void deleteById(final long id) {
         moduleRepository.deleteById(id);
     }
 
+    /**
+     * -
+     * @return -
+     */
     public List<String> getModuleNames() {
         return moduleRepository.findAll().stream().map(Module::getName).collect(Collectors.toList());
     }

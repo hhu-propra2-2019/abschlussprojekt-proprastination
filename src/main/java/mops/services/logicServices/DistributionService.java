@@ -6,10 +6,8 @@ import mops.model.classes.Application.ApplicationBuilder;
 import mops.model.classes.Distribution;
 import mops.model.classes.Evaluation;
 import mops.model.classes.Module;
-import mops.model.classes.webclasses.WebDistribution;
 import mops.model.classes.webclasses.WebDistributorApplicant;
 import mops.model.classes.webclasses.WebDistributorApplication;
-import mops.repositories.DistributionRepository;
 import mops.services.dbServices.DbDistributionService;
 import mops.services.dbServices.EvaluationService;
 import mops.services.dbServices.ModuleService;
@@ -18,12 +16,10 @@ import mops.services.dbServices.ApplicationService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class DistributionService {
@@ -245,6 +241,10 @@ public class DistributionService {
         }
     }
 
+    /**
+     * -
+     * @return -
+     */
     public List<Applicant> findAllUnassigned() {
         List<Applicant> allApplicants = applicantService.findAll();
         List<Distribution> allDistributions = dbDistributionService.findAll();
@@ -312,6 +312,11 @@ public class DistributionService {
         return sortedApplicants;
     }
 
+    /**
+     * -
+     * @param applicant
+     * @return -
+     */
     public String getTypeOfApplicant(final Applicant applicant) {
         if ("Keins".equals(applicant.getCerts().getName())) {
             return "SHK";

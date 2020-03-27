@@ -3,14 +3,12 @@ package mops.services.webServices;
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
 import mops.model.classes.Module;
-import mops.model.classes.webclasses.WebApplication;
 import mops.services.EMailService;
 import mops.services.PDFService;
 import mops.services.ZIPService;
 import mops.services.dbServices.ApplicantService;
 import mops.services.dbServices.ModuleService;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -19,12 +17,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailSendException;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -43,7 +37,18 @@ public class WebPdfService {
     private final ApplicantService applicantService;
     private final PDFService pdfService;
 
-    public WebPdfService(EMailService eMailService, ZIPService zipService, ApplicantService applicantService, PDFService pdfService, ModuleService moduleService) {
+    /**
+     * Constructor
+     * @param eMailService
+     * @param zipService
+     * @param applicantService
+     * @param pdfService
+     * @param moduleService
+     */
+    @SuppressWarnings("checkstyle:HiddenField")
+    public WebPdfService(final EMailService eMailService, final ZIPService zipService,
+                         final ApplicantService applicantService, final PDFService pdfService,
+                         final ModuleService moduleService) {
         this.eMailService = eMailService;
         this.zipService = zipService;
         this.applicantService = applicantService;
@@ -51,15 +56,31 @@ public class WebPdfService {
         this.moduleService = moduleService;
     }
 
-    public String getDownloadRedirectOfApplicantWithModule(String module, String applicant) {
+    /**
+     * -
+     * @param module
+     * @param applicant
+     * @return -
+     */
+    public String getDownloadRedirectOfApplicantWithModule(final String module, final String applicant) {
         return "redirect:pdfDownload?student=" + applicant + "&module=" + module;
     }
 
-    public String getDownloadRedirectOfModule(String module) {
+    /**
+     * -
+     * @param module
+     * @return -
+     */
+    public String getDownloadRedirectOfModule(final String module) {
         return "redirect:zipModuleDownload?module=" + module;
     }
 
-    public HttpHeaders generateHttpHeader(String attachment) {
+    /**
+     * -
+     * @param attachment
+     * @return -
+     */
+    public HttpHeaders generateHttpHeader(final String attachment) {
         HttpHeaders header = new HttpHeaders();
         header.add(HttpHeaders.CONTENT_DISPOSITION, attachment);
         header.add("Cache-Control", "no-cache, no-store, must-revalidate");
@@ -68,7 +89,18 @@ public class WebPdfService {
         return header;
     }
 
-    public ResponseEntity<Resource> generateResponseEntity(HttpHeaders header, File file, ByteArrayResource resource, MediaType applicationOctetStream) {
+    /**
+     * -
+     * @param header
+     * @param file
+     * @param resource
+     * @param applicationOctetStream
+     * @return -
+     */
+    public ResponseEntity<Resource> generateResponseEntity(final HttpHeaders header,
+                                                           final File file,
+                                                           final ByteArrayResource resource,
+                                                           final MediaType applicationOctetStream) {
         return ResponseEntity.ok()
                 .headers(header)
                 .contentLength(file.length())
@@ -76,7 +108,14 @@ public class WebPdfService {
                 .body(resource);
     }
 
-    public void sendEmail(KeycloakAuthenticationToken token, RedirectAttributes attributes, @RequestParam("email") String eMail) {
+    /**
+     * -
+     * @param token
+     * @param attributes
+     * @param eMail
+     */
+    public void sendEmail(final KeycloakAuthenticationToken token,
+                          final RedirectAttributes attributes, final String eMail) {
         attributes.addFlashAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
         String message;
         String type;
@@ -93,7 +132,14 @@ public class WebPdfService {
         attributes.addFlashAttribute("type", type);
     }
 
-    public ResponseEntity<Resource> generatePdfForDownload(String module, String student) throws IOException {
+    /**
+     * -
+     * @param module
+     * @param student
+     * @return -
+     * @throws IOException
+     */
+    public ResponseEntity<Resource> generatePdfForDownload(final String module, final String student) throws IOException {
         Applicant applicant;
         Optional<Application> application;
         try {
@@ -118,7 +164,13 @@ public class WebPdfService {
         return generateResponseEntity(header, file, resource, MediaType.APPLICATION_PDF);
     }
 
-    public ResponseEntity<Resource> generateSingleZip(String module) throws IOException {
+    /**
+     * -
+     * @param module
+     * @return -
+     * @throws IOException
+     */
+    public ResponseEntity<Resource> generateSingleZip(final String module) throws IOException {
         if (module == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
@@ -132,6 +184,11 @@ public class WebPdfService {
         return generateResponseEntity(header, file, resource, MediaType.APPLICATION_OCTET_STREAM);
     }
 
+    /**
+     * -
+     * @return -
+     * @throws IOException
+     */
     public ResponseEntity<Resource> generateMultipleZip() throws IOException {
         List<Module> modules = moduleService.getModules();
         File file = zipService.getZipFileForModule(modules);
@@ -142,6 +199,11 @@ public class WebPdfService {
         return generateResponseEntity(header, file, resource, MediaType.APPLICATION_OCTET_STREAM);
     }
 
+    /**
+     * -
+     * @return -
+     * @throws IOException
+     */
     public ResponseEntity<Resource> generateMultipleZipForAssigned() throws IOException {
         File file = zipService.getZipFileForAllDistributions();
         Path path = Paths.get(file.getAbsolutePath());

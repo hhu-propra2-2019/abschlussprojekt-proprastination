@@ -1,15 +1,9 @@
 package mops.controllers;
 
-import mops.model.Account;
 import mops.model.classes.orgaWebClasses.WebListClass;
 import mops.services.webServices.AccountGenerator;
 import mops.services.webServices.OrgaService;
-import mops.services.dbServices.OrganizerService;
 import mops.services.webServices.WebOrganizerService;
-import mops.services.ModuleService;
-import mops.services.OrgaService;
-import mops.services.OrganizerService;
-import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -37,7 +31,7 @@ public class OrgaController {
      * @param webOrganizerService
      */
     @SuppressWarnings("checkstyle:HiddenField")
-    public OrgaController(final OrgaService orgaService, WebOrganizerService webOrganizerService) {
+    public OrgaController(final OrgaService orgaService, final WebOrganizerService webOrganizerService) {
         this.orgaService = orgaService;
         this.webOrganizerService = webOrganizerService;
 

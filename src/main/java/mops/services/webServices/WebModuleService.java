@@ -1,12 +1,9 @@
 package mops.services.webServices;
 
-import mops.model.classes.Applicant;
-import mops.model.classes.Distribution;
 import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebModule;
 import mops.services.dbServices.DbDistributionService;
 import mops.services.dbServices.ModuleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +24,7 @@ public class WebModuleService {
      * @param dbDistributionService
      */
     @SuppressWarnings("checkstyle:HiddenField")
-    public WebModuleService(final ModuleService moduleService, DbDistributionService dbDistributionService) {
+    public WebModuleService(final ModuleService moduleService, final DbDistributionService dbDistributionService) {
         this.moduleService = moduleService;
         this.dbDistributionService = dbDistributionService;
     }

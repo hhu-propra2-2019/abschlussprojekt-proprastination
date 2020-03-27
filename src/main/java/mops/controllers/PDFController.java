@@ -1,12 +1,8 @@
 package mops.controllers;
 
-import mops.services.dbServices.ApplicantService;
 import mops.services.dbServices.DbDistributionService;
 import mops.services.logicServices.DistributionService;
-import mops.services.EMailService;
 import mops.services.dbServices.ModuleService;
-import mops.services.PDFService;
-import mops.services.ZIPService;
 import mops.services.webServices.AccountGenerator;
 import mops.services.webServices.WebApplicationService;
 import mops.services.webServices.WebPdfService;
@@ -42,16 +38,18 @@ public class PDFController {
 
     /**
      * Initiates PDF Controller
-     * @param moduleService    moduleService
+     * @param moduleService
      * @param webApplicationService
-     * @param distributionService distributionservice
+     * @param distributionService
+     * @param dbDistributionService
+     * @param webPdfService
      */
     @SuppressWarnings("checkstyle:HiddenField")
     public PDFController(final ModuleService moduleService,
                          final WebApplicationService webApplicationService,
                          final DistributionService distributionService,
                          final DbDistributionService dbDistributionService,
-                         WebPdfService webPdfService) {
+                         final WebPdfService webPdfService) {
         this.moduleService = moduleService;
         this.webApplicationService = webApplicationService;
         this.distributionService = distributionService;

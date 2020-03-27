@@ -11,7 +11,6 @@ import mops.model.classes.webclasses.WebDistributorApplication;
 import mops.services.dbServices.DbDistributionService;
 import mops.services.dbServices.EvaluationService;
 import mops.services.logicServices.DistributionService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,7 +24,16 @@ public class WebDistributionService {
     private final DistributionService distributionService;
     private final EvaluationService evaluationService;
 
-    public WebDistributionService(DbDistributionService dbDistributionService, DistributionService distributionService, EvaluationService evaluationService) {
+    /**
+     * Constructor
+     * @param dbDistributionService
+     * @param distributionService
+     * @param evaluationService
+     */
+    @SuppressWarnings("checkstyle:HiddenField")
+    public WebDistributionService(final DbDistributionService dbDistributionService,
+                                  final DistributionService distributionService,
+                                  final EvaluationService evaluationService) {
         this.dbDistributionService = dbDistributionService;
         this.distributionService = distributionService;
         this.evaluationService = evaluationService;
@@ -47,7 +55,8 @@ public class WebDistributionService {
                     .hours7(distribution.getModule().getSevenHourLimit())
                     .hours9(distribution.getModule().getNineHourLimit())
                     .hours17(distribution.getModule().getSeventeenHourLimit())
-                    .webDistributorApplicants(distributionService.sort(webDistributorApplicantList, distribution.getModule().getName()))
+                    .webDistributorApplicants(distributionService
+                            .sort(webDistributorApplicantList, distribution.getModule().getName()))
                     .build();
             webDistributionList.add(webDistribution);
         }
