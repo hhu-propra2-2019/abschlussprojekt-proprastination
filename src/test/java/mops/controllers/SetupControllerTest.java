@@ -27,28 +27,4 @@ class SetupControllerTest {
     void otherRoleNoAccess() throws Exception {
         mockMvc.perform(get("/bewerbung2/setup/")).andExpect(status().isForbidden());
     }
-
-    @Test
-    void postEditedModule() {
-    }
-
-    @Test
-    void newModule() {
-    }
-
-    @Test
-    void postNewModule() {
-    }
-
-    @Test
-    void postEditModule() {
-    }
-
-    @Test
-    void postDeleteModule() {
-    }
-
-    @Test
-    void postDeleteAllModule() {
-    }
 }
