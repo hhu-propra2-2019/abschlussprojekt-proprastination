@@ -61,44 +61,31 @@ public class DistributionService {
     }
 
     /**
-     * Dummy functions that assignes applicants to Distributions
-     */
-    public void assign() {
-        dbDistributionService.save(Distribution.builder()
-                .employees(applicantService.findAll())
-                .build());
-    }
-
-    /**
      * distributes the Applicants
      */
     public void distribute() {
         final int numberOfPriorities = 4;
-        final int numberOfHours = 3;
         final int[] hours = {7, 9, 17};
+
         List<Module> modules = moduleService.getModules();
         List<Applicant> allApplicants = applicantService.findAll();
         List<Applicant>[] applicantsPerModule = new List[modules.size()];
+
         for (int i = 0; i < modules.size(); i++) {
             applicantsPerModule[i] = new LinkedList<>();
         }
-        int[][] maxHoursPerModule = new int[modules.size()][numberOfHours];
-        int[][] countHoursPerModule = new int[modules.size()][numberOfHours];
+
+        int[][] maxHoursPerModule = new int[modules.size()][hours.length];
+        int[][] countHoursPerModule = new int[modules.size()][hours.length];
+
         int moduleCount = 0;
+
         dbDistributionService.deleteAll();
+
+
         for (Module module : modules) {
-            List<Evaluation> evaluations = new LinkedList<>();
-            List<Application> preApplications = applicationService.findApplicationsByModule(module);
-            List<Application> applications = new LinkedList<>();
-            for (Application application : preApplications) {
-                if (allApplicants.indexOf(applicantService.findByApplications(application)) != -1) {
-                    applications.add(application);
-                }
-            }
-            for (Application application : applications) {
-                Evaluation evaluation = evaluationService.findByApplication(application);
-                evaluations.add(evaluation);
-            }
+
+            List<Evaluation> evaluations = prepareEvaluationsList(allApplicants, module);
 
             List<Evaluation> sortedByOrgaPrio = new LinkedList<>();
 
@@ -108,7 +95,7 @@ public class DistributionService {
                 }
             }
 
-            for (int i = 0; i < numberOfHours; i++) {
+            for (int i = 0; i < hours.length; i++) {
                 maxHoursPerModule[moduleCount][i] = 0;
             }
 
@@ -117,27 +104,19 @@ public class DistributionService {
             maxHoursPerModule[moduleCount][2] = Integer.parseInt(module.getSeventeenHourLimit());
 
             for (Evaluation evaluation : sortedByOrgaPrio) {
-                int countSum = 0;
-                int maxSum = 0;
-                for (int i = 0; i < numberOfHours; i++) {
-                    countSum += countHoursPerModule[moduleCount][i];
-                }
-                for (int i = 0; i < numberOfHours; i++) {
-                    maxSum += maxHoursPerModule[moduleCount][i];
-                }
 
-                if (countSum == maxSum) {
-                    break;
-                }
+                if (checkIfModuleHasSpace(hours.length, maxHoursPerModule[moduleCount], countHoursPerModule[moduleCount])) {
 
-                Applicant applicant = applicantService.findByApplications(evaluation.getApplication());
-                for (int i = 0; i < numberOfHours; i++) {
-                    if (evaluation.getHours() == hours[i]
-                            && countHoursPerModule[moduleCount][i] < maxHoursPerModule[moduleCount][i]) {
-                        applicantsPerModule[moduleCount].add(applicant);
-                        saveChecked(applicant.getId() + "", "true");
-                        allApplicants.remove(applicant);
-                        countHoursPerModule[moduleCount][i]++;
+                    Applicant applicant = applicantService.findByApplications(evaluation.getApplication());
+
+                    for (int i = 0; i < hours.length; i++) {
+
+                        if (evaluation.getHours() == hours[i] && countHoursPerModule[moduleCount][i] < maxHoursPerModule[moduleCount][i]) {
+                            applicantsPerModule[moduleCount].add(applicant);
+                            saveChecked(applicant.getId() + "", "true");
+                            allApplicants.remove(applicant);
+                            countHoursPerModule[moduleCount][i]++;
+                        }
                     }
                 }
             }
@@ -147,18 +126,8 @@ public class DistributionService {
         moduleCount = 0;
 
         for (Module module : modules) {
-            List<Evaluation> evaluations = new LinkedList<>();
-            List<Application> preApplications = applicationService.findApplicationsByModule(module);
-            List<Application> applications = new LinkedList<>();
-            for (Application application : preApplications) {
-                if (allApplicants.indexOf(applicantService.findByApplications(application)) != -1) {
-                    applications.add(application);
-                }
-            }
-            for (Application application : applications) {
-                Evaluation evaluation = evaluationService.findByApplication(application);
-                evaluations.add(evaluation);
-            }
+
+            List<Evaluation> evaluations = prepareEvaluationsList(allApplicants, module);
 
             List<Evaluation>[] sortedByOrgaPrio = new List[numberOfPriorities];
 
@@ -175,38 +144,19 @@ public class DistributionService {
             }
 
             for (int x = 0; x < numberOfPriorities; x++) {
-                int countSum = 0;
-                int maxSum = 0;
-                for (int i = 0; i < numberOfHours; i++) {
-                    countSum += countHoursPerModule[moduleCount][i];
-                }
-                for (int i = 0; i < numberOfHours; i++) {
-                    maxSum += maxHoursPerModule[moduleCount][i];
-                }
-                if (countSum == maxSum) {
-                    break;
-                }
 
-                for (Evaluation evaluation : sortedByOrgaPrio[x]) {
+                if (checkIfModuleHasSpace(hours.length, maxHoursPerModule[moduleCount], countHoursPerModule[moduleCount])) {
 
-                    for (int i = 0; i < numberOfHours; i++) {
-                        countSum += countHoursPerModule[moduleCount][i];
-                    }
-                    for (int i = 0; i < numberOfHours; i++) {
-                        maxSum += maxHoursPerModule[moduleCount][i];
-                    }
+                    for (Evaluation evaluation : sortedByOrgaPrio[x]) {
 
-                    if (countSum == maxSum) {
-                        break;
-                    }
+                        Applicant applicant = applicantService.findByApplications(evaluation.getApplication());
 
-                    Applicant applicant = applicantService.findByApplications(evaluation.getApplication());
-                    for (int i = 0; i < numberOfHours; i++) {
-                        if (evaluation.getHours() == hours[i]
-                                && countHoursPerModule[moduleCount][i] < maxHoursPerModule[moduleCount][i]) {
-                            applicantsPerModule[moduleCount].add(applicant);
-                            allApplicants.remove(applicant);
-                            countHoursPerModule[moduleCount][i]++;
+                        for (int i = 0; i < hours.length; i++) {
+                            if (evaluation.getHours() == hours[i] && countHoursPerModule[moduleCount][i] < maxHoursPerModule[moduleCount][i]) {
+                                applicantsPerModule[moduleCount].add(applicant);
+                                allApplicants.remove(applicant);
+                                countHoursPerModule[moduleCount][i]++;
+                            }
                         }
                     }
                 }
@@ -217,6 +167,53 @@ public class DistributionService {
                     .build());
             moduleCount++;
         }
+    }
+
+    /**
+     * Checks if module has space for more applicants
+     * @param numberOfHours
+     * @param maxHoursPerModule
+     * @param countHoursPerModule
+     * @return true if theres space
+     */
+    private boolean checkIfModuleHasSpace(final int numberOfHours, final int[] maxHoursPerModule, final int[] countHoursPerModule) {
+
+        int allocatedStudents = 0;
+        int sumOfStudentsToAllocate = 0;
+
+        for (int i = 0; i < numberOfHours; i++) {
+            allocatedStudents += countHoursPerModule[i];
+        }
+        for (int i = 0; i < numberOfHours; i++) {
+            sumOfStudentsToAllocate += maxHoursPerModule[i];
+        }
+
+        return allocatedStudents != sumOfStudentsToAllocate;
+    }
+
+    /**
+     * Prepare lists evaluation by Module
+     * @param allApplicants
+     * @param module
+     * @return List of evalutaions
+     */
+    private List<Evaluation> prepareEvaluationsList(final List<Applicant> allApplicants, final Module module) {
+        List<Evaluation> evaluations = new LinkedList<>();
+        List<Application> preApplications = applicationService.findApplicationsByModule(module);
+        List<Application> applications = new LinkedList<>();
+
+
+        for (Application application : preApplications) {
+            if (allApplicants.contains(applicantService.findByApplications(application))) {
+                applications.add(application);
+            }
+        }
+
+        for (Application application : applications) {
+            Evaluation evaluation = evaluationService.findByApplication(application);
+            evaluations.add(evaluation);
+        }
+        return evaluations;
     }
 
     /**
