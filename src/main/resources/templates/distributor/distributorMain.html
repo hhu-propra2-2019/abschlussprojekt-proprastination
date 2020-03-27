@@ -57,7 +57,10 @@
     <div class="row">
         <div class="col-sm-6" th:each="distribution: ${distributions}">
             <div class="card bg-light mb-3 border-primary">
-                <div class="card-header d-flex justify-content-start align-items-start">
+                <div class="card-header d-flex justify-content-start align-items-start"
+                     th:style="${distribution.hours7Set} == ${distribution.hours7} ?
+                     (${distribution.hours9Set} == ${distribution.hours9} ?
+                     (${distribution.hours17Set} == ${distribution.hours17} ? 'background-color: rgba(108, 179, 255, 0.51)'))">
                     <div class="col text-left" th:text="${distribution.module}">
                         Propra
                     </div>
