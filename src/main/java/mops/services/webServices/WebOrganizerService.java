@@ -51,7 +51,7 @@ public class WebOrganizerService {
         if (organizer == null) {
             organizer = Organizer.builder()
                     .uniserial(name)
-                    .phonenumber("Bitte speichern Sie Ihre Telefonnummer!")
+                    .phonenumber("")
                     .build();
             organizerService.save(organizer);
         }
@@ -70,5 +70,15 @@ public class WebOrganizerService {
                 .uniserial(oldOrganizer.getUniserial())
                 .phonenumber(phone)
                 .build());
+    }
+
+    /**
+     * checks for Organizer phoneNumber
+     * @param name name of organizer
+     * @return true, if phone number is set, false if not
+     */
+    public boolean checkForPhoneNumber(final String name) {
+        Organizer organizer = organizerService.findByUniserial(name);
+        return !"".equals(organizer.getPhonenumber());
     }
 }

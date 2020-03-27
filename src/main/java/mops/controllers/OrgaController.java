@@ -30,7 +30,7 @@ public class OrgaController {
     /**
      * Lets Spring inject the services
      * @param orgaService   orgaService
-     * @param webOrganizerService
+     * @param webOrganizerService webOrganizerService
      * @param moduleService moduleservice
      */
     @SuppressWarnings("checkstyle:HiddenField")
@@ -75,7 +75,8 @@ public class OrgaController {
                            final Model model) {
         if (token != null) {
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
-            if (!token.getName().equals(moduleService.findById(Long.parseLong(id)).getProfSerial())) {
+            if (!token.getName().equals(moduleService.findById(Long.parseLong(id)).getProfSerial())
+            || !webOrganizerService.checkForPhoneNumber(token.getName())) {
                 return "redirect:/bewerbung2/organisator/";
             }
             model.addAttribute("WebList", new WebListClass(orgaService.getAllListEntrys(id)));
