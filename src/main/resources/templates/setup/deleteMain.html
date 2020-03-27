@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en"
+      th:replace="~{mopslayout :: html(name='Lösche Daten', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}"
+      xmlns:text-align="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <th:block th:fragment="headcontent">
+
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+
+        <link href="../static/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"
+              th:href="@{node_modules/bootstrap/dist/css/bootstrap.min.css}">
+
+    </th:block>
+    <title>Organize Applications</title>
+</head>
+
+<body>
+<header>
+    <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
+        <ul th:if="${account.roles.size() > 1}">
+            <li th:if="${account.roles.contains('verteiler')}"><a th:href="@{/bewerbung2/verteiler/}">Verteiler
+                Übersicht</a></li>
+            <li th:if="${account.roles.contains('orga')}"><a th:href="@{/bewerbung2/organisator/}">Organisator
+                Übersicht</a></li>
+            <li th:if="${account.roles.contains('setup')}"><a th:href="@{/bewerbung2/setup/}">Ersteller Übersicht</a>
+            </li>
+            <li th:if="${account.roles.contains('studentin')}"><a th:href="@{/bewerbung2/bewerber/}">Bewerber
+                Übersicht</a></li>
+        </ul>
+        <ul>
+            <li><a th:href="@{/}">Startseite</a></li>
+            <li><a th:href="@{./}">Dashboard</a></li>
+            <li><a th:href="@{neuesModul}">Neues Modul</a></li>
+        </ul>
+    </nav>
+</header>
+<main th:fragment="bodycontent">
+    <div class="container-fluid">
+        <div class="card bg-light mb-3 border-primary">
+            <div class="card-header"><h2>Löschen Sie hier beliebige Daten</h2></div>
+        </div>
+        <div class="alert alert-danger" role="alert" th:if="${message}">
+            <h2><label th:text="${message}"></label></h2>
+        </div>
+        <div class="row d-flex align-content-sm-stretch">
+            <div class="col-6">
+                <form th:action="@{loescheModul}" th:method="POST">
+                    <div class="card bg-light mb-3 border-primary">
+                        <div class="card-header"><h4>Löschen Sie alle Bewerbungen zu <b>einem Modul</b> hier!</h4></div>
+                        <div class="card-body">
+                            <div class="row form-row">
+                                <label th:for="module">Zu dem Modul werden gelöscht: Bewertungen, Verteilungen,
+                                    Bewerbungen.</label><br>
+                                <select class="form-control" th:id="module" th:name="module">
+                                    <option th:each="module : ${modules}" th:text="${module.name}"
+                                            th:value="${module.name}">Modul a
+                                    </option>
+                                </select>
+                            </div>
+                            <br>
+                            <div class="row form-row">
+                                <button class="btn btn-danger form-control" th:formaction="@{loescheModul}"
+                                        th:type="submit">Löschen
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-6">
+                <form th:action="@{loescheApplicant}" th:method="POST">
+                    <div class="card bg-light mb-3 border-primary">
+                        <div class="card-header"><h4>Löschen Sie <b>einen Bewerber</b> inkl. aller Bewerbungen hier!
+                        </h4></div>
+                        <div class="card-body">
+                            <div class="row form-row">
+                                <label th:for="applicant">Suchen Sie hier welche Bewerberdaten Sie löschen
+                                    wollen.</label><br>
+                                <select class="form-control" th:id="applicant" th:name="applicant">
+                                    <option th:each="applicant : ${applicants}"
+                                            th:text="${applicant.firstName} + ' ' + ${applicant.surname}"
+                                            th:value="${applicant.uniserial}">Modul a
+                                    </option>
+                                </select>
+                            </div>
+                            <br>
+                            <div class="row form-row">
+                                <button class="btn btn-danger form-control" th:formaction="@{loescheApplicant}"
+                                        th:type="submit"
+                                        th:value="Download">Löschen
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <form th:action="@{loescheApplication}" th:method="POST">
+                    <div class="card bg-light mb-3 border-primary">
+                        <div class="card-header"><h4>Löschen Sie <b>einen Bewerber</b> inkl. aller Bewerbungen hier!
+                        </h4></div>
+                        <div class="card-body">
+                            <div class="row form-row">
+                                <label th:for="application">Suchen Sie hier welche Bewerberdaten Sie löschen
+                                    wollen.</label><br>
+                                <select class="form-control" th:id="application" th:name="application">
+                                    <th:block th:each="applicant : ${applicants}">
+                                        <option th:each="appl : ${applicant.applications}"
+                                                th:text="${applicant.firstName} + ', ' + ${applicant.surname} + ': ' + ${appl.module.name} "
+                                                th:value="${appl.id}">Modul
+                                        </option>
+                                    </th:block>
+                                </select>
+                            </div>
+                            <br>
+                            <div class="row form-row">
+                                <button class="btn btn-danger form-control" th:formaction="@{loescheApplication}"
+                                        th:type="submit"
+                                        th:value="Download">Löschen
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="col-6">
+                <form method="GET" th:action="@{loescheAlles}">
+                    <div class="card bg-light mb-3 border-danger">
+                        <div class="card-header"><h4>Löschen Sie alle Daten hier!</h4></div>
+                        <div class="card-body">
+                            <div class="row form-row">
+                                <label>Alle Daten werden unwiederuflich gelöscht! (DB wipe)</label><br>
+                            </div>
+                            <div class="row form-row">
+                                <button class="btn btn-danger form-control" type="submit"
+                                        value="deleteAll">Lösche Alles
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
