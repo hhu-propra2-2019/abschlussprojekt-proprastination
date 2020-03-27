@@ -28,7 +28,6 @@ import java.time.Instant;
 @NoArgsConstructor
 @Entity
 @Table
-@OnDelete(action = OnDeleteAction.CASCADE)
 public class Module {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
