@@ -1,4 +1,4 @@
-package mops.services;
+package mops.services.dbServices;
 
 import mops.model.classes.*;
 import mops.model.classes.Module;
