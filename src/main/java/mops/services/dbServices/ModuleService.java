@@ -59,9 +59,20 @@ public class ModuleService {
      * @param module module.
      */
     public void save(final Module module) {
+        concatenateDeadlines(module);
+        moduleRepository.save(module);
+    }
+
+    /** Sets the deadline (This should me reworked)
+     *
+     * @param module current module
+     */
+    private void concatenateDeadlines(final Module module) {
+        if (module.getDeadlineDate().isEmpty() || module.getDeadlineTime().isEmpty()) {
+            return;
+        }
         module.setDeadline(LocalDateTime.parse((String.format("%sT%s:00",
                 module.getDeadlineDate(), module.getDeadlineTime()))));
-        moduleRepository.save(module);
     }
 
     /**
