@@ -49,12 +49,16 @@ public class WebDistributionService {
         for (Distribution distribution : distributionList) {
             List<WebDistributorApplicant> webDistributorApplicantList =
                     convertApplicantToWebDistributorApplicant(distribution.getEmployees(), distribution.getModule());
+            int[] hoursSet = getCountOfApplicantsPerHour(distribution);
             WebDistribution webDistribution = WebDistribution.builder()
                     .module(distribution.getModule().getName())
                     .id(distribution.getId() + "")
                     .hours7(distribution.getModule().getSevenHourLimit())
                     .hours9(distribution.getModule().getNineHourLimit())
                     .hours17(distribution.getModule().getSeventeenHourLimit())
+                    .hours7Set(hoursSet[0] + "")
+                    .hours9Set(hoursSet[1] + "")
+                    .hours17Set(hoursSet[2] + "")
                     .webDistributorApplicants(distributionService
                             .sort(webDistributorApplicantList, distribution.getModule().getName()))
                     .build();
@@ -67,11 +71,41 @@ public class WebDistributionService {
                 .hours7("0")
                 .hours9("0")
                 .hours17("0")
+                .hours7Set("0")
+                .hours9Set("0")
+                .hours17Set("0")
                 .id(-1 + "")
                 .webDistributorApplicants(webDistributorApplicantList)
                 .build();
         webDistributionList.add(webDistribution);
         return webDistributionList;
+    }
+
+    private int[] getCountOfApplicantsPerHour(final Distribution distribution) {
+        final int countOfHours = 3;
+        final int hours7 = 7;
+        final int hours9 = 9;
+        final int hours17 = 17;
+        int[] hoursSet = new int[countOfHours];
+        for (Applicant applicant : distribution.getEmployees()) {
+            int finalHours = getFinalHoursOfApplicant(applicant, distribution.getModule());
+            switch (finalHours) {
+                case hours7: hoursSet[0]++; break;
+                case hours9: hoursSet[1]++; break;
+                case hours17: hoursSet[2]++; break;
+                default: throw new IllegalStateException("Unexpected value: " + finalHours);
+            }
+        }
+        return hoursSet;
+    }
+
+    private int getFinalHoursOfApplicant(final Applicant applicant, final Module module) {
+        for (Application application : applicant.getApplications()) {
+            if (module.equals(application.getModule())) {
+                return application.getFinalHours();
+            }
+        }
+        return 0;
     }
 
     private List<WebDistributorApplicant> convertUnassignedApplicantsToWebDistributorApplicants(
