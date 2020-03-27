@@ -13,11 +13,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.time.Instant;
-
 
 @Setter
-@Builder(toBuilder = true, builderClassName = "ModuleBuilder")
+@Builder(toBuilder = true, builderClassName = "OrganizerBuilder")
 @EqualsAndHashCode
 @Getter
 @ToString(exclude = "id")
@@ -25,15 +23,10 @@ import java.time.Instant;
 @NoArgsConstructor
 @Entity
 @Table
-public class Module {
+public class Organizer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private String name;
-    private Instant deadline;
-    private String shortName;
-    private String profSerial;
-    private String sevenHourLimit;
-    private String nineHourLimit;
-    private String seventeenHourLimit;
+    private String phonenumber;
+    private String uniserial;
 }

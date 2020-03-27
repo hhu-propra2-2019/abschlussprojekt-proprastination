@@ -1,4 +1,4 @@
-package mops.services;
+package mops.services.dbServices;
 
 import mops.model.classes.Course;
 import mops.repositories.CourseRepository;

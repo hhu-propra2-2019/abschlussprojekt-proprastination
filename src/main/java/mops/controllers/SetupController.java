@@ -4,15 +4,16 @@ import mops.model.Account;
 import mops.model.classes.Applicant;
 import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebModule;
-import mops.services.ApplicantService;
-import mops.services.DeletionService;
-import mops.services.ModuleService;
-import mops.services.WebModuleService;
-import org.keycloak.KeycloakPrincipal;
+import mops.services.webServices.AccountGenerator;
+import mops.services.webServices.WebModuleService;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,19 +23,21 @@ import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
 @SessionScope
 @RequestMapping("/bewerbung2/setup")
 public class SetupController {
-    private WebModuleService webService;
+    private static final Logger LOGGER = LoggerFactory.getLogger(SetupController.class);
+    private final WebModuleService webService;
 
-    private ApplicantService applicantService;
+    private final ApplicantService applicantService;
 
-    private ModuleService moduleService;
+    private final ModuleService moduleService;
 
-    private DeletionService deletionService;
+    private final DeletionService deletionService;
 
     /**
      * Constructor
@@ -74,7 +77,7 @@ public class SetupController {
         if (token != null) {
             List<WebModule> modules = webService.getModules();
             model.addAttribute("modules", modules);
-            model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             model.addAttribute("module", Module.builder().build());
         }
         return "setup/setupMain";
@@ -86,13 +89,23 @@ public class SetupController {
      * @param model The Website model
      * @param oldName module name
      * @param module the module object with details
+     * @param bindingResult the result
      * @return redirects to index
      */
     @PostMapping("/setupMain")
     @Secured("ROLE_setup")
     public String postEditedModule(final KeycloakAuthenticationToken token, final Model model,
                                    @RequestParam("oldName") final String oldName,
-                                   final WebModule module) {
+                                   @Valid final WebModule module, final BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            bindingResult.getAllErrors().forEach(err -> {
+                LOGGER.info("ERROR {}", err.getDefaultMessage());
+            });
+            model.addAttribute("oldName", oldName);
+            model.addAttribute("module", module);
+            model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
+            return "/setup/modulBearbeiten";
+        }
         webService.update(module, oldName);
         return index(token, model);
     }
@@ -107,7 +120,7 @@ public class SetupController {
     @Secured("ROLE_setup")
     public String newModule(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
-            model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             model.addAttribute("Module", WebModule.builder().build());
         }
         return "setup/neuesModul";
@@ -118,12 +131,23 @@ public class SetupController {
      * @param token The KeycloakAuthentication
      * @param model The Website model
      * @param module wrapped Object with module details
+     * @param bindingResult the result of validating module
      * @return redirects to index
      */
     @PostMapping("/neuesModul")
     @Secured("ROLE_setup")
     public String postNewModule(final KeycloakAuthenticationToken token, final Model model,
-                                final WebModule module) {
+                                @Valid final WebModule module, final BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            bindingResult.getAllErrors().forEach(err -> {
+                LOGGER.info("ERROR {}", err.getDefaultMessage());
+            });
+            if (token != null) {
+                model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
+                model.addAttribute("Module", WebModule.builder().build());
+            }
+            return "setup/neuesModul";
+        }
         webService.save(module);
         return index(token, model);
     }
@@ -139,8 +163,9 @@ public class SetupController {
     @Secured("ROLE_setup")
     public String postEditModule(final KeycloakAuthenticationToken token, final Model model,
                                  final WebModule oldModule) {
+        model.addAttribute("oldName", oldModule.getName());
         model.addAttribute("module", oldModule);
-        model.addAttribute("account", createAccountFromPrincipal(token));
+        model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
         return "/setup/modulBearbeiten";
     }
 

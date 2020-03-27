@@ -4,6 +4,9 @@ import mops.model.classes.Applicant;
 import mops.model.classes.Application;
 import mops.model.classes.Distribution;
 import mops.model.classes.Module;
+import mops.services.dbServices.ApplicantService;
+import mops.services.dbServices.ApplicationService;
+import mops.services.dbServices.DbDistributionService;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -22,22 +25,22 @@ public class ZIPService {
     private PDFService pdfService;
     private ApplicantService applicantService;
     private ApplicationService applicationService;
-    private DistributionService distributionService;
+    private DbDistributionService dbDistributionService;
 
     /**
      *
      * @param pdfService
      * @param applicantService
      * @param applicationService
-     * @param distributionService
+     * @param dbDistributionService
      */
     public ZIPService(final PDFService pdfService, final ApplicantService applicantService,
                       final ApplicationService applicationService,
-                      final DistributionService distributionService) {
+                      final DbDistributionService dbDistributionService) {
         this.pdfService = pdfService;
         this.applicantService = applicantService;
         this.applicationService = applicationService;
-        this.distributionService = distributionService;
+        this.dbDistributionService = dbDistributionService;
     }
 
     /**
@@ -73,7 +76,7 @@ public class ZIPService {
         File file;
         String fileName;
         File tmpFile = null;
-        List<Distribution> distributions = distributionService.findAll();
+        List<Distribution> distributions = dbDistributionService.findAll();
         FileOutputStream fos = null;
         ZipOutputStream zipOS = null;
         try {

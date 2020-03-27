@@ -2,10 +2,13 @@ package mops.services;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,23 +19,30 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CSVServiceTest{
     @Autowired
-    CSVService service;
+    CSVService csvService;
 
     @AfterEach
-    void cleanTestCSV(){
+    void cleanTestCSV() {
         final Charset charset = StandardCharsets.UTF_8;
         try {
-            new FileWriter("src/test/java/mops/test.csv", charset).close();
+            new FileWriter(System.getProperty("user.dir") + "/csv/test.csv", charset).close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    @AfterAll
+    void deleteTestCSV() {
+        File file = new File(System.getProperty("user.dir") + "/csv/test.csv");
+        file.delete();
+    }
+
     @Test
     void readFromCSVTest() {
-        String csvName = "src/test/java/mops/test.csv";
+        String csvName = System.getProperty("user.dir") + "/csv/test.csv";
         String[] module1 = {"propra", "21"};
         List<String[]> data = new ArrayList<>();
         data.add(module1);
@@ -55,7 +65,7 @@ class CSVServiceTest{
 
     @Test
     void writeInCSVTest(){
-        String csvName = "src/test/java/mops/test.csv";
+        String csvName = System.getProperty("user.dir") + "/csv/test.csv";
         String[] module1 = {"propra","22"};
         List<String[]> data = new ArrayList<>();
         data.add(module1);
@@ -79,7 +89,7 @@ class CSVServiceTest{
     @Test
     void getCountriesTest() {
         List<String> countries;
-        String csvname = "src/main/resources/csv/countries.csv";
+        String csvname = System.getProperty("user.dir") + "/csv/countries.csv";
         List<String[]> data = CSVService.readFromCSV(csvname);
 
         countries = CSVService.getCountries();
@@ -108,7 +118,7 @@ class CSVServiceTest{
     @Test
     void getModulesTest() {
         List<String> modules;
-        String csvname = "src/main/resources/csv/module.csv";
+        String csvname = System.getProperty("user.dir") + "/csv/module.csv";
         List<String[]> data = CSVService.readFromCSV(csvname);
 
         modules = CSVService.getModules();
@@ -162,7 +172,7 @@ class CSVServiceTest{
     @Test
     void getCourses() {
         List<String> courses;
-        String csvname = "src/main/resources/csv/courses.csv";
+        String csvname = System.getProperty("user.dir") + "/csv/courses.csv";
         List<String[]> data = CSVService.readFromCSV(csvname);
 
         courses = CSVService.getCourses();
@@ -177,7 +187,7 @@ class CSVServiceTest{
     @Test
     void getSemesterTest() {
         List<String> semester;
-        String csvname = "src/main/resources/csv/semester.csv";
+        String csvname = System.getProperty("user.dir") + "/csv/semester.csv";
         List<String[]> data = CSVService.readFromCSV(csvname);
 
         semester = CSVService.getSemester();

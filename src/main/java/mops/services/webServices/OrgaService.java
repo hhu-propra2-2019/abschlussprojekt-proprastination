@@ -7,6 +7,9 @@ import mops.model.classes.Priority;
 import mops.model.classes.orgaWebClasses.WebList;
 import mops.model.classes.orgaWebClasses.OrgaApplication;
 import mops.model.classes.orgaWebClasses.WebListClass;
+import mops.services.dbServices.ApplicantService;
+import mops.services.dbServices.ApplicationService;
+import mops.services.dbServices.EvaluationService;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
@@ -67,7 +70,7 @@ public class OrgaService {
                 .id(application.getId())
                 .minHours(application.getMinHours())
                 .maxHours(application.getMaxHours())
-                .studentPriotiry(application.getPriority())
+                .studentPriority(application.getPriority())
                 .role(application.getRole())
                 .priority(BASEPRIORITY.getValue())
                 .finalHours(BASEHOURS)
@@ -130,11 +133,11 @@ public class OrgaService {
                         .application(application)
                         .build();
             }
-            Evaluation newEvaluatoin = evaluation.toBuilder()
+            Evaluation newEvaluation = evaluation.toBuilder()
                     .priority(Priority.get(eval.getPriority()))
                     .hours(eval.getFinalHours())
                     .build();
-            evaluationService.save(newEvaluatoin);
+            evaluationService.save(newEvaluation);
         });
     }
 }

@@ -8,6 +8,7 @@ RUN ./gradlew bootJar
 FROM openjdk:11-jre
 WORKDIR /mops
 COPY --from=BUILD /mopsBuild/build/libs/*.jar .
+COPY --from=BUILD /mopsBuild/csv/*.csv csv/
 COPY ./wait-for-it.sh .
 RUN chmod +x wait-for-it.sh
 ENTRYPOINT ./wait-for-it.sh -t 10 db:3306 -- java -jar mops.jar
