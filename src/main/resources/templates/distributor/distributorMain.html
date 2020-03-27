@@ -189,9 +189,7 @@
             var hours = el.value;
             var applicantId = el.dataset.applicantid;
             var distributionId = el.dataset.distributionid;
-        }
 
-        function saveHoursGet(distributionId, applicantId, hours) {
             $.ajax({
                 method:'GET',
                 url: "/bewerbung2/verteiler/saveHours/",
