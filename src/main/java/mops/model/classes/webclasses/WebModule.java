@@ -21,13 +21,13 @@ public class WebModule {
     @NotBlank
     private String profSerial;
     @NotBlank
-    @Pattern(regexp = "[0-9]+")
+    @Pattern(regexp = "0|([1-9][0-9]*)")
     private String sevenHourLimit;
     @NotBlank
-    @Pattern(regexp = "[0-9]+")
+    @Pattern(regexp = "0|([1-9][0-9]*)")
     private String nineHourLimit;
     @NotBlank
-    @Pattern(regexp = "[0-9]+")
+    @Pattern(regexp = "0|([1-9][0-9]*)")
     private String seventeenHourLimit;
 
     /**
