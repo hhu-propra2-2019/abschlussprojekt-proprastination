@@ -3,7 +3,6 @@ package mops.services.webServices;
 import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebModule;
 import mops.services.dbServices.ModuleService;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -11,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@EnableAutoConfiguration
 public class WebModuleService {
 
     private final ModuleService moduleService;
@@ -35,7 +33,7 @@ public class WebModuleService {
         List<Module> list = moduleService.getModules();
         List<WebModule> webList = new ArrayList<>();
         for (Module m: list) {
-            webList.add(toWebModule(m));
+            webList.add(moduleService.toWebModule(m));
         }
         return webList;
     }
@@ -48,7 +46,7 @@ public class WebModuleService {
     public void save(final WebModule webmodule) {
         webmodule.setDeadline(LocalDateTime.parse((String.format("%sT%s:00",
                 webmodule.getDeadlineDate(), webmodule.getDeadlineTime()))));
-        moduleService.save(webmodule.toModule());
+        moduleService.save(toModule(webmodule));
     }
     /**
      * saves an updated version of Module
@@ -57,7 +55,7 @@ public class WebModuleService {
      */
     public void update(final WebModule webmodule, final String oldName) {
         Module m = moduleService.findModuleByName(oldName);
-        Module updated = webmodule.toModule();
+        Module updated = toModule(webmodule);
         updated.setId(m.getId());
         moduleService.save(updated);
     }
@@ -77,21 +75,22 @@ public class WebModuleService {
     }
 
     /**
-     * Transfer Module into WebModule
-     * @param module
-     * @return WebModule
+     * Return WebModule as module
+     * @param webModule webmodule
+     * @return Module generated Module
      */
-    public WebModule toWebModule(final Module module) {
-        return WebModule.builder()
-                .name(module.getName())
-                .shortName(module.getShortName())
-                .profSerial(module.getProfSerial())
+
+    public Module toModule(final WebModule webModule) {
+        return Module.builder()
+                .name(webModule.getName())
+                .shortName(webModule.getShortName())
+                .profSerial(webModule.getProfSerial())
                 .deadlineDate(module.getDeadlineDate())
                 .deadlineTime(module.getDeadlineTime())
                 .deadline(module.getDeadline())
-                .sevenHourLimit(module.getSevenHourLimit())
-                .nineHourLimit(module.getNineHourLimit())
-                .seventeenHourLimit(module.getSeventeenHourLimit())
+                .sevenHourLimit(webModule.getSevenHourLimit())
+                .nineHourLimit(webModule.getNineHourLimit())
+                .seventeenHourLimit(webModule.getSeventeenHourLimit())
                 .build();
     }
 }

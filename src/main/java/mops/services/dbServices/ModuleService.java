@@ -1,6 +1,7 @@
 package mops.services.dbServices;
 
 import mops.model.classes.Module;
+import mops.model.classes.webclasses.WebModule;
 import mops.repositories.ModuleRepository;
 import org.springframework.stereotype.Service;
 
@@ -94,5 +95,21 @@ public class ModuleService {
      */
     public List<String> getModuleNames() {
         return moduleRepository.findAll().stream().map(Module::getName).collect(Collectors.toList());
+    }
+
+    /**
+     * Transfer Module into WebModule
+     * @param module
+     * @return WebModule
+     */
+    public WebModule toWebModule(final Module module) {
+        return WebModule.builder()
+                .name(module.getName())
+                .shortName(module.getShortName())
+                .profSerial(module.getProfSerial())
+                .sevenHourLimit(module.getSevenHourLimit())
+                .nineHourLimit(module.getNineHourLimit())
+                .seventeenHourLimit(module.getSeventeenHourLimit())
+                .build();
     }
 }
