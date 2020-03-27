@@ -60,11 +60,12 @@
                                required
                                class="form-control" placeholder="Zugeordnete Person (Unikennung)" th:field="*{profSerial}">
                     </div>
+                    <script>minimumDate();</script>
                     <div class="col">
                         <input type="text" name="deadlineDate" id="deadlineDate" onfocus="(this.type='date')"
-                               th:field="*{deadlineDate}" th:attr="value = *{deadlineDate}"
+                               th:field="*{deadlineDate}" th:attr="value = *{deadlineDate}" onclick="minimumDate()"
                                onblur="(this.type='text')" class="form-control" placeholder="Bewerbungsfrist (1976-04-01)"
-                               required pattern="[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])">
+                               required pattern="[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])" min="2020-01-01">
                         <div th:if="${#fields.hasErrors('deadlineDate')}" class="text-danger">
                             Bitte geben Sie eine gültige Bewerbungsfrist an.
                         </div>
@@ -98,7 +99,7 @@
                         <input type="text" name="deadlineTime" id="deadlineTime" onfocus="(this.type='time')"
                                th:field="*{deadlineTime}" th:attr="value = *{deadlineTime}"
                                onblur="(this.type='text')" class="form-control" placeholder="Bewerbungsfrist (09:41)"
-                               required pattern="(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9])">
+                               required pattern="(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9])" min="">
                         <div th:if="${#fields.hasErrors('deadlineTime')}" class="text-danger">
                             Bitte geben Sie eine gültige Zeit für die Bewerbungsfrist an.
                         </div>
@@ -108,7 +109,18 @@
         </div>
     </form>
     <div th:replace="${content} ? ${content}: ~{}"></div>
-</main>
+    <script>
+        function minimumDate() {
+            const todaysDate = new Date();
+            const year = todaysDate.getFullYear();
+            const month = ("0" + (todaysDate.getMonth() + 1)).slice(-2);
+            const day = ("0" + todaysDate.getDate()).slice(-2);
+            const minDate = (year + "-" + month + "-" + day);
 
+            const deadlineDate = document.getElementById("deadlineDate");
+            deadlineDate.setAttribute("min", minDate);
+        }
+    </script>
+</main>
 </body>
 </html>

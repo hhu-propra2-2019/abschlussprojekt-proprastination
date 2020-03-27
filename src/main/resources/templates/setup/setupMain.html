@@ -83,7 +83,7 @@
                 <div class="row">
                     <div class="col-6">
                         <div th:text="'Kurzform: &ensp;' + *{shortName}"></div>
-                        <span th:text="'Bewerbungsfrist: &ensp;' + *{deadlineDate}"></span><span th:text="*{deadlineTime}"></span>
+                        <span th:text="'Bewerbungsfrist: &ensp;' + *{deadlineDate}"></span><span th:text="'&ensp;' + *{deadlineTime}"></span>
                         <div th:text="'Zugeordnete Person (Unikennung): &ensp;' + *{profSerial}"></div>
                     </div>
                     <div class="col-6">
@@ -95,10 +95,14 @@
             </div>
         </div><br>
     </div>
-    <form th:action="@{alleModuleLoeschen}" th:method="POST" onsubmit="return confirm('Wollen Sie wirklich alle Module löschen?');">
-        <button class="btn btn-outline-danger btn-sm" type="submit"
-                style="position: relative; left: 90%; right: 0; bottom: 10%;"> Alle Module Löschen </button>
-    </form>
+    <div class="row">
+        <div class="col">
+        <form th:action="@{alleModuleLoeschen}" th:method="POST" onsubmit="return confirm('Wollen Sie wirklich alle Module löschen?');">
+                <button class="btn btn-outline-danger btn-sm text-right" type="submit"
+                        style="position: relative; left: 90%; right: 0; bottom: 10%;"> Alle Module Löschen </button>
+            </form>
+        </div>
+    </div>
     <div th:replace="${content} ? ${content}: ~{}"></div>
 </main>
 
