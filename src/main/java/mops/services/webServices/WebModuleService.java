@@ -48,7 +48,7 @@ public class WebModuleService {
     public void save(final WebModule webmodule) {
         webmodule.setDeadline(LocalDateTime.parse((String.format("%sT%s:00",
                 webmodule.getDeadlineDate(), webmodule.getDeadlineTime()))));
-        moduleRepository.save(webmodule.toModule());
+        moduleService.save(webmodule.toModule());
     }
     /**
      * saves an updated version of Module
