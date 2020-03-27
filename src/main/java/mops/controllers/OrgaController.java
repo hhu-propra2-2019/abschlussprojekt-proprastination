@@ -6,6 +6,9 @@ import mops.services.webServices.AccountGenerator;
 import mops.services.webServices.OrgaService;
 import mops.services.dbServices.OrganizerService;
 import mops.services.webServices.WebOrganizerService;
+import mops.services.ModuleService;
+import mops.services.OrgaService;
+import mops.services.OrganizerService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.security.access.annotation.Secured;
@@ -37,6 +40,7 @@ public class OrgaController {
     public OrgaController(final OrgaService orgaService, WebOrganizerService webOrganizerService) {
         this.orgaService = orgaService;
         this.webOrganizerService = webOrganizerService;
+
     }
 
     /**
@@ -73,12 +77,16 @@ public class OrgaController {
                            final Model model) {
         if (token != null) {
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
+            if (!token.getName().equals(moduleService.findById(Long.parseLong(id)).getProfSerial())) {
+                return "redirect:/bewerbung2/organisator/";
+            }
+            model.addAttribute("WebList", new WebListClass(orgaService.getAllListEntrys(id)));
         }
-        model.addAttribute("WebList", new WebListClass(orgaService.getAllListEntrys(id)));
         return "organizer/orgaOverview";
     }
 
     /**
+     * @param token token
      * @param applications WebListClass applications
      * @param id           module id
      * @param model        model
@@ -86,9 +94,13 @@ public class OrgaController {
      */
     @PostMapping("/{id}/")
     @Secured("ROLE_orga")
-    public String applicationInfoPost(@ModelAttribute final WebListClass applications,
+    public String applicationInfoPost(final KeycloakAuthenticationToken token,
+                                      @ModelAttribute final WebListClass applications,
                                       @PathVariable("id") final String id, final Model model) {
-        orgaService.saveEvaluations(applications);
+        if (token != null) {
+            model.addAttribute("account", createAccountFromPrincipal(token));
+            orgaService.saveEvaluations(applications);
+        }
         return "redirect:/bewerbung2/organisator/" + id + "/";
     }
 

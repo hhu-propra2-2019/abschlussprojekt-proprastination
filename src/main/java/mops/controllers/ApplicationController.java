@@ -126,6 +126,7 @@ public class ApplicationController {
         return "applicant/openAppl";
     }
 
+
     /**
      * The GetMapping for the personal data page
      *
