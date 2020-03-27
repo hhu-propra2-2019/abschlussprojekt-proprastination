@@ -3,10 +3,7 @@ package mops.services.dbServices;
 import mops.model.classes.*;
 import mops.model.classes.Module;
 import mops.repositories.ModuleRepository;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -34,13 +31,13 @@ class ApplicantServiceTest {
     Address address;
     Module module;
 
-    @AfterAll
+    @AfterEach
     void setdown() {
         applicantService.deleteAll();
         moduleRepository.deleteAll();
     }
 
-    @BeforeAll
+    @BeforeEach
     void setup() {
         module = Module.builder()
                 .deadline(Instant.ofEpochSecond(100l))
