@@ -139,5 +139,7 @@ class ApplicantServiceTest {
 
         Applicant resultApplicant = applicantService.findByUniserial(applicant.getUniserial());
         assertThat(resultApplicant.getApplications()).doesNotContain(application1);
+        assertThat(resultApplicant.getApplications()).contains(application2);
     }
+
 }
