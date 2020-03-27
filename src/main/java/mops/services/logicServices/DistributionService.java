@@ -105,13 +105,16 @@ public class DistributionService {
 
             for (Evaluation evaluation : sortedByOrgaPrio) {
 
-                if (checkIfModuleHasSpace(hours.length, maxHoursPerModule[moduleCount], countHoursPerModule[moduleCount])) {
+                if (checkIfModuleHasSpace(hours.length,
+                        maxHoursPerModule[moduleCount],
+                        countHoursPerModule[moduleCount])) {
 
                     Applicant applicant = applicantService.findByApplications(evaluation.getApplication());
 
                     for (int i = 0; i < hours.length; i++) {
 
-                        if (evaluation.getHours() == hours[i] && countHoursPerModule[moduleCount][i] < maxHoursPerModule[moduleCount][i]) {
+                        if (evaluation.getHours() == hours[i]
+                                && countHoursPerModule[moduleCount][i] < maxHoursPerModule[moduleCount][i]) {
                             applicantsPerModule[moduleCount].add(applicant);
                             saveChecked(applicant.getId() + "", "true");
                             allApplicants.remove(applicant);
@@ -145,14 +148,17 @@ public class DistributionService {
 
             for (int x = 0; x < numberOfPriorities; x++) {
 
-                if (checkIfModuleHasSpace(hours.length, maxHoursPerModule[moduleCount], countHoursPerModule[moduleCount])) {
+                if (checkIfModuleHasSpace(hours.length,
+                        maxHoursPerModule[moduleCount],
+                        countHoursPerModule[moduleCount])) {
 
                     for (Evaluation evaluation : sortedByOrgaPrio[x]) {
 
                         Applicant applicant = applicantService.findByApplications(evaluation.getApplication());
 
                         for (int i = 0; i < hours.length; i++) {
-                            if (evaluation.getHours() == hours[i] && countHoursPerModule[moduleCount][i] < maxHoursPerModule[moduleCount][i]) {
+                            if (evaluation.getHours() == hours[i]
+                                    && countHoursPerModule[moduleCount][i] < maxHoursPerModule[moduleCount][i]) {
                                 applicantsPerModule[moduleCount].add(applicant);
                                 allApplicants.remove(applicant);
                                 countHoursPerModule[moduleCount][i]++;
@@ -176,7 +182,9 @@ public class DistributionService {
      * @param countHoursPerModule
      * @return true if theres space
      */
-    private boolean checkIfModuleHasSpace(final int numberOfHours, final int[] maxHoursPerModule, final int[] countHoursPerModule) {
+    private boolean checkIfModuleHasSpace(final int numberOfHours,
+                                          final int[] maxHoursPerModule,
+                                          final int[] countHoursPerModule) {
 
         int allocatedStudents = 0;
         int sumOfStudentsToAllocate = 0;
