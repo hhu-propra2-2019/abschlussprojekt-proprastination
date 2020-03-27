@@ -3,6 +3,7 @@ package mops.controllers;
 import mops.model.Account;
 import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebModule;
+import mops.services.ModuleService;
 import mops.services.WebModuleService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
@@ -28,6 +29,9 @@ import java.util.List;
 public class SetupController {
     @Autowired
     private WebModuleService webService;
+
+    @Autowired
+    private ModuleService moduleService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationController.class);
 
@@ -76,7 +80,7 @@ public class SetupController {
             bindingResult.getAllErrors().forEach(err -> {
                 LOGGER.info("ERROR {}", err.getDefaultMessage());
             });
-            model.addAttribute("module", module);
+            model.addAttribute("module", moduleService.findModuleByName(oldName));
             model.addAttribute("account", createAccountFromPrincipal(token));
             return "/setup/modulBearbeiten";
         }
