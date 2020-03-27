@@ -147,21 +147,6 @@ public class ApplicationController {
         return "applicant/openAppl";
     }
 
-    /**
-     * The GetMapping for the personal data page
-     *
-     * @param token The KeycloakAuthentication
-     * @param model The Website model
-     * @return The HTML file rendered as a String
-     */
-    @GetMapping("/profil")
-    @Secured("ROLE_studentin")
-    public String personal(final KeycloakAuthenticationToken token, final Model model) {
-        if (token != null) {
-            model.addAttribute("account", createAccountFromPrincipal(token));
-        }
-        return "applicant/personal";
-    }
 
     /**
      * saves Applicant into database and waits for moduleinformation
