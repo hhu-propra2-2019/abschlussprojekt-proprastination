@@ -60,7 +60,7 @@ public class ApplicationServiceTest {
         module = Module.builder()
                 .deadline(Instant.ofEpochSecond(100l))
                 .name("howToBeEvil")
-                .profName("prodo111")
+                .profSerial("prodo111")
                 .build();
         application1 = Application.builder()
                 .priority(Priority.HIGH)
