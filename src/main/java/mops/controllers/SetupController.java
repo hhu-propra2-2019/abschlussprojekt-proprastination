@@ -6,6 +6,8 @@ import mops.services.webServices.AccountGenerator;
 import mops.services.webServices.WebModuleService;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +26,7 @@ import java.util.List;
 @RequestMapping("/bewerbung2/setup")
 public class SetupController {
 
- 
+    private static final Logger LOGGER = LoggerFactory.getLogger(SetupController.class);
     private final WebModuleService webService;
 
     /**
@@ -74,7 +76,7 @@ public class SetupController {
             });
             model.addAttribute("oldName", oldName);
             model.addAttribute("module", module);
-            model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             return "/setup/modulBearbeiten";
         }
         webService.update(module, oldName);
