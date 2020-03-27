@@ -29,20 +29,6 @@ class ModuleTest {
     }
 
     @Test
-    void toWebModule() {
-        WebModule webmodule = WebModule.builder()
-                .name("Programmier Praktikum")
-                .shortName("ProPra")
-                .profSerial("Jens")
-                .sevenHourLimit("2")
-                .nineHourLimit("7")
-                .seventeenHourLimit("1")
-                .build();
-
-        assertThat(module.toWebModule()).isEqualTo(webmodule);
-    }
-
-    @Test
     void setId() {
         module.setId(02);
 

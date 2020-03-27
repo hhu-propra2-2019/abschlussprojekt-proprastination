@@ -25,27 +25,6 @@ class WebModuleTest {
     }
 
     @Test
-    void toStringArray() {
-        String[] output = {"Programmier Praktikum", "ProPra", "Jens", "2", "7", "1"};
-        String[] moduleString = webmodule.toStringArray();
-        assertThat(moduleString).isEqualTo(output);
-    }
-
-    @Test
-    void toModule() {
-        Module module = Module.builder()
-                .name("Programmier Praktikum")
-                .shortName("ProPra")
-                .profSerial("Jens")
-                .sevenHourLimit("2")
-                .nineHourLimit("7")
-                .seventeenHourLimit("1")
-                .build();
-        Module m = webmodule.toModule();
-        assertThat(m).isEqualTo(module);
-    }
-
-    @Test
     void allArgsConstructorTest() {
         WebModule full = new WebModule("Magische Tränke", "MaTrä",
                 "Maggie Smith", "3",

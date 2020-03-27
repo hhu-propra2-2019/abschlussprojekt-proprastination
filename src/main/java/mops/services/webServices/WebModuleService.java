@@ -3,14 +3,12 @@ package mops.services.webServices;
 import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebModule;
 import mops.services.dbServices.ModuleService;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@EnableAutoConfiguration
 public class WebModuleService {
 
     private final ModuleService moduleService;
@@ -34,7 +32,7 @@ public class WebModuleService {
         List<Module> list = moduleService.getModules();
         List<WebModule> webList = new ArrayList<>();
         for (Module m: list) {
-            webList.add(toWebModule(m));
+            webList.add(moduleService.toWebModule(m));
         }
         return webList;
     }
@@ -71,31 +69,6 @@ public class WebModuleService {
      */
     public void deleteAll() {
         moduleService.deleteAll();
-    }
-
-    /**
-     * Transfer Module into WebModule
-     * @param module
-     * @return WebModule
-     */
-    public WebModule toWebModule(final Module module) {
-        return WebModule.builder()
-                .name(module.getName())
-                .shortName(module.getShortName())
-                .profSerial(module.getProfSerial())
-                .sevenHourLimit(module.getSevenHourLimit())
-                .nineHourLimit(module.getNineHourLimit())
-                .seventeenHourLimit(module.getSeventeenHourLimit())
-                .build();
-    }
-
-    /**
-     * @param module Module
-     * @return returns module as String Array
-     */
-    public String[] toStringArray(final Module module) {
-        return new String[]{module.getName(), module.getShortName(), module.getProfSerial(), module.getSevenHourLimit(),
-                module.getNineHourLimit(), module.getSeventeenHourLimit()};
     }
 
     /**

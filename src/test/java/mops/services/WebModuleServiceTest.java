@@ -2,19 +2,19 @@ package mops.services;
 
 import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebModule;
-import mops.repositories.ModuleRepository;
+import mops.services.dbServices.ModuleService;
+import mops.services.webServices.WebModuleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,9 +28,10 @@ import static org.mockito.Mockito.verify;
 class WebModuleServiceTest {
 
     @MockBean
-    ModuleRepository repo;
+    ModuleService moduleService;
 
     @Autowired
+    @InjectMocks
     private WebModuleService service;
 
     WebModule webmodule;
@@ -54,18 +55,23 @@ class WebModuleServiceTest {
         modules = new ArrayList<>();
         modules.add(webmodule);
 
-        Instant deadline = new Date(System.currentTimeMillis()).toInstant();
-        module = webmodule.toModule();
-        module.setId(01);
-        //module.setDeadline(deadline);
+        module = Module.builder()
+                .name("Programmier Praktikum")
+                .shortName("ProPra")
+                .profSerial("Jens")
+                .sevenHourLimit("2")
+                .nineHourLimit("3")
+                .seventeenHourLimit("2")
+                .build();
 
         List<Module> moduleList = new ArrayList<>();
         moduleList.add(module);
 
 
-        Mockito.when(repo.findAll()).thenReturn(moduleList);
-        Mockito.when(repo.findDistinctByName(anyString())).thenReturn(module);
-        Mockito.when(repo.findById(module.getId())).thenReturn(java.util.Optional.ofNullable(module));
+        Mockito.when(moduleService.getModules()).thenReturn(moduleList);
+        Mockito.when(moduleService.findModuleByName(anyString())).thenReturn(module);
+        Mockito.when(moduleService.findById(module.getId())).thenReturn(module);
+        Mockito.when(moduleService.toWebModule(module)).thenReturn(webmodule);
     }
 
     @Test
@@ -79,7 +85,7 @@ class WebModuleServiceTest {
     void save() {
         service.save(webmodule);
 
-        verify(repo, times(1)).save(webmodule.toModule());
+        verify(moduleService, times(1)).save(service.toModule(webmodule));
     }
 
     @Test
@@ -87,23 +93,36 @@ class WebModuleServiceTest {
         webmodule.setName("Zauberei");
 
         service.update(webmodule, "Programmier Praktikum");
-        List<WebModule> readModules = service.getModules();
 
-        verify(repo, times(1)).findDistinctByName("Programmier Praktikum");
-        verify(repo, times(1)).save(any(Module.class));
+        verify(moduleService, times(1)).findModuleByName("Programmier Praktikum");
+        verify(moduleService, times(1)).save(any(Module.class));
     }
 
     @Test
     void deleteOne() {
         service.deleteOne(webmodule.getName());
 
-        verify(repo, times(1)).deleteById(module.getId());
+        verify(moduleService, times(1)).deleteById(module.getId());
     }
 
     @Test
     void deleteAll() {
         service.deleteAll();
 
-        verify(repo, times(1)).deleteAll();
+        verify(moduleService, times(1)).deleteAll();
+    }
+
+    @Test
+    void toModule() {
+        Module module = Module.builder()
+                .name("Programmier Praktikum")
+                .shortName("ProPra")
+                .profSerial("Jens")
+                .sevenHourLimit("2")
+                .nineHourLimit("3")
+                .seventeenHourLimit("2")
+                .build();
+        Module m = service.toModule(webmodule);
+        assertThat(m).isEqualTo(module);
     }
 }
