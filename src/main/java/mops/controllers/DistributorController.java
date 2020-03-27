@@ -1,10 +1,8 @@
 package mops.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import mops.model.Account;
-import mops.model.classes.webclasses.WebDistribution;
-import mops.services.DistributionService;
-import org.keycloak.KeycloakPrincipal;
+import mops.services.logicServices.DistributionService;
+import mops.services.webServices.AccountGenerator;
+import mops.services.webServices.WebDistributionService;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -14,32 +12,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.annotation.SessionScope;
 
-import java.util.List;
-
 
 @SessionScope
 @Controller
 @RequestMapping("/bewerbung2/verteiler")
 public class DistributorController {
 
+    private final WebDistributionService webDistributionService;
     private final DistributionService distributionService;
 
     /**
      * Constructor
+     * @param webDistributionService
      * @param distributionService
      */
     @SuppressWarnings("checkstyle:HiddenField")
-    public DistributorController(final DistributionService distributionService) {
+    public DistributorController(final WebDistributionService webDistributionService,
+                                 final DistributionService distributionService) {
+        this.webDistributionService = webDistributionService;
         this.distributionService = distributionService;
-    }
-
-    private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
-        KeycloakPrincipal principal = (KeycloakPrincipal) token.getPrincipal();
-        return new Account(
-                principal.getName(),
-                principal.getKeycloakSecurityContext().getIdToken().getEmail(),
-                null,
-                token.getAccount().getRoles());
     }
 
 
@@ -52,11 +43,10 @@ public class DistributorController {
      */
     @GetMapping("/")
     @Secured("ROLE_verteiler")
-    public String index1(final KeycloakAuthenticationToken token, final Model model) throws JsonProcessingException {
+    public String index1(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
-            model.addAttribute("account", createAccountFromPrincipal(token));
-            List<WebDistribution> webDistributionList = distributionService.convertDistributionsToWebDistributions();
-            model.addAttribute("distributions", webDistributionList);
+            model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
+            model.addAttribute("distributions", webDistributionService.convertDistributionsToWebDistributions());
         }
         return "distributor/distributorMain";
     }
@@ -74,7 +64,7 @@ public class DistributorController {
                         @RequestParam("applicantId") final String applicantId,
                         final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
-            model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             distributionService.moveApplicant(applicantId, distributionId);
         }
     }
@@ -95,7 +85,7 @@ public class DistributorController {
                             final KeycloakAuthenticationToken token,
                             final Model model) {
         if (token != null) {
-            model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             distributionService.saveHours(applicantId, distributionId, hours);
         }
     }
@@ -109,12 +99,11 @@ public class DistributorController {
      */
     @GetMapping("/saveChecked/")
     @Secured("ROLE_verteiler")
-    public void saveChecked(
-            @RequestParam("applicantId") final String applicantId,
-            @RequestParam("checked") final String checked,
-            final KeycloakAuthenticationToken token, final Model model) {
+    public void saveChecked(@RequestParam("applicantId") final String applicantId,
+                            @RequestParam("checked") final String checked,
+                            final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
-            model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             distributionService.saveChecked(applicantId, checked);
         }
     }
@@ -129,7 +118,7 @@ public class DistributorController {
     @Secured("ROLE_verteiler")
     public String distribute(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
-            model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             distributionService.changeAllFinalHours();
             distributionService.distribute();
         }

@@ -1,6 +1,7 @@
 package mops.controllers;
 
-import mops.services.DistributeService;
+import mops.services.webServices.AccountGenerator;
+import mops.services.webServices.DistributeService;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -37,7 +38,7 @@ public class DistributeController {
     @PreAuthorize("hasAnyRole('ROLE_orga', 'ROLE_studentin', 'ROLE_verteiler', 'ROLE_setup')")
     public String index(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
-            model.addAttribute("account", distributeService.createAccountFromPrincipal(token));
+            model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             return distributeService.getRedirectForRole(token);
         }
         return "redirect:/error";
