@@ -76,7 +76,7 @@
                 </div>
                 <div class="card-body sneaky" id="div1" th:id="drop + ${distribution.id}" th:attr="data-distributionid=${distribution.id}" ondrop="drop(event, this)" ondragover="allowDrop(event)">
                     <div th:each="applicant: ${distribution.webDistributorApplicants}">
-                        <div class="card w-100 bg-light mb-1 border-primary" th:id="drag + ${applicant.id}" id="drag1"  th:attr="data-applicantId=${applicant.id}" draggable="true" ondragstart="drag(event, this)">
+                        <div class="card w-100 bg-light mb-1 border-primary" th:id="drag + ${applicant.id}" id="drag1"  th:attr="data-applicantId=${applicant.id}" draggable="true" ondragstart="drag(event)">
                             <div class="card-header" th:style="${applicant.distributorHours == '0' && distribution.id != '-1'} ? 'background-color: rgba(255, 0, 0, 0.51)' : (${applicant.checked} ? 'background-color: rgba(108, 179, 255, 0.51)')">
                                 <div class="row">
                                     <div class="col-7 text-left">
@@ -147,18 +147,27 @@
     </div>
 
     <script>
+        $("#distributeModal").keyup(function(event) {
+            if (event.keyCode === 13) {
+                $("#distributeButton").click();
+            }
+        });
+
+        $("#distributeButton").click(function() {
+            window.location.href = "/bewerbung2/verteiler/vorverteilen";
+        });
+
         $('#drag1').draggable({
             scroll: true,
             scrollSensivity: 40,
             scrollSpeed: 40
         })
-    </script>
-    <script>
+
         function allowDrop(ev) {
             ev.preventDefault();
         }
 
-        function drag(ev, el) {
+        function drag(ev) {
             ev.dataTransfer.setData("text", ev.target.id);
 
             ev.dataTransfer.setData("applicantId", ev.currentTarget.id);
@@ -239,30 +248,7 @@
             });
             reloadWithTurbolinks();
         }
-    </script>
-    <script>
-        $("#distributeModal").keyup(function(event) {
-            if (event.keyCode === 13) {
-                $("#distributeButton").click();
-            }
-        });
 
-        $("#distributeButton").click(function() {
-            window.location.href = "/bewerbung2/verteiler/vorverteilen";
-        });
-    </script>
-    <script>
-        $("#distributeModal").keyup(function(event) {
-            if (event.keyCode === 13) {
-                $("#distributeButton").click();
-            }
-        });
-
-        $("#distributeButton").click(function() {
-            window.location.href = "/bewerbung2/verteiler/vorverteilen";
-        });
-    </script>
-    <script>
         var reloadWithTurbolinks = (function () {
             var scrollPosition
 
@@ -280,29 +266,6 @@
 
             return reload
         })()
-
-        function post(path, params, method='post') {
-
-            // The rest of this code assumes you are not using a library.
-            // It can be made less wordy if you use one.
-            const form = document.createElement('form');
-            form.method = method;
-            form.action = path;
-
-            for (const key in params) {
-                if (params.hasOwnProperty(key)) {
-                    const hiddenField = document.createElement('input');
-                    hiddenField.type = 'hidden';
-                    hiddenField.name = key;
-                    hiddenField.value = params[key];
-
-                    form.appendChild(hiddenField);
-                }
-            }
-
-            document.body.appendChild(form);
-            form.submit();
-        }
     </script>
 </main>
 </body>
