@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -23,7 +22,6 @@ public class ZIPService {
     private PDFService pdfService;
     private ApplicantService applicantService;
     private ApplicationService applicationService;
-    private ModuleService moduleService;
     private DistributionService distributionService;
 
     /**
@@ -31,17 +29,39 @@ public class ZIPService {
      * @param pdfService
      * @param applicantService
      * @param applicationService
-     * @param moduleService
      * @param distributionService
      */
     public ZIPService(final PDFService pdfService, final ApplicantService applicantService,
-                      final ApplicationService applicationService, final ModuleService moduleService,
+                      final ApplicationService applicationService,
                       final DistributionService distributionService) {
         this.pdfService = pdfService;
         this.applicantService = applicantService;
         this.applicationService = applicationService;
-        this.moduleService = moduleService;
         this.distributionService = distributionService;
+    }
+
+    /**
+     * writes a file into a zipfile
+     *
+     * @param file
+     * @param zipStream
+     * @param fileName
+     * @throws IOException
+     */
+    public static void writeToZipFile(final File file,
+                                      final ZipOutputStream zipStream,
+                                      final String fileName) throws IOException {
+        final int b = 1024;
+        byte[] bytes = new byte[b];
+        int length;
+
+        try (FileInputStream fileInputStream = new FileInputStream(file)) {
+            ZipEntry zipEntry = new ZipEntry(fileName);
+            zipStream.putNextEntry(zipEntry);
+            while ((length = fileInputStream.read(bytes)) >= 0) {
+                zipStream.write(bytes, 0, length);
+            }
+        }
     }
 
     /**
@@ -49,16 +69,18 @@ public class ZIPService {
      *
      * @return Zip File
      */
-    public File getZipFileForAllDistributions() {
+    public File getZipFileForAllDistributions() throws IOException {
         File file;
         String fileName;
         File tmpFile = null;
         List<Distribution> distributions = distributionService.findAll();
+        FileOutputStream fos = null;
+        ZipOutputStream zipOS = null;
         try {
             tmpFile = File.createTempFile("bewerbung", ".zip");
             tmpFile.deleteOnExit();
-            FileOutputStream fos = new FileOutputStream(tmpFile);
-            ZipOutputStream zipOS = new ZipOutputStream(fos);
+            fos = new FileOutputStream(tmpFile);
+            zipOS = new ZipOutputStream(fos);
             for (Distribution distribution : distributions) {
                 for (Applicant applicant : distribution.getEmployees()) {
                     Optional<Application> application = applicant.getApplications().stream()
@@ -71,12 +93,15 @@ public class ZIPService {
                     }
                 }
             }
-            zipOS.close();
-            fos.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            if (zipOS != null) {
+                zipOS.close();
+            }
+            if (fos != null) {
+                fos.close();
+            }
         }
 
         return tmpFile;
@@ -84,10 +109,11 @@ public class ZIPService {
 
     /**
      * returns path for zipFile
+     *
      * @param modules
      * @return randomised zipPath
      */
-    public File getZipFileForModule(final List<Module> modules) {
+    public File getZipFileForModule(final List<Module> modules) throws IOException {
         File file;
         String fileName;
         Applicant applicant;
@@ -96,80 +122,27 @@ public class ZIPService {
         try {
             tmpFile = File.createTempFile("bewerbung", ".zip");
             tmpFile.deleteOnExit();
-            FileOutputStream fos = new FileOutputStream(tmpFile);
-            ZipOutputStream zipOS = new ZipOutputStream(fos);
+        } catch (Exception e) {
+            return null;
+        }
+        try (FileOutputStream fos = new FileOutputStream(tmpFile);
+             ZipOutputStream zipOS = new ZipOutputStream(fos)
+        ) {
+
             for (Module module : modules) {
                 applicationList = applicationService.findApplicationsByModule(module);
-                 for (Application application : applicationList) {
-                     applicant = applicantService.findByApplications(application);
-                     file = pdfService.generatePDF(application, applicant);
-                     fileName = (module.getName() + File.separator
-                             + applicant.getFirstName() + "_" + applicant.getSurname() + ".pdf");
-                     writeToZipFile(file, zipOS, fileName);
-                 }
+                for (Application application : applicationList) {
+                    applicant = applicantService.findByApplications(application);
+                    file = pdfService.generatePDF(application, applicant);
+                    fileName = (module.getName() + File.separator
+                            + applicant.getFirstName() + "_" + applicant.getSurname() + ".pdf");
+                    writeToZipFile(file, zipOS, fileName);
+                }
             }
-            zipOS.close();
-            fos.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         return tmpFile;
     }
-
-    /**
-     * @return zipPath
-     */
-    public File getAllZipFiles() {
-        List<Module> modules = moduleService.getModules();
-        File retZip = getZipFileForModule(modules);
-        return retZip;
-    }
-
-    /**
-     * writes a file into a zipfile
-     * @param file
-     * @param zipStream
-     * @param fileName
-     * @throws FileNotFoundException
-     * @throws IOException
-     */
-    public static void writeToZipFile(final File file,
-                                      final ZipOutputStream zipStream,
-                                      final String fileName) {
-        final int b = 1024;
-        byte[] bytes = new byte[b];
-        int length;
-        FileInputStream fileInputStream = null;
-        try {
-            fileInputStream = new FileInputStream(file);
-            ZipEntry zipEntry = new ZipEntry(fileName);
-            zipStream.putNextEntry(zipEntry);
-            while ((length = fileInputStream.read(bytes)) >= 0) {
-                zipStream.write(bytes, 0, length);
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (zipStream != null) {
-                try {
-                    zipStream.closeEntry();
-                    zipStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (fileInputStream != null) {
-                try {
-                    fileInputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-   }
 }

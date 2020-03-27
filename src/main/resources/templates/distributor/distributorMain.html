@@ -2,7 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       th:replace="~{mopslayout :: html(name='Verteilung', title='Optional: Verteilung', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}">
+
 <head>
+
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <title>Name des Subsystems</title>
@@ -11,6 +13,8 @@
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script src="/scroll-sneak.js"></script>
+        <script src="/turbolinks.js"></script>
     </th:block>
 </head>
 <body>
@@ -40,8 +44,8 @@
                         <div class="col-2"></div>
                         <div class="col-3">
                             <form th:action="@{/}" th:method="GET">
-                                <a class="btn btn-outline-primary"
-                                   th:href="@{/bewerbung2/pdf/zuteilungUebersicht}" type="submit"> Zu den Einstellungsbögen </a>
+                                <button class="btn btn-outline-primary"
+                                   th:href="@{/bewerbung2/pdf/uebersicht}" type="submit"> Zu den Einstellungsbögen </button>
                             </form>
                         </div>
                         <div class="col-2"></div>
@@ -58,18 +62,18 @@
                         Propra
                     </div>
                     <div class="col text-right">
-                        <div th:text="'7 Stunden: ' + ${distribution.hours7}">
-                            4
-                        </div>
-                        <div th:text="'9 Stunden: ' + ${distribution.hours9}">
-                            7
-                        </div>
-                        <div th:text="'17 Stunden: ' + ${distribution.hours17}">
-                            3
-                        </div>
+                            <div th:text="'7 Stunden: ' + ${distribution.hours7}">
+                                4
+                            </div>
+                            <div th:text="'9 Stunden: ' + ${distribution.hours9}">
+                                7
+                            </div>
+                            <div th:text="'17 Stunden: ' + ${distribution.hours17}">
+                                3
+                            </div>
                     </div>
                 </div>
-                <div class="card-body" id="div1" th:id="drop + ${distribution.id}" th:attr="data-distributionid=${distribution.id}" ondrop="drop(event, this)" ondragover="allowDrop(event)">
+                <div class="card-body sneaky" id="div1" th:id="drop + ${distribution.id}" th:attr="data-distributionid=${distribution.id}" ondrop="drop(event, this)" ondragover="allowDrop(event)">
                     <div th:each="applicant: ${distribution.webDistributorApplicants}">
                         <div class="card w-100 bg-light mb-1 border-primary" th:id="drag + ${applicant.id}" id="drag1"  th:attr="data-applicantId=${applicant.id}" draggable="true" ondragstart="drag(event, this)">
                             <div class="card-header" th:style="${applicant.distributorHours == '0' && distribution.id != '-1'} ? 'background-color: rgba(255, 0, 0, 0.51)' : (${applicant.checked} ? 'background-color: rgba(108, 179, 255, 0.51)')">
@@ -135,10 +139,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Abbrechen</button>
-                    <form th:action="@{/}" th:method="GET">
-                        <a class="btn btn-outline-primary" name="distribute"
-                           th:href="@{/bewerbung2/verteiler/vorverteilen}" type="submit"> Bestätigen </a>
-                    </form>
+                        <button class="btn btn-outline-primary" id="distributeButton" name="distribute"
+                            type="submit"> Bestätigen </button>
                 </div>
             </div>
         </div>
@@ -149,41 +151,73 @@
         $(".form-search-wrapper").remove()
     </script>
     <script>
+
+        (function() {
+            var sneaky = new ScrollSneak(location.hostname);
+            var sneakyList = document.getElementsByClassName("sneaky");
+            var len = sneakyList.length;
+            for(var i; i < len; i++) {
+                alert("test");
+                sneakyList[i].ondrop = sneaky.sneak;
+            }
+        })();
+
+        $('#drag1').draggable({
+            scroll: true,
+            scrollSensivity: 40,
+            scrollSpeed: 40
+        })
+    </script>
+    <script>
         function allowDrop(ev) {
             ev.preventDefault();
         }
 
         function drag(ev, el) {
             ev.dataTransfer.setData("text", ev.target.id);
+
             ev.dataTransfer.setData("applicantId", ev.currentTarget.id);
-            var help = el.dataset.applicantid;
         }
 
         function drop(ev, el) {
             ev.preventDefault();
             var data = ev.dataTransfer.getData("text");
+            el.appendChild(document.getElementById(data));
+
             var applicantElId = ev.dataTransfer.getData("applicantId");
             var applicantEl = document.getElementById(applicantElId);
             var applicantId = applicantEl.dataset.applicantid;
-            el.appendChild(document.getElementById(data));
             var distributorId = el.dataset.distributionid;
-
-            window.location.href = "/bewerbung2/verteiler/" + distributorId + "/" + applicantId + "/"
+            var targetLocation = "/bewerbung2/verteiler/" + distributorId + "/" + applicantId + "/";
+            Turbolinks.visit(targetLocation)
         }
 
         function saveHours(el) {
             var hour = el.value;
             var applicantId = el.dataset.applicantid;
             var distributionId = el.dataset.distributionid;
-            window.location.href = "/bewerbung2/verteiler/saveHours/" + distributionId + "/" + applicantId + "/" + hour + "/"
+            var targetLocation = "/bewerbung2/verteiler/saveHours/" + distributionId + "/" + applicantId + "/" + hour + "/";
+            Turbolinks.visit(targetLocation)
         }
 
         function saveChecked(el) {
             var checked = el.checked;
             var applicantId = el.dataset.applicantid;
-            window.location.href = "/bewerbung2/verteiler/saveChecked/" + applicantId + "/" + checked + "/"
+            var targetLocation = "/bewerbung2/verteiler/saveChecked/" + applicantId + "/" + checked + "/";
+            Turbolinks.visit(targetLocation)
         }
+    </script>
+    <script>
+        $("#distributeModal").keyup(function(event) {
+            if (event.keyCode === 13) {
+                $("#distributeButton").click();
+            }
+        });
 
+        $("#distributeButton").click(function() {
+            var targetLocation = "/bewerbung2/verteiler/vorverteilen";
+            Turbolinks.visit(targetLocation)
+        });
     </script>
 </main>
 </body>

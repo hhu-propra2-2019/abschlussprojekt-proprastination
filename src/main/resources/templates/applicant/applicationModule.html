@@ -151,7 +151,8 @@
                                 </label> <br>
                                 <select class="form-control" id="priority" name="priority" th:field="*{priority}">
                                     <option th:each="module : ${T(mops.model.classes.Priority).values()}"
-                                            th:text="${module.label}" th:value="${module}">++
+                                            th:text="${module.label}" th:unless="${module.value} == 4"
+                                            th:value="${module}">++
                                     </option>
                                 </select> <br>
                             </div>

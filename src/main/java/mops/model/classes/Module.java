@@ -36,25 +36,22 @@ public class Module {
     private String name;
     private Instant deadline;
     private String shortName;
-    private String profName;
+    private String profSerial;
     private String sevenHourLimit;
     private String nineHourLimit;
     private String seventeenHourLimit;
-    private String hourLimit;
     /**
      * Transfer Module into WebModule
      * @return WebModule
      */
     public WebModule toWebModule() {
-        WebModule m = WebModule.builder()
+        return WebModule.builder()
                 .name(this.name)
                 .shortName(this.shortName)
-                .profName(this.profName)
+                .profSerial(this.profSerial)
                 .sevenHourLimit(this.sevenHourLimit)
                 .nineHourLimit(this.nineHourLimit)
                 .seventeenHourLimit(this.seventeenHourLimit)
-                .hourLimit(this.hourLimit)
                 .build();
-        return m;
     }
 }
