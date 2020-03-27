@@ -283,7 +283,7 @@ public class ApplicationController {
                                @ModelAttribute("applicant1") final Applicant applicant1) {
         if (token != null) {
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
-            model.addAttribute("applicant", applicantService.findByUniserial(token.getName())));        //?!?! WHAT IS DIS
+            model.addAttribute("applicant", applicantService.findByUniserial(token.getName()));        //?!?! WHAT IS DIS
             studentService.updateApplicantWithoutChangingApplications(applicant1);
         }
         return "applicant/applicationOverview";
