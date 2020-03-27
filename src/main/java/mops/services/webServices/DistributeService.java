@@ -1,7 +1,5 @@
-package mops.services;
+package mops.services.webServices;
 
-import mops.model.Account;
-import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,21 +17,6 @@ public class DistributeService {
             }
         }
         return false;
-    }
-
-    /**
-     * Method for creating an Account
-     *
-     * @param token The KeycloakAuthentication
-     * @return The Users Account
-     */
-    public Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
-        KeycloakPrincipal principal = (KeycloakPrincipal) token.getPrincipal();
-        return new Account(
-                principal.getName(),
-                principal.getKeycloakSecurityContext().getIdToken().getEmail(),
-                null,
-                token.getAccount().getRoles());
     }
 
     /**

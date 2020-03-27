@@ -1,4 +1,4 @@
-package mops.services;
+package mops.services.webServices;
 
 import mops.model.classes.Address;
 import mops.model.classes.Applicant;
@@ -10,6 +10,8 @@ import mops.model.classes.webclasses.WebAddress;
 import mops.model.classes.webclasses.WebApplicant;
 import mops.model.classes.webclasses.WebApplication;
 import mops.model.classes.webclasses.WebCertificate;
+import mops.services.dbServices.ApplicantService;
+import mops.services.dbServices.ModuleService;
 import org.keycloak.adapters.OidcKeycloakAccount;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -194,6 +196,9 @@ public class StudentService {
      * @return Set of Modules.
      */
     public List<Module> getAllNotfilledModules(final Applicant applicant, final List<Module> modules) {
+        if (applicant == null) {
+            return modules;
+        }
         for (Application app : applicant.getApplications()) {
             modules.remove(app.getModule());
         }

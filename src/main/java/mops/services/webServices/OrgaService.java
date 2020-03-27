@@ -1,4 +1,4 @@
-package mops.services;
+package mops.services.webServices;
 
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
@@ -7,6 +7,9 @@ import mops.model.classes.Priority;
 import mops.model.classes.orgaWebClasses.WebList;
 import mops.model.classes.orgaWebClasses.OrgaApplication;
 import mops.model.classes.orgaWebClasses.WebListClass;
+import mops.services.dbServices.ApplicantService;
+import mops.services.dbServices.ApplicationService;
+import mops.services.dbServices.EvaluationService;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
@@ -67,13 +70,13 @@ public class OrgaService {
                 .id(application.getId())
                 .minHours(application.getMinHours())
                 .maxHours(application.getMaxHours())
-                .studentPriotiry(application.getPriority())
+                .studentPriority(application.getPriority())
                 .role(application.getRole())
-                .priority(BASEPRIORITY)
+                .priority(BASEPRIORITY.getValue())
                 .finalHours(BASEHOURS)
                 .build();
         evaluation.ifPresent(eval -> {
-            webList.setPriority(eval.getPriority());
+            webList.setPriority(eval.getPriority().getValue());
             webList.setFinalHours(eval.getHours());
         });
         return webList;
@@ -125,11 +128,11 @@ public class OrgaService {
         evaluations.getApplications().forEach(eval -> {
             Application application = applicationService.findById(eval.getId());
             Evaluation evaluation = evaluationService.findByApplication(application);
-            Evaluation newEvaluatoin = evaluation.toBuilder()
-                    .priority(eval.getPriority())
+            Evaluation newEvaluation = evaluation.toBuilder()
+                    .priority(Priority.get(eval.getPriority()))
                     .hours(eval.getFinalHours())
                     .build();
-            evaluationService.save(newEvaluatoin);
+            evaluationService.save(newEvaluation);
         });
     }
 }

@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class EvaluationTest {
     Application application;
@@ -76,7 +78,15 @@ class EvaluationTest {
 
         assertThat(evaluation).isEqualTo(evaluation2);
         assertThat(evaluation).isNotEqualTo(evaluation3);
+    }
 
+    @Test
+    void testNoArgsConstructor() {
+        Evaluation emptyEvaluation = new Evaluation();
 
+        assertNull(emptyEvaluation.getApplication());
+        assertNull(emptyEvaluation.getComment());
+        assertEquals(0, emptyEvaluation.getHours());
+        assertNull(emptyEvaluation.getPriority());
     }
 }

@@ -13,8 +13,8 @@ import mops.model.classes.Role;
 @Data
 public class WebList {
     private long id;
-    private Priority priority;
-    private Priority studentPriotiry;
+    private int priority;
+    private Priority studentPriority;
     private Role role;
     private int finalHours;
     private double grade;

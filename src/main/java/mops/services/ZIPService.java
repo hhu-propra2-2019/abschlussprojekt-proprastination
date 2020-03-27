@@ -4,6 +4,9 @@ import mops.model.classes.Applicant;
 import mops.model.classes.Application;
 import mops.model.classes.Distribution;
 import mops.model.classes.Module;
+import mops.services.dbServices.ApplicantService;
+import mops.services.dbServices.ApplicationService;
+import mops.services.dbServices.DbDistributionService;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -22,25 +25,22 @@ public class ZIPService {
     private PDFService pdfService;
     private ApplicantService applicantService;
     private ApplicationService applicationService;
-    private ModuleService moduleService;
-    private DistributionService distributionService;
+    private DbDistributionService dbDistributionService;
 
     /**
      *
      * @param pdfService
      * @param applicantService
      * @param applicationService
-     * @param moduleService
-     * @param distributionService
+     * @param dbDistributionService
      */
     public ZIPService(final PDFService pdfService, final ApplicantService applicantService,
-                      final ApplicationService applicationService, final ModuleService moduleService,
-                      final DistributionService distributionService) {
+                      final ApplicationService applicationService,
+                      final DbDistributionService dbDistributionService) {
         this.pdfService = pdfService;
         this.applicantService = applicantService;
         this.applicationService = applicationService;
-        this.moduleService = moduleService;
-        this.distributionService = distributionService;
+        this.dbDistributionService = dbDistributionService;
     }
 
     /**
@@ -49,7 +49,6 @@ public class ZIPService {
      * @param file
      * @param zipStream
      * @param fileName
-     * @throws FileNotFoundException
      * @throws IOException
      */
     public static void writeToZipFile(final File file,
@@ -77,7 +76,7 @@ public class ZIPService {
         File file;
         String fileName;
         File tmpFile = null;
-        List<Distribution> distributions = distributionService.findAll();
+        List<Distribution> distributions = dbDistributionService.findAll();
         FileOutputStream fos = null;
         ZipOutputStream zipOS = null;
         try {
@@ -148,14 +147,5 @@ public class ZIPService {
         }
 
         return tmpFile;
-    }
-
-    /**
-     * @return zipPath
-     */
-    public File getAllZipFiles() throws IOException {
-        List<Module> modules = moduleService.getModules();
-        File retZip = getZipFileForModule(modules);
-        return retZip;
     }
 }

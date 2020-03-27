@@ -1,12 +1,10 @@
 package mops.controllers;
 
-import mops.model.Account;
-import mops.model.classes.Module;
-import mops.model.classes.orgaWebClasses.WebList;
 import mops.model.classes.orgaWebClasses.WebListClass;
-import mops.services.ModuleService;
-import mops.services.OrgaService;
-import org.keycloak.KeycloakPrincipal;
+import mops.services.dbServices.ModuleService;
+import mops.services.webServices.AccountGenerator;
+import mops.services.webServices.OrgaService;
+import mops.services.webServices.WebOrganizerService;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -16,38 +14,31 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.annotation.SessionScope;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @SessionScope
 @Controller
 @RequestMapping("/bewerbung2/organisator")
 public class OrgaController {
 
-    private final ModuleService moduleService;
     private final OrgaService orgaService;
+    private final WebOrganizerService webOrganizerService;
+    private final ModuleService moduleService;
 
     /**
      * Lets Spring inject the services
-     *
-     * @param moduleService moduleService
      * @param orgaService   orgaService
+     * @param webOrganizerService
+     * @param moduleService moduleservice
      */
     @SuppressWarnings("checkstyle:HiddenField")
-    public OrgaController(final ModuleService moduleService, final OrgaService orgaService) {
-        this.moduleService = moduleService;
+    public OrgaController(final OrgaService orgaService, final WebOrganizerService webOrganizerService,
+                          final ModuleService moduleService) {
         this.orgaService = orgaService;
-    }
-
-    private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
-        KeycloakPrincipal principal = (KeycloakPrincipal) token.getPrincipal();
-        return new Account(
-                principal.getName(),
-                principal.getKeycloakSecurityContext().getIdToken().getEmail(),
-                null,
-                token.getAccount().getRoles());
+        this.webOrganizerService = webOrganizerService;
+        this.moduleService = moduleService;
     }
 
     /**
@@ -62,14 +53,9 @@ public class OrgaController {
     @Secured("ROLE_orga")
     public String index(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
-            model.addAttribute("account", createAccountFromPrincipal(token));
-            List<Module> modules = new ArrayList<>();
-            for (Module module : moduleService.getModules()) {
-                if (module.getProfSerial().equals(token.getName())) {
-                    modules.add(module);
-                }
-            }
-            model.addAttribute("modules", modules);
+            model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
+            model.addAttribute("modules", webOrganizerService.getOrganizerModulesByName(token.getName()));
+            model.addAttribute("organizer", webOrganizerService.getOrganizerOrNewOrganizer(token.getName()));
         }
 
         return "organizer/orgaMain";
@@ -88,15 +74,17 @@ public class OrgaController {
     public String overview(@PathVariable("id") final String id, final KeycloakAuthenticationToken token,
                            final Model model) {
         if (token != null) {
-            model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
+            if (!token.getName().equals(moduleService.findById(Long.parseLong(id)).getProfSerial())) {
+                return "redirect:/bewerbung2/organisator/";
+            }
+            model.addAttribute("WebList", new WebListClass(orgaService.getAllListEntrys(id)));
         }
-        List<WebList> applications = orgaService.getAllListEntrys(id);
-        WebListClass webListClass = new WebListClass(applications);
-        model.addAttribute("WebList", webListClass);
         return "organizer/orgaOverview";
     }
 
     /**
+     * @param token token
      * @param applications WebListClass applications
      * @param id           module id
      * @param model        model
@@ -104,11 +92,33 @@ public class OrgaController {
      */
     @PostMapping("/{id}/")
     @Secured("ROLE_orga")
-    public String applicationInfoPost(@ModelAttribute final WebListClass applications,
+    public String applicationInfoPost(final KeycloakAuthenticationToken token,
+                                      @ModelAttribute final WebListClass applications,
                                       @PathVariable("id") final String id, final Model model) {
-        orgaService.saveEvaluations(applications);
+        if (token != null) {
+            model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
+            orgaService.saveEvaluations(applications);
+        }
         return "redirect:/bewerbung2/organisator/" + id + "/";
     }
+
+    /**
+     * Post mapping for saving edited phone number
+     * @param token The KeycloakAuthentication
+     * @param model The Website model
+     * @param phone The new phone number
+     * @return redirects to orgaMain
+     */
+    @PostMapping("/")
+    @Secured("ROLE_orga")
+    public String postEditedModule(final KeycloakAuthenticationToken token, final Model model,
+                                   @RequestParam("phone") final String phone) {
+        if (token != null) {
+            webOrganizerService.changePhonenumber(token.getName(), phone);
+        }
+        return "redirect:/bewerbung2/organisator/";
+    }
+
 
     /**
      * Needed to display additional information about each application on the overview page.

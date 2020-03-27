@@ -84,7 +84,7 @@
                     </tr>
                     <tr>
                         <td scope="col" height="60" class="align-middle">Telefon</td>
-                        <td scope="col" height="60" class="align-middle">0123/456789</td>
+                        <td scope="col" height="60" class="align-middle" th:text="${organizer.phonenumber}">0123/456789</td>
                         <td height="60" class="align-middle">
                             <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#editModal">Bearbeiten</button>
                         </td>
@@ -93,16 +93,19 @@
                         <div class="modal-dialog modal-dialog-scrollable" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
+                                    <h2 class="modal-title">Telefonnummer bearbeiten</h2>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <div class="modal-body">
-                                    <textarea autofocus type="text" name="phone" id="phone" class="form-control" placeholder="Telefonnummer"></textarea>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Speichern</button>
-                                </div>
+                                <form th:action="@{/bewerbung2/organisator/}" th:method="POST">
+                                    <div class="modal-body">
+                                        <input autofocus type="text" name="phone" id="phone" class="form-control" placeholder="Telefonnummer">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-outline-primary" type="submit"> Speichern </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>

@@ -1,8 +1,9 @@
-package mops.services;
+package mops.services.dbServices;
 
 import mops.model.classes.*;
 import mops.model.classes.Module;
 import mops.repositories.ModuleRepository;
+import mops.services.dbServices.ApplicantService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

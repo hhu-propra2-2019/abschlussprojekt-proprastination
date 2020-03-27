@@ -1,4 +1,4 @@
-package mops.services;
+package mops.services.logicServices;
 
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
@@ -6,24 +6,25 @@ import mops.model.classes.Application.ApplicationBuilder;
 import mops.model.classes.Distribution;
 import mops.model.classes.Evaluation;
 import mops.model.classes.Module;
-import mops.model.classes.webclasses.WebDistribution;
 import mops.model.classes.webclasses.WebDistributorApplicant;
 import mops.model.classes.webclasses.WebDistributorApplication;
-import mops.repositories.DistributionRepository;
+import mops.services.dbServices.DbDistributionService;
+import mops.services.dbServices.EvaluationService;
+import mops.services.dbServices.ModuleService;
+import mops.services.dbServices.ApplicantService;
+import mops.services.dbServices.ApplicationService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class DistributionService {
 
-    private DistributionRepository distributionRepository;
+    private DbDistributionService dbDistributionService;
     private ModuleService moduleService;
     private ApplicantService applicantService;
     private ApplicationService applicationService;
@@ -32,19 +33,19 @@ public class DistributionService {
     /**
      * Injects Services and repositories
      *
-     * @param distributionRepository the injected repository
+     * @param dbDistributionService the injected service
      * @param moduleService          the services that manages modules
      * @param applicantService       the services that manages applicants
      * @param applicationService     the services that manages applications
      * @param evaluationService      the services that manages evaluations
      */
     @SuppressWarnings("checkstyle:HiddenField")
-    public DistributionService(final DistributionRepository distributionRepository,
+    public DistributionService(final DbDistributionService dbDistributionService,
                                final ModuleService moduleService,
                                final ApplicantService applicantService,
                                final ApplicationService applicationService,
                                final EvaluationService evaluationService) {
-        this.distributionRepository = distributionRepository;
+        this.dbDistributionService = dbDistributionService;
         this.moduleService = moduleService;
         this.applicantService = applicantService;
         this.applicationService = applicationService;
@@ -56,14 +57,14 @@ public class DistributionService {
      */
     @PostConstruct
     public void setup() {
-        distributionRepository.deleteAll();
+        dbDistributionService.deleteAll();
     }
 
     /**
      * Dummy functions that assignes applicants to Distributions
      */
     public void assign() {
-        distributionRepository.save(Distribution.builder()
+        dbDistributionService.save(Distribution.builder()
                 .employees(applicantService.findAll())
                 .build());
     }
@@ -84,7 +85,7 @@ public class DistributionService {
         int[][] maxHoursPerModule = new int[modules.size()][numberOfHours];
         int[][] countHoursPerModule = new int[modules.size()][numberOfHours];
         int moduleCount = 0;
-        distributionRepository.deleteAll();
+        dbDistributionService.deleteAll();
         for (Module module : modules) {
             List<Evaluation> evaluations = new LinkedList<>();
             List<Application> preApplications = applicationService.findApplicationsByModule(module);
@@ -210,7 +211,7 @@ public class DistributionService {
                     }
                 }
             }
-            distributionRepository.save(Distribution.builder()
+            dbDistributionService.save(Distribution.builder()
                     .employees(applicantsPerModule[moduleCount])
                     .module(module)
                     .build());
@@ -229,7 +230,6 @@ public class DistributionService {
         applicationService.save(application);
     }
 
-
     /**
      * changes all FinalHours to the organizers wish
      */
@@ -242,128 +242,12 @@ public class DistributionService {
     }
 
     /**
-     * Finds the Distribution of a model
-     *
-     * @param module the model
-     * @return List of Distributions
+     * -
+     * @return -
      */
-    public Distribution findByModule(final Module module) {
-        return distributionRepository.findByModule(module);
-    }
-
-    /**
-     * Finds all Distributions
-     *
-     * @return List of Distributions
-     */
-    public List<Distribution> findAll() {
-        return distributionRepository.findAll();
-    }
-
-    /**
-     * Converts Distributions to Web Distributions
-     * @return List of WebDistributions
-     */
-
-    public List<WebDistribution> convertDistributionsToWebDistributions() {
-        List<WebDistribution> webDistributionList = new ArrayList<>();
-        List<Distribution> distributionList = findAll();
-        for (Distribution distribution : distributionList) {
-            List<WebDistributorApplicant> webDistributorApplicantList =
-                    convertApplicantToWebDistributorApplicant(distribution.getEmployees(), distribution.getModule());
-            WebDistribution webDistribution = WebDistribution.builder()
-                    .module(distribution.getModule().getName())
-                    .id(distribution.getId() + "")
-                    .hours7(distribution.getModule().getSevenHourLimit())
-                    .hours9(distribution.getModule().getNineHourLimit())
-                    .hours17(distribution.getModule().getSeventeenHourLimit())
-                    .webDistributorApplicants(sort(webDistributorApplicantList, distribution.getModule().getName()))
-                    .build();
-            webDistributionList.add(webDistribution);
-        }
-        List<WebDistributorApplicant> webDistributorApplicantList =
-                convertUnassignedApplicantsToWebDistributorApplicants(findAllUnassigned());
-        WebDistribution webDistribution = WebDistribution.builder()
-                .module("Nicht Zugeteilt")
-                .hours7("0")
-                .hours9("0")
-                .hours17("0")
-                .id(-1 + "")
-                .webDistributorApplicants(webDistributorApplicantList)
-                .build();
-        webDistributionList.add(webDistribution);
-        return webDistributionList;
-    }
-
-    private List<WebDistributorApplicant> convertUnassignedApplicantsToWebDistributorApplicants(
-            final List<Applicant> applicants) {
-        List<WebDistributorApplicant> webDistributorApplicantList = new ArrayList<>();
-        for (Applicant applicant : applicants) {
-            Set<Application> applicationSet = applicant.getApplications();
-            List<WebDistributorApplication> webDistributorApplicationList =
-                    createWebDistributorApplications(applicationSet);
-            WebDistributorApplicant webDistributorApplicant = WebDistributorApplicant.builder()
-                    .username(applicant.getUniserial())
-                    .id(applicant.getId() + "")
-                    .type(getTypeOfApplicant(applicant))
-                    .checked(applicant.isChecked())
-                    .fullName(applicant.getFirstName() + " " + applicant.getSurname())
-                    .webDistributorApplications(webDistributorApplicationList)
-                    .distributorHours("0")
-                    .build();
-            webDistributorApplicantList.add(webDistributorApplicant);
-        }
-        return webDistributorApplicantList;
-    }
-
-    private List<WebDistributorApplicant> convertApplicantToWebDistributorApplicant(
-            final List<Applicant> applicantList, final Module module) {
-        List<WebDistributorApplicant> webDistributorApplicantList = new ArrayList<>();
-        for (Applicant applicant : applicantList) {
-            Set<Application> applicationSet = applicant.getApplications();
-            List<WebDistributorApplication> webDistributorApplicationList =
-                    createWebDistributorApplications(applicationSet);
-            int finalHours = 0;
-            for (Application application : applicationSet) {
-                if (application.getModule().equals(module)) {
-                    finalHours = application.getFinalHours();
-                }
-            }
-            WebDistributorApplicant webDistributorApplicant = WebDistributorApplicant.builder()
-                    .username(applicant.getUniserial())
-                    .id(applicant.getId() + "")
-                    .type(getTypeOfApplicant(applicant))
-                    .checked(applicant.isChecked())
-                    .fullName(applicant.getFirstName() + " " + applicant.getSurname())
-                    .webDistributorApplications(webDistributorApplicationList)
-                    .distributorHours(finalHours + "")
-                    .build();
-            webDistributorApplicantList.add(webDistributorApplicant);
-        }
-        return webDistributorApplicantList;
-    }
-
-    private List<WebDistributorApplication> createWebDistributorApplications(final Set<Application> applicationSet) {
-        List<WebDistributorApplication> webDistributorApplicationList = new ArrayList<>();
-        for (Application application : applicationSet) {
-            Evaluation evaluation = evaluationService.findByApplication(application);
-            WebDistributorApplication webDistributorApplication = WebDistributorApplication.builder()
-                    .applicantPriority(application.getPriority())
-                    .minHours(application.getMinHours() + "")
-                    .maxHours(application.getMaxHours() + "")
-                    .module(application.getModule().getName())
-                    .moduleShort(application.getModule().getShortName())
-                    .organizerHours(evaluation.getHours() + "")
-                    .organizerPriority(evaluation.getPriority())
-                    .build();
-            webDistributorApplicationList.add(webDistributorApplication);
-        }
-        return  webDistributorApplicationList;
-    }
-
-    private List<Applicant> findAllUnassigned() {
+    public List<Applicant> findAllUnassigned() {
         List<Applicant> allApplicants = applicantService.findAll();
-        List<Distribution> allDistributions = findAll();
+        List<Distribution> allDistributions = dbDistributionService.findAll();
         List<Applicant> distributedApplicants = new LinkedList<>();
 
         for (Distribution distribution : allDistributions) {
@@ -379,15 +263,15 @@ public class DistributionService {
      * @param distributionId the id of the new distribution
      */
     public void moveApplicant(final String applicantId, final String distributionId) {
-        Optional<Distribution> newDistribution = distributionRepository.findById(Long.parseLong(distributionId));
+        Optional<Distribution> newDistribution = dbDistributionService.findById(Long.parseLong(distributionId));
         Applicant applicant = applicantService.findById(Long.parseLong(applicantId));
         if (newDistribution.isPresent()) {
-            for (Distribution distribution : distributionRepository.findAll()) {
+            for (Distribution distribution : dbDistributionService.findAll()) {
                 distribution.getEmployees().remove(applicant);
-                distributionRepository.save(distribution);
+                dbDistributionService.save(distribution);
             }
             newDistribution.get().getEmployees().add(applicant);
-            distributionRepository.save(newDistribution.get());
+            dbDistributionService.save(newDistribution.get());
         }
     }
 
@@ -397,7 +281,7 @@ public class DistributionService {
      * @param module module of distribution
      * @return sortet List of Applicants
      */
-    private List<WebDistributorApplicant> sort(final List<WebDistributorApplicant> applicantList, final String module) {
+    public List<WebDistributorApplicant> sort(final List<WebDistributorApplicant> applicantList, final String module) {
         final int numberOfOrgaPrios = 4;
         final int numberOfApplPrio = 3;
         List<WebDistributorApplicant> sortedApplicants = new LinkedList<>();
@@ -428,7 +312,12 @@ public class DistributionService {
         return sortedApplicants;
     }
 
-    private String getTypeOfApplicant(final Applicant applicant) {
+    /**
+     * -
+     * @param applicant
+     * @return -
+     */
+    public String getTypeOfApplicant(final Applicant applicant) {
         if ("Keins".equals(applicant.getCerts().getName())) {
             return "SHK";
         } else {
@@ -444,7 +333,7 @@ public class DistributionService {
      */
     public void saveHours(final String applicantId, final String distributionId, final String hours) {
         Applicant applicant = applicantService.findById(Long.parseLong(applicantId));
-        Optional<Distribution> distribution = distributionRepository.findById(Long.parseLong(distributionId));
+        Optional<Distribution> distribution = dbDistributionService.findById(Long.parseLong(distributionId));
         if (distribution.isPresent()) {
             for (Application application : applicant.getApplications()) {
                 if (application.getModule().equals(distribution.get().getModule())) {
@@ -476,6 +365,6 @@ public class DistributionService {
      * @return long number.
      */
     public long getSize() {
-        return distributionRepository.count();
+        return dbDistributionService.count();
     }
 }
