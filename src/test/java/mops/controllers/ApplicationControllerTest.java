@@ -31,4 +31,6 @@ public class ApplicationControllerTest {
         mockMvc.perform(get("/bewerbung2/bewerber/"))
                 .andExpect(status().isForbidden());
     }
+
+
 }

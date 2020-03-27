@@ -1,54 +1,29 @@
-package mops.services;
+package mops.services.webServices;
 
 import mops.model.classes.Module;
 import mops.model.classes.Organizer;
-import mops.repositories.OrganizerRepository;
+import mops.services.dbServices.ModuleService;
+import mops.services.dbServices.OrganizerService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class OrganizerService {
+public class WebOrganizerService {
 
-    private final OrganizerRepository organizerRepository;
     private final ModuleService moduleService;
+    private final OrganizerService organizerService;
 
     /**
-     * Injects The Repository
-     *
-     * @param organizerRepository the injected repository
-     * @param moduleService the injected moduleService
+     * Constructor
+     * @param moduleService
+     * @param organizerService
      */
     @SuppressWarnings("checkstyle:HiddenField")
-    public OrganizerService(final OrganizerRepository organizerRepository, final ModuleService moduleService) {
-        this.organizerRepository = organizerRepository;
+    public WebOrganizerService(final ModuleService moduleService, final OrganizerService organizerService) {
         this.moduleService = moduleService;
-    }
-
-    /**
-     * returns all Organizers
-     * @return List of all Organizer
-     */
-    public List<Organizer> findAll() {
-        return organizerRepository.findAll();
-    }
-
-    /**
-     * returns organizer with given uniserial
-     * @param uniserial uniserial
-     * @return Organizer
-     */
-    public Organizer findByUniserial(final String uniserial) {
-        return organizerRepository.findOrganizerByUniserial(uniserial);
-    }
-
-    /**
-     * saves or updates organizer
-     * @param organizer organizer
-     */
-    public void save(final Organizer organizer) {
-        organizerRepository.save(organizer);
+        this.organizerService = organizerService;
     }
 
     /**
@@ -72,13 +47,13 @@ public class OrganizerService {
      * @return organizer
      */
     public Organizer getOrganizerOrNewOrganizer(final String name) {
-        Organizer organizer = findByUniserial(name);
+        Organizer organizer = organizerService.findByUniserial(name);
         if (organizer == null) {
             organizer = Organizer.builder()
                     .uniserial(name)
                     .phonenumber("Bitte speichern Sie Ihre Telefonnummer!")
                     .build();
-            save(organizer);
+            organizerService.save(organizer);
         }
         return organizer;
     }
@@ -89,8 +64,8 @@ public class OrganizerService {
      * @param phone new phonenumber
      */
     public void changePhonenumber(final String name, final String phone) {
-        Organizer oldOrganizer = findByUniserial(name);
-        save(Organizer.builder()
+        Organizer oldOrganizer = organizerService.findByUniserial(name);
+        organizerService.save(Organizer.builder()
                 .id(oldOrganizer.getId())
                 .uniserial(oldOrganizer.getUniserial())
                 .phonenumber(phone)

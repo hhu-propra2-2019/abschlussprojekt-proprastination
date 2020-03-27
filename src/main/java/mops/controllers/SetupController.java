@@ -1,14 +1,13 @@
 package mops.controllers;
 
-import mops.model.Account;
 import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebModule;
-import mops.services.WebModuleService;
-import org.keycloak.KeycloakPrincipal;
+import mops.services.webServices.AccountGenerator;
+import mops.services.webServices.WebModuleService;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,18 +25,17 @@ import java.util.List;
 @SessionScope
 @RequestMapping("/bewerbung2/setup")
 public class SetupController {
-    @Autowired
-    private WebModuleService webService;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SetupController.class);
+    private final WebModuleService webService;
 
-    private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
-        KeycloakPrincipal principal = (KeycloakPrincipal) token.getPrincipal();
-        return new Account(
-                principal.getName(),
-                principal.getKeycloakSecurityContext().getIdToken().getEmail(),
-                null,
-                token.getAccount().getRoles());
+    /**
+     * Constructor
+     * @param webService
+     */
+    @SuppressWarnings("checkstyle:HiddenField")
+    public SetupController(final WebModuleService webService) {
+        this.webService = webService;
     }
 
     /**
@@ -52,7 +50,7 @@ public class SetupController {
         if (token != null) {
             List<WebModule> modules = webService.getModules();
             model.addAttribute("modules", modules);
-            model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             model.addAttribute("module", Module.builder().build());
         }
         return "setup/setupMain";
@@ -78,7 +76,7 @@ public class SetupController {
             });
             model.addAttribute("oldName", oldName);
             model.addAttribute("module", module);
-            model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             return "/setup/modulBearbeiten";
         }
         webService.update(module, oldName);
@@ -95,7 +93,7 @@ public class SetupController {
     @Secured("ROLE_setup")
     public String newModule(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
-            model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             model.addAttribute("Module", WebModule.builder().build());
         }
         return "setup/neuesModul";
@@ -118,7 +116,7 @@ public class SetupController {
                 LOGGER.info("ERROR {}", err.getDefaultMessage());
             });
             if (token != null) {
-                model.addAttribute("account", createAccountFromPrincipal(token));
+                model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
                 model.addAttribute("Module", WebModule.builder().build());
             }
             return "setup/neuesModul";
@@ -140,7 +138,7 @@ public class SetupController {
                                  final WebModule oldModule) {
         model.addAttribute("oldName", oldModule.getName());
         model.addAttribute("module", oldModule);
-        model.addAttribute("account", createAccountFromPrincipal(token));
+        model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
         return "/setup/modulBearbeiten";
     }
 

@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import mops.model.classes.webclasses.WebModule;
 import org.springframework.data.relational.core.mapping.Table;
 
 import javax.persistence.Entity;
@@ -37,18 +36,4 @@ public class Module {
     private String sevenHourLimit;
     private String nineHourLimit;
     private String seventeenHourLimit;
-    /**
-     * Transfer Module into WebModule
-     * @return WebModule
-     */
-    public WebModule toWebModule() {
-        return WebModule.builder()
-                .name(this.name)
-                .shortName(this.shortName)
-                .profSerial(this.profSerial)
-                .sevenHourLimit(this.sevenHourLimit)
-                .nineHourLimit(this.nineHourLimit)
-                .seventeenHourLimit(this.seventeenHourLimit)
-                .build();
-    }
 }
