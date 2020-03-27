@@ -2,7 +2,6 @@ package mops.services.webServices;
 
 import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebModule;
-import mops.services.dbServices.DbDistributionService;
 import mops.services.dbServices.ModuleService;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Service;
@@ -15,18 +14,15 @@ import java.util.List;
 public class WebModuleService {
 
     private final ModuleService moduleService;
-    private final DbDistributionService dbDistributionService;
 
     /**
      * Injects The Service
      *
      * @param moduleService the injected service
-     * @param dbDistributionService
      */
     @SuppressWarnings("checkstyle:HiddenField")
-    public WebModuleService(final ModuleService moduleService, final DbDistributionService dbDistributionService) {
+    public WebModuleService(final ModuleService moduleService) {
         this.moduleService = moduleService;
-        this.dbDistributionService = dbDistributionService;
     }
 
     /**
@@ -35,7 +31,7 @@ public class WebModuleService {
      * @return List of all Modules
      */
     public List<WebModule> getModules() {
-        List<Module> list = moduleService.findAll();
+        List<Module> list = moduleService.getModules();
         List<WebModule> webList = new ArrayList<>();
         for (Module m: list) {
             webList.add(m.toWebModule());
@@ -57,7 +53,7 @@ public class WebModuleService {
      * @param oldName old name of module for finding id
      */
     public void update(final WebModule webmodule, final String oldName) {
-        Module m = moduleService.findDistinctByName(oldName);
+        Module m = moduleService.findModuleByName(oldName);
         Module updated = webmodule.toModule();
         updated.setId(m.getId());
         moduleService.save(updated);
@@ -67,7 +63,7 @@ public class WebModuleService {
      * @param name
      */
     public void deleteOne(final String name) {
-        Module opt = moduleService.findDistinctByName(name);
+        Module opt = moduleService.findModuleByName(name);
         moduleService.deleteById(opt.getId());
     }
     /**

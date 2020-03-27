@@ -79,23 +79,6 @@ public class ModuleService {
 
     /**
      * -
-     * @return -
-     */
-    public List<Module> findAll() {
-        return moduleRepository.findAll();
-    }
-
-    /**
-     * -
-     * @param oldName
-     * @return -
-     */
-    public Module findDistinctByName(final String oldName) {
-        return moduleRepository.findDistinctByName(oldName);
-    }
-
-    /**
-     * -
      * @param id
      */
     public void deleteById(final long id) {
