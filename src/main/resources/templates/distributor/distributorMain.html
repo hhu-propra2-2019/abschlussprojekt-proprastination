@@ -4,7 +4,6 @@
       th:replace="~{mopslayout :: html(name='Verteilung', title='Optional: Verteilung', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}">
 
 <head>
-
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <meta name="turbolinks-cache-control" content="no-preview">
@@ -16,6 +15,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="/turbolinks.js"></script>
+        <script src="/jquery.dnd_page_scroll.js"></script>
     </th:block>
 </head>
 <body>
@@ -73,10 +73,10 @@
                             </div>
                     </div>
                 </div>
-                <div class="card-body sneaky" id="div1" th:id="drop + ${distribution.id}" th:attr="data-distributionid=${distribution.id}" ondrop="drop(event, this)" ondragover="allowDrop(event)">
+                <div class="card-body" id="div1" th:id="drop + ${distribution.id}" th:attr="data-distributionid=${distribution.id}" ondrop="drop(event, this)" ondragover="allowDrop(event)">
                     <div th:each="applicant: ${distribution.webDistributorApplicants}">
                         <div class="card w-100 bg-light mb-1 border-primary" th:id="drag + ${applicant.id}" id="drag1"  th:attr="data-applicantId=${applicant.id}" draggable="true" ondragstart="drag(event)">
-                            <div class="card-header" th:style="${applicant.distributorHours == '0' && distribution.id != '-1'} ? 'background-color: rgba(255, 0, 0, 0.51)' : (${applicant.checked} ? 'background-color: rgba(108, 179, 255, 0.51)')">
+                            <div class="card-header" th:style="${applicant.checked} ? 'background-color: rgba(108, 179, 255, 0.51)'">
                                 <div class="row">
                                     <div class="col-7 text-left">
                                         <button class="btn" data-toggle="collapse" th:attr="data-target='#collapse'+${applicant.id}" data-target="#collapse1"
@@ -146,6 +146,11 @@
     </div>
 
     <script>
+        $(document).ready(function() { $().dndPageScroll(); });
+    </script>
+
+    <script>
+
         $("#distributeModal").keyup(function(event) {
             if (event.keyCode === 13) {
                 $("#distributeButton").click();
@@ -157,15 +162,6 @@
 
         $("#distributeButton").click(function() {
             window.location.href = "/bewerbung2/verteiler/vorverteilen";
-        });
-
-    </script>
-    <script>
-
-        $('#drag1').draggable({
-            scroll: true,
-            scrollSensivity: 40,
-            scrollSpeed: 40
         });
 
     </script>
@@ -287,6 +283,7 @@
                 if (scrollPosition) {
                     window.scrollTo.apply(window, scrollPosition);
                     scrollPosition = null;
+                    $().dndPageScroll();
                 }
             });
 
