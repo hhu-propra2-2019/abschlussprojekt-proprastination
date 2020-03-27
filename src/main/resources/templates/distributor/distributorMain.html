@@ -175,6 +175,7 @@
             var distributionId = el.dataset.distributionid;
 
             $.ajax({
+                async: false,
                 method:'GET',
                 url: "/bewerbung2/verteiler/move/",
                 data: {
@@ -191,6 +192,7 @@
             var distributionId = el.dataset.distributionid;
 
             $.ajax({
+                async: false,
                 method:'GET',
                 url: "/bewerbung2/verteiler/saveHours/",
                 data: {
@@ -207,6 +209,7 @@
             var applicantId = el.dataset.applicantid;
 
             $.ajax({
+                async: false,
                 method:'GET',
                 url: "/bewerbung2/verteiler/saveChecked/",
                 data: {
