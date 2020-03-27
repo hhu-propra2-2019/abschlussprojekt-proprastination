@@ -357,5 +357,4 @@ class SetupControllerTest {
                 .forEach(e -> multiValueMap.add(e.getKey(), (e.getValue() == null ? "" : e.getValue())));
         return multiValueMap;
     }
-
 }

@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import mops.model.classes.Module;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -29,27 +28,4 @@ public class WebModule {
     @NotBlank
     @Pattern(regexp = "0|([1-9][0-9]*)")
     private String seventeenHourLimit;
-
-    /**
-     * @return returns module as String Array
-     */
-    public String[] toStringArray() {
-        return new String[]{name, shortName, profSerial, sevenHourLimit,
-                nineHourLimit, seventeenHourLimit};
-    }
-
-    /**
-     * Return Module
-     * @return Module
-     */
-    public Module toModule() {
-        return Module.builder()
-                .name(this.name)
-                .shortName(this.shortName)
-                .profSerial(this.profSerial)
-                .sevenHourLimit(this.sevenHourLimit)
-                .nineHourLimit(this.nineHourLimit)
-                .seventeenHourLimit(this.seventeenHourLimit)
-                .build();
-    }
 }
