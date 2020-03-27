@@ -71,8 +71,8 @@ public class ApplicantService {
     public void deleteApplication(final Application application, final Applicant applicant) {
         Set<Application> applications = applicant.getApplications();
         applications.remove(application);
-        ApplicantBuilder applicantBuider = applicant.toBuilder();
-        Applicant newApplicant = applicantBuider.clearApplications().applications(applications).build();
+        ApplicantBuilder applicantBuilder = applicant.toBuilder();
+        Applicant newApplicant = applicantBuilder.clearApplications().applications(applications).build();
         applicantRepository.save(newApplicant);
     }
 
