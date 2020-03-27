@@ -45,7 +45,7 @@
             </div>
             <div class="card-body">
                 <div class="row container-fluid">
-                    <div class="col float-left">
+                    <div class="col">
                         <input type="text" name="name" id="name"
                                class="form-control" placeholder="Name des Moduls" th:field="*{name}">
                     </div>
@@ -53,9 +53,18 @@
                         <input type="text" name="shortName" id="shortName"
                                class="form-control" placeholder="Abkürzung des Moduls" th:field="*{shortName}">
                     </div>
-                    <div class="col float-right">
+                    <div class="col">
                         <input type="text" name="profSerial" id="profSerial"
                                class="form-control" placeholder="Zugeordnete Person (Unikennung)" th:field="*{profSerial}">
+                    </div>
+                    <div class="col">
+                        <input type="text" name="deadlineDate" id="deadlineDate" onfocus="(this.type='date')"
+                               th:field="*{deadlineDate}" th:attr="value = *{deadlineDate}"
+                               onblur="(this.type='text')" class="form-control" placeholder="Bewerbungsfrist (1976-04-01)"
+                               required pattern="[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])">
+                        <div th:if="${#fields.hasErrors('deadlineDate')}" class="text-danger">
+                            Bitte geben Sie eine gültige Bewerbungsfrist an.
+                        </div>
                     </div>
                 </div><br><br>
                 <div class="row">
@@ -78,6 +87,15 @@
                     <div class="col">
                         <input type="number" name="seventeenHourLimit" id="seventeenHourLimit"
                                class="form-control" placeholder="Tutoren mit 17 Stunden" th:field="*{seventeenHourLimit}">
+                    </div>
+                    <div class="col">
+                        <input type="text" name="deadlineTime" id="deadlineTime" onfocus="(this.type='time')"
+                               th:field="*{deadlineTime}" th:attr="value = *{deadlineTime}"
+                               onblur="(this.type='text')" class="form-control" placeholder="Bewerbungsfrist (09:41)"
+                               required pattern="(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9])">
+                        <div th:if="${#fields.hasErrors('deadlineTime')}" class="text-danger">
+                            Bitte geben Sie eine gültige Zeit für die Bewerbungsfrist an.
+                        </div>
                     </div>
                 </div>
             </div>

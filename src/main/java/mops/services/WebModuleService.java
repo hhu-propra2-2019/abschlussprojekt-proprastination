@@ -6,6 +6,7 @@ import mops.repositories.ModuleRepository;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +46,8 @@ public class WebModuleService {
      * @param webmodule module.
      */
     public void save(final WebModule webmodule) {
+        webmodule.setDeadline(LocalDateTime.parse((String.format("%sT%s:00",
+                webmodule.getDeadlineDate(), webmodule.getDeadlineTime()))));
         moduleRepository.save(webmodule.toModule());
     }
     /**

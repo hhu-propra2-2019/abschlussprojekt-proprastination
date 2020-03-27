@@ -33,7 +33,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -509,7 +509,7 @@ public class ApplicationController {
                 attributes.addFlashAttribute("errormessage", "Diese Bewerbung gehört dir nicht!");
                 return new RedirectView("bewerbungsUebersicht", true);
             }
-            if (application.getModule().getDeadline().isBefore(Instant.now())) {
+            if (application.getModule().getDeadline().isBefore(LocalDateTime.now())) {
                 attributes.addFlashAttribute("errormessage", "Der Bewerbungszeitraum ist abgelaufen");
                 return new RedirectView("bewerbungsUebersicht", true);
             }

@@ -27,7 +27,8 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 
 import java.io.File;
 import java.io.FileWriter;
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -63,7 +64,7 @@ class PDFControllerTest {
     @WithMockKeycloackAuth(name = "name", roles = "studentin")
     void fileSystemResource() throws Exception {
         Module module = Module.builder()
-                .deadline(Instant.ofEpochSecond(100l))
+                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("Info4")
                 .build();
         Application application = Application.builder()
@@ -96,7 +97,7 @@ class PDFControllerTest {
     @WithMockKeycloackAuth(name = "baum", roles = "studentin")
     void noSuchApplication() throws Exception {
         Module module = Module.builder()
-                .deadline(Instant.ofEpochSecond(100l))
+                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("Info4")
                 .build();
         Application application = Application.builder()

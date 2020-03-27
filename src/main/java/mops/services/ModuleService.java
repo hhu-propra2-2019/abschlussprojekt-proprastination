@@ -4,6 +4,7 @@ import mops.model.classes.Module;
 import mops.repositories.ModuleRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -56,6 +57,8 @@ public class ModuleService {
      * @param module module.
      */
     public void save(final Module module) {
+        module.setDeadline(LocalDateTime.parse((String.format("%sT%s:00",
+                module.getDeadlineDate(), module.getDeadlineTime()))));
         moduleRepository.save(module);
     }
 

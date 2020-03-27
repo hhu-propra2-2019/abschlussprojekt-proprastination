@@ -3,7 +3,8 @@ package mops.model.classes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -13,7 +14,7 @@ class EvaluationTest {
     @BeforeEach
     void setup() {
         Module module = Module.builder()
-                .deadline(Instant.ofEpochSecond(100l))
+                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("Info4")
                 .build();
         //We do not Test the Applicant and Application here.
@@ -47,9 +48,9 @@ class EvaluationTest {
 
         String evalString = evaluation.toString();
         String expected = "Evaluation(application=Application(minHours=0, finalHours=0, maxHours=0, " +
-                "module=Module(name=Info4, deadline=1970-01-01T00:01:40Z, shortName=null, profSerial=null, " +
-                "sevenHourLimit=null, nineHourLimit=null, seventeenHourLimit=null), priority=null," +
-                " grade=0.0, lecturer=null, semester=null, role=null, comment=null), hours=0," +
+                "module=Module(name=Info4, deadlineDate=null, deadlineTime=null, deadline=1970-01-01T00:01:40," +
+                " shortName=null, profSerial=null, sevenHourLimit=null, nineHourLimit=null, seventeenHourLimit=null)," +
+                " priority=null, grade=0.0, lecturer=null, semester=null, role=null, comment=null), hours=0," +
                 " comment=He is not awesome!, priority=NEUTRAL)";
         assertThat(evalString).isEqualTo(expected);
     }

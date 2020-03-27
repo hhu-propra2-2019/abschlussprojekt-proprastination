@@ -14,7 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -43,7 +44,9 @@ class ApplicantRepositoryTest {
     @Test
     public void test() {
         Module module = Module.builder()
-                .deadline(Instant.ofEpochSecond(100l))
+                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
+                .deadlineDate("1976-04-01")
+                .deadlineTime("09:41")
                 .name("Info4")
                 .build();
 

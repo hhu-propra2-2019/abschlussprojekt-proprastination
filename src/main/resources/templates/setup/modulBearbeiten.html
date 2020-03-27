@@ -34,12 +34,12 @@
 </header>
 
 <main th:fragment="bodycontent">
-    <form th:action="@{setupMain}" th:method="POST">
+    <form th:action="@{setupMain}" th:method="POST" th:object="${module}">
         <div class="card bg-light mb-3 border-primary">
-            <div class="card-header" th:object="${module}">
+            <div class="card-header">
                 <div class="row">
                     <div class="col-md-8">
-                        <h3 style="margin-bottom: .0rem" class="card-title" th:text="${module.name}"></h3>
+                        <h3 style="margin-bottom: .0rem" class="card-title" th:text="*{name}"></h3>
                     </div>
                     <div class="col-md-4 container-fluid">
                         <button class="btn btn-outline-primary btn-sm float-right" type="submit">Speichern</button>
@@ -57,23 +57,33 @@
                     <div class="col-3">
                         <div class="card-text">Zugeordnete Person (Unikennung)</div>
                     </div>
-                    <div class="col-3"></div>
+                    <div class="col-3">
+                        <div class="card-text">Bewerbungsfrist</div>
+                    </div>
                 </div>
                 <div class="row container-fluid">
-                    <input id="oldName" name="oldName" type="hidden" th:value="${module.name}">
+                    <input id="oldName" name="oldName" type="hidden" th:value="*{name}">
                     <div class="col-3">
                         <input type="text" name="name" id="name"
-                               th:value="${module.name}" th:placeholder="${module.name}" th:field="${module.name}">
+                               th:value="*{name}" th:placeholder="*{name}" th:field="*{name}">
                     </div>
                     <div class="col-3">
                         <input type="text" name="shortName" id="shortName"
-                               th:value="${module.shortName}" th:placeholder="${module.shortName}" th:field="${module.shortName}">
+                               th:value="*{shortName}" th:placeholder="*{shortName}" th:field="*{shortName}">
                     </div>
                     <div class="col-3">
                         <input type="text" name="profSeriale" id="profSerial"
-                               th:value="${module.profSerial}" th:placeholder="${module.profSerial}" th:field="${module.profSerial}">
+                               th:value="*{profSerial}" th:placeholder="*{profSerial}" th:field="*{profSerial}">
                     </div>
-                    <div class="col-3"></div>
+                    <div class="col-3">
+                        <input type="text" name="deadlineDate" id="deadlineDate" onfocus="(this.type='date')"
+                               th:field="*{deadlineDate}" th:attr="value = *{deadlineDate}"
+                               onblur="(this.type='text')" class="form-control" th:placeholder="*{deadlineDate}"
+                               required pattern="[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])">
+                        <div th:if="${#fields.hasErrors('deadlineDate')}" class="text-danger">
+                            Bitte geben Sie eine gültige Bewerbungsfrist an.
+                        </div>
+                    </div>
                 </div><br>
                 <div class="row container-fluid">
                     <div class="col-3">
@@ -90,20 +100,28 @@
                 <div class="row container-fluid">
                     <div class="col-3">
                         <input type="number" name="sevenHourLimit" id="sevenHourLimit"
-                               th:value="${module.sevenHourLimit}" th:placeholder="${module.sevenHourLimit}"
-                               th:field="${module.sevenHourLimit}">
+                               th:value="*{sevenHourLimit}" th:placeholder="*{sevenHourLimit}"
+                               th:field="*{sevenHourLimit}">
                     </div>
                     <div class="col-3">
                         <input type="number" name="nineHourLimit" id="nineHourLimit"
-                               th:value="${module.nineHourLimit}" th:placeholder="${module.nineHourLimit}"
-                               th:field="${module.nineHourLimit}">
+                               th:value="*{nineHourLimit}" th:placeholder="*{nineHourLimit}"
+                               th:field="*{nineHourLimit}">
                     </div>
                     <div class="col-3">
                         <input type="number" name="seventeenHourLimit" id="seventeenHourLimit"
-                               th:value="${module.seventeenHourLimit}" th:placeholder="${module.seventeenHourLimit}"
-                               th:field="${module.seventeenHourLimit}">
+                               th:value="*{seventeenHourLimit}" th:placeholder="*{seventeenHourLimit}"
+                               th:field="*{seventeenHourLimit}">
                     </div>
-                    <div class="col-3"></div>
+                    <div class="col-3">
+                        <input type="text" name="deadlineTime" id="deadlineTime" onfocus="(this.type='time')"
+                               th:field="*{deadlineTime}" th:attr="value = *{deadlineTime}"
+                               onblur="(this.type='text')" class="form-control" th:placeholder="*{deadlineTime}"
+                               required pattern="(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9])">
+                        <div th:if="${#fields.hasErrors('deadlineTime')}" class="text-danger">
+                            Bitte geben Sie eine gültige Zeit für die Bewerbungsfrist an.
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -16,7 +16,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 
 @Setter
@@ -34,7 +34,9 @@ public class Module {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String name;
-    private Instant deadline;
+    private String deadlineDate;
+    private String deadlineTime;
+    private LocalDateTime deadline;
     private String shortName;
     private String profSerial;
     private String sevenHourLimit;
@@ -49,6 +51,9 @@ public class Module {
                 .name(this.name)
                 .shortName(this.shortName)
                 .profSerial(this.profSerial)
+                .deadlineDate(this.deadlineDate)
+                .deadlineTime(this.deadlineTime)
+                .deadline(this.deadline)
                 .sevenHourLimit(this.sevenHourLimit)
                 .nineHourLimit(this.nineHourLimit)
                 .seventeenHourLimit(this.seventeenHourLimit)

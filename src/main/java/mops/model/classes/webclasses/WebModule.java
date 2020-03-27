@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import mops.model.classes.Module;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,6 +16,9 @@ public class WebModule {
     private String name;
     private String shortName;
     private String profSerial;
+    private String deadlineDate;
+    private String deadlineTime;
+    private LocalDateTime deadline;
     private String sevenHourLimit;
     private String nineHourLimit;
     private String seventeenHourLimit;
@@ -35,6 +40,9 @@ public class WebModule {
                 .name(this.name)
                 .shortName(this.shortName)
                 .profSerial(this.profSerial)
+                .deadlineDate(this.deadlineDate)
+                .deadlineTime(this.deadlineTime)
+                .deadline(this.deadline)
                 .sevenHourLimit(this.sevenHourLimit)
                 .nineHourLimit(this.nineHourLimit)
                 .seventeenHourLimit(this.seventeenHourLimit)
