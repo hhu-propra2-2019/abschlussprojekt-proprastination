@@ -125,6 +125,11 @@ public class OrgaService {
         evaluations.getApplications().forEach(eval -> {
             Application application = applicationService.findById(eval.getId());
             Evaluation evaluation = evaluationService.findByApplication(application);
+            if (evaluation == null) {
+                evaluation = Evaluation.builder()
+                        .application(application)
+                        .build();
+            }
             Evaluation newEvaluatoin = evaluation.toBuilder()
                     .priority(Priority.get(eval.getPriority()))
                     .hours(eval.getFinalHours())
