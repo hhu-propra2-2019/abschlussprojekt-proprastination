@@ -93,7 +93,7 @@ public class WebModuleService {
      * @param module Module
      * @return returns module as String Array
      */
-    public String[] toStringArray(Module module) {
+    public String[] toStringArray(final Module module) {
         return new String[]{module.getName(), module.getShortName(), module.getProfSerial(), module.getSevenHourLimit(),
                 module.getNineHourLimit(), module.getSeventeenHourLimit()};
     }
@@ -103,7 +103,7 @@ public class WebModuleService {
      * @param webModule webmodule
      * @return Module generated Module
      */
-    public Module toModule(WebModule webModule) {
+    public Module toModule(final WebModule webModule) {
         return Module.builder()
                 .name(webModule.getName())
                 .shortName(webModule.getShortName())
