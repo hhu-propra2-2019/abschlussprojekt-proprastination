@@ -47,14 +47,17 @@
                 <div class="row container-fluid">
                     <div class="col float-left">
                         <input type="text" name="name" id="name"
+                               required
                                class="form-control" placeholder="Name des Moduls" th:field="*{name}">
                     </div>
                     <div class="col">
                         <input type="text" name="shortName" id="shortName"
+                               required
                                class="form-control" placeholder="Abkürzung des Moduls" th:field="*{shortName}">
                     </div>
                     <div class="col float-right">
                         <input type="text" name="profSerial" id="profSerial"
+                               required
                                class="form-control" placeholder="Zugeordnete Person (Unikennung)" th:field="*{profSerial}">
                     </div>
                 </div><br><br>
@@ -69,14 +72,17 @@
                 <div class="row">
                     <div class="col">
                         <input type="number" name="sevenHourLimit" id="sevenHourLimit"
+                               required pattern="0|([1-9][0-9]*)"
                                class="form-control" placeholder="Tutoren mit 7 Stunden" th:field="*{sevenHourLimit}">
                     </div>
                     <div class="col">
                         <input type="number" name="nineHourLimit" id="nienHourLimit"
+                               required pattern="0|([1-9][0-9]*)"
                                class="form-control" placeholder="Tutoren mit 9 Stunden" th:field="*{nineHourLimit}">
                     </div>
                     <div class="col">
                         <input type="number" name="seventeenHourLimit" id="seventeenHourLimit"
+                               required pattern="0|([1-9][0-9]*)"
                                class="form-control" placeholder="Tutoren mit 17 Stunden" th:field="*{seventeenHourLimit}">
                     </div>
                 </div>
