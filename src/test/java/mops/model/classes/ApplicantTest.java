@@ -174,7 +174,7 @@ class ApplicantTest {
     @Test
     void testHashCode() {
         Module newModule = Module.builder()
-                .deadline(Instant.ofEpochSecond(100l))
+                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("Info4")
                 .build();
         Application newApplication = Application.builder().module(newModule).build();
@@ -213,7 +213,7 @@ class ApplicantTest {
     @Test
     void testHashCodeDifferentSurname() {
         Module newModule = Module.builder()
-                .deadline(Instant.ofEpochSecond(100l))
+                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("Info4")
                 .build();
         Application newApplication = Application.builder().module(newModule).build();

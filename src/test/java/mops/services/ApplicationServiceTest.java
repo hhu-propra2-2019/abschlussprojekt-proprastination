@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +60,7 @@ public class ApplicationServiceTest {
                 .build();
 
         module = Module.builder()
-                .deadline(Instant.ofEpochSecond(100l))
+                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("howToBeEvil")
                 .profSerial("prodo111")
                 .build();

@@ -93,7 +93,7 @@ class DistributionTest {
     @Test
     void testEquals() {
         Module newModule = Module.builder()
-                .deadline(Instant.ofEpochSecond(100l))
+                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("Info4")
                 .build();
         Application newApplication = Application.builder().module(newModule).build();
@@ -136,7 +136,7 @@ class DistributionTest {
     @Test
     void testEqualsNotEqual() {
         Module newModule = Module.builder()
-                .deadline(Instant.ofEpochSecond(100l))
+                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("Info6")
                 .build();
         Application newApplication = Application.builder().module(newModule).build();
@@ -179,7 +179,7 @@ class DistributionTest {
     @Test
     void testHashCode() {
         Module newModule = Module.builder()
-                .deadline(Instant.ofEpochSecond(100l))
+                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("Info4")
                 .build();
         Application newApplication = Application.builder().module(newModule).build();
@@ -224,7 +224,7 @@ class DistributionTest {
     @Test
     void testHashCodeNotEqual() {
         Module newModule = Module.builder()
-                .deadline(Instant.ofEpochSecond(100l))
+                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("Info6")
                 .build();
         Application newApplication = Application.builder().module(newModule).build();
