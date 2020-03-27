@@ -9,7 +9,9 @@ import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.List;
@@ -60,12 +62,11 @@ public class DistributorController {
     }
 
     /**
-     * Maps when an Applicant is moved
+     * saves when an Applicant is moved
      * @param distributionId distributionId
      * @param applicantId applicantId
      * @param token token
      * @param model model
-     * @return redirect on mainpage as String
      */
     @GetMapping("/move/")
     @Secured("ROLE_verteiler")
@@ -85,7 +86,6 @@ public class DistributorController {
      * @param hours hours
      * @param token token
      * @param model model
-     * @return redirect on mainpage as String
      */
     @GetMapping("/saveHours/")
     @Secured("ROLE_verteiler")
@@ -106,7 +106,6 @@ public class DistributorController {
      * @param checked checked
      * @param token token
      * @param model model
-     * @return redirect on mainpage as String
      */
     @GetMapping("/saveChecked/")
     @Secured("ROLE_verteiler")
