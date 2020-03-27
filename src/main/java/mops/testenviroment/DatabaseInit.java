@@ -378,8 +378,7 @@ public class DatabaseInit implements ServletContextInitializer {
     @SuppressWarnings({"checkstyle:MagicNumber", "checkstyle:HiddenField"})
     private void fakeModules(final Faker faker) {
         Random random = new Random();
-        String[] modulenames = {"Programmier Praktikum 1", "Programmier Praktikum 2",
-                "RDB",
+        String[] modulenames = {"Programmier Praktikum 1", "Programmier Praktikum 2", "RDB",
                 "Algorithmen und Datenstrukturen", "Theoretische Informatik"};
         String[] shortNames = {"ProPra1", "Propra2", "RDB", "Aldat", "Theo"};
         String[] profSerial = {"orga", "bewerbung2_all_roles", "bewerbung2_studentin_orga",
