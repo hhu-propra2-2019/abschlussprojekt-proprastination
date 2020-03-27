@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import mops.model.classes.webclasses.WebModule;
 import org.springframework.data.relational.core.mapping.Table;
 
 import javax.persistence.Entity;
