@@ -6,6 +6,7 @@ import com.opencsv.exceptions.CsvException;
 import mops.model.classes.webclasses.WebModule;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -237,5 +238,18 @@ public class CSVService {
      */
     public static List<String> getSemester() {
         return getCSVData(0, System.getProperty("user.dir") + "/csv/semester.csv");
+    }
+
+    /**
+     * delete CSVFile if it exists
+     * @param csvName
+     */
+    public void deleteCSVFile(final String csvName) {
+        File file = new File(csvName);
+        if (file.delete()) {
+            System.out.println("File was deleted");
+        } else {
+            System.out.println("Couldn't delete File");
+        }
     }
 }

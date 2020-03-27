@@ -3,6 +3,8 @@ package mops.services;
 import mops.model.classes.*;
 import mops.model.classes.Module;
 import mops.repositories.ModuleRepository;
+import mops.services.dbServices.ApplicantService;
+import mops.services.dbServices.ApplicationService;
 import org.junit.Test;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;

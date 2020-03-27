@@ -1,12 +1,10 @@
 package mops.controllers;
 
 import com.c4_soft.springaddons.test.security.context.support.WithMockKeycloackAuth;
-import mops.model.classes.Address;
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
-import mops.model.classes.Certificate;
 import mops.model.classes.Module;
-import mops.services.ApplicantService;
+import mops.services.dbServices.ApplicantService;
 import mops.services.PDFService;
 import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
@@ -84,9 +82,9 @@ class PDFControllerTest {
         when(service.generatePDF(any(Application.class), any(Applicant.class))).thenReturn(file);
 
 
-        //mvc.perform(get("/bewerbung2/bewerber/pdf/download?module=test")).andExpect(status().isOk());
+        //mvc.perform(get("/bewerbung2/bewerber/pdf/download?module=createNewApplicantIfNoneWasFound")).andExpect(status().isOk());
 
-        mvc.perform(get("/bewerbung2/pdf/pfdDownload?module=test?student=name")).andExpect(status().is4xxClientError());
+        mvc.perform(get("/bewerbung2/pdf/pfdDownload?module=createNewApplicantIfNoneWasFound?student=name")).andExpect(status().is4xxClientError());
 
         verify(appService, times(1)).findByUniserial(any(String.class));
         verify(service, times(1)).generatePDF(any(Application.class), any(Applicant.class));
@@ -118,8 +116,6 @@ class PDFControllerTest {
     @Test
     @WithMockKeycloackAuth(name = "name", roles = "studentin")
     void missingParam() throws Exception {
-
-
         mvc.perform(get("/bewerbung2/pdf/pdfDownload")).andExpect(status().isBadRequest());
 
     }

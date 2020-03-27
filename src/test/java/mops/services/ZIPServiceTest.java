@@ -8,6 +8,10 @@ import mops.model.classes.Distribution;
 import mops.model.classes.Module;
 import mops.model.classes.Priority;
 import mops.model.classes.Role;
+import mops.services.dbServices.ApplicantService;
+import mops.services.dbServices.ApplicationService;
+import mops.services.dbServices.DbDistributionService;
+import mops.services.logicServices.DistributionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -35,6 +39,9 @@ class ZIPServiceTest {
 
     @Mock
     DistributionService distributionService;
+
+    @Mock
+    DbDistributionService dbDistributionService;
 
     @Mock
     PDFService pdfService;
@@ -104,8 +111,8 @@ class ZIPServiceTest {
 
         File file = File.createTempFile("baum", ".pdf");
         Mockito.when(pdfService.generatePDF(any(Application.class), any(Applicant.class))).thenReturn(file);
-        Mockito.when(distributionService.findAll()).thenReturn(Arrays.asList(distribution));
-        Mockito.when(distributionService.findByModule(any(Module.class))).thenReturn(distribution);
+        Mockito.when(dbDistributionService.findAll()).thenReturn(Arrays.asList(distribution));
+        Mockito.when(dbDistributionService.findByModule(any(Module.class))).thenReturn(distribution);
         Mockito.when(applicationService.findApplicationsByModule(any(Module.class))).thenReturn(Arrays.asList(application));
         Mockito.when(applicantService.findByApplications(any(Application.class))).thenReturn(applicant);
 
