@@ -215,9 +215,9 @@ public class ApplicationController {
         applicantService.saveApplicant(applicant);
 
 
+        model.addAttribute("semesters", CSVService.getSemester());
         model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
         model.addAttribute("newModule", modul);
-        model.addAttribute("semesters", CSVService.getSemester());
         model.addAttribute("modules", availableMods);
         model.addAttribute("webApplication", WebApplication.builder().module(module).build());
         return "applicant/applicationModule";
@@ -277,14 +277,13 @@ public class ApplicationController {
      * @param applicant1 new Applicant Data
      * @return The HTML file rendered as a String
      */
-
     @PostMapping("/uebersichtDashboard")
     @Secured("ROLE_studentin")
     public String saveOverview(final KeycloakAuthenticationToken token, final Model model,
                                @ModelAttribute("applicant1") final Applicant applicant1) {
         if (token != null) {
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
-            model.addAttribute("applicant", applicantService.findByUniserial("has220"));        //?!?! WHAT IS DIS
+            model.addAttribute("applicant", applicantService.findByUniserial(token.getName())));        //?!?! WHAT IS DIS
             studentService.updateApplicantWithoutChangingApplications(applicant1);
         }
         return "applicant/applicationOverview";
