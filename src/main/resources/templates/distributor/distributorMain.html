@@ -7,13 +7,14 @@
 
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta name="turbolinks-cache-control" content="no-preview">
     <title>Name des Subsystems</title>
     <th:block th:fragment="headcontent">
         <!-- Links, Skripts, Styles hier einfügen! -->
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-        <script src="/scroll-sneak.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="/turbolinks.js"></script>
     </th:block>
 </head>
@@ -43,9 +44,8 @@
                         </div>
                         <div class="col-2"></div>
                         <div class="col-3">
-                            <form th:action="@{/}" th:method="GET">
-                                <button class="btn btn-outline-primary"
-                                   th:href="@{/bewerbung2/pdf/uebersicht}" type="submit"> Zu den Einstellungsbögen </button>
+                            <form th:action="@{/bewerbung2/pdf/uebersicht}" th:method="GET">
+                                <button class="btn btn-outline-primary" type="submit"> Zu den Einstellungsbögen </button>
                             </form>
                         </div>
                         <div class="col-2"></div>
@@ -75,7 +75,7 @@
                 </div>
                 <div class="card-body sneaky" id="div1" th:id="drop + ${distribution.id}" th:attr="data-distributionid=${distribution.id}" ondrop="drop(event, this)" ondragover="allowDrop(event)">
                     <div th:each="applicant: ${distribution.webDistributorApplicants}">
-                        <div class="card w-100 bg-light mb-1 border-primary" th:id="drag + ${applicant.id}" id="drag1"  th:attr="data-applicantId=${applicant.id}" draggable="true" ondragstart="drag(event, this)">
+                        <div class="card w-100 bg-light mb-1 border-primary" th:id="drag + ${applicant.id}" id="drag1"  th:attr="data-applicantId=${applicant.id}" draggable="true" ondragstart="drag(event)">
                             <div class="card-header" th:style="${applicant.distributorHours == '0' && distribution.id != '-1'} ? 'background-color: rgba(255, 0, 0, 0.51)' : (${applicant.checked} ? 'background-color: rgba(108, 179, 255, 0.51)')">
                                 <div class="row">
                                     <div class="col-7 text-left">
@@ -86,7 +86,7 @@
                                     </div>
                                     <div class="col-4">
                                         <div>
-                                            <input onClick="this.select();" type="text" size="1" th:value="${applicant.distributorHours}" th:attr="data-distributionId=${distribution.id}, data-applicantId=${applicant.id}" onblur="saveHours(this)">
+                                            <input onClick="this.select();" type="text" size="1" th:value="${applicant.distributorHours}" th:attr="data-distributionId=${distribution.id}, data-applicantId=${applicant.id}" onblur="saveHours(this)" onkeyup="saveHoursEnter(event, this)">
                                             <label>Stunden</label>
                                         </div>
                                     </div>
@@ -139,45 +139,53 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Abbrechen</button>
-                        <button class="btn btn-outline-primary" id="distributeButton" name="distribute"
-                            type="submit"> Bestätigen </button>
+                        <button class="btn btn-outline-primary" id="distributeButton" name="distribute" type="submit"> Bestätigen </button>
                 </div>
             </div>
         </div>
     </div>
 
-
     <script>
-        $(".form-search-wrapper").remove()
+        $("#distributeModal").keyup(function(event) {
+            if (event.keyCode === 13) {
+                $("#distributeButton").click();
+            }
+        });
+
     </script>
     <script>
 
-        (function() {
-            var sneaky = new ScrollSneak(location.hostname);
-            var sneakyList = document.getElementsByClassName("sneaky");
-            var len = sneakyList.length;
-            for(var i; i < len; i++) {
-                alert("test");
-                sneakyList[i].ondrop = sneaky.sneak;
-            }
-        })();
+        $("#distributeButton").click(function() {
+            window.location.href = "/bewerbung2/verteiler/vorverteilen";
+        });
+
+    </script>
+    <script>
 
         $('#drag1').draggable({
             scroll: true,
             scrollSensivity: 40,
             scrollSpeed: 40
-        })
+        });
+
     </script>
     <script>
+
         function allowDrop(ev) {
             ev.preventDefault();
         }
 
-        function drag(ev, el) {
+    </script>
+    <script>
+
+        function drag(ev) {
             ev.dataTransfer.setData("text", ev.target.id);
 
             ev.dataTransfer.setData("applicantId", ev.currentTarget.id);
         }
+
+    </script>
+    <script>
 
         function drop(ev, el) {
             ev.preventDefault();
@@ -187,37 +195,103 @@
             var applicantElId = ev.dataTransfer.getData("applicantId");
             var applicantEl = document.getElementById(applicantElId);
             var applicantId = applicantEl.dataset.applicantid;
-            var distributorId = el.dataset.distributionid;
-            var targetLocation = "/bewerbung2/verteiler/" + distributorId + "/" + applicantId + "/";
-            Turbolinks.visit(targetLocation)
+            var distributionId = el.dataset.distributionid;
+
+            $.ajax({
+                async: false,
+                method:'GET',
+                url: "/bewerbung2/verteiler/move/",
+                data: {
+                    distributionId: distributionId,
+                    applicantId: applicantId
+                }
+            });
+            reloadWithTurbolinks();
         }
 
+    </script>
+    <script>
+
         function saveHours(el) {
-            var hour = el.value;
+            var hours = el.value;
             var applicantId = el.dataset.applicantid;
             var distributionId = el.dataset.distributionid;
-            var targetLocation = "/bewerbung2/verteiler/saveHours/" + distributionId + "/" + applicantId + "/" + hour + "/";
-            Turbolinks.visit(targetLocation)
+
+            $.ajax({
+                async: false,
+                method:'GET',
+                url: "/bewerbung2/verteiler/saveHours/",
+                data: {
+                    distributionId: distributionId,
+                    applicantId: applicantId,
+                    hours: hours
+                }
+            });
+            reloadWithTurbolinks();
         }
+
+    </script>
+    <script>
+
+        function saveHoursEnter(ev, el) {
+            if (event.which === 13) {
+                var hours = el.value;
+                var applicantId = el.dataset.applicantid;
+                var distributionId = el.dataset.distributionid;
+
+                $.ajax({
+                    async: false,
+                    method: 'GET',
+                    url: "/bewerbung2/verteiler/saveHours/",
+                    data: {
+                        distributionId: distributionId,
+                        applicantId: applicantId,
+                        hours: hours
+                    }
+                });
+                reloadWithTurbolinks();
+            }
+        }
+
+    </script>
+    <script>
 
         function saveChecked(el) {
             var checked = el.checked;
             var applicantId = el.dataset.applicantid;
-            var targetLocation = "/bewerbung2/verteiler/saveChecked/" + applicantId + "/" + checked + "/";
-            Turbolinks.visit(targetLocation)
+
+            $.ajax({
+                async: false,
+                method:'GET',
+                url: "/bewerbung2/verteiler/saveChecked/",
+                data: {
+                    applicantId: applicantId,
+                    checked: checked
+                }
+            });
+            reloadWithTurbolinks();
         }
+
     </script>
     <script>
-        $("#distributeModal").keyup(function(event) {
-            if (event.keyCode === 13) {
-                $("#distributeButton").click();
-            }
-        });
 
-        $("#distributeButton").click(function() {
-            var targetLocation = "/bewerbung2/verteiler/vorverteilen";
-            Turbolinks.visit(targetLocation)
-        });
+        var reloadWithTurbolinks = (function () {
+            var scrollPosition;
+
+            function reload () {
+                scrollPosition = [window.scrollX, window.scrollY];
+                Turbolinks.visit(window.location.toString(), { action: 'replace' })
+            }
+
+            document.addEventListener('turbolinks:load', function () {
+                if (scrollPosition) {
+                    window.scrollTo.apply(window, scrollPosition);
+                    scrollPosition = null;
+                }
+            });
+
+            return reload
+        })()
     </script>
 </main>
 </body>

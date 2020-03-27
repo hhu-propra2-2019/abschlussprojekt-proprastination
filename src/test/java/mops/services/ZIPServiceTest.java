@@ -38,9 +38,6 @@ import static org.assertj.core.api.Assertions.*;
 class ZIPServiceTest {
 
     @Mock
-    DistributionService distributionService;
-
-    @Mock
     DbDistributionService dbDistributionService;
 
     @Mock
