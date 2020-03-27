@@ -17,5 +17,8 @@ public class WebDistribution {
     private String hours7;
     private String hours9;
     private String hours17;
+    private String hours7Set;
+    private String hours9Set;
+    private String hours17Set;
     private List<WebDistributorApplicant> webDistributorApplicants;
 }
