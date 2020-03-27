@@ -2,10 +2,13 @@ package mops.services;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,23 +19,30 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CSVServiceTest{
     @Autowired
-    CSVService service;
+    CSVService csvService;
 
     @AfterEach
-    void cleanTestCSV(){
+    void cleanTestCSV() {
         final Charset charset = StandardCharsets.UTF_8;
         try {
-            new FileWriter("src/creatNewApplicantIfNoneWasFound/java/mops/creatNewApplicantIfNoneWasFound.csv", charset).close();
+            new FileWriter(System.getProperty("user.dir") + "/csv/test.csv", charset).close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    @AfterAll
+    void deleteTestCSV() {
+        File file = new File(System.getProperty("user.dir") + "/csv/test.csv");
+        file.delete();
+    }
+
     @Test
     void readFromCSVTest() {
-        String csvName = "src/creatNewApplicantIfNoneWasFound/java/mops/creatNewApplicantIfNoneWasFound.csv";
+        String csvName = System.getProperty("user.dir") + "/csv/test.csv";
         String[] module1 = {"propra", "21"};
         List<String[]> data = new ArrayList<>();
         data.add(module1);
@@ -55,7 +65,7 @@ class CSVServiceTest{
 
     @Test
     void writeInCSVTest(){
-        String csvName = "src/creatNewApplicantIfNoneWasFound/java/mops/creatNewApplicantIfNoneWasFound.csv";
+        String csvName = System.getProperty("user.dir") + "/csv/test.csv";
         String[] module1 = {"propra","22"};
         List<String[]> data = new ArrayList<>();
         data.add(module1);
