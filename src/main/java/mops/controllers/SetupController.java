@@ -116,7 +116,7 @@ public class SetupController {
                 LOGGER.info("ERROR {}", err.getDefaultMessage());
             });
             if (token != null) {
-                model.addAttribute("account", createAccountFromPrincipal(token));
+                model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
                 model.addAttribute("Module", WebModule.builder().build());
             }
             return "setup/neuesModul";
