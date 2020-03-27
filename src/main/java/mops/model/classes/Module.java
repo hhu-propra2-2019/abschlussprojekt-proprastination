@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import mops.model.classes.webclasses.WebModule;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.relational.core.mapping.Table;
 
 import javax.persistence.Entity;
@@ -28,7 +26,6 @@ import java.time.Instant;
 @NoArgsConstructor
 @Entity
 @Table
-@OnDelete(action = OnDeleteAction.CASCADE)
 public class Module {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
