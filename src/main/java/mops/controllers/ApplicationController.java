@@ -42,17 +42,11 @@ import java.util.List;
 public class ApplicationController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationController.class);
-
     private ApplicantService applicantService;
-
     private ModuleService moduleService;
-
     private ApplicationService applicationService;
-
     private StudentService studentService;
-
     private WebApplicationService webApplicationService;
-
 
     /**
      * Inits the service.
@@ -109,7 +103,7 @@ public class ApplicationController {
     }
 
     /**
-     * The GetMapping for the open applications
+     * The GetMapping for the open applicationsOverview
      *
      * @param token The KeycloakAuthentication
      * @param model The Website model

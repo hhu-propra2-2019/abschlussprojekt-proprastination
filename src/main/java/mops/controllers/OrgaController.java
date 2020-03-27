@@ -1,6 +1,7 @@
 package mops.controllers;
 
 import mops.model.classes.orgaWebClasses.WebListClass;
+import mops.services.dbServices.ModuleService;
 import mops.services.webServices.AccountGenerator;
 import mops.services.webServices.OrgaService;
 import mops.services.webServices.WebOrganizerService;
@@ -24,6 +25,7 @@ public class OrgaController {
 
     private final OrgaService orgaService;
     private final WebOrganizerService webOrganizerService;
+    private final ModuleService moduleService;
 
     /**
      * Lets Spring inject the services
@@ -31,10 +33,11 @@ public class OrgaController {
      * @param webOrganizerService
      */
     @SuppressWarnings("checkstyle:HiddenField")
-    public OrgaController(final OrgaService orgaService, final WebOrganizerService webOrganizerService) {
+    public OrgaController(final OrgaService orgaService, final WebOrganizerService webOrganizerService,
+                          final ModuleService moduleService) {
         this.orgaService = orgaService;
         this.webOrganizerService = webOrganizerService;
-
+        this.moduleService = moduleService;
     }
 
     /**
@@ -92,7 +95,7 @@ public class OrgaController {
                                       @ModelAttribute final WebListClass applications,
                                       @PathVariable("id") final String id, final Model model) {
         if (token != null) {
-            model.addAttribute("account", createAccountFromPrincipal(token));
+            model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             orgaService.saveEvaluations(applications);
         }
         return "redirect:/bewerbung2/organisator/" + id + "/";

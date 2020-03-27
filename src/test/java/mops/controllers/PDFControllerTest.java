@@ -115,8 +115,6 @@ class PDFControllerTest {
     @Test
     @WithMockKeycloackAuth(name = "name", roles = "studentin")
     void missingParam() throws Exception {
-
-
         mvc.perform(get("/bewerbung2/pdf/pdfDownload")).andExpect(status().isBadRequest());
 
     }

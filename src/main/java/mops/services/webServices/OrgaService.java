@@ -70,7 +70,7 @@ public class OrgaService {
                 .id(application.getId())
                 .minHours(application.getMinHours())
                 .maxHours(application.getMaxHours())
-                .studentPriotiry(application.getPriority())
+                .studentPriority(application.getPriority())
                 .role(application.getRole())
                 .priority(BASEPRIORITY.getValue())
                 .finalHours(BASEHOURS)
@@ -128,11 +128,11 @@ public class OrgaService {
         evaluations.getApplications().forEach(eval -> {
             Application application = applicationService.findById(eval.getId());
             Evaluation evaluation = evaluationService.findByApplication(application);
-            Evaluation newEvaluatoin = evaluation.toBuilder()
+            Evaluation newEvaluation = evaluation.toBuilder()
                     .priority(Priority.get(eval.getPriority()))
                     .hours(eval.getFinalHours())
                     .build();
-            evaluationService.save(newEvaluatoin);
+            evaluationService.save(newEvaluation);
         });
     }
 }
