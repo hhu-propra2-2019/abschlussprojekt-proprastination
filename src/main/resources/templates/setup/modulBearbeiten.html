@@ -39,7 +39,7 @@
             <div class="card-header" th:object="${module}">
                 <div class="row">
                     <div class="col-md-8">
-                        <h3 style="margin-bottom: .0rem" class="card-title" th:text="${module.name}"></h3>
+                        <h3 style="margin-bottom: .0rem" class="card-title" th:text="${oldName}"></h3>
                     </div>
                     <div class="col-md-4 container-fluid">
                         <button class="btn btn-outline-primary btn-sm float-right" type="submit">Speichern</button>
@@ -60,7 +60,7 @@
                     <div class="col-3"></div>
                 </div>
                 <div class="row container-fluid">
-                    <input id="oldName" name="oldName" type="hidden" th:value="${module.name}">
+                    <input id="oldName" name="oldName" type="hidden" th:value="${oldName}">
                     <div class="col-3">
                         <input type="text" name="name" id="name"
                                th:value="${module.name}" th:placeholder="${module.name}" th:field="${module.name}">
