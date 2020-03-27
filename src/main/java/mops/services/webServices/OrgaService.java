@@ -1,4 +1,4 @@
-package mops.services;
+package mops.services.webServices;
 
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;

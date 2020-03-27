@@ -1,9 +1,9 @@
 package mops.controllers;
 
 import mops.model.classes.orgaWebClasses.WebListClass;
+import mops.services.webServices.OrgaService;
 import mops.services.dbServices.ModuleService;
 import mops.services.webServices.AccountGenerator;
-import mops.services.webServices.OrgaService;
 import mops.services.webServices.WebOrganizerService;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.security.access.annotation.Secured;

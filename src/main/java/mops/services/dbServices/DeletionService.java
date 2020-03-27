@@ -1,4 +1,4 @@
-package mops.services;
+package mops.services.dbServices;
 
 import mops.model.Account;
 import mops.model.classes.Applicant;

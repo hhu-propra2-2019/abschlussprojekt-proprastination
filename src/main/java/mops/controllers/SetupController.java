@@ -4,6 +4,9 @@ import mops.model.Account;
 import mops.model.classes.Applicant;
 import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebModule;
+import mops.services.dbServices.DeletionService;
+import mops.services.dbServices.ApplicantService;
+import mops.services.dbServices.ModuleService;
 import mops.services.webServices.AccountGenerator;
 import mops.services.webServices.WebModuleService;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
@@ -56,15 +59,6 @@ public class SetupController {
         this.deletionService = deletionService;
     }
 
-    private Account createAccountFromPrincipal(final KeycloakAuthenticationToken token) {
-        KeycloakPrincipal principal = (KeycloakPrincipal) token.getPrincipal();
-        return new Account(
-                principal.getName(),
-                principal.getKeycloakSecurityContext().getIdToken().getEmail(),
-                null,
-                token.getAccount().getRoles());
-    }
-
     /**
      * Get Mapping for the mainboard
      * @param token The KeycloakAuthentication
@@ -98,9 +92,7 @@ public class SetupController {
                                    @RequestParam("oldName") final String oldName,
                                    @Valid final WebModule module, final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            bindingResult.getAllErrors().forEach(err -> {
-                LOGGER.info("ERROR {}", err.getDefaultMessage());
-            });
+            bindingResult.getAllErrors().forEach(err -> LOGGER.info("ERROR {}", err.getDefaultMessage()));
             model.addAttribute("oldName", oldName);
             model.addAttribute("module", module);
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
@@ -139,9 +131,7 @@ public class SetupController {
     public String postNewModule(final KeycloakAuthenticationToken token, final Model model,
                                 @Valid final WebModule module, final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            bindingResult.getAllErrors().forEach(err -> {
-                LOGGER.info("ERROR {}", err.getDefaultMessage());
-            });
+            bindingResult.getAllErrors().forEach(err -> LOGGER.info("ERROR {}", err.getDefaultMessage()));
             if (token != null) {
                 model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
                 model.addAttribute("Module", WebModule.builder().build());
@@ -208,7 +198,7 @@ public class SetupController {
     @Secured("ROLE_setup")
     public String deleteMain(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
-            Account account = createAccountFromPrincipal(token);
+            Account account = AccountGenerator.createAccountFromPrincipal(token);
             List<Module> modules = moduleService.getModules();
             List<Applicant> applicants = applicantService.findAll();
             model.addAttribute("account", account);
@@ -229,7 +219,7 @@ public class SetupController {
     @Secured("ROLE_setup")
     public RedirectView deleteAll(final KeycloakAuthenticationToken token, final RedirectAttributes attributes) {
         if (token != null) {
-            Account account = createAccountFromPrincipal(token);
+            Account account = AccountGenerator.createAccountFromPrincipal(token);
             attributes.addFlashAttribute("message", deletionService.deleteAll(account));
         }
         return new RedirectView("loeschen", true);
@@ -248,7 +238,7 @@ public class SetupController {
     public RedirectView deleteModule(@ModelAttribute("module") final String module,
                                      final KeycloakAuthenticationToken token, final RedirectAttributes attributes) {
         if (token != null) {
-            Account account = createAccountFromPrincipal(token);
+            Account account = AccountGenerator.createAccountFromPrincipal(token);
             attributes.addFlashAttribute("message", deletionService.deleteModule(module, account));
         }
         return new RedirectView("loeschen", true);
@@ -267,7 +257,7 @@ public class SetupController {
     public RedirectView deleteApplicant(@ModelAttribute("applicant") final String applicant,
                                         final KeycloakAuthenticationToken token, final RedirectAttributes attributes) {
         if (token != null) {
-            Account account = createAccountFromPrincipal(token);
+            Account account = AccountGenerator.createAccountFromPrincipal(token);
             attributes.addFlashAttribute("message", deletionService.deleteApplicant(applicant, account));
         }
         return new RedirectView("loeschen", true);
@@ -287,7 +277,7 @@ public class SetupController {
                                           final KeycloakAuthenticationToken token,
                                           final RedirectAttributes attributes) {
         if (token != null) {
-            Account account = createAccountFromPrincipal(token);
+            Account account = AccountGenerator.createAccountFromPrincipal(token);
             attributes.addFlashAttribute("message", deletionService.deleteApplication(application, account));
         }
         return new RedirectView("loeschen", true);
