@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 class DistributionTest {
     Distribution dist;
@@ -80,5 +81,188 @@ class DistributionTest {
                 " sevenHourLimit=null, nineHourLimit=null, seventeenHourLimit=null), priority=null, grade=0.0," +
                 " lecturer=null, semester=null, role=null, comment=null)])])"
         );
+    }
+
+    @Test
+    void testNoArgsConstructor() {
+        Distribution emptyDistribution = new Distribution();
+        assertNull(emptyDistribution.getModule());
+        assertNull(emptyDistribution.getEmployees());
+    }
+
+    @Test
+    void testEquals() {
+        Module newModule = Module.builder()
+                .deadline(Instant.ofEpochSecond(100l))
+                .name("Info4")
+                .build();
+        Application newApplication = Application.builder().module(newModule).build();
+        Set<Application> applicationList = new HashSet<>();
+        applicationList.add(newApplication);
+
+        Certificate newCert = Certificate.builder()
+                .name("Bachelor")
+                .course("Harvard")
+                .build();
+        Address newAddress = Address.builder()
+                .street("Baker Street")
+                .houseNumber("21B")
+                .city("London")
+                .country("England")
+                .zipcode("20394")
+                .build();
+
+        Applicant newApplicant = Applicant.builder()
+                .surname("J")
+                .address(newAddress)
+                .birthday("01.01.2001")
+                .birthplace("Wakanda")
+                .course("Arts")
+                .nationality("English")
+                .status("New")
+                .certs(newCert)
+                .applications(applicationList)
+                .build();
+        List<Applicant> newEmps = Arrays.asList(newApplicant);
+        Distribution newDist = Distribution.builder()
+                .employees(newEmps)
+                .module(newModule)
+                .build();
+
+        assertEquals(dist, newDist);
+        assertEquals(newDist, dist);
+    }
+
+    @Test
+    void testEqualsNotEqual() {
+        Module newModule = Module.builder()
+                .deadline(Instant.ofEpochSecond(100l))
+                .name("Info6")
+                .build();
+        Application newApplication = Application.builder().module(newModule).build();
+        Set<Application> applicationList = new HashSet<>();
+        applicationList.add(newApplication);
+
+        Certificate newCert = Certificate.builder()
+                .name("Bachelor")
+                .course("Harvard")
+                .build();
+        Address newAddress = Address.builder()
+                .street("Baker Street")
+                .houseNumber("21B")
+                .city("London")
+                .country("England")
+                .zipcode("20394")
+                .build();
+
+        Applicant newApplicant = Applicant.builder()
+                .surname("J")
+                .address(newAddress)
+                .birthday("01.01.2001")
+                .birthplace("Wakanda")
+                .course("Arts")
+                .nationality("English")
+                .status("New")
+                .certs(newCert)
+                .applications(applicationList)
+                .build();
+        List<Applicant> newEmps = Arrays.asList(newApplicant);
+        Distribution newDist = Distribution.builder()
+                .employees(newEmps)
+                .module(newModule)
+                .build();
+
+        assertNotEquals(dist, newDist);
+        assertNotEquals(newDist, dist);
+    }
+
+    @Test
+    void testHashCode() {
+        Module newModule = Module.builder()
+                .deadline(Instant.ofEpochSecond(100l))
+                .name("Info4")
+                .build();
+        Application newApplication = Application.builder().module(newModule).build();
+        Set<Application> applicationList = new HashSet<>();
+        applicationList.add(newApplication);
+
+        Certificate newCert = Certificate.builder()
+                .name("Bachelor")
+                .course("Harvard")
+                .build();
+        Address newAddress = Address.builder()
+                .street("Baker Street")
+                .houseNumber("21B")
+                .city("London")
+                .country("England")
+                .zipcode("20394")
+                .build();
+
+        Applicant newApplicant = Applicant.builder()
+                .surname("J")
+                .address(newAddress)
+                .birthday("01.01.2001")
+                .birthplace("Wakanda")
+                .course("Arts")
+                .nationality("English")
+                .status("New")
+                .certs(newCert)
+                .applications(applicationList)
+                .build();
+        List<Applicant> newEmps = Arrays.asList(newApplicant);
+        Distribution newDist = Distribution.builder()
+                .employees(newEmps)
+                .module(newModule)
+                .build();
+
+        int hashCode = dist.hashCode();
+        int newHashCode = newDist.hashCode();
+
+        assertEquals(hashCode, newHashCode);
+    }
+
+    @Test
+    void testHashCodeNotEqual() {
+        Module newModule = Module.builder()
+                .deadline(Instant.ofEpochSecond(100l))
+                .name("Info6")
+                .build();
+        Application newApplication = Application.builder().module(newModule).build();
+        Set<Application> applicationList = new HashSet<>();
+        applicationList.add(newApplication);
+
+        Certificate newCert = Certificate.builder()
+                .name("Bachelor")
+                .course("Harvard")
+                .build();
+        Address newAddress = Address.builder()
+                .street("Baker Street")
+                .houseNumber("21B")
+                .city("London")
+                .country("England")
+                .zipcode("20394")
+                .build();
+
+        Applicant newApplicant = Applicant.builder()
+                .surname("J")
+                .address(newAddress)
+                .birthday("01.01.2001")
+                .birthplace("Wakanda")
+                .course("Arts")
+                .nationality("English")
+                .status("New")
+                .certs(newCert)
+                .applications(applicationList)
+                .build();
+        List<Applicant> newEmps = Arrays.asList(newApplicant);
+        Distribution newDist = Distribution.builder()
+                .employees(newEmps)
+                .module(newModule)
+                .build();
+
+        int hashCode = dist.hashCode();
+        int newHashCode = newDist.hashCode();
+
+        assertNotEquals(hashCode, newHashCode);
     }
 }

@@ -147,21 +147,6 @@ public class ApplicationController {
         return "applicant/openAppl";
     }
 
-    /**
-     * The GetMapping for the personal data page
-     *
-     * @param token The KeycloakAuthentication
-     * @param model The Website model
-     * @return The HTML file rendered as a String
-     */
-    @GetMapping("/profil")
-    @Secured("ROLE_studentin")
-    public String personal(final KeycloakAuthenticationToken token, final Model model) {
-        if (token != null) {
-            model.addAttribute("account", createAccountFromPrincipal(token));
-        }
-        return "applicant/personal";
-    }
 
     /**
      * saves Applicant into database and waits for moduleinformation
@@ -180,11 +165,11 @@ public class ApplicationController {
     @PostMapping("/modul")
     @Secured("ROLE_studentin")
     public String modul(final KeycloakAuthenticationToken token,
-                            @Valid final WebApplicant webApplicant, final BindingResult applicantBindingResult,
-                            @Valid final WebAddress webAddress, final BindingResult addressBindingResult,
-                            final Model model,
-                            @Valid final WebCertificate webCertificate, final BindingResult certificateBindingResult,
-                            final String modules) {
+                        @Valid final WebApplicant webApplicant, final BindingResult applicantBindingResult,
+                        @Valid final WebAddress webAddress, final BindingResult addressBindingResult,
+                        final Model model,
+                        @Valid final WebCertificate webCertificate, final BindingResult certificateBindingResult,
+                        final String modules) {
 
         if (applicantBindingResult.hasErrors()) {
             applicantBindingResult.getAllErrors().forEach(err -> {
@@ -223,7 +208,7 @@ public class ApplicationController {
             model.addAttribute("courses", CSVService.getCourses());
             return "applicant/applicationPersonal";
         }
-       return "applicant/applicationModule";
+        return "applicant/applicationModule";
     }
 
     /**
@@ -238,9 +223,9 @@ public class ApplicationController {
     @PostMapping("weiteresModul")
     @Secured("ROLE_studentin")
     public String anotherModule(final KeycloakAuthenticationToken token,
-                              @Valid final WebApplication webApplication, final BindingResult bindingResult,
-                              final Model model,
-                              @RequestParam("modules") final String module) {
+                                @Valid final WebApplication webApplication, final BindingResult bindingResult,
+                                final Model model,
+                                @RequestParam("modules") final String module) {
         if (webApplication.getMinHours() > webApplication.getMaxHours()) {
             bindingResult.addError(new FieldError("WebApplication", "maxHours",
                     "Maximale Stundenzahl darf nicht kleiner als minimale sein."));
@@ -376,10 +361,13 @@ public class ApplicationController {
                                     @ModelAttribute("errormessage") final String error) {
         if (token != null) {
             Account account = createAccountFromPrincipal(token);
+            Applicant applicant = applicantService.findByUniserial(account.getName());
+            if (applicant == null) {
+                return "redirect:";
+            }
             model.addAttribute("errormessage", error);
             model.addAttribute("account", account);
             model.addAttribute("email", account.getEmail());
-            Applicant applicant = applicantService.findByUniserial(account.getName());
             model.addAttribute("applicant", applicant);
             model.addAttribute("modules",
                     studentService.getAllNotfilledModules(applicant, moduleService.getModules()));
@@ -400,33 +388,38 @@ public class ApplicationController {
     public String overview(final KeycloakAuthenticationToken token, final Model model,
                            @Valid final WebApplication webApplication,
                            final BindingResult bindingResult) {
-        if (webApplication.getMinHours() > webApplication.getMaxHours()) {
-            bindingResult.addError(new FieldError("webApplication", "maxHours",
-                    "Maximale Stundenzahl darf nicht kleiner als minimale sein."));
-        }
-        if (bindingResult.hasErrors()) {
-            bindingResult.getAllErrors().forEach(err -> {
-                LOGGER.info("ERROR {}", err.getDefaultMessage());
-            });
-            Module modul = moduleService.findModuleByName(webApplication.getModule());
-            Applicant applicant = applicantService.findByUniserial(token.getName());
-            List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
-            availableMods.remove(modul);
-            model.addAttribute("newModule", modul);
+        if (token != null) {
             model.addAttribute("account", createAccountFromPrincipal(token));
-            model.addAttribute("semesters", CSVService.getSemester());
-            model.addAttribute("modules", availableMods);
-            model.addAttribute("webApplication", webApplication);
-            return "applicant/applicationModule";
-        }
 
-        Applicant applicant = applicantService.findByUniserial(token.getName());
-        Application application = studentService.buildApplication(webApplication);
-        applicant = applicant.toBuilder().application(application).build();
-        applicantService.saveApplicant(applicant);
-        List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
-        model.addAttribute("applicant", applicant);
-        model.addAttribute("modules", availableMods);
+
+            if (webApplication.getMinHours() > webApplication.getMaxHours()) {
+                bindingResult.addError(new FieldError("webApplication", "maxHours",
+                        "Maximale Stundenzahl darf nicht kleiner als minimale sein."));
+            }
+            if (bindingResult.hasErrors()) {
+                bindingResult.getAllErrors().forEach(err -> {
+                    LOGGER.info("ERROR {}", err.getDefaultMessage());
+                });
+                Module modul = moduleService.findModuleByName(webApplication.getModule());
+                Applicant applicant = applicantService.findByUniserial(token.getName());
+                List<Module> availableMods = studentService.getAllNotfilledModules(applicant,
+                        moduleService.getModules());
+                availableMods.remove(modul);
+                model.addAttribute("newModule", modul);
+                model.addAttribute("semesters", CSVService.getSemester());
+                model.addAttribute("modules", availableMods);
+                model.addAttribute("webApplication", webApplication);
+                return "applicant/applicationModule";
+            }
+
+            Applicant applicant = applicantService.findByUniserial(token.getName());
+            Application application = studentService.buildApplication(webApplication);
+            applicant = applicant.toBuilder().application(application).build();
+            applicantService.saveApplicant(applicant);
+            List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
+            model.addAttribute("applicant", applicant);
+            model.addAttribute("modules", availableMods);
+        }
         return "applicant/applicationOverview";
     }
 
@@ -561,8 +554,8 @@ public class ApplicationController {
                     "Maximale Stundenzahl darf nicht kleiner als minimale sein."));
         }
         if (bindingResult.hasErrors()) {
-                bindingResult.getAllErrors().forEach(err -> {
-                    LOGGER.info("ERROR {}", err.getDefaultMessage());
+            bindingResult.getAllErrors().forEach(err -> {
+                LOGGER.info("ERROR {}", err.getDefaultMessage());
             });
         }
 

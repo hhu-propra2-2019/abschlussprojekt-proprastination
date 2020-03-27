@@ -194,6 +194,9 @@ public class StudentService {
      * @return Set of Modules.
      */
     public List<Module> getAllNotfilledModules(final Applicant applicant, final List<Module> modules) {
+        if (applicant == null) {
+            return modules;
+        }
         for (Application app : applicant.getApplications()) {
             modules.remove(app.getModule());
         }

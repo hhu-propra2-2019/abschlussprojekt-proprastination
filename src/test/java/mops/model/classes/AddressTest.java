@@ -3,6 +3,7 @@ package mops.model.classes;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class AddressTest {
 
@@ -56,5 +57,16 @@ class AddressTest {
                 .build();
 
         assertThat(address1).isEqualTo(address2);
+    }
+
+    @Test
+    void testNoArgsConstructor() {
+        Address emptyAddress = new Address();
+
+        assertNull(emptyAddress.getCity());
+        assertNull(emptyAddress.getCountry());
+        assertNull(emptyAddress.getHouseNumber());
+        assertNull(emptyAddress.getStreet());
+        assertNull(emptyAddress.getZipcode());
     }
 }

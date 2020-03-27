@@ -79,7 +79,7 @@ class CSVServiceTest{
     @Test
     void getCountriesTest() {
         List<String> countries;
-        String csvname = "src/main/resources/csv/countries.csv";
+        String csvname = System.getProperty("user.dir") + "/csv/countries.csv";
         List<String[]> data = CSVService.readFromCSV(csvname);
 
         countries = CSVService.getCountries();
@@ -108,7 +108,7 @@ class CSVServiceTest{
     @Test
     void getModulesTest() {
         List<String> modules;
-        String csvname = "src/main/resources/csv/module.csv";
+        String csvname = System.getProperty("user.dir") + "/csv/module.csv";
         List<String[]> data = CSVService.readFromCSV(csvname);
 
         modules = CSVService.getModules();
@@ -162,7 +162,7 @@ class CSVServiceTest{
     @Test
     void getCourses() {
         List<String> courses;
-        String csvname = "src/main/resources/csv/courses.csv";
+        String csvname = System.getProperty("user.dir") + "/csv/courses.csv";
         List<String[]> data = CSVService.readFromCSV(csvname);
 
         courses = CSVService.getCourses();
@@ -177,7 +177,7 @@ class CSVServiceTest{
     @Test
     void getSemesterTest() {
         List<String> semester;
-        String csvname = "src/main/resources/csv/semester.csv";
+        String csvname = System.getProperty("user.dir") + "/csv/semester.csv";
         List<String[]> data = CSVService.readFromCSV(csvname);
 
         semester = CSVService.getSemester();
