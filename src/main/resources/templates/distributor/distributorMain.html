@@ -153,25 +153,40 @@
             }
         });
 
+    </script>
+    <script>
+
         $("#distributeButton").click(function() {
             window.location.href = "/bewerbung2/verteiler/vorverteilen";
         });
+
+    </script>
+    <script>
 
         $('#drag1').draggable({
             scroll: true,
             scrollSensivity: 40,
             scrollSpeed: 40
-        })
+        });
+
+    </script>
+    <script>
 
         function allowDrop(ev) {
             ev.preventDefault();
         }
+
+    </script>
+    <script>
 
         function drag(ev) {
             ev.dataTransfer.setData("text", ev.target.id);
 
             ev.dataTransfer.setData("applicantId", ev.currentTarget.id);
         }
+
+    </script>
+    <script>
 
         function drop(ev, el) {
             ev.preventDefault();
@@ -195,6 +210,9 @@
             reloadWithTurbolinks();
         }
 
+    </script>
+    <script>
+
         function saveHours(el) {
             var hours = el.value;
             var applicantId = el.dataset.applicantid;
@@ -213,8 +231,11 @@
             reloadWithTurbolinks();
         }
 
+    </script>
+    <script>
+
         function saveHoursEnter(ev, el) {
-            if (event.which == 13) {
+            if (event.which === 13) {
                 var hours = el.value;
                 var applicantId = el.dataset.applicantid;
                 var distributionId = el.dataset.distributionid;
@@ -233,6 +254,9 @@
             }
         }
 
+    </script>
+    <script>
+
         function saveChecked(el) {
             var checked = el.checked;
             var applicantId = el.dataset.applicantid;
@@ -249,20 +273,23 @@
             reloadWithTurbolinks();
         }
 
+    </script>
+    <script>
+
         var reloadWithTurbolinks = (function () {
-            var scrollPosition
+            var scrollPosition;
 
             function reload () {
-                scrollPosition = [window.scrollX, window.scrollY]
+                scrollPosition = [window.scrollX, window.scrollY];
                 Turbolinks.visit(window.location.toString(), { action: 'replace' })
             }
 
             document.addEventListener('turbolinks:load', function () {
                 if (scrollPosition) {
-                    window.scrollTo.apply(window, scrollPosition)
-                    scrollPosition = null
+                    window.scrollTo.apply(window, scrollPosition);
+                    scrollPosition = null;
                 }
-            })
+            });
 
             return reload
         })()
