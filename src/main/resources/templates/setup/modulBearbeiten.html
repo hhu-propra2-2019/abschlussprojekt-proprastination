@@ -101,16 +101,19 @@
                     <div class="col-3">
                         <input type="number" name="sevenHourLimit" id="sevenHourLimit"
                                th:value="*{sevenHourLimit}" th:placeholder="*{sevenHourLimit}"
+                               required pattern="0|([1-9][0-9]*)"
                                th:field="*{sevenHourLimit}">
                     </div>
                     <div class="col-3">
                         <input type="number" name="nineHourLimit" id="nineHourLimit"
                                th:value="*{nineHourLimit}" th:placeholder="*{nineHourLimit}"
+                               required pattern="0|([1-9][0-9]*)"
                                th:field="*{nineHourLimit}">
                     </div>
                     <div class="col-3">
                         <input type="number" name="seventeenHourLimit" id="seventeenHourLimit"
                                th:value="*{seventeenHourLimit}" th:placeholder="*{seventeenHourLimit}"
+                               required pattern="0|([1-9][0-9]*)"
                                th:field="*{seventeenHourLimit}">
                     </div>
                     <div class="col-3">
