@@ -166,4 +166,25 @@ class StudentServiceTest {
         verify(applicantServiceMock, times(1)).saveApplicant(newApplicant);
     }
 
+    @Test
+    void getExistingApplicant() {
+        WebApplicant result = studentService.getExistingApplicant(applicant);
+
+        assertEquals(webApplicant, result);
+    }
+
+    @Test
+    void getExistingAddress() {
+        WebAddress result = studentService.getExistingAddress(address);
+
+        assertEquals(webAddress, result);
+    }
+
+    @Test
+    void getExistingCertificate() {
+        WebCertificate result = studentService.getExistingCertificate(certificate);
+
+        assertEquals(webCertificate, result);
+    }
+
 }
