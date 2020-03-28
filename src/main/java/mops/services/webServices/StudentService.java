@@ -147,7 +147,7 @@ public class StudentService {
      * @param applicant applicant.
      * @return WebApplicant.
      */
-    public WebApplicant getExsistingApplicant(final Applicant applicant) {
+    public WebApplicant getExistingApplicant(final Applicant applicant) {
         return WebApplicant.builder()
                 .birthday(applicant.getBirthday())
                 .birthplace(applicant.getBirthplace())
@@ -165,7 +165,7 @@ public class StudentService {
      * @param address address.
      * @return webaddress.
      */
-    public WebAddress getExsistingAddress(final Address address) {
+    public WebAddress getExistingAddress(final Address address) {
         return WebAddress.builder()
                 .city(address.getCity())
                 .number(address.getHouseNumber())
@@ -181,7 +181,7 @@ public class StudentService {
      * @param certificate certificate
      * @return webcertificate
      */
-    public WebCertificate getExsistingCertificate(final Certificate certificate) {
+    public WebCertificate getExistingCertificate(final Certificate certificate) {
         return WebCertificate.builder()
                 .graduationcourse(certificate.getCourse())
                 .graduation(certificate.getName())
