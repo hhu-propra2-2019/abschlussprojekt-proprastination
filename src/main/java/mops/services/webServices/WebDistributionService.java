@@ -93,7 +93,7 @@ public class WebDistributionService {
                 case hours7: hoursSet[0]++; break;
                 case hours9: hoursSet[1]++; break;
                 case hours17: hoursSet[2]++; break;
-                default: throw new IllegalStateException("Unexpected value: " + finalHours);
+                default:
             }
         }
         return hoursSet;
