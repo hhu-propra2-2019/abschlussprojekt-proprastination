@@ -130,7 +130,7 @@ public class StudentService {
                 .certs(newApplicant.getCerts())
                 .status(newApplicant.getStatus())
                 .course(newApplicant.getCourse())
-                .nationality(newApplicant.getComment())
+                .nationality(newApplicant.getNationality())
                 .birthday(newApplicant.getBirthday())
                 .address(newApplicant.getAddress())
                 .birthplace(newApplicant.getBirthplace())

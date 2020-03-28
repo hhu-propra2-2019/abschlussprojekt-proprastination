@@ -1,8 +1,8 @@
 package mops.services.webServices;
 
-import com.github.javafaker.App;
 import mops.model.classes.Address;
 import mops.model.classes.Applicant;
+import mops.model.classes.Application;
 import mops.model.classes.Certificate;
 import mops.model.classes.webclasses.WebAddress;
 import mops.model.classes.webclasses.WebApplicant;
@@ -10,6 +10,9 @@ import mops.model.classes.webclasses.WebCertificate;
 import mops.services.dbServices.ApplicantService;
 import mops.services.dbServices.ModuleService;
 import org.junit.jupiter.api.Test;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -113,6 +116,54 @@ class StudentServiceTest {
 
         verify(applicantServiceMock, times(1)).findByUniserial(uniserial);
         assertEquals(applicant, result);
+    }
+
+    @Test
+    void updateApplicantWithoutChangingApplications() {
+        Set<Application> testApplications = new HashSet<>();
+        testApplications.add(mock(Application.class));
+        testApplications.add(mock(Application.class));
+
+        Applicant oldApplicant = Applicant.builder()
+                .uniserial("jabon007")
+                .firstName("James")
+                .surname("Bond")
+                .address(mock(Address.class))
+                .certs(mock(Certificate.class))
+                .birthday("2001-01-01")
+                .birthplace("London, UK")
+                .comment("Ah!")
+                .course("Photografie")
+                .gender("male")
+                .nationality("UK")
+                .status("Tutor")
+                .checked(false)
+                .applications(testApplications)
+                .build();
+
+        Applicant newApplicant = Applicant.builder()
+                .uniserial("jabon007")
+                .firstName("Clark")
+                .surname("Kent")
+                .address(mock(Address.class))
+                .certs(mock(Certificate.class))
+                .birthday("2002-02-02")
+                .birthplace("Krypton")
+                .comment("Up, up and away!")
+                .course("Journalism")
+                .gender("female")
+                .nationality("USA")
+                .status("Korrektor")
+                .checked(false)
+                .applications(testApplications)
+                .build();
+
+        when(applicantServiceMock.findByUniserial("jabon007")).thenReturn(oldApplicant);
+
+        studentService.updateApplicantWithoutChangingApplications(newApplicant);
+
+        verify(applicantServiceMock, times(1)).findByUniserial("jabon007");
+        verify(applicantServiceMock, times(1)).saveApplicant(newApplicant);
     }
 
 }
