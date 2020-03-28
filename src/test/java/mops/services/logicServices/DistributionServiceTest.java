@@ -2,6 +2,7 @@ package mops.services.logicServices;
 
 import mops.model.classes.*;
 import mops.model.classes.Module;
+import mops.model.classes.webclasses.WebDistributorApplicant;
 import mops.services.dbServices.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -28,8 +29,6 @@ class DistributionServiceTest {
     DbDistributionService dbDistributionService;
     @Autowired
     ModuleService moduleService;
-
-    DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
 
     @AfterEach
     public void cleanDatabase() {
@@ -197,7 +196,9 @@ class DistributionServiceTest {
     }
 
     @Test
-    private void testDistribute() {
+    public void testDistribute() {
+
+        DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
 
         fillDatabase();
 
@@ -253,7 +254,10 @@ class DistributionServiceTest {
     }
 
     @Test
-    private void testChangeAllFinalHours() {
+    public void testChangeAllFinalHours() {
+
+        DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
+
         fillDatabase();
 
         distributionService.changeAllFinalHours();
@@ -264,4 +268,121 @@ class DistributionServiceTest {
             assertEquals(evaluation.getHours(), application.getFinalHours());
         }
     }
+
+    @Test
+    public void testFindAllUnassignedAfterDistribute() {
+
+        DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
+
+        fillDatabase();
+
+        distributionService.distribute();
+
+        List<Applicant> actualApplicants = distributionService.findAllUnassigned();
+
+        List<Applicant> expectedApplicants = new LinkedList<>();
+        expectedApplicants.add(applicantService.findByUniserial("1"));
+        expectedApplicants.add(applicantService.findByUniserial("7"));
+        expectedApplicants.add(applicantService.findByUniserial("9"));
+        expectedApplicants.add(applicantService.findByUniserial("13"));
+        expectedApplicants.add(applicantService.findByUniserial("15"));
+
+        assertEquals(actualApplicants.size(), expectedApplicants.size());
+        for (int i = 0; i < expectedApplicants.size(); i++) {
+            assertTrue(actualApplicants.contains(expectedApplicants.get(i)));
+        }
+    }
+
+    @Test
+    public void testFindAllUnassignedBeforeDistribute() {
+
+        DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
+
+        fillDatabase();
+
+        List<Applicant> actualApplicants = distributionService.findAllUnassigned();
+
+        assertEquals(actualApplicants, applicantService.findAll());
+    }
+
+    @Test
+    public void testMoveApplicantFromModuleToModule() {
+
+        DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
+
+        fillDatabase();
+
+        distributionService.moveApplicant(Long.toString(applicantService.findByUniserial("2").getId()), Long.toString(dbDistributionService.findByModule(moduleService.findModuleByName("Aldat")).getId()));
+
+        assertTrue(dbDistributionService.findByModule(moduleService.findModuleByName("Aldat")).getEmployees().contains(applicantService.findByUniserial("2")));
+        assertFalse(dbDistributionService.findByModule(moduleService.findModuleByName("RA")).getEmployees().contains(applicantService.findByUniserial("2")));
+    }
+
+    @Test
+    public void testMoveApplicantFromUnassignedToModule() {
+
+        DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
+
+        fillDatabase();
+
+        distributionService.moveApplicant(Long.toString(applicantService.findByUniserial("1").getId()), Long.toString(dbDistributionService.findByModule(moduleService.findModuleByName("Aldat")).getId()));
+
+        assertTrue(dbDistributionService.findByModule(moduleService.findModuleByName("Aldat")).getEmployees().contains(applicantService.findByUniserial("1")));
+        assertFalse(distributionService.findAllUnassigned().contains(applicantService.findByUniserial("1")));
+    }
+
+    @Test
+    public void testMoveApplicantFromModuleToUnassigned() {
+
+        DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
+
+        fillDatabase();
+
+        //distributionService.moveApplicant(Long.toString(applicantService.findByUniserial("2").getId()), Long.toString(dbDistributionService.findByModule(moduleService.findModuleByName("Aldat")).getId()));
+
+        assertFalse(dbDistributionService.findByModule(moduleService.findModuleByName("RA")).getEmployees().contains(applicantService.findByUniserial("2")));
+        assertTrue(distributionService.findAllUnassigned().contains(applicantService.findByUniserial("2")));
+    }
+
+    @Test
+    public void testMoveApplicantToWrongModule() {
+
+        DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
+
+        fillDatabase();
+
+        moduleService.save(Module.builder()
+                .name("ProPra")
+                .build());
+
+        distributionService.moveApplicant(Long.toString(applicantService.findByUniserial("2").getId()), Long.toString(dbDistributionService.findByModule(moduleService.findModuleByName("Propra")).getId()));
+
+        assertFalse(dbDistributionService.findByModule(moduleService.findModuleByName("Propra")).getEmployees().contains(applicantService.findByUniserial("2")));
+        assertTrue(dbDistributionService.findByModule(moduleService.findModuleByName("RA")).getEmployees().contains(applicantService.findByUniserial("2")));
+    }
+
+    @Test
+    public void testGetTypeOfApplicant() {
+
+        DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
+
+        Applicant applicant1 = Applicant.builder()
+                .certs(Certificate.builder()
+                        .name("Keins")
+                        .build())
+                .uniserial("1")
+                .build();
+
+        Applicant applicant2 = Applicant.builder()
+                .certs(Certificate.builder()
+                        .name("Jodeldiplom")
+                        .build())
+                .uniserial("1")
+                .build();
+
+        assertEquals(distributionService.getTypeOfApplicant(applicant1), "SHK");
+        assertEquals(distributionService.getTypeOfApplicant(applicant2), "WHB");
+    }
+
+
 }

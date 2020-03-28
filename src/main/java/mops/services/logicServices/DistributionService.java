@@ -332,7 +332,7 @@ public class DistributionService {
      * Sorts the WebDistributorApplicants by Matches
      * @param applicantList List with all WebDistributorApplicants for Distribution
      * @param module module of distribution
-     * @return sortet List of Applicants
+     * @return sorted List of Applicants
      */
     public List<WebDistributorApplicant> sort(final List<WebDistributorApplicant> applicantList, final String module) {
         List<WebDistributorApplicant> sortedApplicants = new LinkedList<>();
@@ -392,7 +392,6 @@ public class DistributionService {
                             .finalHours(Integer.parseInt(hours))
                             .build());
                 }
-
             }
         }
     }
