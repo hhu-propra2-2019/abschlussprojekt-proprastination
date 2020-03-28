@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{mopslayout :: html(name='Korrektorenbewerbung', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}">
+<head>
+    <meta charset="utf-8">
+    <title>Korrektorenbewerbung</title>
+    <th:block th:fragment="headcontent">
+        <link href="../static/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"
+              th:href="@{node_modules/bootstrap/dist/css/bootstrap.min.css}">
+    </th:block>
+</head>
+<body>
+<header>
+    <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
+        <ul th:if="${account.roles.size() > 1}">
+            <li th:if="${account.roles.contains('verteiler')}"><a th:href="@{/bewerbung2/verteiler/}">Verteiler Übersicht</a></li>
+            <li th:if="${account.roles.contains('orga')}"><a th:href="@{/bewerbung2/organisator/}">Organisator Übersicht</a></li>
+            <li th:if="${account.roles.contains('setup')}"><a th:href="@{/bewerbung2/setup/}">Ersteller Übersicht</a></li>
+            <li th:if="${account.roles.contains('studentin')}"><a th:href="@{/bewerbung2/bewerber/}">Bewerber Übersicht</a></li>
+        </ul>
+        <ul>
+            <li><a th:href="@{/}">Startseite</a></li>
+            <li><a th:href="@{./}">Dashboard</a></li>
+        </ul>
+    </nav>
+</header>
+<main th:fragment="bodycontent">
+    <div style="text-align: center;">
+        <form th:action="@{modul}" th:method="POST" th:object="${webApplicant}">
+            <div class="card bg-light mb-3 border-primary">
+                <div class="card-header"><h2>Persönliche Daten</h2></div>
+                <div class="card-body">
+                    <div class="row" th:object="${webAddress}">
+                        <div class="col-4">
+                            <input th:type="text" th:name="street"
+                                   th:field="*{street}" th:attr="value = ${webAddress.street}"
+                                   class="form-control" placeholder="Straße"
+                                   required >
+                            <div th:if="${#fields.hasErrors('street')}" class="text-danger">
+                                Bitte geben Sie eine Straße ein.
+                            </div>
+                            <br>
+                            <br>
+                        </div>
+                        <div class="col-md-1">
+                            <input class="form-control" name="streetnumber" placeholder="Nr." required
+                                   th:field="*{number}" th:attr="value = ${webAddress.number}"
+                                   type="text">
+                        </div>
+                        <div class="col-3">
+                            <input th:type="text" th:name="city" th:id="city"
+                                   th:field="*{city}" th:attr="value = ${webAddress.city}"
+                                   th:class="form-control" placeholder="Ort"
+                                   required>
+                            <div th:if="${#fields.hasErrors('city')}" class="text-danger">
+                                Bitte geben Sie eine Stadt an.
+                            </div>
+                            <br>
+                        </div>
+                        <div class="col-2">
+                            <input th:field="*{zipcode}" th:id="zipcode" th:name="zipcode" type="text"
+                                   th:attr="value = ${webAddress.zipcode}"
+                                   th:class="form-control" placeholder="Postleitzahl"
+                                   required>
+                            <div th:if="${#fields.hasErrors('zipcode')}" class="text-danger">
+                                Bitte geben Sie eine gültige Postleitzahl ein.
+                            </div>
+                            <br>
+                        </div>
+                        <div class="col">
+                            <select required th:class="form-control" th:field="*{country}"
+                                    th:id="country" th:name="country" th:value="${webAddress.country}">
+                                <option value="" disabled hidden>Wohnsitz</option>
+                                <option th:each="country:${countries}" th:text="${country}"
+                                        th:value="${country}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5">
+                            <input th:type="text" th:name="birthplace" th:id="birthplace"
+                                   th:field="*{birthplace}"  th:attr="value = ${webApplicant.birthplace}"
+                                   th:class="form-control" placeholder="Geburtsort, Land"
+                                   required>
+                            <div th:if="${#fields.hasErrors('birthplace')}" class="text-danger">
+                                Bitte geben Sie einen Geburtsort an.
+                            </div>
+                            <br>
+                        </div>
+                        <div class="col-5">
+                            <select name="nationality" id="nationality" class="form-control"
+                                    th:field="*{nationality}" required>
+                                <option value="" disabled hidden>Nationalität</option>
+                                <option th:each="country:${countries}" th:text="${country}" th:value="${country}"></option>
+                            </select>
+                            <div th:if="${#fields.hasErrors('nationality')}" class="text-danger">
+                                Bitte geben Sie eine Nationalität an.
+                            </div>
+                            <br>
+                        </div>
+                        <div class="col-2">
+                            <input type="text" name="birthday" id="birthday" onfocus="(this.type='date')"
+                                   th:field="*{birthday}" th:attr="value = ${webApplicant.birthday}"
+                                   onblur="(this.type='text')" class="form-control" placeholder="Geburtstag"
+                                   required pattern="[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])">
+                            <div th:if="${#fields.hasErrors('birthday')}" class="text-danger">
+                                Bitte geben Sie ein gültiges Geburtsdatum an.
+                            </div>
+                            <br><br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            <select name="gender" id="gender" class="form-control"
+                                    th:field="*{gender}" required>
+                                <option value="" disabled selected hidden>Geschlecht</option>
+                                <option th:value="male">männlich</option>
+                                <option th:value="female">weiblich</option>
+                            </select>
+                            <div th:if="${#fields.hasErrors('gender')}" class="text-danger">
+                                Bitte wählen Sie ein Geschlecht.
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div align="right">
+                                <label for="courses">
+                                    Wählen Sie ihr aktuellen Studienfach aus falls Sie an der HHU immatrikuliert sind.
+                                    Ansonsten wählen sie bitte die Option <br>"nicht immatrikuliert".
+                                </label> <br>
+                            </div>
+
+                        </div>
+                        <div class="col-6">
+                            <select name="courses" id="courses" class="form-control"
+                                    th:field="*{course}" th:attr="value=${webApplicant.course}"
+                                    required>
+                                <option th:each="cours:${courses}" th:text="${cours}" th:value="${cours}"></option>
+                            </select>
+                            <div th:if="${#fields.hasErrors('course')}" class="text-danger">
+                                Bitte wählen Sie ein Studienfach.
+                            </div>
+                            <br> <br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div align="right">
+                                <label>
+                                    Wählen sie bitte Ihren aktuellen Angestelltenstatus
+                                </label> <br>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <select th:name="status" th:id="status" th:class="form-control"
+                                    th:field="*{status}" th:attr="value = ${webApplicant.status}"
+                                    required>
+                                <option th:value="Einstellung">
+                                    Neueinstellung (bisher keine Anstellung an der HHU)
+                                </option>
+                                <option th:value="Weiterbeschäftigung">
+                                    Weiterbeschäftigung (bestehender Vertrag bis zum DD.MM.YYYY)
+                                </option>
+                                <option th:value="Änderung">
+                                    Wiedereinstellung (KEIN bestehender Vertrag bis zum DD.MM.YYYY)
+                                </option>
+                            </select>
+                            <div th:if="${#fields.hasErrors('status')}" class="text-danger">
+                                Bitte wählen Sie Ihren Angestelltenstatus.
+                            </div>
+                            <br><br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label th:for="graduation">
+                                Was ist der bisher höchste Universitätsabschluss, den Sie erreicht haben?
+                                Bitte schreiben Sie in das Textfeld, in welchem Fach Sie Ihren Abschluss erreicht haben.
+                                Falls der Abschluss nicht an der HHU erlangt wurde, schreiben sie dies bitte dazu.
+                            </label> <br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <th:block th:object="${webCertificate}">
+                            <div class="col-6">
+                                <select th:name="graduation" th:id="name" class="form-control"
+                                        th:field="*{graduation}" th:attr="value = ${webCertificate.graduation}">
+                                    <option th:value="Keins">kein Universitätsabschluss</option>
+                                    <option th:value="Bachelor">Bachelor</option>
+                                    <option th:value="Master">Master</option>
+                                    <option th:value="Diplom">Diplom</option>
+                                    <option th:value="Staatsexamen">Staatsexamen</option>
+                                    <option th:value="Anderes">Anderes</option>
+                                </select> <br>
+                            </div>
+                            <div class="col-6">
+                                <input th:type="text" th:name="graduationsubject" th:id="graduationsubject"
+                                       class="form-control" placeholder="Abschlussfach"
+                                       th:field="*{graduationcourse}" th:value="${webCertificate.graduationcourse}">
+                                <br>
+                            </div>
+                        </th:block>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label>
+                                Beschreiben Sie hier kurz Ihre bisherigen Erfahrungen und sonstige Anmerkungen:
+                            </label> <br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <textarea th:name="comment" th:id="comment" th:class="form-control" rows="6"
+                                      th:field="*{comment}" th:attr="value = ${webApplicant.comment}"
+                                      maxlength="1000"></textarea>
+                            <div th:if="${#fields.hasErrors('comment')}" class="text-danger">
+                                Die Anmerkungen dürfen maximal 1000 Zeichen lang sein.
+                            </div>
+                            <br>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card bg-light mb-3 border-primary" th:if="${modules.size()} ne 0">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="modules">
+                                Wählen Sie das Modul für das Sie sich bewerben möchten:
+                            </label>
+                        </div>
+                        <div class="col-4">
+                            <select name="modules" id="modules" class="form-control">
+                                <option th:each="module:${modules}" th:text="${module.name}"></option>
+                            </select>
+                        </div>
+                        <div class="col-2">
+                            <button th:type="submit" class="btn btn-outline-primary form-control"> Bestätige</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="card bg-light mb-3 border-primary" th:unless="${modules.size()} ne 0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <label for="back"><h3>Du kannst keine weiteren Bewerbungen ausfüllen!</h3></label>
+                        <a class="btn btn-outline-danger" name="back"
+                           th:href="@{/bewerbung2/bewerber/}" type="submit"> Zurück</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

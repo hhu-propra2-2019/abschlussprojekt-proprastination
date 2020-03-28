@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{mopslayout :: html(name='Orga', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}">
+
+<head>
+    <meta charset="utf-8">
+    <title>Name des Subsystems</title>
+    <th:block th:fragment="headcontent">
+        <!-- Links, Skripts, Styles hier einfügen! -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+        <script charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"
+                type="text/javascript"></script>
+        <script src="//cdn.datatables.net/plug-ins/1.10.20/sorting/enum.js" type="text/javascript"></script>
+        <script src="//cdn.datatables.net/plug-ins/1.10.20/sorting/numString.js" type="text/javascript"></script>
+        <script>
+            $.fn.dataTable.ext.order['dom-select'] = function (settings, col) {
+                return this.api().column(col, {order: 'index'}).nodes().map(function (td, i) {
+                    return $('select', td).val();
+                });
+            };
+            $(document).ready(function () {
+                $.fn.dataTable.enum(['++', '+', 'O', '-']);
+                $.fn.dataTable.numString(/^\d+.*?$/);
+                $('#table_id').DataTable({
+                    "paging": false,
+                    "searching": false,
+                    "info": false,
+                    "columns": [
+                        {"name": "ProfPrio", "orderable": true, "orderDataType": "dom-select"},
+                        {"name": "AppPrio", "orderable": true},
+                        {"name": "Rolle", "orderable": true},
+                        {"name": "Note", "orderable": true},
+                        {"name": "MinStunden", "orderable": true},
+                        {"name": "MaxStunden", "orderable": true},
+                        {"name": "Stunden", "orderable": true, "orderDataType": "dom-select"},
+                        {"name": "Unikennung", "orderable": true},
+                        {"name": "ButtonShow", "orderable": false}
+                    ]
+                } );
+            } );
+        </script>
+    </th:block>
+</head>
+<body>
+
+
+<header>
+    <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
+        <ul th:if="${account.roles.size() > 1}">
+            <li th:if="${account.roles.contains('verteiler')}"><a th:href="@{/bewerbung2/verteiler/}">Verteiler Übersicht</a></li>
+            <li th:if="${account.roles.contains('orga')}"><a th:href="@{/bewerbung2/organisator/}">Organisator Übersicht</a></li>
+            <li th:if="${account.roles.contains('setup')}"><a th:href="@{/bewerbung2/setup/}">Ersteller Übersicht</a></li>
+            <li th:if="${account.roles.contains('studentin')}"><a th:href="@{/bewerbung2/bewerber/}">Bewerber Übersicht</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main th:fragment="bodycontent">
+    <form th:action="@{./}" th:method="POST" th:object="${WebList}">
+        <div class="row">
+            <div class="col mr-2 mb-2">
+                <button class="btn btn-outline-primary float-right mx-md-3" th:type="submit" th:value="submit">
+                    Speichern
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+
+
+                <table class="display" id="table_id" style="width:100%">
+                    <thead>
+                    <tr>
+                        <th class="text-center">Ihre Priorität</th>
+                        <th class="text-center">Priorität des Bewerbers</th>
+                        <th class="text-center">Note</th>
+                        <th class="text-center">Rolle</th>
+                        <th class="text-center">Min. Arbeitszeit</th>
+                        <th class="text-center">Max. Arbeitszeit</th>
+                        <th class="text-center">Stundenanzahl</th>
+                        <th class="text-center">Name</th>
+                        <th class="text-center">Ganze Bewerbung</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="appl, stat : ${WebList.applications}">
+                        <td class="text-center">
+                            <select id="priority" name="priority"
+                                    th:field="*{applications[__${stat.index}__].priority}"
+                                    th:name="|applications[__${stat.index}__].priority|"
+                                    th:value="${appl.priority}">
+                                <option th:each="priority : ${T(mops.model.classes.Priority).values()}"
+                                        th:text="${priority.label}"
+                                        th:value="${priority.value}"
+                                >++
+                                </option>
+                            </select>
+                            <input th:field="*{applications[__${stat.index}__].id}" th:value="${appl.id}" type="hidden">
+                        </td>
+                        <td class="text-center" th:text="${appl.studentPriority.label}"
+                            th:value="${appl.studentPriority.value}">++
+                        </td>
+                        <td class="text-center" th:text="${appl.grade}">2,7</td>
+                        <td class="text-center" th:text="${appl.role.label}">Tutor</td>
+                        <td class="text-center" th:text="${appl.minHours} + 'h'">7h</td>
+                        <td class="text-center" th:text="${appl.maxHours} + 'h'">9h</td>
+                        <td class="text-center">
+                            <select id="hours" th:field="*{applications[__${stat.index}__].finalHours}"
+                                    th:name="|applications[${stat.index}].finalHours|" th:value="${appl.finalHours}">
+                                <option th:value="7">7 Stunden</option>
+                                <option th:value="9">9 Stunden</option>
+                                <option th:value="17">17 Stunden</option>
+                            </select>
+                        </td>
+                        <td class="text-center" th:text="${appl.firstName + ' ' + appl.surname}">Mamus100</td>
+                        <td class="text-center">
+                            <button class="btn btn-outline-dark openBtn" data-target="#applicationModal"
+                                    data-toggle="modal"
+                                    th:attr="data-id=${appl.id},data-name=${appl.firstName + ' ' + appl.surname}"
+                                    type="button">
+                                Bewerbung ansehen
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="modal fade" id="applicationModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title">Bewerbung von Max Mustermann</h2>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body applicationModal">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script>
+        $('#applicationModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var test = button.data('id');
+            var applicant = button.data('name');
+            var modal = $(this);
+            modal.find('.modal-title').text('Bewerbung von ' + applicant);
+            $('.applicationModal').load('/bewerbung2/organisator/modal/' + test + '/',function(){
+                $('#applicationModal').show(true);
+            });
+        });
+    </script>
+</main>
+</body>
+</html>

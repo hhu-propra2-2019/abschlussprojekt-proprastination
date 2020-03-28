@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{mopslayout :: html(name='Korrektorenbewerbung', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}">
+<head>
+    <meta charset="utf-8">
+    <title>Korrektorenbewerbung</title>
+    <th:block th:fragment="headcontent">
+        <link href="../static/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"
+              th:href="@{node_modules/bootstrap/dist/css/bootstrap.min.css}">
+    </th:block>
+</head>
+<body>
+<header>
+    <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
+        <ul th:if="${account.roles.size() > 1}">
+            <li th:if="${account.roles.contains('verteiler')}"><a th:href="@{/bewerbung2/verteiler/}">Verteiler Übersicht</a></li>
+            <li th:if="${account.roles.contains('orga')}"><a th:href="@{/bewerbung2/organisator/}">Organisator Übersicht</a></li>
+            <li th:if="${account.roles.contains('setup')}"><a th:href="@{/bewerbung2/setup/}">Ersteller Übersicht</a></li>
+            <li th:if="${account.roles.contains('studentin')}"><a th:href="@{/bewerbung2/bewerber/}">Bewerber Übersicht</a></li>
+        </ul>
+        <ul>
+            <li><a th:href="@{/}">Startseite</a></li>
+            <li><a th:href="@{./}">Dashboard</a></li>
+        </ul>
+    </nav>
+</header>
+<main th:fragment="bodycontent">
+    <div style="text-align: center;">
+        <!-- Restlichen Inhalt hier einfügen! -->
+        <form th:action="${weiteresModul}" th:method="POST" th:object="${webApplication}">
+            <div class="card bg-light mb-3 border-primary">
+                <div class="card-header"><h2 th:text="${newModule.name}"></h2>
+                    <input th:field="*{module}" th:type="hidden"
+                           th:value="${newModule.name}">
+                </div>
+                <div class="card-body">
+                    <div class="row form-row mb-3">
+                        <div class="d-flex align-items-sm-center">
+                            <div class="col-md-4 px-md-1 align-self-center">
+                                <div class="form-group">
+                                    <label th:for="minworkload">
+                                        Geben Sie bitte an wie viele Stunden Sie minimal pro Woche arbeiten möchten
+                                    </label> <br>
+                                    <select class="form-control" required th:attr="value = ${webApplication.minHours}"
+                                            th:field="*{minHours}"
+                                            th:id="workload" th:name="minworkload">
+                                        <option disabled hidden selected value="0">Arbeitszeit</option>
+                                        <option th:value="7">7 Stunden/Woche</option>
+                                        <option th:value="9">9 Stunden/Woche</option>
+                                        <option th:value="17">17 Stunden/Woche</option>
+                                    </select>
+                                    <div th:if="${#fields.hasErrors('minHours')}" class="text-danger">
+                                        Bitte geben Sie ein gültiges Stundenminimum an.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 px-md-1 align-self-center">
+                                <div class="form-group">
+                                    <label th:for="maxworkload">
+                                        Geben Sie bitte an wie viele Stunden Sie maximal pro Woche arbeiten möchten
+                                    </label> <br>
+                                    <select class="form-control" required th:attr="value = ${webApplication.maxHours}"
+                                            th:field="*{maxHours}"
+                                            th:id="workload" th:name="maxworkload">
+                                        <option disabled hidden selected value="0">Arbeitszeit</option>
+                                        <option th:value="7">7 Stunden/Woche</option>
+                                        <option th:value="9">9 Stunden/Woche</option>
+                                        <option th:value="17">17 Stunden/Woche</option>
+                                    </select>
+                                    <div th:if="${#fields.hasErrors('maxHours')}" class="text-danger">
+                                        Bitte geben Sie ein gültiges Stundenmaximum an, das nicht kleiner als das
+                                        Minimum ist.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 px-md-1 align-self-center">
+                                <div class="form-group">
+                                    <label th:for="grade">Geben Sie von Ihnen in diesem Modul erreichte Note an</label> <br>
+                                    <select class="form-control" required th:attr="value = ${webApplication.grade}"
+                                            th:field="*{grade}"
+                                            th:id="grade" th:name="grade">
+                                        <option disabled hidden selected th:value="0">Note</option>
+                                        <option th:value="1.0">1,0</option>
+                                        <option th:value="1.3">1,3</option>
+                                        <option th:value="1.7">1,7</option>
+                                        <option th:value="2.0">2,0</option>
+                                        <option th:value="2.3">2,3</option>
+                                        <option th:value="2.7">2,7</option>
+                                        <option th:value="3.0">3,0</option>
+                                        <option th:value="3.3">3,3</option>
+                                        <option th:value="3.7">3,7</option>
+                                        <option th:value="4.0">4,0</option>
+                                        <option th:value="5.0">5,0</option>
+                                    </select>
+                                    <div th:if="${#fields.hasErrors('grade')}" class="text-danger">
+                                        Bitte geben Sie eine Note an.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label th:for="semesters">In welchem Semester haben Sie dieses Modul bestanden</label>
+                                <br>
+                                <select class="form-control" required th:attr="value = ${webApplication.semester}"
+                                        th:field="*{semester}"
+                                        th:id="semesters" th:name="semesters">
+                                    <option disabled hidden selected value="">Semester</option>
+                                    <option th:each="semester:${semesters}" th:text="${semester}"
+                                            th:value="${semester}"></option>
+                                </select>
+                                <div th:if="${#fields.hasErrors('semester')}" class="text-danger">
+                                    Bitte geben Sie ein Semester an.
+                                </div>
+                                <br>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label th:for="lecturer">Bei welchem Dozent haben Sie dieses Modul bestanden</label>
+                                <br>
+                                <input class="form-control" placeholder="Dozent" required
+                                       th:attr="value = ${webApplication.lecturer}" th:field="*{lecturer}"
+                                       th:id="lecturer"
+                                       th:name="lecturer" th:type="text">
+                                <div th:if="${#fields.hasErrors('lecturer')}" class="text-danger">
+                                    Bitte geben Sie einen Dozenten an.
+                                </div>
+                                <br>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label th:for="role">Welche Aufgaben möchten Sie übernehmen</label> <br> <br>
+                                <select class="form-control" id="tasks" name="tasks" th:field="*{role}">
+                                    <option th:each="role : ${T(mops.model.classes.Role).values()}"
+                                            th:text="${role.label}"
+                                            th:value="${role}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label th:for="priority">
+                                    Geben Sie bitte hier ihre Priorität für dieses Modul an,
+                                    falls sie vor haben sich noch bei anderen Modulen zu bewerben
+                                </label> <br>
+                                <select class="form-control" id="priority" name="priority" th:field="*{priority}">
+                                    <option th:each="module : ${T(mops.model.classes.Priority).values()}"
+                                            th:text="${module.label}" th:unless="${module.value} == 4"
+                                            th:value="${module}">++
+                                    </option>
+                                </select> <br>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col">
+                                <label>
+                                    Beschreiben Sie hier kurz Ihre bisherigen Erfahrungen und sonstige Anmerkungen:
+                                </label> <br>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                            <textarea maxlength="1000" rows="6" th:attr="value = ${comment}" th:class="form-control"
+                                      th:field="*{comment}"
+                                      th:id="comment" th:name="comment"
+                            ></textarea> <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="card bg-light mb-3 border-primary" th:if="${modules.size() ne 0}">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <label th:for="modules">
+                                Falls Sie sich bei einem weiteren Modul bewerben möchten können Sie dieses hier
+                                auswählen
+                            </label>
+                        </div>
+                        <div class="col-4">
+                            <select th:name="modules" th:id="modules" class="form-control">
+                                <option th:each="module:${modules}" th:text="${module.name}"
+                                        th:value="${module.name}"></option>
+                            </select>
+                        </div>
+                        <div class="col-2">
+                            <button class="btn btn-outline-primary form-control" th:formaction="@{weiteresModul} "
+                                    th:type="submit">Weiteres Modul
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="card bg-light mb-3 border-primary">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-10">
+                            Klicken sie hier falls sie ihre Bewerbung einreichen wollen.
+                            Sie wird bis zur Frist noch änderbar sein.
+                        </div>
+                        <div class="col-2">
+                            <button class="btn btn-outline-primary form-control" th:formaction="@{uebersicht}"
+                                    th:type="submit">
+                                Einreichen
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+</body>
+</html>

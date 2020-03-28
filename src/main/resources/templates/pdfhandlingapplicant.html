@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en"
+      th:replace="~{mopslayout :: html(name='Download PDFs', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}"
+      xmlns:th="http://www.thymeleaf.org" xmlns:text-align="http://www.w3.org/1999/xhtml">
+
+<head>
+    <!-- Required meta tags -->
+    <th:block th:fragment="headcontent">
+
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+
+        <link href="../static/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"
+              th:href="@{node_modules/bootstrap/dist/css/bootstrap.min.css}">
+
+    </th:block>
+    <title>Organize Applications</title>
+</head>
+
+<body>
+<header>
+    <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
+        <ul th:if="${account.roles.size() > 1}">
+            <li th:if="${account.roles.contains('verteiler')}"><a th:href="@{/bewerbung2/verteiler/}">Verteiler Übersicht</a></li>
+            <li th:if="${account.roles.contains('orga')}"><a th:href="@{/bewerbung2/organisator/}">Organisator Übersicht</a></li>
+            <li th:if="${account.roles.contains('setup')}"><a th:href="@{/bewerbung2/setup/}">Ersteller Übersicht</a></li>
+            <li th:if="${account.roles.contains('studentin')}"><a th:href="@{/bewerbung2/bewerber/}">Bewerber Übersicht</a></li>
+        </ul>
+        <ul>
+            <li><a th:href="@{/}">Startseite</a></li>
+            <li><a th:href="@{./}">Übersicht</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main th:fragment="bodycontent">
+
+        <div class="card bg-light mb-3 border-primary">
+            <div class="card-header"><h2>Downloaden Sie Bewerbungen als PDFs hier!</h2></div>
+        </div>
+        <div class="card bg-light mb-3 border-primary">
+            <div class="card-header"><h4>Downloaden Sie Bewerbung als eines Studenten hier!</h4></div>
+            <div class="card-body">
+                <form th:action="@{downloadBewerberFertig}" th:method="POST">
+
+                <div class="row form-row">
+                    <input th:type="hidden" th:name="module" th:id="module" th:value="${module}">
+                    <label th:for="applicants">Suchen Sie hier den Studenten aus!</label><br>
+                    <select th:name="applicants" th:id="applicants" class="form-control">
+                        <option th:each="applicant : ${applicants}" th:value="${applicant}" th:text="${applicant}">Bewerber a</option>
+                    </select>
+                </div>
+                <br>
+                <div class="row form-row">
+                    <button th:type="submit" th:value="Download" class="btn btn-outline-primary form-control">Download</button>
+                </div>
+                </form>
+                <form th:action="@{uebersicht}" th:method="GET">
+                    <div class="row form-row">
+                        <button th:type="submit" class="btn btn-outline-primary form-control">zurück zur Download Übersicht</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

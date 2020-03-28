@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en"
+      th:replace="~{mopslayout :: html(name='Erstellen der Module', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <th:block th:fragment="headcontent">
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+
+        <link href="../static/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"
+              th:href="@{node_modules/bootstrap/dist/css/bootstrap.min.css}">
+
+    </th:block>
+    <title>Organize Applications</title>
+</head>
+
+<body>
+<header>
+    <nav class="navigation navigation-secondary" is="mops-navigation" th:fragment="navigation">
+        <ul th:if="${account.roles.size() > 1}">
+            <li th:if="${account.roles.contains('verteiler')}"><a th:href="@{/bewerbung2/verteiler/}">Verteiler Übersicht</a></li>
+            <li th:if="${account.roles.contains('orga')}"><a th:href="@{/bewerbung2/organisator/}">Organisator Übersicht</a></li>
+            <li th:if="${account.roles.contains('setup')}"><a th:href="@{/bewerbung2/setup/}">Ersteller Übersicht</a></li>
+            <li th:if="${account.roles.contains('studentin')}"><a th:href="@{/bewerbung2/bewerber/}">Bewerber Übersicht</a></li>
+        </ul>
+        <ul>
+            <li><a th:href="@{/}">Startseite</a></li>
+            <li><a th:href="@{./}">Dashboard</a></li>
+            <li><a th:href="@{loeschen}">Lösche Daten</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main th:fragment="bodycontent">
+    <form th:action="@{neuesModul}" th:method="POST" th:object="${Module}">
+        <div class="card bg-light mb-3 border-primary">
+            <div class="card-header container-fluid">
+                <div class="row">
+                    <h2 style="margin-bottom: .0rem" class="card-text col-6 float-left">Neues Modul</h2>
+                    <div class="col-6">
+                        <button class="btn btn-outline-primary btn-sm float-right" th:type="submit">Speichern</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row container-fluid">
+                    <div class="col">
+                        <input type="text" name="name" id="name"
+                               required
+                               class="form-control" placeholder="Name des Moduls" th:field="*{name}">
+                    </div>
+                    <div class="col">
+                        <input type="text" name="shortName" id="shortName"
+                               required
+                               class="form-control" placeholder="Abkürzung des Moduls" th:field="*{shortName}">
+                    </div>
+                    <div class="col">
+                        <input type="text" name="profSerial" id="profSerial"
+                               required
+                               class="form-control" placeholder="Zugeordnete Person (Unikennung)" th:field="*{profSerial}">
+                    </div>
+                    <script>minimumDate();</script>
+                    <div class="col">
+                        <input type="text" name="deadlineDate" id="deadlineDate" onfocus="(this.type='date')"
+                               th:field="*{deadlineDate}" th:attr="value = *{deadlineDate}" onclick="minimumDate()"
+                               onblur="(this.type='text')" class="form-control" placeholder="Bewerbungsfrist (1976-04-01)"
+                               required pattern="[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])" min="2020-01-01">
+                        <div th:if="${#fields.hasErrors('deadlineDate')}" class="text-danger">
+                            Bitte geben Sie eine gültige Bewerbungsfrist an.
+                        </div>
+                    </div>
+                </div><br><br>
+                <div class="row">
+                    <div class="card-text col">
+                        Füllen Sie bitte alle unteren Felder aus. Geben
+                        Sie für das jeweilige Feld die Anzahl an Personen
+                        an, welche für die ausgewählte Stundenanzahl eingestellt
+                        werden sollen.
+                    </div>
+                </div><br>
+                <div class="row">
+                    <div class="col">
+                        <input type="number" name="sevenHourLimit" id="sevenHourLimit"
+                               required pattern="0|([1-9][0-9]*)"
+                               class="form-control" placeholder="Tutoren mit 7 Stunden" th:field="*{sevenHourLimit}">
+                    </div>
+                    <div class="col">
+                        <input type="number" name="nineHourLimit" id="nienHourLimit"
+                               required pattern="0|([1-9][0-9]*)"
+                               class="form-control" placeholder="Tutoren mit 9 Stunden" th:field="*{nineHourLimit}">
+                    </div>
+                    <div class="col">
+                        <input type="number" name="seventeenHourLimit" id="seventeenHourLimit"
+                               required pattern="0|([1-9][0-9]*)"
+                               class="form-control" placeholder="Tutoren mit 17 Stunden" th:field="*{seventeenHourLimit}">
+                    </div>
+                    <div class="col">
+                        <input type="text" name="deadlineTime" id="deadlineTime" onfocus="(this.type='time')"
+                               th:field="*{deadlineTime}" th:attr="value = *{deadlineTime}"
+                               onblur="(this.type='text')" class="form-control" placeholder="Bewerbungsfrist (09:41)"
+                               required pattern="(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9])" min="">
+                        <div th:if="${#fields.hasErrors('deadlineTime')}" class="text-danger">
+                            Bitte geben Sie eine gültige Zeit für die Bewerbungsfrist an.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div th:replace="${content} ? ${content}: ~{}"></div>
+    <script>
+        function minimumDate() {
+            const todaysDate = new Date();
+            const year = todaysDate.getFullYear();
+            const month = ("0" + (todaysDate.getMonth() + 1)).slice(-2);
+            const day = ("0" + todaysDate.getDate()).slice(-2);
+            const minDate = (year + "-" + month + "-" + day);
+
+            const deadlineDate = document.getElementById("deadlineDate");
+            deadlineDate.setAttribute("min", minDate);
+        }
+    </script>
+</main>
+</body>
+</html>
