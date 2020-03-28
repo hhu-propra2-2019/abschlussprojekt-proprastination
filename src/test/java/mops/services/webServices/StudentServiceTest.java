@@ -1,15 +1,18 @@
 package mops.services.webServices;
 
+import com.github.javafaker.App;
 import mops.model.classes.Address;
+import mops.model.classes.Applicant;
 import mops.model.classes.Certificate;
 import mops.model.classes.webclasses.WebAddress;
+import mops.model.classes.webclasses.WebApplicant;
 import mops.model.classes.webclasses.WebCertificate;
 import mops.services.dbServices.ApplicantService;
 import mops.services.dbServices.ModuleService;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 class StudentServiceTest {
 
@@ -44,6 +47,32 @@ class StudentServiceTest {
             .course("Desaster")
             .build();
 
+    private WebApplicant webApplicant = WebApplicant.builder()
+            .birthday("2001-01-01")
+            .birthplace("London, UK")
+            .comment("Ah!")
+            .course("Photografie")
+            .gender("male")
+            .nationality("UK")
+            .status("Tutor")
+            .build();
+
+    private Applicant applicant = Applicant.builder()
+            .uniserial("jabon007")
+            .firstName("James")
+            .surname("Bond")
+            .address(address)
+            .certs(certificate)
+            .birthday("2001-01-01")
+            .birthplace("London, UK")
+            .comment("Ah!")
+            .course("Photografie")
+            .gender("male")
+            .nationality("UK")
+            .status("Tutor")
+            .checked(false)
+            .build();
+
     @Test
     void buildAddress() {
         Address result = studentService.buildAddress(webAddress);
@@ -53,9 +82,37 @@ class StudentServiceTest {
 
     @Test
     void buildCertificate() {
-        Certificate result =studentService.buildCertificate(webCertificate);
+        Certificate result = studentService.buildCertificate(webCertificate);
 
         assertEquals(result, certificate);
+    }
+
+    @Test
+    void buildApplicantIfApplicantNotFound() {
+        String uniserial = "jabon007";
+        String givenName = "James";
+        String familyName = "Bond";
+        when(applicantServiceMock.findByUniserial(uniserial)).thenReturn(null);
+
+        Applicant result = studentService.buildApplicant(uniserial, webApplicant,
+                address, certificate, givenName, familyName);
+
+        verify(applicantServiceMock, times(1)).findByUniserial(uniserial);
+        assertEquals(applicant, result);
+    }
+
+    @Test
+    void buildApplicantIfApplicantFound() {
+        String uniserial = "jabon007";
+        String givenName = "James";
+        String familyName = "Bond";
+        when(applicantServiceMock.findByUniserial(uniserial)).thenReturn(applicant);
+
+        Applicant result = studentService.buildApplicant(uniserial, webApplicant,
+                address, certificate, givenName, familyName);
+
+        verify(applicantServiceMock, times(1)).findByUniserial(uniserial);
+        assertEquals(applicant, result);
     }
 
 }
