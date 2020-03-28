@@ -47,4 +47,6 @@ In jedem Semester werden studentische Hilfskräfte für den Übungsbetrieb benö
 * Überarbeitungsmöglichkeit der einzelnen Bewerbungen bis zum Bewerbungsschluss
 * Organisatoren und Verteiler können Priorität/Zuteilung ändern bevor Einstellungsbögen erstellt werden
 
-[Link zur arc42 Doku](Dokumentation.md)
+Link zur Doku (arc42):
+
+link:Dokumentation.md[]
