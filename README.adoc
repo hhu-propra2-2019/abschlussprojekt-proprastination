@@ -47,5 +47,4 @@ In jedem Semester werden studentische Hilfskräfte für den Übungsbetrieb benö
 * Überarbeitungsmöglichkeit der einzelnen Bewerbungen bis zum Bewerbungsschluss
 * Organisatoren und Verteiler können Priorität/Zuteilung ändern bevor Einstellungsbögen erstellt werden
 
-Links zur Doku:
-https://pad.hhu.de/s/S1n5ZAo48 (arc42)
+[Link zur Doku](Dokumentation.md) (arc42)
