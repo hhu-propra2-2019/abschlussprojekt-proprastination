@@ -55,7 +55,8 @@ public class OrgaController {
         if (token != null) {
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             model.addAttribute("modules", webOrganizerService.getOrganizerModulesByName(token.getName()));
-            model.addAttribute("organizer", webOrganizerService.getOrganizerOrNewOrganizer(token.getName()));
+            model.addAttribute("organizer", webOrganizerService.getOrganizerOrNewOrganizer(token.getName(),
+                    AccountGenerator.createAccountFromPrincipal(token), token));
         }
 
         return "organizer/orgaMain";

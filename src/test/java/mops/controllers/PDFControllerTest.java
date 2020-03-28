@@ -4,6 +4,7 @@ import com.c4_soft.springaddons.test.security.context.support.WithMockKeycloackA
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
 import mops.model.classes.Module;
+import mops.model.classes.Organizer;
 import mops.services.dbServices.ApplicantService;
 import mops.services.PDFService;
 import org.junit.Ignore;
@@ -79,7 +80,7 @@ class PDFControllerTest {
         writer.close();
 
         when(appService.findByUniserial(any(String.class))).thenReturn(applicant);
-        when(service.generatePDF(any(Application.class), any(Applicant.class))).thenReturn(file);
+        when(service.generatePDF(any(Application.class), any(Applicant.class), any(Organizer.class))).thenReturn(file);
 
 
         //mvc.perform(get("/bewerbung2/bewerber/pdf/download?module=createNewApplicantIfNoneWasFound")).andExpect(status().isOk());
@@ -87,7 +88,7 @@ class PDFControllerTest {
         mvc.perform(get("/bewerbung2/pdf/pfdDownload?module=createNewApplicantIfNoneWasFound?student=name")).andExpect(status().is4xxClientError());
 
         verify(appService, times(1)).findByUniserial(any(String.class));
-        verify(service, times(1)).generatePDF(any(Application.class), any(Applicant.class));
+        verify(service, times(1)).generatePDF(any(Application.class), any(Applicant.class), any(Organizer.class));
         boolean ignoreme = file.delete();
     }
 
@@ -107,7 +108,7 @@ class PDFControllerTest {
         file.deleteOnExit();
 
         when(appService.findByUniserial(any(String.class))).thenReturn(applicant);
-        when(service.generatePDF(any(Application.class), any(Applicant.class))).thenReturn(file);
+        when(service.generatePDF(any(Application.class), any(Applicant.class), any(Organizer.class))).thenReturn(file);
 
         mvc.perform(get("/bewerbung2/pdf/pdfDownload?module=Baum?student=baum")).andExpect(status().isBadRequest());
 

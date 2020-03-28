@@ -132,11 +132,13 @@ public class DatabaseInit implements ServletContextInitializer {
                     .role(getRole())
                     .priority(nextPriorityApplicant())
                     .build();
+            String surename = faker.name().lastName();
+            String firstname = faker.name().firstName();
 
             Applicant applicant = Applicant.builder()
-                    .uniserial(truncate(faker.animal().name(), 5) + faker.number().digits(3))
-                    .firstName(faker.name().firstName())
-                    .surname(faker.name().lastName())
+                    .uniserial(truncate(firstname, 2) + truncate(surename, 3) + faker.number().digits(3))
+                    .firstName(firstname)
+                    .surname(surename)
                     .comment(truncate(faker.yoda().quote(), 255))
                     .course(faker.educator().course())
                     .nationality(faker.nation().nationality())
