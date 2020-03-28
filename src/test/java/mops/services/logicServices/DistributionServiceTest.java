@@ -1,26 +1,18 @@
 package mops.services.logicServices;
 
-import com.github.javafaker.App;
 import mops.model.classes.*;
 import mops.model.classes.Module;
 import mops.services.dbServices.*;
-import org.hamcrest.collection.IsIterableContainingInAnyOrder;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest
@@ -37,10 +29,18 @@ class DistributionServiceTest {
     @Autowired
     ModuleService moduleService;
 
-    @Test
-    public void testDistribute() {
-        DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
+    DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
 
+    @AfterEach
+    public void cleanDatabase() {
+        applicantService.deleteAll();
+        applicationService.deleteAll();
+        evaluationService.deleteAll();
+        dbDistributionService.deleteAll();
+        moduleService.deleteAll();
+    }
+
+    private void fillDatabase() {
         Module ra = Module.builder()
                 .name("RA")
                 .sevenHourLimit("1")
@@ -194,42 +194,74 @@ class DistributionServiceTest {
                 }
             }
         }
-    /*
-        for (Applicant applicant : applicantService.findAll()) {
+    }
+
+    @Test
+    private void testDistribute() {
+
+        fillDatabase();
+
+        /*for (Applicant applicant : applicantService.findAll()) {
             System.out.println();
             System.out.println(applicant.getUniserial());
             for (Application application : applicant.getApplications()) {
                 System.out.println("----- " + application.getModule().getName() + " " + application.getPriority().getLabel());
                 System.out.println("----------- " + evaluationService.findByApplication(application).getPriority().getLabel() + " " + evaluationService.findByApplication(application).getHours());
             }
-        }
-     */
+        }*/
 
         distributionService.distribute();
 
-        //List<Distribution> distributions = new LinkedList<>();
-        Distribution distribution = (Distribution.builder()
+        /*List<Applicant> employees = dbDistributionService.findByModule(moduleService.findModuleByName("RA")).getEmployees();
+
+        for (Applicant applicant : employees) {
+            System.out.println();
+            System.out.println(applicant.getUniserial());
+            for (Application application : applicant.getApplications()) {
+                System.out.println("----- " + application.getModule().getName() + " " + application.getPriority().getLabel());
+                System.out.println("----------- " + evaluationService.findByApplication(application).getPriority().getLabel() + " " + evaluationService.findByApplication(application).getHours());
+            }
+        }*/
+
+        Distribution distribution1 = (Distribution.builder()
                 .module(moduleService.findModuleByName("RA"))
-                .employee(applicantService.findByUniserial("1"))
-                .employee(applicantService.findByUniserial("12"))
-                .employee(applicantService.findByUniserial("3"))
                 .employee(applicantService.findByUniserial("2"))
+                .employee(applicantService.findByUniserial("3"))
+                .employee(applicantService.findByUniserial("4"))
                 .employee(applicantService.findByUniserial("8"))
+                .employee(applicantService.findByUniserial("12"))
                 .employee(applicantService.findByUniserial("14"))
                 .build());
-        /*
-        distributions.add(Distribution.builder()
+
+        Distribution distribution2 = (Distribution.builder()
                 .module(moduleService.findModuleByName("Aldat"))
                 .employee(applicantService.findByUniserial("5"))
                 .employee(applicantService.findByUniserial("11"))
-                .employee(applicantService.findByUniserial("4"))
                 .employee(applicantService.findByUniserial("10"))
                 .employee(applicantService.findByUniserial("6"))
-                .build());*/
+                .build());
 
-        assertThat(dbDistributionService.findByModule(moduleService.findModuleByName("RA")).getEmployees(),
-                containsInAnyOrder(distribution.getEmployees()));
+        assertEquals(dbDistributionService.findByModule(moduleService.findModuleByName("RA")).getEmployees().size(), distribution1.getEmployees().size());
+        for (int i = 0; i < distribution1.getEmployees().size(); i++) {
+            assertTrue(dbDistributionService.findByModule(moduleService.findModuleByName("RA")).getEmployees().contains(distribution1.getEmployees().get(i)));
+        }
+
+        assertEquals(dbDistributionService.findByModule(moduleService.findModuleByName("Aldat")).getEmployees().size(), distribution2.getEmployees().size());
+        for (int i = 0; i < distribution2.getEmployees().size(); i++) {
+            assertTrue(dbDistributionService.findByModule(moduleService.findModuleByName("Aldat")).getEmployees().contains(distribution2.getEmployees().get(i)));
+        }
     }
 
+    @Test
+    private void testChangeAllFinalHours() {
+        fillDatabase();
 
+        distributionService.changeAllFinalHours();
+
+        List<Application> applications = applicationService.findAll();
+        for (Application application : applications) {
+            Evaluation evaluation = evaluationService.findByApplication(application);
+            assertEquals(evaluation.getHours(), application.getFinalHours());
+        }
+    }
 }
