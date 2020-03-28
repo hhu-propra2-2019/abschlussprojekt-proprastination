@@ -4,6 +4,7 @@ import mops.model.classes.Address;
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
 import mops.model.classes.Certificate;
+import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebAddress;
 import mops.model.classes.webclasses.WebApplicant;
 import mops.model.classes.webclasses.WebCertificate;
@@ -11,7 +12,10 @@ import mops.services.dbServices.ApplicantService;
 import mops.services.dbServices.ModuleService;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -185,6 +189,19 @@ class StudentServiceTest {
         WebCertificate result = studentService.getExistingCertificate(certificate);
 
         assertEquals(webCertificate, result);
+    }
+
+    @Test
+    void getAllNotfilledModulesApplicantIsNull() {
+        Module moduleMock1 = mock(Module.class);
+        Module moduleMock2 = mock(Module.class);
+        List<Module> modules = new ArrayList<>();
+        modules.add(moduleMock1);
+        modules.add(moduleMock2);
+
+        List<Module> result = studentService.getAllNotfilledModules(null, modules);
+
+        assertEquals(modules, result);
     }
 
 }
