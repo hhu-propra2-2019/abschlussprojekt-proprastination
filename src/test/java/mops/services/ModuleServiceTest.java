@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,16 +39,18 @@ class ModuleServiceTest {
 
     @BeforeEach
     void init() {
-        Instant deadline = new Date(System.currentTimeMillis()).toInstant();
+        LocalDateTime deadline = LocalDateTime.now();
         m1 = Module.builder()
                 .id(01)
                 .name("Programmier Praktikum")
                 .shortName("ProPra")
                 .profSerial("Jens")
+                .deadlineDate("2020-01-01")
+                .deadlineTime("09:41")
+                .deadline(deadline)
                 .sevenHourLimit("2")
                 .nineHourLimit("3")
                 .seventeenHourLimit("2")
-                .deadline(deadline)
                 .build();
 
 

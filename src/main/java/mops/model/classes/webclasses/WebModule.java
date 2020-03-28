@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
@@ -19,6 +20,9 @@ public class WebModule {
     private String shortName;
     @NotBlank
     private String profSerial;
+    private String deadlineDate;
+    private String deadlineTime;
+    private LocalDateTime deadline;
     @NotBlank
     @Pattern(regexp = "0|([1-9][0-9]*)")
     private String sevenHourLimit;

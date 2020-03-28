@@ -1,15 +1,16 @@
 package mops.model.classes.webclasses;
 
-import org.bouncycastle.math.raw.Mod;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import mops.model.classes.Module;
+
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class WebModuleTest {
 
     WebModule webmodule;
+    LocalDateTime deadline = LocalDateTime.now();
 
     @BeforeEach
     void init() {
@@ -17,6 +18,9 @@ class WebModuleTest {
                 .name("Programmier Praktikum")
                 .shortName("ProPra")
                 .profSerial("Jens")
+                .deadlineDate("2020-01-01")
+                .deadlineTime("09:41")
+                .deadline(deadline)
                 .sevenHourLimit("2")
                 .nineHourLimit("7")
                 .seventeenHourLimit("1")
@@ -26,13 +30,15 @@ class WebModuleTest {
 
     @Test
     void allArgsConstructorTest() {
-        WebModule full = new WebModule("Magische Tränke", "MaTrä",
-                "Maggie Smith", "3",
-                "4", "5");
+        LocalDateTime deadline = LocalDateTime.now();
+        WebModule full = new WebModule("Magische Tränke", "MaTrä", "Maggie Smith", "2020-01-01", "09:41", deadline, "3", "4", "5");
 
         assertThat(full.getName()).isEqualTo("Magische Tränke");
         assertThat(full.getShortName()).isEqualTo("MaTrä");
         assertThat(full.getProfSerial()).isEqualTo("Maggie Smith");
+        assertThat(full.getDeadlineDate()).isEqualTo("2020-01-01");
+        assertThat(full.getDeadlineTime()).isEqualTo("09:41");
+        assertThat(full.getDeadline()).isEqualTo(deadline);
         assertThat(full.getSevenHourLimit()).isEqualTo("3");
         assertThat(full.getNineHourLimit()).isEqualTo("4");
         assertThat(full.getSeventeenHourLimit()).isEqualTo("5");
@@ -45,6 +51,9 @@ class WebModuleTest {
         assertThat(empty.getName()).isNull();
         assertThat(empty.getShortName()).isNull();
         assertThat(empty.getProfSerial()).isNull();
+        assertThat(empty.getDeadlineDate()).isNull();
+        assertThat(empty.getDeadlineTime()).isNull();
+        assertThat(empty.getDeadline()).isNull();
         assertThat(empty.getSevenHourLimit()).isNull();
         assertThat(empty.getNineHourLimit()).isNull();
         assertThat(empty.getSeventeenHourLimit()).isNull();
@@ -63,6 +72,9 @@ class WebModuleTest {
                 .name("Programmier Praktikum")
                 .shortName("ProPra")
                 .profSerial("Jens")
+                .deadlineDate("2020-01-01")
+                .deadlineTime("09:41")
+                .deadline(deadline)
                 .sevenHourLimit("2")
                 .nineHourLimit("7")
                 .seventeenHourLimit("1")
@@ -77,6 +89,9 @@ class WebModuleTest {
                 .name("Programmier Praktikum")
                 .shortName("ProPra")
                 .profSerial("Jens")
+                .deadlineDate("2020-01-01")
+                .deadlineTime("09:41")
+                .deadline(deadline)
                 .sevenHourLimit("2")
                 .nineHourLimit("7")
                 .seventeenHourLimit("1")
@@ -87,9 +102,10 @@ class WebModuleTest {
 
     @Test
     void testToString() {
+        String deadline = webmodule.getDeadline().toString();
         assertThat(webmodule.toString()).isEqualTo("WebModule(name=Programmier Praktikum, "+
-                "shortName=ProPra, profSerial=Jens, " +
-                "sevenHourLimit=2, nineHourLimit=7, " +
-                "seventeenHourLimit=1)");
+                "shortName=ProPra, profSerial=Jens, deadlineDate=2020-01-01, " +
+                "deadlineTime=09:41, deadline=" + deadline + ", sevenHourLimit=2, " +
+                "nineHourLimit=7, seventeenHourLimit=1)");
     }
 }
