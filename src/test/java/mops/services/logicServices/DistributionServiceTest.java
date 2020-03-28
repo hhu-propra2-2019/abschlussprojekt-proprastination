@@ -14,9 +14,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.LinkedList;
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -227,7 +227,7 @@ class DistributionServiceTest {
                 .employee(applicantService.findByUniserial("6"))
                 .build());*/
 
-        assert(dbDistributionService.findByModule(moduleService.findModuleByName("RA")).getEmployees(),
+        assertThat(dbDistributionService.findByModule(moduleService.findModuleByName("RA")).getEmployees(),
                 containsInAnyOrder(distribution.getEmployees()));
     }
 
