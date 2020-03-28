@@ -152,7 +152,8 @@ public class ZIPService {
                     applicant = applicantService.findByApplications(application);
                     file = pdfService.generatePDF(application, applicant, organizer);
                     fileName = (module.getName() + File.separator
-                            + applicant.getFirstName() + "_" + applicant.getSurname() + ".pdf");
+                            + applicant.getFirstName().replaceAll("[^A-Za-z0-9.,ß]", "") + "_"
+                            + applicant.getSurname().replaceAll("[^A-Za-z0-9.,ß]", "") + ".pdf");
                     writeToZipFile(file, zipOS, fileName);
                 }
             }
