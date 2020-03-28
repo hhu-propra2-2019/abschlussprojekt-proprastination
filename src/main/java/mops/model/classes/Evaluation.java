@@ -35,7 +35,6 @@ public class Evaluation {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Application application;
     private int hours;
-    private String comment;
     @Enumerated(EnumType.STRING)
     private Priority priority;
 }
