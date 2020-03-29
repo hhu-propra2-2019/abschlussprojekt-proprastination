@@ -19,6 +19,11 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+
+import org.keycloak.KeycloakSecurityContext;
+import org.keycloak.adapters.OidcKeycloakAccount;
+import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.keycloak.representations.IDToken;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
@@ -421,6 +426,26 @@ class StudentServiceTest {
 
         assertEquals(expectedApplication, result);
         assertEquals(expectedApplication.getId(), result.getId());
+    }
+
+    @Test
+    void savePersonalData() {
+        KeycloakAuthenticationToken tokenMock = mock(KeycloakAuthenticationToken.class);
+        OidcKeycloakAccount mockAccount = mock(OidcKeycloakAccount.class);
+        when(tokenMock.getAccount()).thenReturn(mockAccount);
+        KeycloakSecurityContext contextMock = mock(KeycloakSecurityContext.class);
+        when(mockAccount.getKeycloakSecurityContext()).thenReturn(contextMock);
+        IDToken mockIDToken = mock(IDToken.class);
+        when(contextMock.getIdToken()).thenReturn(mockIDToken);
+        when(mockIDToken.getGivenName()).thenReturn("James");
+        when(mockIDToken.getFamilyName()).thenReturn("Bond");
+        when(tokenMock.getName()).thenReturn("jabon007");
+        Module moduleMock = mock(Module.class);
+
+        Applicant result = studentService.savePersonalData(tokenMock, webApplicant, webAddress, webCertificate);
+
+        verify(applicantServiceMock, times(1)).saveApplicant(result);
+        assertEquals(applicant, result);
     }
 
 }
