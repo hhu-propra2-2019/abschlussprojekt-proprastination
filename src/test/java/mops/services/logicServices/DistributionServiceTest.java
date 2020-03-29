@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -433,5 +434,61 @@ class DistributionServiceTest {
 
         assertEquals(distributionService.getTypeOfApplicant(applicant1), "SHK");
         assertEquals(distributionService.getTypeOfApplicant(applicant2), "WHB");
+    }
+
+    @Test
+    public void testSaveHours() {
+
+        DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
+
+        fillDatabase();
+
+        distributionService.distribute();
+
+        distributionService.saveHours(Long.toString(applicantService.findByUniserial("2").getId()), Long.toString(dbDistributionService.findByModule(moduleService.findModuleByName("RA")).getId()), "4");
+
+        int actualFinalHours = 0;
+
+        for (Application application : applicantService.findByUniserial("2").getApplications()) {
+            if ("RA".equals(application.getModule().getName())) {
+                actualFinalHours = application.getFinalHours();
+            }
+        }
+
+        assertEquals(actualFinalHours, 4);
+    }
+
+    @Test
+    public void testSaveChecked() {
+
+        DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
+
+        fillDatabase();
+
+        distributionService.saveChecked(Long.toString(applicantService.findByUniserial("2").getId()), "true");
+
+        assertTrue(applicantService.findByUniserial("2").isChecked());
+    }
+
+    @Test
+    public void testGetSize() {
+
+        DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
+
+        fillDatabase();
+
+        distributionService.distribute();
+
+        assertEquals(distributionService.getSize(), 2);
+    }
+
+    @Test
+    public void testGetSizeBeforeDistribute() {
+
+        DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
+
+        fillDatabase();
+
+        assertEquals(distributionService.getSize(), 0);
     }
 }
