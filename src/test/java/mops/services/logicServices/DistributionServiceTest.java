@@ -7,6 +7,7 @@ import mops.model.classes.webclasses.WebDistributorApplicant;
 import mops.services.dbServices.*;
 import mops.services.webServices.WebDistributionService;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,8 @@ class DistributionServiceTest {
     DbDistributionService dbDistributionService;
     @Autowired
     ModuleService moduleService;
+    @Autowired
+    DistributionService distributionService;
 
     @AfterEach
     public void cleanDatabase() {
@@ -43,82 +46,30 @@ class DistributionServiceTest {
         moduleService.deleteAll();
     }
 
-    private void fillDatabase() {
-        Module ra = Module.builder()
+    @BeforeEach
+    public void fillDatabase() {
+        createModules();
+        List<Application> applications = createApplications();
+        createApplicants(applications);
+        createEvaluations(applications);
+    }
+
+    private void createModules() {
+        moduleService.save(Module.builder()
                 .name("RA")
                 .sevenHourLimit("1")
                 .nineHourLimit("2")
                 .seventeenHourLimit("3")
-                .build();
-        Module aldat = Module.builder()
+                .build());
+        moduleService.save(Module.builder()
                 .name("Aldat")
                 .sevenHourLimit("3")
                 .nineHourLimit("2")
                 .seventeenHourLimit("1")
-                .build();
-        moduleService.save(ra);
-        moduleService.save(aldat);
+                .build());
+    }
 
-        List<Application> applications = new LinkedList<>();
-        for (int i = 0; i < 30; i++) {
-            if (i % 2 == 0) {
-                if (i % 3 == 0) {
-                    Application application = Application.builder()
-                            .module(ra)
-                            .priority(Priority.VERYHIGH)
-                            .build();
-                    applications.add(application);
-                } else if (i % 3 == 1) {
-                    Application application = Application.builder()
-                            .module(ra)
-                            .priority(Priority.HIGH)
-                            .build();
-                    applications.add(application);
-                } else {
-                    Application application = Application.builder()
-                            .module(ra)
-                            .priority(Priority.NEUTRAL)
-                            .build();
-                    applications.add(application);
-                }
-            } else {
-                if (i % 3 == 0) {
-                    Application application = Application.builder()
-                            .module(aldat)
-                            .priority(Priority.HIGH)
-                            .build();
-                    applications.add(application);
-                } else if (i % 3 == 1) {
-                    Application application = Application.builder()
-                            .module(aldat)
-                            .priority(Priority.NEUTRAL)
-                            .build();
-                    applications.add(application);
-                } else {
-
-                    Application application = Application.builder()
-                            .module(aldat)
-                            .priority(Priority.VERYHIGH)
-                            .build();
-                    applications.add(application);
-                }
-            }
-        }
-
-        for (int i = 0; i < applications.size(); i++) {
-            if(i % 2 == 1) {
-                applicantService.saveApplicant(Applicant.builder()
-                        .uniserial(Long.toString((i + 1)/2))
-                        .application(applications.get(i - 1))
-                        .application(applications.get(i))
-                        .certs(Certificate.builder()
-                                .name("Keins")
-                                .build())
-                        .checked(false)
-                        .build());
-            }
-        }
-
+    private void createEvaluations(List<Application> applications) {
         for (int i = 0; i < applications.size(); i++) {
             if(i % 3 == 0) {
                 if ((i+1) % 4 == 0) {
@@ -202,71 +153,102 @@ class DistributionServiceTest {
         }
     }
 
+    private void createApplicants(List<Application> applications) {
+        for (int i = 0; i < applications.size(); i++) {
+            if(i % 2 == 1) {
+                applicantService.saveApplicant(Applicant.builder()
+                        .uniserial(Long.toString((i + 1)/2))
+                        .application(applications.get(i - 1))
+                        .application(applications.get(i))
+                        .certs(Certificate.builder()
+                                .name("Keins")
+                                .build())
+                        .checked(false)
+                        .build());
+            }
+        }
+    }
+
+    private List<Application> createApplications() {
+        List<Application> applications = new LinkedList<>();
+        for (int i = 0; i < 30; i++) {
+            if (i % 2 == 0) {
+                if (i % 3 == 0) {
+                    Application application = Application.builder()
+                            .module(moduleService.findModuleByName("RA"))
+                            .priority(Priority.VERYHIGH)
+                            .build();
+                    applications.add(application);
+                } else if (i % 3 == 1) {
+                    Application application = Application.builder()
+                            .module(moduleService.findModuleByName("RA"))
+                            .priority(Priority.HIGH)
+                            .build();
+                    applications.add(application);
+                } else {
+                    Application application = Application.builder()
+                            .module(moduleService.findModuleByName("RA"))
+                            .priority(Priority.NEUTRAL)
+                            .build();
+                    applications.add(application);
+                }
+            } else {
+                if (i % 3 == 0) {
+                    Application application = Application.builder()
+                            .module(moduleService.findModuleByName("Aldat"))
+                            .priority(Priority.HIGH)
+                            .build();
+                    applications.add(application);
+                } else if (i % 3 == 1) {
+                    Application application = Application.builder()
+                            .module(moduleService.findModuleByName("Aldat"))
+                            .priority(Priority.NEUTRAL)
+                            .build();
+                    applications.add(application);
+                } else {
+
+                    Application application = Application.builder()
+                            .module(moduleService.findModuleByName("Aldat"))
+                            .priority(Priority.VERYHIGH)
+                            .build();
+                    applications.add(application);
+                }
+            }
+        }
+        return applications;
+    }
+
     @Test
     public void testDistribute() {
-
-        DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
-
-        fillDatabase();
-
-        /*for (Applicant applicant : applicantService.findAll()) {
-            System.out.println();
-            System.out.println(applicant.getUniserial());
-            for (Application application : applicant.getApplications()) {
-                System.out.println("----- " + application.getModule().getName() + " " + application.getPriority().getLabel());
-                System.out.println("----------- " + evaluationService.findByApplication(application).getPriority().getLabel() + " " + evaluationService.findByApplication(application).getHours());
-            }
-        }*/
-
         distributionService.distribute();
 
-        /*List<Applicant> employees = dbDistributionService.findByModule(moduleService.findModuleByName("RA")).getEmployees();
+        List<Applicant> applicantsRA = new LinkedList<>();
+        applicantsRA.add(applicantService.findByUniserial("2"));
+        applicantsRA.add(applicantService.findByUniserial("3"));
+        applicantsRA.add(applicantService.findByUniserial("4"));
+        applicantsRA.add(applicantService.findByUniserial("8"));
+        applicantsRA.add(applicantService.findByUniserial("12"));
+        applicantsRA.add(applicantService.findByUniserial("14"));
 
-        for (Applicant applicant : employees) {
-            System.out.println();
-            System.out.println(applicant.getUniserial());
-            for (Application application : applicant.getApplications()) {
-                System.out.println("----- " + application.getModule().getName() + " " + application.getPriority().getLabel());
-                System.out.println("----------- " + evaluationService.findByApplication(application).getPriority().getLabel() + " " + evaluationService.findByApplication(application).getHours());
-            }
-        }*/
+        List<Applicant> applicantsAldat = new LinkedList<>();
+        applicantsAldat.add(applicantService.findByUniserial("5"));
+        applicantsAldat.add(applicantService.findByUniserial("11"));
+        applicantsAldat.add(applicantService.findByUniserial("10"));
+        applicantsAldat.add(applicantService.findByUniserial("6"));
 
-        Distribution distribution1 = (Distribution.builder()
-                .module(moduleService.findModuleByName("RA"))
-                .employee(applicantService.findByUniserial("2"))
-                .employee(applicantService.findByUniserial("3"))
-                .employee(applicantService.findByUniserial("4"))
-                .employee(applicantService.findByUniserial("8"))
-                .employee(applicantService.findByUniserial("12"))
-                .employee(applicantService.findByUniserial("14"))
-                .build());
-
-        Distribution distribution2 = (Distribution.builder()
-                .module(moduleService.findModuleByName("Aldat"))
-                .employee(applicantService.findByUniserial("5"))
-                .employee(applicantService.findByUniserial("11"))
-                .employee(applicantService.findByUniserial("10"))
-                .employee(applicantService.findByUniserial("6"))
-                .build());
-
-        assertEquals(dbDistributionService.findByModule(moduleService.findModuleByName("RA")).getEmployees().size(), distribution1.getEmployees().size());
-        for (int i = 0; i < distribution1.getEmployees().size(); i++) {
-            assertTrue(dbDistributionService.findByModule(moduleService.findModuleByName("RA")).getEmployees().contains(distribution1.getEmployees().get(i)));
+        assertEquals(dbDistributionService.findByModule(moduleService.findModuleByName("RA")).getEmployees().size(), applicantsRA.size());
+        for (Applicant applicant : applicantsRA) {
+            assertTrue(dbDistributionService.findByModule(moduleService.findModuleByName("RA")).getEmployees().contains(applicant));
         }
 
-        assertEquals(dbDistributionService.findByModule(moduleService.findModuleByName("Aldat")).getEmployees().size(), distribution2.getEmployees().size());
-        for (int i = 0; i < distribution2.getEmployees().size(); i++) {
-            assertTrue(dbDistributionService.findByModule(moduleService.findModuleByName("Aldat")).getEmployees().contains(distribution2.getEmployees().get(i)));
+        assertEquals(dbDistributionService.findByModule(moduleService.findModuleByName("Aldat")).getEmployees().size(), applicantsAldat.size());
+        for (Applicant applicant : applicantsAldat) {
+            assertTrue(dbDistributionService.findByModule(moduleService.findModuleByName("Aldat")).getEmployees().contains(applicant));
         }
     }
 
     @Test
     public void testChangeAllFinalHours() {
-
-        DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
-
-        fillDatabase();
-
         distributionService.changeAllFinalHours();
 
         List<Application> applications = applicationService.findAll();
@@ -278,21 +260,15 @@ class DistributionServiceTest {
 
     @Test
     public void testFindAllUnassignedAfterDistribute() {
-
-        DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
-
-        fillDatabase();
-
-        distributionService.distribute();
-
-        List<Applicant> actualApplicants = distributionService.findAllUnassigned();
-
         List<Applicant> expectedApplicants = new LinkedList<>();
         expectedApplicants.add(applicantService.findByUniserial("1"));
         expectedApplicants.add(applicantService.findByUniserial("7"));
         expectedApplicants.add(applicantService.findByUniserial("9"));
         expectedApplicants.add(applicantService.findByUniserial("13"));
         expectedApplicants.add(applicantService.findByUniserial("15"));
+
+        distributionService.distribute();
+        List<Applicant> actualApplicants = distributionService.findAllUnassigned();
 
         assertEquals(actualApplicants.size(), expectedApplicants.size());
         for (Applicant expectedApplicant : expectedApplicants) {
@@ -302,11 +278,6 @@ class DistributionServiceTest {
 
     @Test
     public void testFindAllUnassignedBeforeDistribute() {
-
-        DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
-
-        fillDatabase();
-
         List<Applicant> actualApplicants = distributionService.findAllUnassigned();
 
         assertEquals(actualApplicants, applicantService.findAll());
@@ -314,13 +285,7 @@ class DistributionServiceTest {
 
     @Test
     public void testMoveApplicantFromModuleToModule() {
-
-        DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
-
-        fillDatabase();
-
         distributionService.distribute();
-
         distributionService.moveApplicant(Long.toString(applicantService.findByUniserial("2").getId()), Long.toString(dbDistributionService.findByModule(moduleService.findModuleByName("Aldat")).getId()));
 
         assertTrue(dbDistributionService.findByModule(moduleService.findModuleByName("Aldat")).getEmployees().contains(applicantService.findByUniserial("2")));
@@ -329,13 +294,7 @@ class DistributionServiceTest {
 
     @Test
     public void testMoveApplicantFromUnassignedToModule() {
-
-        DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
-
-        fillDatabase();
-
         distributionService.distribute();
-
         distributionService.moveApplicant(Long.toString(applicantService.findByUniserial("1").getId()), Long.toString(dbDistributionService.findByModule(moduleService.findModuleByName("Aldat")).getId()));
 
         assertTrue(dbDistributionService.findByModule(moduleService.findModuleByName("Aldat")).getEmployees().contains(applicantService.findByUniserial("1")));
@@ -344,13 +303,7 @@ class DistributionServiceTest {
 
     @Test
     public void testMoveApplicantFromModuleToUnassigned() {
-
-        DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
-
-        fillDatabase();
-
         distributionService.distribute();
-
         distributionService.moveApplicant(Long.toString(applicantService.findByUniserial("2").getId()), "-1");
 
         assertFalse(dbDistributionService.findByModule(moduleService.findModuleByName("RA")).getEmployees().contains(applicantService.findByUniserial("2")));
@@ -359,11 +312,6 @@ class DistributionServiceTest {
 
     @Test
     public void testMoveApplicantToWrongModule() {
-
-        DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
-
-        fillDatabase();
-
         moduleService.save(Module.builder()
                 .name("ProPra")
                 .sevenHourLimit("1")
@@ -380,19 +328,12 @@ class DistributionServiceTest {
 
     @Test
     public void testSort() {
-
-        DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
-
-        fillDatabase();
+        String[] expectedUniserial = {"4", "12", "2", "8", "14", "3"};
 
         distributionService.distribute();
-
         WebDistributionService webDistributionService = new WebDistributionService(dbDistributionService, distributionService, evaluationService);
-
         List<WebDistribution> webDistributions = webDistributionService.convertDistributionsToWebDistributions();
-
         WebDistribution webDistribution = null;
-
         for (WebDistribution distribution : webDistributions) {
             if ("RA".equals(distribution.getModule())) {
                 webDistribution = distribution;
@@ -403,8 +344,6 @@ class DistributionServiceTest {
             actuaUniserial[i] = webDistribution.getWebDistributorApplicants().get(i).getUsername();
         }
 
-        String[] expectedUniserial = {"4", "12", "2", "8", "14", "3"};
-
         for (int i = 0; i < actuaUniserial.length; i++) {
             assertEquals(actuaUniserial[i], expectedUniserial[i]);
         }
@@ -412,9 +351,6 @@ class DistributionServiceTest {
 
     @Test
     public void testGetTypeOfApplicant() {
-
-        DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
-
         Applicant applicant1 = Applicant.builder()
                 .certs(Certificate.builder()
                         .name("Keins")
@@ -435,16 +371,10 @@ class DistributionServiceTest {
 
     @Test
     public void testSaveHours() {
-
-        DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
-
-        fillDatabase();
+        int actualFinalHours = 0;
 
         distributionService.distribute();
-
         distributionService.saveHours(Long.toString(applicantService.findByUniserial("2").getId()), Long.toString(dbDistributionService.findByModule(moduleService.findModuleByName("RA")).getId()), "4");
-
-        int actualFinalHours = 0;
 
         for (Application application : applicantService.findByUniserial("2").getApplications()) {
             if ("RA".equals(application.getModule().getName())) {
@@ -457,11 +387,6 @@ class DistributionServiceTest {
 
     @Test
     public void testSaveChecked() {
-
-        DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
-
-        fillDatabase();
-
         distributionService.saveChecked(Long.toString(applicantService.findByUniserial("2").getId()), "true");
 
         assertTrue(applicantService.findByUniserial("2").isChecked());
@@ -469,11 +394,6 @@ class DistributionServiceTest {
 
     @Test
     public void testGetSize() {
-
-        DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
-
-        fillDatabase();
-
         distributionService.distribute();
 
         assertEquals(distributionService.getSize(), 2);
@@ -481,11 +401,6 @@ class DistributionServiceTest {
 
     @Test
     public void testGetSizeBeforeDistribute() {
-
-        DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
-
-        fillDatabase();
-
         assertEquals(distributionService.getSize(), 0);
     }
 }

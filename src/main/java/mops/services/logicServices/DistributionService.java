@@ -66,7 +66,6 @@ public class DistributionService {
      * distributes the Applicants
      */
     public void distribute() {
-        final int numberOfPriorities = 4;
         final int[] hours = {7, 9, 17};
 
         List<Module> modules = moduleService.getModules();
