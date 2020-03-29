@@ -367,7 +367,6 @@ public class DatabaseInit implements ServletContextInitializer {
     private void fakeEvaluations(final Faker faker) {
         applicationRepository.findAll().forEach(application -> {
                     Evaluation evaluation = Evaluation.builder()
-                            .comment(truncate(faker.yoda().quote(), 255))
                             .hours(nextFinalHour())
                             .priority(nextPriority())
                             .application(application)
