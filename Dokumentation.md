@@ -276,10 +276,25 @@ Erstellt die Dummydaten für die Development Datenbank zum testen und arbeiten.
 
 Bieten die Schnittstelle zwischen Controller und Repository, also zwischen der Website und der Datenbank, sowie die Möglichkeit externe Dateien zu  schreiben und zu bearbeiten.
 
-*Entity Services*
+*Database Services*
 
 Speichern und Laden Daten zu Entities in der Datenbank mithilfe des jeweiligen Repositories.
 Veränderte Daten werden weitergereicht und es kann nach bestimmten Attributen gesucht werden.
+
+
+*Webservices*
+| Datei | Inhalt | Zweck |
+| -------- | -------- | -------- |
+| Account Generator | erstellen der KeyCloak Accounts | Ausgelagert, da duplizierter Code |
+| Distribute Service | Rückgabe einzelner html Paths und checken der Rollen | Einfacheres und zentraleres Weiterleiten je nach angemeldeter Rolle |
+| Orga Service | Nutzt die anderen Entity Services und deren Methoden | Stellt dem Orga Controller die entsprechenden Bewerber, Bewerbungen und Prioritäten zur Verfügung und gibt die eingegebene Organisator Präferenz an den Evaluation Service weiter|
+| Student Service | Methoden zur Umwandlung von Webklassen in Modelklassen und vice versa | Aus dem Controller ausgelagerte Logik die den Übergang zwischen den im Frontend verwendeten Webklassen und den in der Datenbank benutzten Modelklassen |
+| Webapplication Service | | |
+| WebDistributionService | | |
+| Webmodul Service | Wandelt Web Module in Module und andersherum und speichert oder schickt diese weiter | Zur einfacheren Handhabung im Setup Controller |
+| WebOrganizer Service | | |
+| WebPdf Service |  |  |
+
 
 *Andere*
 
@@ -287,10 +302,7 @@ Veränderte Daten werden weitergereicht und es kann nach bestimmten Attributen g
 | -------- | -------- | -------- |
 | CSV Service | Schreiben in und Lesen aus CSV Dateien, sowie suchen nach bestimmten Einträgen| Wurde am Anfang für die Module genutzt, nachdem diese in die Datenbank verschoben wurden lädt der Service nur die Länder- und Studienfachauswahl für die Bewerbungsseite, sowie die Semestermöglichkeiten|
 | Email Service | Sendet Mails an eine oder mehrere Personen | Wird zum verschicken der Personalbögen eingesetzt |
-| Orga Service | Nutzt die anderen Entity Services und deren Methoden | Stellt dem Orga Controller die entsprechenden Bewerber, Bewerbungen und Prioritäten zur Verfügung und gibt die eingegebene Organisator Präferenz an den Evaluation Service weiter|
-| Student Service | Methoden zur Umwandlung von Webklassen in Modelklassen und vice versa | Aus dem Controller ausgelagerte Logik die den Übergang zwischen den im Frontend verwendeten Webklassen und den in der Datenbank benutzten Modelklassen |
 | PDF Service | Öffnet eine pdf Datei und fügt Informationen ein | Hier werden die Einstellungsbögen mit den Daten der Bewerber, Bewerbungen und Organisatoren erstellt |
-| Webmodul Service | Wandelt Web Module in Module und andersherum und speichert oder schickt diese weiter | Zur einfacheren Handhabung im Setup Controller |
 | Distribution Service | Beinhaltet ein wichtiges Feature, den Sortier Algorithmus der dem Verteiler die Bewerbungen in die einzelnen Module vorsortiert. Weiterhin sind dort einige Umwandlungsmethoden und die Logik hinter dem drag and drop System der html Seite |
 
 #### (5) << repositories >>
@@ -305,6 +317,7 @@ Lesen und schreiben Daten direkt aus der Datenbank und können nach bestimmten F
 |Distribution repository| Speichert und lädt die Zuteilung des Verteilers, bei der die Bewerbung und das Modul enthalten sind. Kann nach iD und Modul gefilter/gesucht werden |
 | Evaluation repository | Findet einzelne Bewertungen mit Priorität des Professors und der Bewerbung und stellt sie dem Verteiler zur Verfügung  |
 | Module repository | Gibt alle Module die vom Ersteller hinzugefügt wurden heraus und lässt nach einzelnen Modulen per Name suchen, wird auch zum löschen und leeren der ModulTabelle genutzt |
+| Organizer repository | Gibt alle eingetragenen Organisatoren wieder und lässt nach bestimmten Unikennungen suchen |
 
 #### (6) << Modelklassen >>
 
@@ -317,11 +330,12 @@ Erstellen mit JPA Hibernate die Tabellen in der Datenbank und sind Transporter d
 | Module | Speichert Name, Kurzform und Verantwortlichen für das Modul, sowie die gewünschte Anzahl an Mitarbeitern mit 7,9 und 17 Wochenstunden. Hat eine eigene Methode die es in ein WebModule verwandelt|
 | Applicant | Speichert die standardmäßigen persönlichen Daten des Bewerbers zusätzlich zu seiner Unikennung, sowie den Studienganz, die gewünschte Einstellungsart (Tutor/Korrektor/Beides), den bisher höchsten Abschluss falls es einen gibt und die bisher abgeschickten Bewerbungen. Dazu gibt es eine Methode die einzelne Bewerbungen raussucht |
 | Address | Speichert die Adresse des Bewerbers, als Feld dort gespeichert |
-| Cert | Speichert den höchsten Abschluss des Bewerbers, falls es einen gibt |
+| Certificate | Speichert den höchsten Abschluss des Bewerbers, falls es einen gibt |
 | Course | Speichert den Studiengang, die Liste an möglichen Studiengängen ist in der Datenbank gespeichert |
 | Application | Speichert die Bewerbungsdetails, abgesehen vom Modul und der Mindest- und Maximalarbeitszeit auch die Note und Details des eigenen Besuchs des Bewerbungsmoduls |
 | Evaluation | Repräsentiert die "Bewertung" des Organisators der einzelnen Bewerbungen, speichert die Bewerbung und die eingegebene Priorität des Organisators, sowie die Wochenstunden und ein Kommentar falls nötig |
 | Distribution | Speichert die Einteilung des Verteilers, also das Modul und die zugewiesenen Bewerber |
+| Organizer | Speichert persönliche Daten der Organisatoren |
 
 *Webklassen*
 
@@ -353,8 +367,8 @@ Die einzelnen Seiten die jede Rolle hat. Lassen manuell Daten eintragen und gebe
 
 *Ersteller*
 
-Der Ersteller befindet sich zuerst auf seinem Dashboard (**/setupMain**), auf diesem sieht er seine bereits eingetragenen Module die offen für Bewerbungen sind. Durch Buttons kann er neue Module hinzufügen und wird dazu auf eine Seite geleitet bei der er die Details eingeben muss (**/neuesModul**).
-Weiterhin kann er bestehende Module bearbeiten (**/modulBearbeiten**), komplett löschen und alle Module aus der Datenbank löschen.
+Der Ersteller befindet sich zuerst auf seinem Dashboard (**/setupMain**), auf diesem sieht er seine bereits eingetragenen Module, die offen für Bewerbungen sind. Durch Buttons kann er neue Module hinzufügen und wird dazu auf eine Seite geleitet bei der er die Details eingeben muss (**/neuesModul**).
+Weiterhin kann er bestehende Module bearbeiten (**/modulBearbeiten**), komplett löschen und alle Module aus der Datenbank löschen. Er ist verantwortlich dafür, die Deadlines für Bewerber und Organisatoren zu setzen.
 
 *Bewerber*
 
