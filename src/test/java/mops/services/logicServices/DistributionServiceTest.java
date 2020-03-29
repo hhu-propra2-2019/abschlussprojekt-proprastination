@@ -2,14 +2,17 @@ package mops.services.logicServices;
 
 import mops.model.classes.*;
 import mops.model.classes.Module;
+import mops.model.classes.webclasses.WebDistribution;
 import mops.model.classes.webclasses.WebDistributorApplicant;
 import mops.services.dbServices.*;
+import mops.services.webServices.WebDistributionService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -107,6 +110,9 @@ class DistributionServiceTest {
                         .uniserial(Long.toString((i + 1)/2))
                         .application(applications.get(i - 1))
                         .application(applications.get(i))
+                        .certs(Certificate.builder()
+                                .name("Keins")
+                                .build())
                         .checked(false)
                         .build());
             }
@@ -312,6 +318,8 @@ class DistributionServiceTest {
 
         fillDatabase();
 
+        distributionService.distribute();
+
         distributionService.moveApplicant(Long.toString(applicantService.findByUniserial("2").getId()), Long.toString(dbDistributionService.findByModule(moduleService.findModuleByName("Aldat")).getId()));
 
         assertTrue(dbDistributionService.findByModule(moduleService.findModuleByName("Aldat")).getEmployees().contains(applicantService.findByUniserial("2")));
@@ -324,6 +332,8 @@ class DistributionServiceTest {
         DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
 
         fillDatabase();
+
+        distributionService.distribute();
 
         distributionService.moveApplicant(Long.toString(applicantService.findByUniserial("1").getId()), Long.toString(dbDistributionService.findByModule(moduleService.findModuleByName("Aldat")).getId()));
 
@@ -338,7 +348,9 @@ class DistributionServiceTest {
 
         fillDatabase();
 
-        //distributionService.moveApplicant(Long.toString(applicantService.findByUniserial("2").getId()), Long.toString(dbDistributionService.findByModule(moduleService.findModuleByName("Aldat")).getId()));
+        distributionService.distribute();
+
+        distributionService.moveApplicant(Long.toString(applicantService.findByUniserial("2").getId()), "-1");
 
         assertFalse(dbDistributionService.findByModule(moduleService.findModuleByName("RA")).getEmployees().contains(applicantService.findByUniserial("2")));
         assertTrue(distributionService.findAllUnassigned().contains(applicantService.findByUniserial("2")));
@@ -353,12 +365,51 @@ class DistributionServiceTest {
 
         moduleService.save(Module.builder()
                 .name("ProPra")
+                .sevenHourLimit("1")
+                .nineHourLimit("2")
+                .seventeenHourLimit("3")
                 .build());
 
-        distributionService.moveApplicant(Long.toString(applicantService.findByUniserial("2").getId()), Long.toString(dbDistributionService.findByModule(moduleService.findModuleByName("Propra")).getId()));
+        distributionService.distribute();
+        distributionService.moveApplicant(Long.toString(applicantService.findByUniserial("2").getId()), Long.toString(dbDistributionService.findByModule(moduleService.findModuleByName("ProPra")).getId()));
 
-        assertFalse(dbDistributionService.findByModule(moduleService.findModuleByName("Propra")).getEmployees().contains(applicantService.findByUniserial("2")));
+        assertFalse(dbDistributionService.findByModule(moduleService.findModuleByName("ProPra")).getEmployees().contains(applicantService.findByUniserial("2")));
         assertTrue(dbDistributionService.findByModule(moduleService.findModuleByName("RA")).getEmployees().contains(applicantService.findByUniserial("2")));
+    }
+
+    @Test
+    public void testSort() {
+
+        DistributionService distributionService = new DistributionService(dbDistributionService, moduleService, applicantService, applicationService, evaluationService);
+
+        fillDatabase();
+
+        distributionService.distribute();
+
+        WebDistributionService webDistributionService = new WebDistributionService(dbDistributionService, distributionService, evaluationService);
+
+        List<WebDistribution> webDistributions = webDistributionService.convertDistributionsToWebDistributions();
+
+        WebDistribution webDistribution = null;
+
+        for (int i = 0; i < webDistributions.size(); i++) {
+            if ("RA".equals(webDistributions.get(i).getModule())) {
+                webDistribution = webDistributions.get(i);
+            }
+        }
+
+        String[] actuaUniserial = new String[webDistribution.getWebDistributorApplicants().size()];
+        for (int i = 0; i < actuaUniserial.length; i++) {
+            actuaUniserial[i] = webDistribution.getWebDistributorApplicants().get(i).getUsername();
+        }
+
+        List<WebDistributorApplicant> sortedApplicants = webDistribution.getWebDistributorApplicants();
+
+        String[] expectedUniserial = {"4", "12", "2", "8", "14", "3"};
+
+        for (int i = 0; i < actuaUniserial.length; i++) {
+            assertEquals(actuaUniserial[i], expectedUniserial[i]);
+        }
     }
 
     @Test
@@ -383,6 +434,4 @@ class DistributionServiceTest {
         assertEquals(distributionService.getTypeOfApplicant(applicant1), "SHK");
         assertEquals(distributionService.getTypeOfApplicant(applicant2), "WHB");
     }
-
-
 }
