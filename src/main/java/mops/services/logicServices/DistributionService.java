@@ -24,8 +24,8 @@ import java.util.Optional;
 @Service
 public class DistributionService {
 
-    private final int numberOfOrgaPrios = 4;
-    private final int numberOfApplPrio = 3;
+    private static final int NUMBER_OF_ORGA_PRIOS = 4;
+    private static final int NUMBER_OF_APPL_PRIO = 3;
     private DbDistributionService dbDistributionService;
     private ModuleService moduleService;
     private ApplicantService applicantService;
@@ -181,9 +181,9 @@ public class DistributionService {
                                           final Module module) {
         List<Evaluation> evaluations = prepareEvaluationsList(allApplicants, module);
 
-        List<Evaluation>[] sortedByOrgaPrio = new List[numberOfOrgaPrios];
+        List<Evaluation>[] sortedByOrgaPrio = new List[NUMBER_OF_ORGA_PRIOS];
 
-        for (int i = 0; i < numberOfOrgaPrios; i++) {
+        for (int i = 0; i < NUMBER_OF_ORGA_PRIOS; i++) {
             sortedByOrgaPrio[i] = new LinkedList<>();
         }
 
@@ -191,11 +191,11 @@ public class DistributionService {
             sortedByOrgaPrio[evaluation.getPriority().getValue() - 1].add(evaluation);
         }
 
-        for (int i = 0; i < numberOfOrgaPrios; i++) {
+        for (int i = 0; i < NUMBER_OF_ORGA_PRIOS; i++) {
             sortedByOrgaPrio[i].sort(Comparator.comparing(a -> a.getApplication().getPriority().getValue()));
         }
 
-        for (int x = 0; x < numberOfOrgaPrios - 1; x++) {
+        for (int x = 0; x < NUMBER_OF_ORGA_PRIOS - 1; x++) {
 
             if (checkIfModuleHasSpace(hours.length,
                     maxHoursPerModule[moduleCount],
@@ -342,11 +342,11 @@ public class DistributionService {
      */
     public List<WebDistributorApplicant> sort(final List<WebDistributorApplicant> applicantList, final String module) {
         List<WebDistributorApplicant> sortedApplicants = new LinkedList<>();
-        LinkedList<WebDistributorApplicant>[][] orgaPrios = new LinkedList[numberOfOrgaPrios][numberOfApplPrio];
+        LinkedList<WebDistributorApplicant>[][] orgaPrios = new LinkedList[NUMBER_OF_ORGA_PRIOS][NUMBER_OF_APPL_PRIO];
         LinkedList<WebDistributorApplicant> wrongApplicants = new LinkedList<>();
         wrongApplicants.addAll(applicantList);
-        for (int i = 0; i < numberOfOrgaPrios; i++) {
-            for (int j = 0; j < numberOfApplPrio; j++) {
+        for (int i = 0; i < NUMBER_OF_ORGA_PRIOS; i++) {
+            for (int j = 0; j < NUMBER_OF_APPL_PRIO; j++) {
                 orgaPrios[i][j] = new LinkedList<>();
             }
         }
@@ -360,8 +360,8 @@ public class DistributionService {
                 }
             }
         }
-        for (int i = 0; i < numberOfOrgaPrios; i++) {
-            for (int j = 0; j < numberOfApplPrio; j++) {
+        for (int i = 0; i < NUMBER_OF_ORGA_PRIOS; i++) {
+            for (int j = 0; j < NUMBER_OF_APPL_PRIO; j++) {
                 sortedApplicants.addAll(orgaPrios[i][j]);
             }
         }
