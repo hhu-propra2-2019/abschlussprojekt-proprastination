@@ -86,7 +86,7 @@ public class CSVService {
      * @param moduleName Name of the module
      */
     public static void deleteModule(final String moduleName) {
-        List<String[]> readData = readFromCSV(System.getProperty("user.dir") + "/csv/module.csv");
+        List<String[]> readData = readFromCSV(System.getProperty("user.dir") + File.separator + "csv" + File.separator + "module.csv");
         List<String[]> writeData = new ArrayList<>();
         String[] tmp;
         for (String[] readDatum : readData) {
@@ -96,7 +96,7 @@ public class CSVService {
             }
         }
         cleanModules();
-        writeInCSV(System.getProperty("user.dir") + "/csv/module.csv", writeData);
+        writeInCSV(System.getProperty("user.dir") + File.separator + "csv" + File.separator + "module.csv", writeData);
     }
 
     /**
@@ -105,7 +105,7 @@ public class CSVService {
     public static void cleanModules() {
         final Charset charset = StandardCharsets.UTF_8;
         try {
-            new FileWriter(System.getProperty("user.dir") + "/csv/module.csv", charset).close();
+            new FileWriter(System.getProperty("user.dir") + File.separator + "csv" + File.separator + "module.csv", charset).close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -116,7 +116,7 @@ public class CSVService {
      * @return List of all modules
      */
     public static List<String> getModules() {
-        return getCSVData(NAME, System.getProperty("user.dir") + "/csv/module.csv");
+        return getCSVData(NAME, System.getProperty("user.dir") + File.separator + "csv" + File.separator + "module.csv");
     }
 
     /**
@@ -124,7 +124,7 @@ public class CSVService {
      * @return list of short names
      */
     public  static List<String> getShortModuleNames() {
-        return getCSVData(SHORT_NAME, System.getProperty("user.dir") + "/csv/module.csv");
+        return getCSVData(SHORT_NAME, System.getProperty("user.dir") + File.separator + "csv" + File.separator + "module.csv");
     }
 
     /**
@@ -133,7 +133,7 @@ public class CSVService {
      */
 
     public static List<String> getModuleProfs() {
-        return getCSVData(PROF_SERIAL, System.getProperty("user.dir") + "/csv/module.csv");
+        return getCSVData(PROF_SERIAL, System.getProperty("user.dir") + File.separator + "csv" + File.separator + "module.csv");
     }
 
     /**
@@ -141,7 +141,7 @@ public class CSVService {
      * @return return module with details as list of Modules
      */
     public static List<WebModule> getModulesWithDetails() {
-        List<String[]> modules = readFromCSV(System.getProperty("user.dir") + "/csv/module.csv");
+        List<String[]> modules = readFromCSV(System.getProperty("user.dir") + File.separator + "csv" + File.separator + "module.csv");
         List<WebModule> moduleList = new ArrayList<>();
         String[] tmp;
         for (String[] module : modules) {
@@ -164,7 +164,7 @@ public class CSVService {
      * @return list of countries
      */
     public static List<String> getCountries() {
-        return getCSVData(0, System.getProperty("user.dir") + "/csv/countries.csv");
+        return getCSVData(0, System.getProperty("user.dir") + File.separator + "csv" + File.separator + "countries.csv");
     }
 
     /**
@@ -174,7 +174,7 @@ public class CSVService {
      */
 
     public static String getProfForModule(final String moduleName) {
-        List<String[]> data = readFromCSV(System.getProperty("user.dir") + "/csv/module.csv");
+        List<String[]> data = readFromCSV(System.getProperty("user.dir") + File.separator + "csv" + File.separator + "module.csv");
         String[] strArr;
         for (String[] datum : data) {
             strArr = datum;
@@ -192,7 +192,7 @@ public class CSVService {
      * @return countrycode
      */
     public static String getCodeForCountry(final String country) {
-        List<String[]> data = readFromCSV(System.getProperty("user.dir") + "/csv/countries.csv");
+        List<String[]> data = readFromCSV(System.getProperty("user.dir") + File.separator + "csv" + File.separator + "countries.csv");
         String[] strArr;
         for (String[] datum : data) {
             strArr = datum;
@@ -212,7 +212,7 @@ public class CSVService {
 
     public static List<String> getModulesForProf(final String profSerial) {
         List<String> list = new ArrayList<>();
-        List<String[]> profs = readFromCSV(System.getProperty("user.dir") + "/csv/module.csv");
+        List<String[]> profs = readFromCSV(System.getProperty("user.dir") + File.separator + "csv" + File.separator + "module.csv");
         String[] strArr;
         for (String[] prof : profs) {
             strArr = prof;
@@ -228,7 +228,7 @@ public class CSVService {
      * @return List of all courses
      */
     public static List<String> getCourses() {
-        return getCSVData(0, System.getProperty("user.dir") + "/csv/courses.csv");
+        return getCSVData(0, System.getProperty("user.dir") + File.separator + "csv" + File.separator + "courses.csv");
     }
 
     /**
@@ -237,7 +237,7 @@ public class CSVService {
      * @return List of all Semesters
      */
     public static List<String> getSemester() {
-        return getCSVData(0, System.getProperty("user.dir") + "/csv/semester.csv");
+        return getCSVData(0, System.getProperty("user.dir") + File.separator + "csv" + File.separator + "semester.csv");
     }
 
     /**
