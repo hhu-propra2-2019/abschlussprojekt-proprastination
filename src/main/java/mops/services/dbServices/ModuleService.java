@@ -5,6 +5,7 @@ import mops.model.classes.webclasses.WebModule;
 import mops.repositories.ModuleRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,7 +59,20 @@ public class ModuleService {
      * @param module module.
      */
     public void save(final Module module) {
+        concatenateDeadlines(module);
         moduleRepository.save(module);
+    }
+
+    /** Sets the deadline (This should me reworked)
+     *
+     * @param module current module
+     */
+    private void concatenateDeadlines(final Module module) {
+        if (module.getDeadlineDate().isEmpty() || module.getDeadlineTime().isEmpty()) {
+            return;
+        }
+        module.setDeadline(LocalDateTime.parse((String.format("%sT%s:00",
+                module.getDeadlineDate(), module.getDeadlineTime()))));
     }
 
     /**
@@ -104,6 +118,9 @@ public class ModuleService {
                 .name(module.getName())
                 .shortName(module.getShortName())
                 .profSerial(module.getProfSerial())
+                .deadlineDate(module.getDeadlineDate())
+                .deadlineTime(module.getDeadlineTime())
+                .deadline(module.getDeadline())
                 .sevenHourLimit(module.getSevenHourLimit())
                 .nineHourLimit(module.getNineHourLimit())
                 .seventeenHourLimit(module.getSeventeenHourLimit())

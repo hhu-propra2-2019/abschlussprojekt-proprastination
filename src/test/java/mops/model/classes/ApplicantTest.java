@@ -3,7 +3,9 @@ package mops.model.classes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,7 +24,7 @@ class ApplicantTest {
     @BeforeEach
     void init() {
         Module module = Module.builder()
-                .deadline(Instant.ofEpochSecond(100l))
+                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("Info4")
                 .build();
         Application application = Application.builder().module(module).build();
@@ -76,9 +78,9 @@ class ApplicantTest {
                 " surname=J, address=Address(street=Baker Street, houseNumber=21B, city=London, country=England," +
                 " zipcode=NW1 6XE), checked=false, gender=null, birthday=01.01.2001, nationality=English, course=Arts, status=New," +
                 " comment=null, certs=Certificate(name=Bachelor, course=Harvard), applications=[Application" +
-                "(minHours=0, finalHours=0, maxHours=0, module=Module(name=Info4, deadline=1970-01-01T00:01:40Z," +
-                " shortName=null, profSerial=null, sevenHourLimit=null, nineHourLimit=null, seventeenHourLimit=null)," +
-                " priority=null, grade=0.0, lecturer=null, semester=null, role=null, comment=null" +
+                "(minHours=0, finalHours=0, maxHours=0, module=Module(name=Info4, deadlineDate=null, deadlineTime=null," +
+                " deadline=1970-01-01T00:01:40, shortName=null, profSerial=null, sevenHourLimit=null, nineHourLimit=null," +
+                " seventeenHourLimit=null), priority=null, grade=0.0, lecturer=null, semester=null, role=null, comment=null" +
                 ")])");
     }
 
@@ -172,7 +174,7 @@ class ApplicantTest {
     @Test
     void testHashCode() {
         Module newModule = Module.builder()
-                .deadline(Instant.ofEpochSecond(100l))
+                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("Info4")
                 .build();
         Application newApplication = Application.builder().module(newModule).build();
@@ -211,7 +213,7 @@ class ApplicantTest {
     @Test
     void testHashCodeDifferentSurname() {
         Module newModule = Module.builder()
-                .deadline(Instant.ofEpochSecond(100l))
+                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("Info4")
                 .build();
         Application newApplication = Application.builder().module(newModule).build();

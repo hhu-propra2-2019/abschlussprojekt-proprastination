@@ -5,6 +5,7 @@ import mops.model.classes.webclasses.WebModule;
 import mops.services.dbServices.ModuleService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,8 +44,23 @@ public class WebModuleService {
      * @param webmodule module.
      */
     public void save(final WebModule webmodule) {
+        concatenateDeadlines(webmodule);
         moduleService.save(toModule(webmodule));
     }
+
+    /** Sets the deadline (this should me reworked)
+     *
+     * @param webmodule current webmodule
+     */
+    private void concatenateDeadlines(final WebModule webmodule) {
+        if (webmodule.getDeadlineDate() == null || webmodule.getDeadlineTime() == null) {
+            return;
+        }
+        webmodule.setDeadline(LocalDateTime.parse((String.format("%sT%s:00",
+                webmodule.getDeadlineDate(), webmodule.getDeadlineTime()))));
+    }
+
+
     /**
      * saves an updated version of Module
      * @param webmodule edited module
@@ -76,11 +92,15 @@ public class WebModuleService {
      * @param webModule webmodule
      * @return Module generated Module
      */
+
     public Module toModule(final WebModule webModule) {
         return Module.builder()
                 .name(webModule.getName())
                 .shortName(webModule.getShortName())
                 .profSerial(webModule.getProfSerial())
+                .deadlineDate(webModule.getDeadlineDate())
+                .deadlineTime(webModule.getDeadlineTime())
+                .deadline(webModule.getDeadline())
                 .sevenHourLimit(webModule.getSevenHourLimit())
                 .nineHourLimit(webModule.getNineHourLimit())
                 .seventeenHourLimit(webModule.getSeventeenHourLimit())

@@ -6,6 +6,7 @@ import mops.model.classes.Applicant;
 import mops.model.classes.Application;
 import mops.model.classes.Certificate;
 import mops.model.classes.Module;
+import mops.model.classes.Organizer;
 import mops.model.classes.Priority;
 import mops.model.classes.Role;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -16,7 +17,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,7 +34,7 @@ class PDFServiceTest {
     @Test
     void generatePDF() throws IOException {
         Module module = Module.builder()
-                .deadline(Instant.ofEpochSecond(100l))
+                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("Info4")
                 .build();
 
@@ -70,7 +72,14 @@ class PDFServiceTest {
                 .application(application)
                 .build();
 
-        File file = service.generatePDF(application, applicant);
+        Organizer organizer = Organizer.builder()
+                .email("test@test.test")
+                .name("test")
+                .phonenumber("test")
+                .uniserial("test")
+                .build();
+
+        File file = service.generatePDF(application, applicant, organizer);
 
         PDDocument document1 = PDDocument.load(file);
         document1.setAllSecurityToBeRemoved(true);
@@ -82,6 +91,7 @@ class PDFServiceTest {
         assertThat(acroForm.getField("Anschrift (Straße)").getValueAsString()).isEqualTo("Baker Street");
         assertThat(acroForm.getField("Stunden").getValueAsString()).isEqualTo("0");
         assertThat(acroForm.getField("Studiengang").getValueAsString()).isEqualTo("Arts");
+        assertThat(acroForm.getField("Antragsteller_Name").getValueAsString()).isEqualTo("test");
 
     }
 }

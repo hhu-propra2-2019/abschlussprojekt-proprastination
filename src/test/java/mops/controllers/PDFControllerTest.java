@@ -4,6 +4,7 @@ import com.c4_soft.springaddons.test.security.context.support.WithMockKeycloackA
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
 import mops.model.classes.Module;
+import mops.model.classes.Organizer;
 import mops.services.dbServices.ApplicantService;
 import mops.services.PDFService;
 import org.junit.Ignore;
@@ -25,7 +26,8 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 
 import java.io.File;
 import java.io.FileWriter;
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -61,7 +63,7 @@ class PDFControllerTest {
     @WithMockKeycloackAuth(name = "name", roles = "studentin")
     void fileSystemResource() throws Exception {
         Module module = Module.builder()
-                .deadline(Instant.ofEpochSecond(100l))
+                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("Info4")
                 .build();
         Application application = Application.builder()
@@ -78,7 +80,7 @@ class PDFControllerTest {
         writer.close();
 
         when(appService.findByUniserial(any(String.class))).thenReturn(applicant);
-        when(service.generatePDF(any(Application.class), any(Applicant.class))).thenReturn(file);
+        when(service.generatePDF(any(Application.class), any(Applicant.class), any(Organizer.class))).thenReturn(file);
 
 
         //mvc.perform(get("/bewerbung2/bewerber/pdf/download?module=createNewApplicantIfNoneWasFound")).andExpect(status().isOk());
@@ -86,7 +88,7 @@ class PDFControllerTest {
         mvc.perform(get("/bewerbung2/pdf/pfdDownload?module=createNewApplicantIfNoneWasFound?student=name")).andExpect(status().is4xxClientError());
 
         verify(appService, times(1)).findByUniserial(any(String.class));
-        verify(service, times(1)).generatePDF(any(Application.class), any(Applicant.class));
+        verify(service, times(1)).generatePDF(any(Application.class), any(Applicant.class), any(Organizer.class));
         boolean ignoreme = file.delete();
     }
 
@@ -94,7 +96,7 @@ class PDFControllerTest {
     @WithMockKeycloackAuth(name = "baum", roles = "studentin")
     void noSuchApplication() throws Exception {
         Module module = Module.builder()
-                .deadline(Instant.ofEpochSecond(100l))
+                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("Info4")
                 .build();
         Application application = Application.builder()
@@ -106,7 +108,7 @@ class PDFControllerTest {
         file.deleteOnExit();
 
         when(appService.findByUniserial(any(String.class))).thenReturn(applicant);
-        when(service.generatePDF(any(Application.class), any(Applicant.class))).thenReturn(file);
+        when(service.generatePDF(any(Application.class), any(Applicant.class), any(Organizer.class))).thenReturn(file);
 
         mvc.perform(get("/bewerbung2/pdf/pdfDownload?module=Baum?student=baum")).andExpect(status().isBadRequest());
 
