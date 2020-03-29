@@ -303,15 +303,17 @@ class StudentServiceTest {
 
     @Test
     void getAllNotfilledModulesApplicantIsNull() {
-        Module moduleMock1 = mock(Module.class);
-        Module moduleMock2 = mock(Module.class);
+        Module expired = mock(Module.class);
+        when(expired.getDeadline()).thenReturn(LocalDateTime.MIN);
+        Module notExpired = mock(Module.class);
+        when(notExpired.getDeadline()).thenReturn(LocalDateTime.MAX);
         List<Module> modules = new ArrayList<>();
-        modules.add(moduleMock1);
-        modules.add(moduleMock2);
+        modules.add(expired);
+        modules.add(notExpired);
 
         List<Module> result = studentService.getAllNotfilledModules(null, modules);
 
-        assertEquals(modules, result);
+        assertThat(result).containsOnly(notExpired);
     }
 
     @Test
