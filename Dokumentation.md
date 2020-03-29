@@ -289,11 +289,11 @@ Veränderte Daten werden weitergereicht und es kann nach bestimmten Attributen g
 | Distribute Service | Rückgabe einzelner html Paths und checken der Rollen | Einfacheres und zentraleres Weiterleiten je nach angemeldeter Rolle |
 | Orga Service | Nutzt die anderen Entity Services und deren Methoden | Stellt dem Orga Controller die entsprechenden Bewerber, Bewerbungen und Prioritäten zur Verfügung und gibt die eingegebene Organisator Präferenz an den Evaluation Service weiter|
 | Student Service | Methoden zur Umwandlung von Webklassen in Modelklassen und vice versa | Aus dem Controller ausgelagerte Logik die den Übergang zwischen den im Frontend verwendeten Webklassen und den in der Datenbank benutzten Modelklassen |
-| Webapplication Service | | |
-| WebDistributionService | | |
+| Webapplication Service | Ausgabe von Binding errors und Erstelen von Bwerbern falls es noch keinen für diese Bewerbung gibt | Überprüft Eingaben des Bewerbers und löscht das Modul der abgesendeten Bewerbung aus der Liste möglicher weiterer Bewerbungen. |
+| WebDistributionService | Suchmethoden zu den unterschiedlichen Arbeitszeiten sowie Umwandlungsmethoden | Mittler zwischen den in der Datenbank eingetragenen Verteilungen und der Darstellung auf der Seite des Verteilers |
 | Webmodul Service | Wandelt Web Module in Module und andersherum und speichert oder schickt diese weiter | Zur einfacheren Handhabung im Setup Controller |
-| WebOrganizer Service | | |
-| WebPdf Service |  |  |
+| WebOrganizer Service | Gibt Daten aus den Organisator Seiten an die Datenbank weiter und Ergebnisse aus Suchen im repository zurück | Die Organisator Daten werden vor allem für die Erstellung der pfd Bögen gebraucht, der Service speichert Änderungen die eingegebn werden |
+| WebPdf Service | Gibt Download Seiten für die Einstellungsbögen zurück oder stellt diese als Zip Download zur Verfügung. Er initiiert auch das Versenden der Mails mit den Einstellungsbögen.|  |
 
 
 *Andere*
