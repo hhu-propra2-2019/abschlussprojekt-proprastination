@@ -12,7 +12,7 @@
             topId: 'top_scroll_page',
             bottomId: 'bottom_scroll_page',
             delay: 20,
-            height: 50
+            height: 80
         };
         var options = $.extend(defaults, options);
 

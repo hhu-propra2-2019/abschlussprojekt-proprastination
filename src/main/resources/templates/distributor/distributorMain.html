@@ -58,20 +58,20 @@
         <div class="col-sm-6" th:each="distribution: ${distributions}">
             <div class="card bg-light mb-3 border-primary">
                 <div class="card-header d-flex justify-content-start align-items-start"
-                     th:style="${distribution.hours7Set} == ${distribution.hours7} ?
+                     th:style="${distribution.module} != 'Nicht Zugeteilt' ? (${distribution.hours7Set} == ${distribution.hours7} ?
                      (${distribution.hours9Set} == ${distribution.hours9} ?
-                     (${distribution.hours17Set} == ${distribution.hours17} ? 'background-color: rgba(108, 179, 255, 0.51)'))">
+                     (${distribution.hours17Set} == ${distribution.hours17} ? 'background-color: rgba(108, 179, 255, 0.51)')))">
                     <div class="col text-left" th:text="${distribution.module}">
                         Propra
                     </div>
                     <div class="col text-right">
-                            <div th:class="${distribution.hours7Set} > ${distribution.hours7} ? 'text-danger'" th:text="'7 Stunden: ' + ${distribution.hours7Set} + '/' + ${distribution.hours7}">
+                            <div th:class="${distribution.hours7Set} > ${distribution.hours7} ? 'text-danger'" th:text="${distribution.module} != 'Nicht Zugeteilt' ? '7 Stunden: ' + ${distribution.hours7Set} + '/' + ${distribution.hours7}">
                                 4
                             </div>
-                            <div th:class="${distribution.hours9Set} > ${distribution.hours9} ? 'text-danger'" th:text="'9 Stunden: ' + ${distribution.hours9Set} + '/' + ${distribution.hours9}">
+                            <div th:class="${distribution.hours9Set} > ${distribution.hours9} ? 'text-danger'" th:text="${distribution.module} != 'Nicht Zugeteilt' ? '9 Stunden: ' + ${distribution.hours9Set} + '/' + ${distribution.hours9}">
                                 7
                             </div>
-                            <div th:class="${distribution.hours17Set} > ${distribution.hours17} ? 'text-danger'" th:text="'17 Stunden: ' + ${distribution.hours17Set} + '/' + ${distribution.hours17}">
+                            <div th:class="${distribution.hours17Set} > ${distribution.hours17} ? 'text-danger'" th:text="${distribution.module} != 'Nicht Zugeteilt' ? '17 Stunden: ' + ${distribution.hours17Set} + '/' + ${distribution.hours17}">
                                 3
                             </div>
                     </div>
