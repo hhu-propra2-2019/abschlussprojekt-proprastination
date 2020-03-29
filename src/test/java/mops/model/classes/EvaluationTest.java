@@ -47,9 +47,9 @@ class EvaluationTest {
 
         String evalString = evaluation.toString();
         String expected = "Evaluation(application=Application(minHours=0, finalHours=0, maxHours=0, " +
-                "module=Module(name=Info4, deadline=1970-01-01T00:01:40Z, shortName=null, profSerial=null, " +
-                "sevenHourLimit=null, nineHourLimit=null, seventeenHourLimit=null), priority=null," +
-                " grade=0.0, lecturer=null, semester=null, role=null, comment=null), hours=0," +
+                "module=Module(name=Info4, deadlineDate=null, deadlineTime=null, deadline=1970-01-01T00:01:40," +
+                " shortName=null, profSerial=null, sevenHourLimit=null, nineHourLimit=null, seventeenHourLimit=null)," +
+                " priority=null, grade=0.0, lecturer=null, semester=null, role=null, comment=null), hours=0," +
                 " priority=NEUTRAL)";
         assertThat(evalString).isEqualTo(expected);
     }

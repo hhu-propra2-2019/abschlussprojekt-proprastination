@@ -60,12 +60,16 @@ class DistributionServiceTest {
                 .sevenHourLimit("1")
                 .nineHourLimit("2")
                 .seventeenHourLimit("3")
+                .deadlineDate("")
+                .deadlineTime("")
                 .build());
         moduleService.save(Module.builder()
                 .name("Aldat")
                 .sevenHourLimit("3")
                 .nineHourLimit("2")
                 .seventeenHourLimit("1")
+                .deadlineDate("")
+                .deadlineTime("")
                 .build());
     }
 
@@ -317,6 +321,8 @@ class DistributionServiceTest {
                 .sevenHourLimit("1")
                 .nineHourLimit("2")
                 .seventeenHourLimit("3")
+                .deadlineDate("")
+                .deadlineTime("")
                 .build());
 
         distributionService.distribute();
