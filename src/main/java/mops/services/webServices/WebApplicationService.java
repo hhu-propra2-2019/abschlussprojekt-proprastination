@@ -71,11 +71,11 @@ public class WebApplicationService {
         Applicant applicant = applicantService.findByUniserial(account.getName());
 
         WebApplicant webApplicant = (applicant == null)
-                ? WebApplicant.builder().build() : studentService.getExsistingApplicant(applicant);
+                ? WebApplicant.builder().build() : studentService.getExistingApplicant(applicant);
         WebAddress webAddress = (applicant == null)
-                ? WebAddress.builder().build() : studentService.getExsistingAddress(applicant.getAddress());
+                ? WebAddress.builder().build() : studentService.getExistingAddress(applicant.getAddress());
         WebCertificate webCertificate = (applicant == null)
-                ? WebCertificate.builder().build() : studentService.getExsistingCertificate(applicant.getCerts());
+                ? WebCertificate.builder().build() : studentService.getExistingCertificate(applicant.getCerts());
         List<Module> modules = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
 
         model.addAttribute("account", account);
