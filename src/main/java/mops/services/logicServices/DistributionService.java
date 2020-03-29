@@ -315,14 +315,21 @@ public class DistributionService {
         Optional<Distribution> newDistribution = dbDistributionService.findById(Long.parseLong(distributionId));
         Applicant applicant = applicantService.findById(Long.parseLong(applicantId));
         for (Application application : applicant.getApplications()) {
+            if ("-1".equals(distributionId)) {
+                for (Distribution distribution : dbDistributionService.findAll()) {
+                    distribution.getEmployees().remove(applicant);
+                    dbDistributionService.save(distribution);
+                }
+            } else {
                 if (newDistribution.isPresent()) {
                     if (application.getModule().equals(newDistribution.get().getModule())) {
                         for (Distribution distribution : dbDistributionService.findAll()) {
                             distribution.getEmployees().remove(applicant);
                             dbDistributionService.save(distribution);
                         }
-                    newDistribution.get().getEmployees().add(applicant);
-                    dbDistributionService.save(newDistribution.get());
+                        newDistribution.get().getEmployees().add(applicant);
+                        dbDistributionService.save(newDistribution.get());
+                    }
                 }
             }
         }
