@@ -440,7 +440,6 @@ class StudentServiceTest {
         when(mockIDToken.getGivenName()).thenReturn("James");
         when(mockIDToken.getFamilyName()).thenReturn("Bond");
         when(tokenMock.getName()).thenReturn("jabon007");
-        Module moduleMock = mock(Module.class);
 
         Applicant result = studentService.savePersonalData(tokenMock, webApplicant, webAddress, webCertificate);
 
