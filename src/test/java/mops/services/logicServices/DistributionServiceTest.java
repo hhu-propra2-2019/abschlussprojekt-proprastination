@@ -295,8 +295,8 @@ class DistributionServiceTest {
         expectedApplicants.add(applicantService.findByUniserial("15"));
 
         assertEquals(actualApplicants.size(), expectedApplicants.size());
-        for (int i = 0; i < expectedApplicants.size(); i++) {
-            assertTrue(actualApplicants.contains(expectedApplicants.get(i)));
+        for (Applicant expectedApplicant : expectedApplicants) {
+            assertTrue(actualApplicants.contains(expectedApplicant));
         }
     }
 
@@ -393,18 +393,15 @@ class DistributionServiceTest {
 
         WebDistribution webDistribution = null;
 
-        for (int i = 0; i < webDistributions.size(); i++) {
-            if ("RA".equals(webDistributions.get(i).getModule())) {
-                webDistribution = webDistributions.get(i);
+        for (WebDistribution distribution : webDistributions) {
+            if ("RA".equals(distribution.getModule())) {
+                webDistribution = distribution;
             }
         }
-
         String[] actuaUniserial = new String[webDistribution.getWebDistributorApplicants().size()];
         for (int i = 0; i < actuaUniserial.length; i++) {
             actuaUniserial[i] = webDistribution.getWebDistributorApplicants().get(i).getUsername();
         }
-
-        List<WebDistributorApplicant> sortedApplicants = webDistribution.getWebDistributorApplicants();
 
         String[] expectedUniserial = {"4", "12", "2", "8", "14", "3"};
 
