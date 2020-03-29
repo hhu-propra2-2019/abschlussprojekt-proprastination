@@ -335,4 +335,21 @@ class StudentServiceTest {
         assertThat(result).containsOnly(notApplied);
     }
 
+    @Test
+    void getAllNotfilledModulesExpiredDeadlinesGetSortedOut() {
+        Module notExpired = mock(Module.class);
+        when(notExpired.getDeadline()).thenReturn(LocalDateTime.MAX);
+        Module expired = mock(Module.class);
+        when(expired.getDeadline()).thenReturn(LocalDateTime.MIN);
+        List<Module> modules = new ArrayList<>();
+        modules.add(notExpired);
+        modules.add(expired);
+        Applicant applicantMock = mock(Applicant.class);
+        when(applicantMock.getApplications()).thenReturn(new HashSet<>());
+
+        List<Module> result = studentService.getAllNotfilledModules(applicantMock, modules);
+
+        assertThat(result).containsOnly(notExpired);
+    }
+
 }
