@@ -223,8 +223,7 @@ class StudentServiceTest {
 
         List<Module> result = studentService.getAllNotfilledModules(applicantMock, modules);
 
-        assertThat(result).doesNotContain(applied);
-        assertThat(result).contains(notApplied);
+        assertThat(result).containsOnly(notApplied);
     }
 
 }
