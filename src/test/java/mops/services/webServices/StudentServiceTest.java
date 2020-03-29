@@ -1,12 +1,10 @@
 package mops.services.webServices;
 
-import mops.model.classes.Address;
-import mops.model.classes.Applicant;
-import mops.model.classes.Application;
-import mops.model.classes.Certificate;
+import mops.model.classes.*;
 import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebAddress;
 import mops.model.classes.webclasses.WebApplicant;
+import mops.model.classes.webclasses.WebApplication;
 import mops.model.classes.webclasses.WebCertificate;
 import mops.services.dbServices.ApplicantService;
 import mops.services.dbServices.ModuleService;
@@ -81,6 +79,18 @@ class StudentServiceTest {
             .nationality("UK")
             .status("Tutor")
             .checked(false)
+            .build();
+
+    private WebApplication webApplication = WebApplication.builder()
+            .comment("The Matrix is a system, Neo.")
+            .grade(1.0)
+            .lecturer("Professor Y")
+            .maxHours(17)
+            .minHours(7)
+            .module("Archeology")
+            .priority(Priority.HIGH)
+            .role(Role.BOTH)
+            .semester("SS2014")
             .build();
 
     private WebCertificate webCertificate1;
@@ -352,6 +362,29 @@ class StudentServiceTest {
         List<Module> result = studentService.getAllNotfilledModules(applicantMock, modules);
 
         assertThat(result).containsOnly(notExpired);
+    }
+
+    @Test
+    void buildApplication() {
+        Module moduleMock = mock(Module.class);
+        Application application = Application.builder()
+                .comment("The Matrix is a system, Neo.")
+                .finalHours(0) // final hours are not included in the WebModule
+                .grade(1.0)
+                .lecturer("Professor Y")
+                .maxHours(17)
+                .minHours(7)
+                .module(moduleMock)
+                .priority(Priority.HIGH)
+                .role(Role.BOTH)
+                .semester("SS2014")
+                .build();
+        when(moduleServiceMock.findModuleByName("Archeology")).thenReturn(moduleMock);
+
+        Application result = studentService.buildApplication(webApplication);
+
+        verify(moduleServiceMock, times(1)).findModuleByName("Archeology");
+        assertEquals(application, result);
     }
 
 }
