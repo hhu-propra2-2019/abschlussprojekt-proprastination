@@ -387,4 +387,40 @@ class StudentServiceTest {
         assertEquals(application, result);
     }
 
+    @Test
+    void changeApplication() {
+        Module moduleMock = mock(Module.class);
+        Application oldApplication = Application.builder()
+                .id(321)
+                .comment("Ping!")
+                .finalHours(9)
+                .grade(2.7)
+                .lecturer("Miss Piggy")
+                .maxHours(10)
+                .minHours(8)
+                .module(moduleMock)
+                .priority(Priority.NEGATIVE)
+                .role(Role.PROOFREADER)
+                .semester("SS2013")
+                .build();
+        Application expectedApplication = Application.builder()
+                .id(321) //should remain intact
+                .comment("The Matrix is a system, Neo.")
+                .finalHours(9) // should remain intact
+                .grade(1.0)
+                .lecturer("Professor Y")
+                .maxHours(17)
+                .minHours(7)
+                .module(moduleMock) // should remain intact
+                .priority(Priority.HIGH)
+                .role(Role.BOTH)
+                .semester("SS2014")
+                .build();
+
+        Application result = studentService.changeApplication(webApplication, oldApplication);
+
+        assertEquals(expectedApplication, result);
+        assertEquals(expectedApplication.getId(), result.getId());
+    }
+
 }
