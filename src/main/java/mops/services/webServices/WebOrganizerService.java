@@ -1,9 +1,14 @@
 package mops.services.webServices;
 
+import mops.model.Account;
 import mops.model.classes.Module;
 import mops.model.classes.Organizer;
+import mops.model.classes.Organizer.OrganizerBuilder;
 import mops.services.dbServices.ModuleService;
 import mops.services.dbServices.OrganizerService;
+import org.keycloak.KeycloakPrincipal;
+import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.keycloak.representations.IDToken;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,8 +22,9 @@ public class WebOrganizerService {
 
     /**
      * Constructor
-     * @param moduleService
-     * @param organizerService
+     *
+     * @param moduleService    ModuleService
+     * @param organizerService OrganizerService
      */
     @SuppressWarnings("checkstyle:HiddenField")
     public WebOrganizerService(final ModuleService moduleService, final OrganizerService organizerService) {
@@ -43,14 +49,22 @@ public class WebOrganizerService {
 
     /**
      * Search Organizer by name and if not existing yet, it creates a new one.
-     * @param name name of organizer
+     *
+     * @param name    name of organizer
+     * @param account kycloak account
+     * @param token   keycloaktoken
      * @return organizer
      */
-    public Organizer getOrganizerOrNewOrganizer(final String name) {
+    public Organizer getOrganizerOrNewOrganizer(final String name, final Account account,
+                                                final KeycloakAuthenticationToken token) {
         Organizer organizer = organizerService.findByUniserial(name);
+        KeycloakPrincipal principal = (KeycloakPrincipal) token.getPrincipal();
+        IDToken idToken = principal.getKeycloakSecurityContext().getIdToken();
         if (organizer == null) {
             organizer = Organizer.builder()
                     .uniserial(name)
+                    .email(account.getEmail())
+                    .name(idToken.getGivenName() + " " + idToken.getFamilyName())
                     .phonenumber("")
                     .build();
             organizerService.save(organizer);
@@ -65,9 +79,8 @@ public class WebOrganizerService {
      */
     public void changePhonenumber(final String name, final String phone) {
         Organizer oldOrganizer = organizerService.findByUniserial(name);
-        organizerService.save(Organizer.builder()
-                .id(oldOrganizer.getId())
-                .uniserial(oldOrganizer.getUniserial())
+        OrganizerBuilder organizerBuilder = oldOrganizer.toBuilder();
+        organizerService.save(organizerBuilder
                 .phonenumber(phone)
                 .build());
     }

@@ -28,7 +28,7 @@ class CSVServiceTest{
     void cleanTestCSV() {
         final Charset charset = StandardCharsets.UTF_8;
         try {
-            new FileWriter(System.getProperty("user.dir") + "/csv/test.csv", charset).close();
+            new FileWriter(System.getProperty("user.dir") + File.separator + "csv" + File.separator + "test.csv", charset).close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -36,13 +36,13 @@ class CSVServiceTest{
 
     @AfterAll
     void deleteTestCSV() {
-        File file = new File(System.getProperty("user.dir") + "/csv/test.csv");
+        File file = new File(System.getProperty("user.dir") + File.separator + "csv" + File.separator + "test.csv");
         file.delete();
     }
 
     @Test
     void readFromCSVTest() {
-        String csvName = System.getProperty("user.dir") + "/csv/test.csv";
+        String csvName = System.getProperty("user.dir") + File.separator + "csv" + File.separator + "test.csv";
         String[] module1 = {"propra", "21"};
         List<String[]> data = new ArrayList<>();
         data.add(module1);
@@ -65,7 +65,7 @@ class CSVServiceTest{
 
     @Test
     void writeInCSVTest(){
-        String csvName = System.getProperty("user.dir") + "/csv/test.csv";
+        String csvName = System.getProperty("user.dir") + File.separator + "csv" + File.separator + "test.csv";
         String[] module1 = {"propra","22"};
         List<String[]> data = new ArrayList<>();
         data.add(module1);
@@ -89,7 +89,7 @@ class CSVServiceTest{
     @Test
     void getCountriesTest() {
         List<String> countries;
-        String csvname = System.getProperty("user.dir") + "/csv/countries.csv";
+        String csvname = System.getProperty("user.dir") + File.separator + "csv" + File.separator + "countries.csv";
         List<String[]> data = CSVService.readFromCSV(csvname);
 
         countries = CSVService.getCountries();
@@ -118,7 +118,7 @@ class CSVServiceTest{
     @Test
     void getModulesTest() {
         List<String> modules;
-        String csvname = System.getProperty("user.dir") + "/csv/module.csv";
+        String csvname = System.getProperty("user.dir") + File.separator + "csv" + File.separator + "module.csv";
         List<String[]> data = CSVService.readFromCSV(csvname);
 
         modules = CSVService.getModules();
@@ -172,7 +172,7 @@ class CSVServiceTest{
     @Test
     void getCourses() {
         List<String> courses;
-        String csvname = System.getProperty("user.dir") + "/csv/courses.csv";
+        String csvname = System.getProperty("user.dir") + File.separator + "csv" + File.separator + "courses.csv";
         List<String[]> data = CSVService.readFromCSV(csvname);
 
         courses = CSVService.getCourses();
@@ -187,7 +187,7 @@ class CSVServiceTest{
     @Test
     void getSemesterTest() {
         List<String> semester;
-        String csvname = System.getProperty("user.dir") + "/csv/semester.csv";
+        String csvname = System.getProperty("user.dir") + File.separator + "csv" + File.separator + "semester.csv";
         List<String[]> data = CSVService.readFromCSV(csvname);
 
         semester = CSVService.getSemester();

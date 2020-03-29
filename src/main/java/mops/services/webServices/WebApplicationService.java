@@ -76,9 +76,7 @@ public class WebApplicationService {
                 ? WebAddress.builder().build() : studentService.getExistingAddress(applicant.getAddress());
         WebCertificate webCertificate = (applicant == null)
                 ? WebCertificate.builder().build() : studentService.getExistingCertificate(applicant.getCerts());
-        List<Module> modules = (applicant == null)
-                ? moduleService.getModules() : studentService
-                .getAllNotfilledModules(applicant, moduleService.getModules());
+        List<Module> modules = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
 
         model.addAttribute("account", account);
         model.addAttribute("countries", CSVService.getCountries());

@@ -29,4 +29,6 @@ public class Organizer {
     private long id;
     private String phonenumber;
     private String uniserial;
+    private String name;
+    private String email;
 }

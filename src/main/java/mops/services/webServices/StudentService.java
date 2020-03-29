@@ -197,6 +197,7 @@ public class StudentService {
      */
     public List<Module> getAllNotfilledModules(final Applicant applicant, final List<Module> modules) {
         if (applicant == null) {
+            modules.removeIf(module -> module.getDeadline().isBefore(LocalDateTime.now()));
             return modules;
         }
         for (Application app : applicant.getApplications()) {

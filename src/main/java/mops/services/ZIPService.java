@@ -4,9 +4,13 @@ import mops.model.classes.Applicant;
 import mops.model.classes.Application;
 import mops.model.classes.Distribution;
 import mops.model.classes.Module;
+import mops.model.classes.Organizer;
 import mops.services.dbServices.ApplicantService;
 import mops.services.dbServices.ApplicationService;
 import mops.services.dbServices.DbDistributionService;
+import mops.services.dbServices.OrganizerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -22,34 +26,39 @@ import java.util.zip.ZipOutputStream;
 @SuppressWarnings({"checkstyle:HiddenField", "checkstyle:HideUtilityClassConstructor"})
 public class ZIPService {
 
+    private Logger logger = LoggerFactory.getLogger(ZIPService.class);
+
     private PDFService pdfService;
     private ApplicantService applicantService;
     private ApplicationService applicationService;
     private DbDistributionService dbDistributionService;
+    private OrganizerService organizerService;
 
     /**
-     *
-     * @param pdfService
-     * @param applicantService
-     * @param applicationService
-     * @param dbDistributionService
+     * @param pdfService            Retrieves/receives PDF data
+     * @param applicantService      Retrieves/receives Applicant data
+     * @param applicationService    Retrieves/receives Application data
+     * @param dbDistributionService Retrieves Distribution data
+     * @param organizerService      organizerservice
      */
     public ZIPService(final PDFService pdfService, final ApplicantService applicantService,
                       final ApplicationService applicationService,
-                      final DbDistributionService dbDistributionService) {
+                      final DbDistributionService dbDistributionService,
+                      final OrganizerService organizerService) {
         this.pdfService = pdfService;
         this.applicantService = applicantService;
         this.applicationService = applicationService;
         this.dbDistributionService = dbDistributionService;
+        this.organizerService = organizerService;
     }
 
     /**
      * writes a file into a zipfile
      *
-     * @param file
-     * @param zipStream
-     * @param fileName
-     * @throws IOException
+     * @param file      File
+     * @param zipStream ZipStream
+     * @param fileName  filename
+     * @throws IOException IoException
      */
     public static void writeToZipFile(final File file,
                                       final ZipOutputStream zipStream,
@@ -75,6 +84,7 @@ public class ZIPService {
     public File getZipFileForAllDistributions() throws IOException {
         File file;
         String fileName;
+        Organizer organizer;
         File tmpFile = null;
         List<Distribution> distributions = dbDistributionService.findAll();
         FileOutputStream fos = null;
@@ -89,7 +99,8 @@ public class ZIPService {
                     Optional<Application> application = applicant.getApplications().stream()
                             .filter(app -> app.getModule().equals(distribution.getModule())).findFirst();
                     if (application.isPresent()) {
-                        file = pdfService.generatePDF(application.get(), applicant);
+                        organizer = organizerService.findByUniserial(application.get().getModule().getProfSerial());
+                        file = pdfService.generatePDF(application.get(), applicant, organizer);
                         fileName = (distribution.getModule().getName() + File.separator
                                 + applicant.getFirstName() + "_" + applicant.getSurname() + ".pdf");
                         writeToZipFile(file, zipOS, fileName);
@@ -97,7 +108,7 @@ public class ZIPService {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.warn(e.getMessage());
         } finally {
             if (zipOS != null) {
                 zipOS.close();
@@ -113,7 +124,7 @@ public class ZIPService {
     /**
      * returns path for zipFile
      *
-     * @param modules
+     * @param modules modules
      * @return randomised zipPath
      */
     public File getZipFileForModule(final List<Module> modules) throws IOException {
@@ -121,11 +132,13 @@ public class ZIPService {
         String fileName;
         Applicant applicant;
         File tmpFile = null;
+        Organizer organizer;
         List<Application> applicationList;
         try {
             tmpFile = File.createTempFile("bewerbung", ".zip");
             tmpFile.deleteOnExit();
         } catch (Exception e) {
+            logger.warn(e.getMessage());
             return null;
         }
         try (FileOutputStream fos = new FileOutputStream(tmpFile);
@@ -135,15 +148,18 @@ public class ZIPService {
             for (Module module : modules) {
                 applicationList = applicationService.findApplicationsByModule(module);
                 for (Application application : applicationList) {
+                    organizer = organizerService.findByUniserial(application.getModule().getProfSerial());
                     applicant = applicantService.findByApplications(application);
-                    file = pdfService.generatePDF(application, applicant);
+                    file = pdfService.generatePDF(application, applicant, organizer);
                     fileName = (module.getName() + File.separator
-                            + applicant.getFirstName() + "_" + applicant.getSurname() + ".pdf");
+                            + applicant.getFirstName().replaceAll("[^A-Za-z0-9.,ß]", "") + "_"
+                            + applicant.getSurname().replaceAll("[^A-Za-z0-9.,ß]", "") + ".pdf");
                     writeToZipFile(file, zipOS, fileName);
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.warn("Error creating Application PDF");
+            logger.debug(e.getMessage());
         }
 
         return tmpFile;

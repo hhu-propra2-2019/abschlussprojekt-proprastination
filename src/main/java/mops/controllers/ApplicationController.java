@@ -268,29 +268,6 @@ public class ApplicationController {
         return "redirect:bewerbungsUebersicht";
     }
 
-
-    /**
-     * The GetMapping for the overview
-     *
-     * @param token      The KeycloakAuthentication
-     * @param model      The Website model
-     * @param applicant1 new Applicant Data
-     * @return The HTML file rendered as a String
-     */
-    @PostMapping("/uebersichtDashboard")
-    @Secured("ROLE_studentin")
-    public String saveOverview(final KeycloakAuthenticationToken token, final Model model,
-                               @ModelAttribute("applicant1") final Applicant applicant1) {
-        if (token != null) {
-            model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
-            model.addAttribute("applicant", applicantService
-                    .findByUniserial(token.getName()));
-            studentService.updateApplicantWithoutChangingApplications(applicant1);
-        }
-        return "applicant/applicationOverview";
-    }
-
-
     /**
      * Bewerbungsübersicht
      *
@@ -357,11 +334,8 @@ public class ApplicationController {
             Application application = studentService.buildApplication(webApplication);
             applicant = applicant.toBuilder().application(application).build();
             applicantService.saveApplicant(applicant);
-            List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
-            model.addAttribute("applicant", applicant);
-            model.addAttribute("modules", availableMods);
         }
-        return "applicant/applicationOverview";
+        return "redirect:bewerbungsUebersicht";
     }
 
     /**

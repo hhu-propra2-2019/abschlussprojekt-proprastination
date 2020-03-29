@@ -12,6 +12,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.relational.core.mapping.Table;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -47,6 +48,7 @@ public class Applicant {
     private String nationality;
     private String course;
     private String status;
+    @Column(columnDefinition = "TEXT")
     private String comment;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Certificate certs;
