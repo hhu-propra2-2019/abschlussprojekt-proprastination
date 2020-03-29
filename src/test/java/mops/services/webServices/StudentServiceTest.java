@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -202,6 +203,28 @@ class StudentServiceTest {
         List<Module> result = studentService.getAllNotfilledModules(null, modules);
 
         assertEquals(modules, result);
+    }
+
+    @Test
+    void getAllNotfilledModulesApplicationsGetSortedOut() {
+        Module applied = mock(Module.class);
+        when(applied.getDeadline()).thenReturn(Instant.MAX);
+        Module notApplied = mock(Module.class);
+        when(notApplied.getDeadline()).thenReturn(Instant.MAX);
+        List<Module> modules = new ArrayList<>();
+        modules.add(applied);
+        modules.add(notApplied);
+        Applicant applicantMock = mock(Applicant.class);
+        Application applicationMock = mock(Application.class);
+        Set<Application> applications = new HashSet<>();
+        applications.add(applicationMock);
+        when(applicantMock.getApplications()).thenReturn(applications);
+        when(applicationMock.getModule()).thenReturn(applied);
+
+        List<Module> result = studentService.getAllNotfilledModules(applicantMock, modules);
+
+        assertThat(result).doesNotContain(applied);
+        assertThat(result).contains(notApplied);
     }
 
 }
