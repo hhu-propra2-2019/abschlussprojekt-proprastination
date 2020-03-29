@@ -3,7 +3,8 @@ package mops.model.classes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,7 +19,7 @@ class ApplicationTest {
     @BeforeEach
     void setup() {
         Module module = Module.builder()
-                .deadline(Instant.ofEpochSecond(100l))
+                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("Info4")
                 .build();
         address = Address.builder()
@@ -67,7 +68,7 @@ class ApplicationTest {
     void TestBuilder() {
         //Arrange in BeforeEach
         Module module = Module.builder()
-                .deadline(Instant.ofEpochSecond(100l))
+                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("Info4")
                 .build();
 
@@ -88,7 +89,7 @@ class ApplicationTest {
     @Test
     void testEquals() {
         Module module = Module.builder()
-                .deadline(Instant.ofEpochSecond(100l))
+                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("Info4")
                 .build();
         Application application1 = Application.builder()
@@ -121,9 +122,9 @@ class ApplicationTest {
         //Arrange in BeforeEach
 
         assertThat(application.toString()).isEqualTo(
-                "Application(minHours=2, finalHours=0, maxHours=4, module=Module(name=Info4," +
-                        " deadline=1970-01-01T00:01:40Z, shortName=null, profSerial=null, sevenHourLimit=null," +
-                        " nineHourLimit=null, seventeenHourLimit=null), priority=VERYHIGH," +
+                "Application(minHours=2, finalHours=0, maxHours=4, module=Module(name=Info4, deadlineDate=null," +
+                        " deadlineTime=null, deadline=1970-01-01T00:01:40, shortName=null, profSerial=null," +
+                        " sevenHourLimit=null, nineHourLimit=null, seventeenHourLimit=null), priority=VERYHIGH," +
                         " grade=1.3, lecturer=Tester, semester=WS2020, role=PROOFREADER, comment=)");
 
     }

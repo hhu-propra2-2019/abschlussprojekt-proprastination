@@ -1,30 +1,29 @@
 package mops.model.classes;
 
-import mops.model.classes.webclasses.WebModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.Instant;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ModuleTest {
     Module module;
-    Instant deadline;
+    LocalDateTime deadline = LocalDateTime.now();
 
     @BeforeEach
     void init() {
-        deadline = new Date(System.currentTimeMillis()).toInstant();
         module = Module.builder()
                 .id(01)
                 .name("Programmier Praktikum")
                 .shortName("ProPra")
                 .profSerial("Jens")
+                .deadlineDate("2020-01-01")
+                .deadlineTime("09:41")
+                .deadline(deadline)
                 .sevenHourLimit("2")
                 .nineHourLimit("7")
                 .seventeenHourLimit("1")
-                .deadline(deadline)
                 .build();
     }
 
@@ -42,10 +41,12 @@ class ModuleTest {
                 .name("Programmier Praktikum")
                 .shortName("ProPra")
                 .profSerial("Jens")
+                .deadlineDate("2020-01-01")
+                .deadlineTime("09:41")
+                .deadline(deadline)
                 .sevenHourLimit("2")
                 .nineHourLimit("7")
                 .seventeenHourLimit("1")
-                .deadline(deadline)
                 .build();
 
         assertThat(module.equals(m2)).isTrue();
@@ -58,10 +59,12 @@ class ModuleTest {
                 .name("Programmier Praktikum")
                 .shortName("ProPra")
                 .profSerial("Jens")
+                .deadlineDate("2020-01-01")
+                .deadlineTime("09:41")
+                .deadline(deadline)
                 .sevenHourLimit("2")
                 .nineHourLimit("7")
                 .seventeenHourLimit("1")
-                .deadline(deadline)
                 .build();
 
         assertThat(module.hashCode()).isEqualTo(m2.hashCode());
@@ -75,12 +78,11 @@ class ModuleTest {
 
     @Test
     void testToString() {
-        String d = module.getDeadline().toString();
-        assertThat(module.toString()).isEqualTo("Module(name=Programmier Praktikum, deadline=" +
-                d +
-                ", shortName=ProPra, profSerial=Jens, " +
-                "sevenHourLimit=2, nineHourLimit=7, " +
-                "seventeenHourLimit=1)");
+        String deadline = module.getDeadline().toString();
+        assertThat(module.toString()).isEqualTo(
+                "Module(name=Programmier Praktikum, deadlineDate=2020-01-01, deadlineTime=09:41, " +
+                "deadline=" + deadline + ", shortName=ProPra, profSerial=Jens, " +
+                "sevenHourLimit=2, nineHourLimit=7, seventeenHourLimit=1)");
     }
 
     @Test
@@ -91,16 +93,20 @@ class ModuleTest {
         assertThat(empty.getName()).isNull();
         assertThat(empty.getShortName()).isNull();
         assertThat(empty.getProfSerial()).isNull();
+        assertThat(empty.getDeadlineDate()).isNull();
+        assertThat(empty.getDeadlineTime()).isNull();
+        assertThat(empty.getDeadline()).isNull();
         assertThat(empty.getSevenHourLimit()).isNull();
         assertThat(empty.getNineHourLimit()).isNull();
         assertThat(empty.getSeventeenHourLimit()).isNull();
-        assertThat(empty.getDeadline()).isNull();
     }
 
     @Test
     void allArgsConstructor() {
         Module full = new Module(module.getId(),
                                 module.getName(),
+                                module.getDeadlineDate(),
+                                module.getDeadlineTime(),
                                 module.getDeadline(),
                                 module.getShortName(),
                                 module.getProfSerial(),
@@ -114,10 +120,12 @@ class ModuleTest {
         assertThat(full.getName()).isEqualTo(module.getName());
         assertThat(full.getShortName()).isEqualTo(module.getShortName());
         assertThat(full.getProfSerial()).isEqualTo(module.getProfSerial());
+        assertThat(full.getDeadlineDate()).isEqualTo(module.getDeadlineDate());
+        assertThat(full.getDeadlineTime()).isEqualTo(module.getDeadlineTime());
+        assertThat(full.getDeadline()).isEqualTo(module.getDeadline());
         assertThat(full.getSevenHourLimit()).isEqualTo(module.getSevenHourLimit());
         assertThat(full.getNineHourLimit()).isEqualTo(module.getNineHourLimit());
         assertThat(full.getSeventeenHourLimit()).isEqualTo(module.getSeventeenHourLimit());
-        assertThat(full.getDeadline()).isEqualTo(module.getDeadline());
 
     }
 }

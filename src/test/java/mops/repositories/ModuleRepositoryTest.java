@@ -9,9 +9,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,11 +30,14 @@ class ModuleRepositoryTest {
 
     @BeforeEach
     void init() {
-        Instant deadline = new Date(System.currentTimeMillis()).toInstant();
+        LocalDateTime deadline = LocalDateTime.now();
         module = Module.builder()
                 .name("Programmier Praktikum")
                 .shortName("ProPra")
                 .profSerial("Jens")
+                .deadlineDate("2020-01-01")
+                .deadlineTime("09:41")
+                .deadline(deadline)
                 .sevenHourLimit("2")
                 .nineHourLimit("3")
                 .seventeenHourLimit("2")

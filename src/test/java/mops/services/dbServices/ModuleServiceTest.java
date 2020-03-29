@@ -6,6 +6,8 @@ import mops.repositories.ModuleRepository;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -19,7 +21,7 @@ class ModuleServiceTest {
             .name("Kung Fu")
             .shortName("KF")
             .profSerial("neo001")
-            .deadline(Instant.parse("1970-01-01T00:00:00Z"))
+            .deadline(LocalDateTime.parse("1970-01-01T00:00:00.000"))
             .sevenHourLimit("70")
             .nineHourLimit("90")
             .seventeenHourLimit("170")
@@ -34,6 +36,7 @@ class ModuleServiceTest {
         expected.setSevenHourLimit("70");
         expected.setNineHourLimit("90");
         expected.setSeventeenHourLimit("170");
+        expected.setDeadline(LocalDateTime.parse("1970-01-01T00:00:00.000"));
 
         WebModule result = moduleService.toWebModule(module);
 

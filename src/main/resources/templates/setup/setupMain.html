@@ -54,57 +54,56 @@
         </div>
     </div>
     <div th:each="module : ${modules}">
-        <div class="card bg-light mb-3 border-primary">
+        <div class="card bg-light mb-3 border-primary" th:object="${module}">
             <div class="card-header container-fluid">
                 <div class="row">
                     <div class="col-md-8">
-                        <h3 style="margin-bottom: .0rem" class="card-title" th:text="${module.name}"></h3>
+                        <h3 style="margin-bottom: .0rem" class="card-title" th:text="*{name}"></h3>
                     </div>
                     <div class="col-md-4">
-                        <form th:action="@{deleteModule}" th:method="POST">
-                            <input id="nameDelete" name="nameDelete" type="hidden" th:value="${module.name}">
-                            <button class="btn btn-outline-danger btn-sm float-right" style="margin-left: 10px" type="submit">Löschen</button>
+                        <form th:action="@{deleteModule}" th:method="POST" onsubmit="return confirm('Wollen Sie das Modul unwiederruflich löschen?');">
+                            <input id="nameDelete" name="nameDelete" type="hidden" th:value="*{name}">
+                            <button class="btn btn-outline-danger btn-sm float-right"
+                                    style="margin-left: 10px" type="submit">Löschen</button>
                         </form>
                         <form th:action="@{modulBearbeiten}" th:method="POST">
-                            <input id="name" name="name" type="hidden" th:value="${module.name}">
-                            <input id="shortName" name="shortName" type="hidden" th:value="${module.shortName}">
-                            <input id="profSerial" name="profSerial" type="hidden" th:value="${module.profSerial}">
-                            <input id="sevenHourLimit" name="sevenHourLimit" type="hidden" th:value="${module.sevenHourLimit}">
-                            <input id="nineHourLimit" name="nineHourLimit" type="hidden" th:value="${module.nineHourLimit}">
-                            <input id="seventeenHourLimit" name="seventeenHourLimit" type="hidden" th:value="${module.seventeenHourLimit}">
+                            <input id="name" name="name" type="hidden" th:value="*{name}">
+                            <input id="shortName" name="shortName" type="hidden" th:value="*{shortName}">
+                            <input id="profSerial" name="profSerial" type="hidden" th:value="*{profSerial}">
+                            <input id="sevenHourLimit" name="sevenHourLimit" type="hidden" th:value="*{sevenHourLimit}">
+                            <input id="nineHourLimit" name="nineHourLimit" type="hidden" th:value="*{nineHourLimit}">
+                            <input id="seventeenHourLimit" name="seventeenHourLimit" type="hidden" th:value="*{seventeenHourLimit}">
+                            <input id="deadlineDate" name="deadlineDate" type="hidden" th:value="*{deadlineDate}">
+                            <input id="deadlineTime" name="deadlineTime" type="hidden" th:value="*{deadlineTime}">
                             <button class="btn btn-outline-primary btn-sm float-right" type="submit">Bearbeiten</button>
                         </form>
                     </div>
                 </div>
             </div>
-            <div class="card-body" th:object="${module}">
+            <div class="card-body">
                 <div class="row">
-                    <div class="col-3">
-                        <div>Kurzform: </div>
-                        <div>Zugeordnete Person (Unikennung): </div>
+                    <div class="col-6">
+                        <div th:text="'Kurzform: &ensp;' + *{shortName}"></div>
+                        <span th:text="'Bewerbungsfrist: &ensp;' + *{deadlineDate}"></span><span th:text="'&ensp;' + *{deadlineTime}"></span>
+                        <div th:text="'Zugeordnete Person (Unikennung): &ensp;' + *{profSerial}"></div>
                     </div>
-                    <div class="col-2">
-                        <div th:text="${module.shortName}"></div>
-                        <div th:text="${module.profSerial}"></div>
+                    <div class="col-6">
+                        <div th:text="'Personenanzahl 7 Std: &ensp;' + *{sevenHourLimit}"></div>
+                        <div th:text="'Personenanzahl 9 Std: &ensp;' + *{nineHourLimit}"></div>
+                        <div th:text="'Personenanzahl 17 Std: ' + *{seventeenHourLimit}"></div>
                     </div>
-                    <div class="col-2">
-                        <div>Personenanzahl 7 Std: </div>
-                        <div>Personenanzahl 9 Std: </div>
-                        <div>Personenanzahl 17 Std: </div>
-                    </div>
-                    <div class="col-1">
-                        <div th:text="${module.sevenHourLimit}"></div>
-                        <div th:text="${module.nineHourLimit}"></div>
-                        <div th:text="${module.seventeenHourLimit}"></div>
-                    </div>
-                    <div class="col-4"></div>
                 </div>
             </div>
         </div><br>
     </div>
-    <form th:action="@{alleModuleLoeschen}" th:method="POST">
-        <button class="btn btn-outline-danger btn-sm" type="submit" style="position: relative; left: 90%; right: 0; bottom: 10%;"> Alle Module Löschen </button>
-    </form>
+    <div class="row">
+        <div class="col">
+        <form th:action="@{alleModuleLoeschen}" th:method="POST" onsubmit="return confirm('Wollen Sie wirklich alle Module löschen?');">
+                <button class="btn btn-outline-danger btn-sm text-right" type="submit"
+                        style="position: relative; left: 90%; right: 0; bottom: 10%;"> Alle Module Löschen </button>
+            </form>
+        </div>
+    </div>
     <div th:replace="${content} ? ${content}: ~{}"></div>
 </main>
 

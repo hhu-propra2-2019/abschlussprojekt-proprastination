@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletContext;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -378,22 +378,27 @@ public class DatabaseInit implements ServletContextInitializer {
     @SuppressWarnings({"checkstyle:MagicNumber", "checkstyle:HiddenField"})
     private void fakeModules(final Faker faker) {
         Random random = new Random();
-        String[] modulenames = {"Programmier Praktikum 1", "Programmier Praktikum 2",
-                "RDB",
+        String[] modulenames = {"Programmier Praktikum 1", "Programmier Praktikum 2", "RDB",
                 "Algorithmen und Datenstrukturen", "Theoretische Informatik"};
         String[] shortNames = {"ProPra1", "Propra2", "RDB", "Aldat", "Theo"};
         String[] profSerial = {"orga", "bewerbung2_all_roles", "bewerbung2_studentin_orga",
                 "bewerbung2_verteiler_orga", "Stefan"};
         for (int i = 0; i < modulenames.length; i++) {
-            Instant date = faker.date().future(300, 30, TimeUnit.DAYS).toInstant();
+            SimpleDateFormat deadlineDatePattern = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat deadlineTimePattern = new SimpleDateFormat("hh:mm");
+            String deadlineDate = deadlineDatePattern.format(faker.date().future(300, 30, TimeUnit.DAYS));
+            String deadlineTime = deadlineTimePattern.format(faker.date().future(300, 30, TimeUnit.DAYS));
+            LocalDateTime date = LocalDateTime.parse(deadlineDate + "T" + deadlineTime + ":00");
             Module module = Module.builder()
                     .name(modulenames[i])
                     .shortName(shortNames[i])
+                    .profSerial(profSerial[i])
+                    .deadlineDate(deadlineDate)
+                    .deadlineTime(deadlineTime)
+                    .deadline(date)
                     .sevenHourLimit((1 + random.nextInt(5)) + "")
                     .nineHourLimit((1 + random.nextInt(5)) + "")
                     .seventeenHourLimit((1 + random.nextInt(5)) + "")
-                    .profSerial(profSerial[i])
-                    .deadline(date)
                     .build();
             moduleRepository.save(module);
         }
