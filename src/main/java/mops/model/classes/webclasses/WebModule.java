@@ -20,9 +20,12 @@ public class WebModule {
     private String shortName;
     @NotBlank
     private String profSerial;
-    private String deadlineDate;
-    private String deadlineTime;
-    private LocalDateTime deadline;
+    private String applicantDeadlineDate;
+    private String applicantDeadlineTime;
+    private LocalDateTime applicantDeadline;
+    private String orgaDeadlineDate;
+    private String orgaDeadlineTime;
+    private LocalDateTime orgaDeadline;
     @NotBlank
     @Pattern(regexp = "0|([1-9][0-9]*)")
     private String sevenHourLimit;
