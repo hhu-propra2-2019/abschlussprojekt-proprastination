@@ -60,7 +60,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-6" th:each="distribution: ${distributions}">
+        <div class="col-sm-6" th:each="distribution: ${distributions}" th:attr="data-distributionid=${distribution.id}" ondrop="drop(event, this)" ondragover="allowDrop(event)">
             <div class="card bg-light mb-3 border-primary">
                 <div class="card-header d-flex justify-content-start align-items-start"
                      th:style="${distribution.module} != 'Nicht Zugeteilt' ? (${distribution.hours7Set} == ${distribution.hours7} ?
@@ -192,14 +192,16 @@
     <script>
 
         function drop(ev, el) {
+
+            var distributionId = el.dataset.distributionid;
+
             ev.preventDefault();
             var data = ev.dataTransfer.getData("text");
-            el.appendChild(document.getElementById(data));
+            document.getElementById('drop' + distributionId).appendChild(document.getElementById(data));
 
             var applicantElId = ev.dataTransfer.getData("applicantId");
             var applicantEl = document.getElementById(applicantElId);
             var applicantId = applicantEl.dataset.applicantid;
-            var distributionId = el.dataset.distributionid;
 
             $.ajax({
                 async: false,
