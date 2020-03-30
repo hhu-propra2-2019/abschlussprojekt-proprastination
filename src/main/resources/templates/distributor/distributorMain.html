@@ -16,6 +16,11 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="/turbolinks.js"></script>
         <script src="/jquery.dnd_page_scroll.js"></script>
+        <style>
+            .doneBackground{
+                background-color: rgba(108, 179, 255, 0.51);
+            }
+        </style>
     </th:block>
 </head>
 <body>
@@ -79,7 +84,7 @@
                 <div class="card-body" id="div1" th:id="drop + ${distribution.id}" th:attr="data-distributionid=${distribution.id}" ondrop="drop(event, this)" ondragover="allowDrop(event)">
                     <div th:each="applicant: ${distribution.webDistributorApplicants}">
                         <div class="card w-100 bg-light mb-1 border-primary" th:id="drag + ${applicant.id}" id="drag1"  th:attr="data-applicantId=${applicant.id}" draggable="true" ondragstart="drag(event)">
-                            <div class="card-header" th:style="${applicant.checked} ? 'background-color: rgba(108, 179, 255, 0.51)'">
+                            <div class="card-header" th:classappend="${applicant.checked} ? 'doneBackground'">
                                 <div class="row">
                                     <div class="col-7 text-left">
                                         <button class="btn" data-toggle="collapse" th:attr="data-target='#collapse'+${applicant.id}, data-applicantId=${applicant.id}" data-target="#collapse1"
@@ -256,6 +261,11 @@
     <script>
 
         function saveChecked(el) {
+            if($(el).is(":checked")){
+                $(el).parent().parent().parent().addClass("doneBackground");
+            }else{
+                $(el).parent().parent().parent().removeClass("doneBackground");
+            }
             var checked = el.checked;
             var applicantId = el.dataset.applicantid;
 
@@ -268,7 +278,6 @@
                     checked: checked
                 }
             });
-            reloadWithTurbolinks();
         }
 
     </script>
@@ -310,12 +319,15 @@
 
             return reload
         })()
+
     </script>
     <script>
+
         window.addEventListener('scroll', function () {
             localStorage.scrollX = window.scrollX;
             localStorage.scrollY = window.scrollY;
         })
+
     </script>
 </main>
 </body>
