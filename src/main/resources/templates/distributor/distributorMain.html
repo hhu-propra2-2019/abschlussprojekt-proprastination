@@ -94,7 +94,7 @@
                                     </div>
                                     <div class="col-4">
                                         <div>
-                                            <input onClick="this.select();" type="text" size="1" th:value="${applicant.distributorHours}" th:attr="data-distributionId=${distribution.id}, data-applicantId=${applicant.id}" onblur="saveHours(this)" onkeyup="saveHoursEnter(event, this)">
+                                            <input onClick="this.select();" id="textfield" type="text" size="1" th:value="${applicant.distributorHours}" th:attr="data-distributionId=${distribution.id}, data-applicantId=${applicant.id}" onblur="saveHours(this)" onkeyup="saveHoursEnter(event, this)">
                                             <label>Stunden</label>
                                         </div>
                                     </div>
@@ -217,7 +217,7 @@
     <script>
 
         function saveHours(el) {
-            var hours = el.hasClass('show');
+            var hours = el.value;
             var applicantId = el.dataset.applicantid;
             var distributionId = el.dataset.distributionid;
 
@@ -231,7 +231,6 @@
                     hours: hours
                 }
             });
-            reloadWithTurbolinks();
         }
 
     </script>
@@ -239,6 +238,7 @@
 
         function saveHoursEnter(ev, el) {
             if (event.which === 13) {
+                el.blur();
                 var hours = el.value;
                 var applicantId = el.dataset.applicantid;
                 var distributionId = el.dataset.distributionid;
@@ -253,7 +253,6 @@
                         hours: hours
                     }
                 });
-                reloadWithTurbolinks();
             }
         }
 
