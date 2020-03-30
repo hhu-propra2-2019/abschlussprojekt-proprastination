@@ -37,4 +37,11 @@ public class EvaluationService {
     public void save(final Evaluation evaluation) {
         evaluationRepository.save(evaluation);
     }
+
+    /**
+     * Deletes all.
+     */
+    public void deleteAll() {
+        evaluationRepository.deleteAll();
+    }
 }
