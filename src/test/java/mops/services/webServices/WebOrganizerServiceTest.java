@@ -111,11 +111,25 @@ class WebOrganizerServiceTest {
         verify(mockOrganizerService, times(1)).save(result);
     }
 
-    /*@Test
-    void changePhonenumber() {
+    @Test
+    void checkForPhoneNumberOrganizerHasNumber() {
+        Organizer organizerMock = mock(Organizer.class);
+        when(organizerMock.getPhonenumber()).thenReturn("0123456789");
+        when(mockOrganizerService.findByUniserial("serial123")).thenReturn(organizerMock);
+
+        boolean result = webOrganizerService.checkForPhoneNumber("serial123");
+
+        assertTrue(result);
     }
 
     @Test
-    void checkForPhoneNumber() {
-    }*/
+    void checkForPhoneNumberOrganizerHaNoNumber() {
+        Organizer organizerMock = mock(Organizer.class);
+        when(organizerMock.getPhonenumber()).thenReturn("");
+        when(mockOrganizerService.findByUniserial("serial123")).thenReturn(organizerMock);
+
+        boolean result = webOrganizerService.checkForPhoneNumber("serial123");
+
+        assertFalse(result);
+    }
 }
