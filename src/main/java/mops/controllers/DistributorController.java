@@ -4,12 +4,14 @@ import mops.services.logicServices.DistributionService;
 import mops.services.webServices.AccountGenerator;
 import mops.services.webServices.WebDistributionService;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.annotation.SessionScope;
 
 
@@ -60,6 +62,7 @@ public class DistributorController {
      */
     @GetMapping("/move/")
     @Secured("ROLE_verteiler")
+    @ResponseStatus(value = HttpStatus.OK)
     public void moved(@RequestParam("distributionId") final String distributionId,
                         @RequestParam("applicantId") final String applicantId,
                         final KeycloakAuthenticationToken token, final Model model) {
@@ -79,6 +82,7 @@ public class DistributorController {
      */
     @GetMapping("/saveHours/")
     @Secured("ROLE_verteiler")
+    @ResponseStatus(value = HttpStatus.OK)
     public void saveHours(@RequestParam("applicantId") final String applicantId,
                             @RequestParam("distributionId") final String distributionId,
                             @RequestParam("hours") final String hours,
@@ -99,6 +103,7 @@ public class DistributorController {
      */
     @GetMapping("/saveChecked/")
     @Secured("ROLE_verteiler")
+    @ResponseStatus(value = HttpStatus.OK)
     public void saveChecked(@RequestParam("applicantId") final String applicantId,
                             @RequestParam("checked") final String checked,
                             final KeycloakAuthenticationToken token, final Model model) {
