@@ -1,24 +1,36 @@
 package mops.services.webServices;
 
+import mops.model.Account;
 import mops.model.classes.Module;
+import mops.model.classes.Organizer;
 import mops.services.dbServices.ModuleService;
 import mops.services.dbServices.OrganizerService;
 import org.junit.jupiter.api.Test;
+import org.keycloak.KeycloakPrincipal;
+import org.keycloak.KeycloakSecurityContext;
+import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.keycloak.representations.IDToken;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class WebOrganizerServiceTest {
 
-    ModuleService mockModuleService = mock(ModuleService.class);
-    OrganizerService mockOrganizerService = mock(OrganizerService.class);
+    private ModuleService mockModuleService = mock(ModuleService.class);
+    private OrganizerService mockOrganizerService = mock(OrganizerService.class);
     private WebOrganizerService webOrganizerService =
             new WebOrganizerService(mockModuleService, mockOrganizerService);
+
+    private Organizer organizer = Organizer.builder()
+            .uniserial("neo001")
+            .email("neo@matrix.net")
+            .name("Thomas Anderson")
+            .phonenumber("")
+            .build();
 
     @Test
     void getOrganizerModulesByName() {
@@ -56,11 +68,50 @@ class WebOrganizerServiceTest {
         assertThat(result).hasSize(0);
     }
 
-    /*@Test
-    void getOrganizerOrNewOrganizer() {
+    @Test
+    void getOrganizer() {
+        KeycloakAuthenticationToken mockToken = mock(KeycloakAuthenticationToken.class);
+        KeycloakPrincipal mockPrincipal = mock(KeycloakPrincipal.class);
+        when(mockToken.getPrincipal()).thenReturn(mockPrincipal);
+        KeycloakSecurityContext mockContext = mock(KeycloakSecurityContext.class);
+        when(mockPrincipal.getKeycloakSecurityContext()).thenReturn(mockContext);
+        IDToken mockIDToken = mock(IDToken.class);
+        when(mockContext.getIdToken()).thenReturn(mockIDToken);
+
+        Account accountMock = mock(Account.class);
+
+        when(mockOrganizerService.findByUniserial("neo001")).thenReturn(organizer);
+
+        Organizer result = webOrganizerService.getOrganizerOrNewOrganizer("neo001", accountMock, mockToken);
+
+        assertEquals(organizer, result);
     }
 
     @Test
+    void newOrganizer() {
+        KeycloakAuthenticationToken mockToken = mock(KeycloakAuthenticationToken.class);
+        KeycloakPrincipal mockPrincipal = mock(KeycloakPrincipal.class);
+        when(mockToken.getPrincipal()).thenReturn(mockPrincipal);
+        KeycloakSecurityContext mockContext = mock(KeycloakSecurityContext.class);
+        when(mockPrincipal.getKeycloakSecurityContext()).thenReturn(mockContext);
+        IDToken mockIDToken = mock(IDToken.class);
+        when(mockContext.getIdToken()).thenReturn(mockIDToken);
+        when(mockIDToken.getGivenName()).thenReturn("Thomas");
+        when(mockIDToken.getFamilyName()).thenReturn("Anderson");
+
+        Account accountMock = mock(Account.class);
+        when(accountMock.getEmail()).thenReturn("neo@matrix.net");
+
+        when(mockOrganizerService.findByUniserial("neo001")).thenReturn(null);
+
+        Organizer result = webOrganizerService.getOrganizerOrNewOrganizer(
+                "neo001", accountMock, mockToken);
+
+        assertEquals(organizer, result);
+        verify(mockOrganizerService, times(1)).save(result);
+    }
+
+    /*@Test
     void changePhonenumber() {
     }
 
