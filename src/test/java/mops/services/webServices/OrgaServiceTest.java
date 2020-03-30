@@ -8,6 +8,7 @@ import mops.services.dbServices.ApplicationService;
 import mops.services.dbServices.EvaluationService;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -93,5 +94,26 @@ class OrgaServiceTest {
         OrgaApplication result = orgaService.getApplication("42");
 
         assertEquals(orgaApplication1, result);
+    }
+
+    @Test
+    void getAllApplications() {
+        when(mockApplicationService.findById(42)).thenReturn(application1);
+        when(mockApplicantService.findByApplications(application1)).thenReturn(applicantMock1);
+        when(mockApplicationService.findById(33)).thenReturn(application2);
+        when(mockApplicantService.findByApplications(application2)).thenReturn(applicantMock2);
+
+        List<Application> applications = new ArrayList<>();
+        applications.add(application1);
+        applications.add(application2);
+        when(mockApplicationService.findAllByModuleId(1)).thenReturn(applications);
+
+        List<OrgaApplication> expected = new ArrayList<>();
+        expected.add(orgaApplication1);
+        expected.add(orgaApplication2);
+
+        List<OrgaApplication> result = orgaService.getAllApplications("1");
+
+        assertEquals(expected, result);
     }
 }
