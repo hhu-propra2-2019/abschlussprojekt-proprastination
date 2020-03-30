@@ -10,12 +10,15 @@ on:
 
 jobs:
   Checkstyle:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v1
-      - name: Setup java v11
-        uses: actions/setup-java@v1
+      - uses: actions/setup-java@v1
         with:
           java-version: 11
-      - name: Run Tests with Gradle
-        run: ./gradlew checkstyleMain
+      - uses: eskatos/gradle-command-action@v1
+        with:
+          arguments: checkstyleMain
