@@ -10,10 +10,7 @@ on:
 
 jobs:
   Tests-on-Mac:
-    strategy:
-      matrix:
-        os: [macos-latest]
-    runs-on: ${{ matrix.os }}
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-java@v1
