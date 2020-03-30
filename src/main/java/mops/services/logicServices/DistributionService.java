@@ -60,6 +60,13 @@ public class DistributionService {
     @PostConstruct
     public void setup() {
         dbDistributionService.deleteAll();
+        if (dbDistributionService.findAll().size() == 0) {
+            for (Module module : moduleService.getModules()) {
+                dbDistributionService.save(Distribution.builder()
+                        .module(module)
+                        .build());
+            }
+        }
     }
 
     /**
