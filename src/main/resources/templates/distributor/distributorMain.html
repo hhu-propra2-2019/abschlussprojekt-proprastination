@@ -21,6 +21,19 @@
                 background-color: rgba(108, 179, 255, 0.51);
             }
         </style>
+        <style>
+            /* Chrome, Safari, Edge, Opera */
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+
+            /* Firefox */
+            input[type=number] {
+                -moz-appearance: textfield;
+            }
+        </style>
     </th:block>
 </head>
 <body>
@@ -94,7 +107,7 @@
                                     </div>
                                     <div class="col-4">
                                         <div>
-                                            <input onClick="this.select();" id="textfield" type="text" size="1" th:value="${applicant.distributorHours}" th:attr="data-distributionId=${distribution.id}, data-applicantId=${applicant.id}" onblur="saveHours(this)" onkeyup="saveHoursEnter(event, this)">
+                                            <input type="number" min="0" onClick="this.select();" id="textfield" size="1" th:value="${applicant.distributorHours}" th:attr="data-distributionId=${distribution.id}, data-applicantId=${applicant.id}" onblur="saveHours(this)" onkeyup="saveHoursEnter(event, this)">
                                             <label>Stunden</label>
                                         </div>
                                     </div>
@@ -233,6 +246,7 @@
                     hours: hours
                 }
             });
+            reloadWithTurbolinks;
         }
 
     </script>
@@ -256,6 +270,7 @@
                     }
                 });
             }
+            reloadWithTurbolinks;
         }
 
     </script>
