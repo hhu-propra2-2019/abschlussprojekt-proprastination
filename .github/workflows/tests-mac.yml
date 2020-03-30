@@ -1,4 +1,4 @@
-name: Tests
+name: Tests-on-Mac
 
 on:
   pull_request:
@@ -9,8 +9,8 @@ on:
     - cron:  '0 11,12,13,14,15,16,17 * * 1,2,3,4,5'
 
 jobs:
-  Tests:
-    runs-on: ubuntu-latest
+  Tests-on-Mac:
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v1
       - name: Setup java v11
@@ -18,4 +18,4 @@ jobs:
         with:
           java-version: 11
       - name: Run Tests with Gradle
-        run: gradle test
+        run: ./gradlew test

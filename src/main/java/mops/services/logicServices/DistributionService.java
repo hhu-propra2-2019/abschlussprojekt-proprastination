@@ -24,6 +24,8 @@ import java.util.Optional;
 @Service
 public class DistributionService {
 
+    private static final int NUMBER_OF_ORGA_PRIOS = 4;
+    private static final int NUMBER_OF_APPL_PRIO = 3;
     private DbDistributionService dbDistributionService;
     private ModuleService moduleService;
     private ApplicantService applicantService;
@@ -64,7 +66,6 @@ public class DistributionService {
      * distributes the Applicants
      */
     public void distribute() {
-        final int numberOfPriorities = 4;
         final int[] hours = {7, 9, 17};
 
         List<Module> modules = moduleService.getModules();
@@ -85,44 +86,8 @@ public class DistributionService {
 
         for (Module module : modules) {
 
-            List<Evaluation> evaluations = prepareEvaluationsList(allApplicants, module);
-
-            List<Evaluation> sortedByOrgaPrio = new LinkedList<>();
-
-            for (Evaluation evaluation : evaluations) {
-                if ((evaluation.getPriority().getValue() + evaluation.getApplication().getPriority().getValue()) == 2) {
-                    sortedByOrgaPrio.add(evaluation);
-                }
-            }
-
-            for (int i = 0; i < hours.length; i++) {
-                maxHoursPerModule[moduleCount][i] = 0;
-            }
-
-            maxHoursPerModule[moduleCount][0] = Integer.parseInt(module.getSevenHourLimit());
-            maxHoursPerModule[moduleCount][1] = Integer.parseInt(module.getNineHourLimit());
-            maxHoursPerModule[moduleCount][2] = Integer.parseInt(module.getSeventeenHourLimit());
-
-            for (Evaluation evaluation : sortedByOrgaPrio) {
-
-                if (checkIfModuleHasSpace(hours.length,
-                        maxHoursPerModule[moduleCount],
-                        countHoursPerModule[moduleCount])) {
-
-                    Applicant applicant = applicantService.findByApplications(evaluation.getApplication());
-
-                    for (int i = 0; i < hours.length; i++) {
-
-                        if (evaluation.getHours() == hours[i]
-                                && countHoursPerModule[moduleCount][i] < maxHoursPerModule[moduleCount][i]) {
-                            applicantsPerModule[moduleCount].add(applicant);
-                            saveChecked(applicant.getId() + "", "true");
-                            allApplicants.remove(applicant);
-                            countHoursPerModule[moduleCount][i]++;
-                        }
-                    }
-                }
-            }
+            assignPerfectMatches(hours, allApplicants, applicantsPerModule,
+                    maxHoursPerModule, countHoursPerModule, moduleCount, module);
             moduleCount++;
         }
 
@@ -130,48 +95,126 @@ public class DistributionService {
 
         for (Module module : modules) {
 
-            List<Evaluation> evaluations = prepareEvaluationsList(allApplicants, module);
-
-            List<Evaluation>[] sortedByOrgaPrio = new List[numberOfPriorities];
-
-            for (int i = 0; i < numberOfPriorities; i++) {
-                sortedByOrgaPrio[i] = new LinkedList<>();
-            }
-
-            for (Evaluation evaluation : evaluations) {
-                sortedByOrgaPrio[evaluation.getPriority().getValue() - 1].add(evaluation);
-            }
-
-            for (int i = 0; i < numberOfPriorities; i++) {
-                sortedByOrgaPrio[i].sort(Comparator.comparing(a -> a.getApplication().getPriority().getValue()));
-            }
-
-            for (int x = 0; x < numberOfPriorities; x++) {
-
-                if (checkIfModuleHasSpace(hours.length,
-                        maxHoursPerModule[moduleCount],
-                        countHoursPerModule[moduleCount])) {
-
-                    for (Evaluation evaluation : sortedByOrgaPrio[x]) {
-
-                        Applicant applicant = applicantService.findByApplications(evaluation.getApplication());
-
-                        for (int i = 0; i < hours.length; i++) {
-                            if (evaluation.getHours() == hours[i]
-                                    && countHoursPerModule[moduleCount][i] < maxHoursPerModule[moduleCount][i]) {
-                                applicantsPerModule[moduleCount].add(applicant);
-                                allApplicants.remove(applicant);
-                                countHoursPerModule[moduleCount][i]++;
-                            }
-                        }
-                    }
-                }
-            }
+            assingLeftOverApplicants(hours, allApplicants, applicantsPerModule,
+                    maxHoursPerModule, countHoursPerModule, moduleCount, module);
             dbDistributionService.save(Distribution.builder()
                     .employees(applicantsPerModule[moduleCount])
                     .module(module)
                     .build());
             moduleCount++;
+        }
+    }
+
+    /**
+     * assinges perfect matches to one module
+     * @param hours
+     * @param allApplicants
+     * @param applicantsPerModule
+     * @param maxHoursPerModule
+     * @param countHoursPerModule
+     * @param moduleCount
+     * @param module
+     */
+    private void assignPerfectMatches(final int[] hours,
+                                      final List<Applicant> allApplicants,
+                                      final List<Applicant>[] applicantsPerModule,
+                                      final int[][] maxHoursPerModule,
+                                      final int[][] countHoursPerModule,
+                                      final int moduleCount,
+                                      final Module module) {
+        List<Evaluation> evaluations = prepareEvaluationsList(allApplicants, module);
+
+        List<Evaluation> sortedByOrgaPrio = new LinkedList<>();
+
+        for (Evaluation evaluation : evaluations) {
+            if ((evaluation.getPriority().getValue() + evaluation.getApplication().getPriority().getValue()) == 2) {
+                sortedByOrgaPrio.add(evaluation);
+            }
+        }
+
+        for (int i = 0; i < hours.length; i++) {
+            maxHoursPerModule[moduleCount][i] = 0;
+        }
+
+        maxHoursPerModule[moduleCount][0] = Integer.parseInt(module.getSevenHourLimit());
+        maxHoursPerModule[moduleCount][1] = Integer.parseInt(module.getNineHourLimit());
+        maxHoursPerModule[moduleCount][2] = Integer.parseInt(module.getSeventeenHourLimit());
+
+        for (Evaluation evaluation : sortedByOrgaPrio) {
+
+            if (checkIfModuleHasSpace(hours.length,
+                    maxHoursPerModule[moduleCount],
+                    countHoursPerModule[moduleCount])) {
+
+                Applicant applicant = applicantService.findByApplications(evaluation.getApplication());
+
+                for (int i = 0; i < hours.length; i++) {
+
+                    if (evaluation.getHours() == hours[i]
+                            && countHoursPerModule[moduleCount][i] < maxHoursPerModule[moduleCount][i]) {
+                        applicantsPerModule[moduleCount].add(applicant);
+                        saveChecked(applicant.getId() + "", "true");
+                        allApplicants.remove(applicant);
+                        countHoursPerModule[moduleCount][i]++;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * assinges from leftover Applicants to given module
+     * @param hours
+     * @param allApplicants
+     * @param applicantsPerModule
+     * @param maxHoursPerModule
+     * @param countHoursPerModule
+     * @param moduleCount
+     * @param module
+     */
+    private void assingLeftOverApplicants(final int[] hours,
+                                          final List<Applicant> allApplicants,
+                                          final List<Applicant>[] applicantsPerModule,
+                                          final int[][] maxHoursPerModule,
+                                          final int[][] countHoursPerModule,
+                                          final int moduleCount,
+                                          final Module module) {
+        List<Evaluation> evaluations = prepareEvaluationsList(allApplicants, module);
+
+        List<Evaluation>[] sortedByOrgaPrio = new List[NUMBER_OF_ORGA_PRIOS];
+
+        for (int i = 0; i < NUMBER_OF_ORGA_PRIOS; i++) {
+            sortedByOrgaPrio[i] = new LinkedList<>();
+        }
+
+        for (Evaluation evaluation : evaluations) {
+            sortedByOrgaPrio[evaluation.getPriority().getValue() - 1].add(evaluation);
+        }
+
+        for (int i = 0; i < NUMBER_OF_ORGA_PRIOS; i++) {
+            sortedByOrgaPrio[i].sort(Comparator.comparing(a -> a.getApplication().getPriority().getValue()));
+        }
+
+        for (int x = 0; x < NUMBER_OF_ORGA_PRIOS - 1; x++) {
+
+            if (checkIfModuleHasSpace(hours.length,
+                    maxHoursPerModule[moduleCount],
+                    countHoursPerModule[moduleCount])) {
+
+                for (Evaluation evaluation : sortedByOrgaPrio[x]) {
+
+                    Applicant applicant = applicantService.findByApplications(evaluation.getApplication());
+
+                    for (int i = 0; i < hours.length; i++) {
+                        if (evaluation.getHours() == hours[i]
+                                && countHoursPerModule[moduleCount][i] < maxHoursPerModule[moduleCount][i]) {
+                            applicantsPerModule[moduleCount].add(applicant);
+                            allApplicants.remove(applicant);
+                            countHoursPerModule[moduleCount][i]++;
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -271,14 +314,21 @@ public class DistributionService {
         Optional<Distribution> newDistribution = dbDistributionService.findById(Long.parseLong(distributionId));
         Applicant applicant = applicantService.findById(Long.parseLong(applicantId));
         for (Application application : applicant.getApplications()) {
+            if ("-1".equals(distributionId)) {
+                for (Distribution distribution : dbDistributionService.findAll()) {
+                    distribution.getEmployees().remove(applicant);
+                    dbDistributionService.save(distribution);
+                }
+            } else {
                 if (newDistribution.isPresent()) {
                     if (application.getModule().equals(newDistribution.get().getModule())) {
                         for (Distribution distribution : dbDistributionService.findAll()) {
                             distribution.getEmployees().remove(applicant);
                             dbDistributionService.save(distribution);
                         }
-                    newDistribution.get().getEmployees().add(applicant);
-                    dbDistributionService.save(newDistribution.get());
+                        newDistribution.get().getEmployees().add(applicant);
+                        dbDistributionService.save(newDistribution.get());
+                    }
                 }
             }
         }
@@ -288,17 +338,15 @@ public class DistributionService {
      * Sorts the WebDistributorApplicants by Matches
      * @param applicantList List with all WebDistributorApplicants for Distribution
      * @param module module of distribution
-     * @return sortet List of Applicants
+     * @return sorted List of Applicants
      */
     public List<WebDistributorApplicant> sort(final List<WebDistributorApplicant> applicantList, final String module) {
-        final int numberOfOrgaPrios = 4;
-        final int numberOfApplPrio = 3;
         List<WebDistributorApplicant> sortedApplicants = new LinkedList<>();
-        LinkedList<WebDistributorApplicant>[][] orgaPrios = new LinkedList[numberOfOrgaPrios][numberOfApplPrio];
+        LinkedList<WebDistributorApplicant>[][] orgaPrios = new LinkedList[NUMBER_OF_ORGA_PRIOS][NUMBER_OF_APPL_PRIO];
         LinkedList<WebDistributorApplicant> wrongApplicants = new LinkedList<>();
         wrongApplicants.addAll(applicantList);
-        for (int i = 0; i < numberOfOrgaPrios; i++) {
-            for (int j = 0; j < numberOfApplPrio; j++) {
+        for (int i = 0; i < NUMBER_OF_ORGA_PRIOS; i++) {
+            for (int j = 0; j < NUMBER_OF_APPL_PRIO; j++) {
                 orgaPrios[i][j] = new LinkedList<>();
             }
         }
@@ -312,8 +360,8 @@ public class DistributionService {
                 }
             }
         }
-        for (int i = 0; i < numberOfOrgaPrios; i++) {
-            for (int j = 0; j < numberOfApplPrio; j++) {
+        for (int i = 0; i < NUMBER_OF_ORGA_PRIOS; i++) {
+            for (int j = 0; j < NUMBER_OF_APPL_PRIO; j++) {
                 sortedApplicants.addAll(orgaPrios[i][j]);
             }
         }
@@ -350,7 +398,6 @@ public class DistributionService {
                             .finalHours(Integer.parseInt(hours))
                             .build());
                 }
-
             }
         }
     }

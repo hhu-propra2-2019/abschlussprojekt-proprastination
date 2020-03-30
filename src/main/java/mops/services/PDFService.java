@@ -6,6 +6,7 @@ import mops.model.DocumentWithoutBachelor;
 import mops.model.classes.Address;
 import mops.model.classes.Applicant;
 import mops.model.classes.Application;
+import mops.model.classes.Organizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -29,9 +30,10 @@ public class PDFService {
      *
      * @param application Application.
      * @param applicant   Applicant.
+     * @param organizer   organizer
      * @return filepath to file.
      */
-    public File generatePDF(final Application application, final Applicant applicant) {
+    public File generatePDF(final Application application, final Applicant applicant, final Organizer organizer) {
         File tmpFile = null;
         try {
             tmpFile = File.createTempFile("bewerbung", ".pdf");
@@ -43,6 +45,7 @@ public class PDFService {
             }
             addApplicationInfoToPDF(application);
             addApplicantInfoToPDF(applicant);
+            addOrganizerInfoToPDF(organizer);
             document.addGeneralInfos();
             document.save(tmpFile);
             logger.debug("Saved PDF to:" + tmpFile.getAbsolutePath());
@@ -55,6 +58,18 @@ public class PDFService {
 
     private void addApplicationInfoToPDF(final Application application) throws IOException {
         document.setField("Stunden", String.valueOf(application.getFinalHours()));
+    }
+
+    private void addOrganizerInfoToPDF(final Organizer organizer) throws IOException {
+        if (organizer == null) {
+            return;
+        }
+        document.setField("Antragsteller_Name",
+                (organizer.getName() != null) ? organizer.getName() : "");
+        document.setField("Antragsteller_Telefon",
+                (organizer.getPhonenumber() != null) ? organizer.getPhonenumber() : "");
+        document.setField("Antragsteller_E-Mail", (organizer.getEmail() != null) ? organizer.getEmail() : "");
+        document.setField("Universitätseinrichtung", "WE Informatik");
     }
 
     private void addApplicantInfoToPDF(final Applicant applicant) throws IOException, ParseException {
@@ -75,7 +90,8 @@ public class PDFService {
         document.setField("Anschrift (Hausnummer)", address.getHouseNumber());
         document.setField("Anschrift (PLZ)", String.valueOf(address.getZipcode()));
         document.setField("Anschrift (Ort)", address.getCity());
-        document.setField("Anschrift (Land)", CSVService.getCodeForCountry(address.getCountry()));
+        document.setField("Anschrift (Land)", CSVService.getCodeForCountry(address.getCountry())
+                + " (" + address.getCountry() + ")");
     }
 
     private String formatDate(final String idate) throws ParseException {
