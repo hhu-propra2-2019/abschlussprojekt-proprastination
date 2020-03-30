@@ -70,6 +70,12 @@ public class DistributionService {
 
         List<Module> modules = moduleService.getModules();
         List<Applicant> allApplicants = applicantService.findAll();
+
+        for (Applicant applicant : allApplicants) {
+            saveChecked(applicant.getId() + "", "false");
+            saveCollapsed(applicant.getId() + "", "false");
+        }
+
         List<Applicant>[] applicantsPerModule = new List[modules.size()];
 
         for (int i = 0; i < modules.size(); i++) {
@@ -252,7 +258,6 @@ public class DistributionService {
         List<Evaluation> evaluations = new LinkedList<>();
         List<Application> preApplications = applicationService.findApplicationsByModule(module);
         List<Application> applications = new LinkedList<>();
-
 
         for (Application application : preApplications) {
             if (allApplicants.contains(applicantService.findByApplications(application))) {
