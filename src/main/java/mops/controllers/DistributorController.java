@@ -47,6 +47,7 @@ public class DistributorController {
     @Secured("ROLE_verteiler")
     public String index1(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
+            distributionService.createEmptyDistributions();
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             model.addAttribute("distributions", webDistributionService.convertDistributionsToWebDistributions());
         }
