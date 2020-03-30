@@ -82,8 +82,8 @@
                             <div class="card-header" th:style="${applicant.checked} ? 'background-color: rgba(108, 179, 255, 0.51)'">
                                 <div class="row">
                                     <div class="col-7 text-left">
-                                        <button class="btn" data-toggle="collapse" th:attr="data-target='#collapse'+${applicant.id}" data-target="#collapse1"
-                                                aria-expanded="false" th:text="'[' + ${applicant.type} + '] ' + ${applicant.fullName}">
+                                        <button class="btn" data-toggle="collapse" th:attr="data-target='#collapse'+${applicant.id}, data-applicantId=${applicant.id}" data-target="#collapse1"
+                                                aria-expanded="false" th:text="'[' + ${applicant.type} + '] ' + ${applicant.fullName}" onclick="saveCollapsed(this)">
                                             Mamus100
                                         </button>
                                     </div>
@@ -98,7 +98,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div th:id="collapse + ${applicant.id}" id="collapse1" class="collapse">
+                            <div th:id="collapse + ${applicant.id}" id="collapse1" class="collapse" th:classappend="${applicant.collapsed} ? 'show'">
                                 <div class="container text-center">
                                     <div class="row border font-weight-bold">
                                         <div class="col" title="Modul" style="text-overflow: ellipsis; overflow: hidden; width: 20%; white-space: nowrap">Modul</div>
@@ -212,7 +212,7 @@
     <script>
 
         function saveHours(el) {
-            var hours = el.value;
+            var hours = el.hasClass('show');
             var applicantId = el.dataset.applicantid;
             var distributionId = el.dataset.distributionid;
 
@@ -274,11 +274,29 @@
     </script>
     <script>
 
+        function saveCollapsed(el) {
+            var applicantId = el.dataset.applicantid;
+            var collapsed = (document.getElementById('collapse' + applicantId).className !== 'collapse show');
+
+            $.ajax({
+                async: false,
+                method:'GET',
+                url: "/bewerbung2/verteiler/saveCollapsed/",
+                data: {
+                    applicantId: applicantId,
+                    collapsed: collapsed
+                }
+            });
+        }
+
+    </script>
+    <script>
+
         var reloadWithTurbolinks = (function () {
             var scrollPosition;
 
             function reload () {
-                scrollPosition = [window.scrollX, window.scrollY];
+                scrollPosition = [localStorage.scrollX = window.scrollX, localStorage.scrollY = window.scrollY];
                 Turbolinks.visit(window.location.toString(), { action: 'replace' })
             }
 
@@ -292,6 +310,12 @@
 
             return reload
         })()
+    </script>
+    <script>
+        window.addEventListener('scroll', function () {
+            localStorage.scrollX = window.scrollX;
+            localStorage.scrollY = window.scrollY;
+        })
     </script>
 </main>
 </body>

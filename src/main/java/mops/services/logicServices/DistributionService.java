@@ -416,6 +416,19 @@ public class DistributionService {
     }
 
     /**
+     * saves collapsed status that distributor sets
+     * @param applicantId applicantId
+     * @param collapsed collapsed
+     */
+    public void saveCollapsed(final String applicantId, final String collapsed) {
+        Applicant applicant = applicantService.findById(Long.parseLong(applicantId));
+        boolean collapsedBoolean = Boolean.parseBoolean(collapsed);
+        applicantService.saveApplicant(applicant.toBuilder()
+                .collapsed(collapsedBoolean)
+                .build());
+    }
+
+    /**
      * Returns number of distribution entrys. Faster than getting all first.
      *
      * @return long number.
