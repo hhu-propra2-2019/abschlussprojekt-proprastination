@@ -71,6 +71,7 @@ public class DistributionService {
                 dbDistributionService.save(Distribution.builder()
                         .module(module)
                         .build());
+                changeAllFinalHours();
             }
         }
     }
@@ -88,6 +89,7 @@ public class DistributionService {
             saveChecked(applicant.getId() + "", "false");
             saveCollapsed(applicant.getId() + "", "false");
         }
+        changeAllFinalHours();
 
         List<Applicant>[] applicantsPerModule = new List[modules.size()];
 
@@ -407,6 +409,12 @@ public class DistributionService {
      * @param hours hours
      */
     public void saveHours(final String applicantId, final String distributionId, final String hours) {
+        if ("".equals(hours)) {
+            return;
+        }
+        if (Integer.parseInt(hours) < 0) {
+            return;
+        }
         Applicant applicant = applicantService.findById(Long.parseLong(applicantId));
         Optional<Distribution> distribution = dbDistributionService.findById(Long.parseLong(distributionId));
         if (distribution.isPresent()) {
