@@ -99,7 +99,7 @@ public class SetupController {
             return "/setup/modulBearbeiten";
         }
         webService.update(module, oldName);
-        LOGGER.debug("Updated Module " + module.getName());
+        LOGGER.debug("Updated Module " + oldName + " to module " + module.getName());
         return index(token, model);
     }
 
