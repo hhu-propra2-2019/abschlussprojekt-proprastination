@@ -196,8 +196,6 @@
     <script>
 
         function drag(ev) {
-            ev.dataTransfer.setData("text", ev.target.id);
-
             ev.dataTransfer.setData("applicantId", ev.currentTarget.id);
         }
 
@@ -205,13 +203,7 @@
     <script>
 
         function drop(ev, el) {
-
             var distributionId = el.dataset.distributionid;
-
-            ev.preventDefault();
-            var data = ev.dataTransfer.getData("text");
-            document.getElementById('drop' + distributionId).appendChild(document.getElementById(data));
-
             var applicantElId = ev.dataTransfer.getData("applicantId");
             var applicantEl = document.getElementById(applicantElId);
             var applicantId = applicantEl.dataset.applicantid;
