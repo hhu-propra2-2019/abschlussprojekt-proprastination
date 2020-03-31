@@ -103,7 +103,7 @@ public class OrgaController {
         if (token != null) {
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             orgaService.saveEvaluations(applications);
-            LOGGER.debug("Saved applications of Module with ID " + id);
+            LOGGER.debug("Saved Evaluations of Module with ID " + id);
         }
         return "redirect:/bewerbung2/organisator/" + id + "/";
     }
