@@ -162,6 +162,7 @@ public class ApplicationController {
         if (token != null) {
             webApplicationService.removeCurrentModuleFromListOfAvailebleModuleToApplyTo(
                     token, webApplicant, webAddress, model, modules, webCertificate);
+            LOGGER.debug("Saved Infos of Applicant " + token.getName());
         }
         if (applicantBindingResult.hasErrors() || addressBindingResult.hasErrors()
                 || certificateBindingResult.hasErrors()) {
@@ -213,6 +214,7 @@ public class ApplicationController {
         Application application = studentService.buildApplication(webApplication);
         applicant = applicant.toBuilder().application(application).build();
         applicantService.saveApplicant(applicant);
+        LOGGER.debug("Saved Application of Applicant " + token.getName());
 
 
         model.addAttribute("semesters", CSVService.getSemester());
@@ -264,6 +266,7 @@ public class ApplicationController {
         if (token != null) {
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             studentService.savePersonalData(token, webApplicant, webAddress, webCertificate);
+            LOGGER.debug("Updated Infos of Applicant " + token.getName());
         }
         return "redirect:bewerbungsUebersicht";
     }
@@ -334,6 +337,7 @@ public class ApplicationController {
             Application application = studentService.buildApplication(webApplication);
             applicant = applicant.toBuilder().application(application).build();
             applicantService.saveApplicant(applicant);
+            LOGGER.debug("Saved Application of Applicant " + token.getName());
         }
         return "redirect:bewerbungsUebersicht";
     }
@@ -456,6 +460,7 @@ public class ApplicationController {
             Application application = applicationService.findById(webApplication.getId());
             Application newApplication = studentService.changeApplication(webApplication, application);
             applicationService.save(newApplication);
+            LOGGER.debug("Updated Application of Applicant " + token.getName());
         }
 
         if (bindingResult.hasErrors()) {
@@ -487,6 +492,7 @@ public class ApplicationController {
             if (application == null) {
                 return "redirect:bewerbungsUebersicht";
             }
+            LOGGER.debug("Deleted Application " + application.getId() + " of Applicant " + token.getName());
             applicantService.deleteApplication(application, applicant);
 
         }
