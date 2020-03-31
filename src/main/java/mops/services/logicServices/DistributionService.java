@@ -63,6 +63,19 @@ public class DistributionService {
     }
 
     /**
+     * create empty distributions if no distributions existing
+     */
+    public void createEmptyDistributions() {
+        if (dbDistributionService.findAll().size() == 0) {
+            for (Module module : moduleService.getModules()) {
+                dbDistributionService.save(Distribution.builder()
+                        .module(module)
+                        .build());
+            }
+        }
+    }
+
+    /**
      * distributes the Applicants
      */
     public void distribute() {
@@ -70,6 +83,12 @@ public class DistributionService {
 
         List<Module> modules = moduleService.getModules();
         List<Applicant> allApplicants = applicantService.findAll();
+
+        for (Applicant applicant : allApplicants) {
+            saveChecked(applicant.getId() + "", "false");
+            saveCollapsed(applicant.getId() + "", "false");
+        }
+
         List<Applicant>[] applicantsPerModule = new List[modules.size()];
 
         for (int i = 0; i < modules.size(); i++) {
@@ -253,7 +272,6 @@ public class DistributionService {
         List<Application> preApplications = applicationService.findApplicationsByModule(module);
         List<Application> applications = new LinkedList<>();
 
-
         for (Application application : preApplications) {
             if (allApplicants.contains(applicantService.findByApplications(application))) {
                 applications.add(application);
@@ -412,6 +430,19 @@ public class DistributionService {
         boolean checkedBoolean = Boolean.parseBoolean(checked);
         applicantService.saveApplicant(applicant.toBuilder()
                 .checked(checkedBoolean)
+                .build());
+    }
+
+    /**
+     * saves collapsed status that distributor sets
+     * @param applicantId applicantId
+     * @param collapsed collapsed
+     */
+    public void saveCollapsed(final String applicantId, final String collapsed) {
+        Applicant applicant = applicantService.findById(Long.parseLong(applicantId));
+        boolean collapsedBoolean = Boolean.parseBoolean(collapsed);
+        applicantService.saveApplicant(applicant.toBuilder()
+                .collapsed(collapsedBoolean)
                 .build());
     }
 

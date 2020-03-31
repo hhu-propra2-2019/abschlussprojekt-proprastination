@@ -43,6 +43,7 @@ public class Applicant {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Address address;
     private boolean checked;
+    private boolean collapsed;
     private String gender;
     private String birthday;
     private String nationality;

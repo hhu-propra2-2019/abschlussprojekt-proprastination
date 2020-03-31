@@ -47,6 +47,7 @@ public class DistributorController {
     @Secured("ROLE_verteiler")
     public String index1(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
+            distributionService.createEmptyDistributions();
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             model.addAttribute("distributions", webDistributionService.convertDistributionsToWebDistributions());
         }
@@ -110,6 +111,25 @@ public class DistributorController {
         if (token != null) {
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             distributionService.saveChecked(applicantId, checked);
+        }
+    }
+
+    /**
+     * saves the data the distributor changed
+     * @param applicantId applicantId
+     * @param collapsed collapsed
+     * @param token token
+     * @param model model
+     */
+    @GetMapping("/saveCollapsed/")
+    @Secured("ROLE_verteiler")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void saveCollapsed(@RequestParam("applicantId") final String applicantId,
+                            @RequestParam("collapsed") final String collapsed,
+                            final KeycloakAuthenticationToken token, final Model model) {
+        if (token != null) {
+            model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
+            distributionService.saveCollapsed(applicantId, collapsed);
         }
     }
 
