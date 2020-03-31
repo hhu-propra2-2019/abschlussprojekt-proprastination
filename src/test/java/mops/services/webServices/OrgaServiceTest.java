@@ -72,15 +72,21 @@ class OrgaServiceTest {
             .finalHours(17)
             .build();
 
+    private Evaluation evaluation1 = Evaluation.builder()
+            .application(application1)
+            .hours(17)
+            .priority(Priority.HIGH)
+            .build();
+
     private Application application2 = Application.builder()
             .id(33)
             .semester("SS10")
             .role(Role.TUTOR)
             .priority(Priority.NEUTRAL)
             .module(moduleMock2)
-            .minHours(9)
-            .maxHours(9)
-            .finalHours(9)
+            .minHours(7)
+            .maxHours(7)
+            .finalHours(7)
             .lecturer("you222")
             .grade(2.3)
             .comment("Mit dem 2. sieht man besser!")
@@ -93,9 +99,9 @@ class OrgaServiceTest {
             .role(Role.TUTOR)
             .priority(Priority.NEUTRAL)
             .module(moduleMock2)
-            .minHours(9)
-            .maxHours(9)
-            .finalHours(9)
+            .minHours(7)
+            .maxHours(7)
+            .finalHours(7)
             .lecturer("you222")
             .grade(2.3)
             .comment("Mit dem 2. sieht man besser!")
@@ -110,9 +116,15 @@ class OrgaServiceTest {
             .studentPriority(Priority.NEUTRAL)
             .grade(2.3)
             .uniserial("blwid333")
-            .minHours(9)
-            .maxHours(9)
-            .finalHours(9)
+            .minHours(7)
+            .maxHours(7)
+            .finalHours(7)
+            .build();
+
+    Evaluation evaluation2 = Evaluation.builder()
+            .application(application2)
+            .hours(7)
+            .priority(Priority.NEGATIVE)
             .build();
 
     @Test
@@ -153,17 +165,6 @@ class OrgaServiceTest {
         list.add(webList2);
         WebListClass evaluations = new WebListClass(list);
 
-        Evaluation evaluation1 = Evaluation.builder()
-                .application(application1)
-                .hours(17)
-                .priority(Priority.HIGH)
-                .build();
-        Evaluation evaluation2 = Evaluation.builder()
-                .application(application2)
-                .hours(9)
-                .priority(Priority.NEGATIVE)
-                .build();
-
         when(mockApplicationService.findById(42)).thenReturn(application1);
         when(mockApplicationService.findById(33)).thenReturn(application2);
         when(mockEvaluationService.findByApplication(application1)).thenReturn(evaluation1);
@@ -174,4 +175,48 @@ class OrgaServiceTest {
         verify(mockEvaluationService, times(1)).save(evaluation1);
         verify(mockEvaluationService, times(1)).save(evaluation2);
     }
+
+    @Test
+    void getAllListEntries() {
+        List<Application> applications = new ArrayList<>();
+        applications.add(application1);
+        applications.add(application2);
+        when(mockApplicationService.findAllByModuleId(1)).thenReturn(applications);
+
+        when(mockEvaluationService.findByApplication(application1)).thenReturn(evaluation1);
+        when(mockEvaluationService.findByApplication(application2)).thenReturn(null);
+
+        when(mockApplicantService.findByApplications(application1)).thenReturn(applicantMock1);
+        when(applicantMock1.getUniserial()).thenReturn("jegre777");
+        when(applicantMock1.getFirstName()).thenReturn("Jean");
+        when(applicantMock1.getSurname()).thenReturn("Grey");
+
+        when(mockApplicantService.findByApplications(application2)).thenReturn(applicantMock2);
+        when(applicantMock2.getUniserial()).thenReturn("blwid333");
+        when(applicantMock2.getFirstName()).thenReturn("Black");
+        when(applicantMock2.getSurname()).thenReturn("Widow");
+
+        WebList expectedWebList2 = WebList.builder()
+                .id(33)
+                .firstName("Black")
+                .surname("Widow")
+                .role(Role.TUTOR)
+                .priority(3) // BASEPRIORITY
+                .studentPriority(Priority.NEUTRAL)
+                .grade(2.3)
+                .uniserial("blwid333")
+                .minHours(7)
+                .maxHours(7)
+                .finalHours(9) // BASEHOURS
+                .build();
+
+        List<WebList> expected = new ArrayList<>();
+        expected.add(webList1);
+        expected.add(expectedWebList2);
+
+        List<WebList> result = orgaService.getAllListEntries("1");
+
+        assertEquals(expected, result);
+    }
+
 }
