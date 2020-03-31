@@ -112,11 +112,11 @@ public class WebApplicationService {
      * @param modules
      * @param webCertificate
      */
-    public void removeCurrentModuleFromListOfAvailebleModuleToApplyTo(final KeycloakAuthenticationToken token,
-                                                                      final WebApplicant webApplicant,
-                                                                      final WebAddress webAddress,
-                                                                      final Model model, final String modules,
-                                                                      final WebCertificate webCertificate) {
+    public void removeCurrentModuleFromListAndSavePersonalInfo(final KeycloakAuthenticationToken token,
+                                                               final WebApplicant webApplicant,
+                                                               final WebAddress webAddress,
+                                                               final Model model, final String modules,
+                                                               final WebCertificate webCertificate) {
         Applicant applicant = studentService.savePersonalData(token, webApplicant, webAddress, webCertificate);
         Module module = moduleService.findModuleByName(modules);
         List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());

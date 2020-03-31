@@ -160,7 +160,7 @@ public class ApplicationController {
         webApplicationService.printBindingResultErrorsToLog(addressBindingResult);
         webApplicationService.printBindingResultErrorsToLog(certificateBindingResult);
         if (token != null) {
-            webApplicationService.removeCurrentModuleFromListOfAvailebleModuleToApplyTo(
+            webApplicationService.removeCurrentModuleFromListAndSavePersonalInfo(
                     token, webApplicant, webAddress, model, modules, webCertificate);
             LOGGER.debug("Saved Infos of Applicant " + token.getName());
         }
