@@ -266,7 +266,7 @@ public class ApplicationController {
         if (token != null) {
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             studentService.savePersonalData(token, webApplicant, webAddress, webCertificate);
-            LOGGER.debug("Updated Infos of Applicant " + token.getName());
+            LOGGER.debug("Updated info about Applicant " + token.getName());
         }
         return "redirect:bewerbungsUebersicht";
     }
