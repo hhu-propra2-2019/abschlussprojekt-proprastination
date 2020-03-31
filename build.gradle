@@ -47,37 +47,37 @@ tasks.withType(SpotBugsTask) {
 
 
 dependencies {
-    compileOnly 'com.github.spotbugs:spotbugs-annotations:4.0.0-RC1'
-    compile group: 'org.json', name: 'json', version: '20190722'
-    implementation 'com.github.javafaker:javafaker:1.0.2'
-    compile 'com.opencsv:opencsv:5.1'
     implementation 'mops:styleguide:2.2.0'
-    testCompile("org.assertj:assertj-core:3.15.0")
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'com.c4-soft.springaddons:spring-security-test-keycloack-addons:1.2.0'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.19'
     implementation 'org.keycloak:keycloak-spring-boot-starter:9.0.0'
     implementation 'org.keycloak.bom:keycloak-adapter-bom:3.3.0.Final'
+    implementation 'com.github.javafaker:javafaker:1.0.2'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+    implementation 'com.c4-soft.springaddons:spring-security-test-keycloack-addons:1.2.0'
+    compile 'org.springframework.boot:spring-boot-starter-mail:2.2.5.RELEASE'
+    compile group: 'org.json', name: 'json', version: '20190722'
+    compile 'com.opencsv:opencsv:5.1'
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
+    compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.19'
+    compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5:3.0.4.RELEASE'
     compile group: 'org.webjars', name: 'jquery', version: '3.3.1'
-    testCompile 'com.tngtech.archunit:archunit:0.13.0'
-    testCompile 'com.tngtech.archunit:archunit-junit5:0.13.0'
     compileOnly 'org.projectlombok:lombok'
+    compileOnly 'com.github.spotbugs:spotbugs-annotations:4.0.0-RC1'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation("org.assertj:assertj-core:3.15.0")
-    testCompile("org.assertj:assertj-core:3.11.1")
-    compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5:3.0.4.RELEASE'
-    compile 'org.springframework.boot:spring-boot-starter-mail:2.2.5.RELEASE'
     implementation 'junit:junit:4.12'
+    testCompile 'com.tngtech.archunit:archunit:0.13.0'
+    testCompile 'com.tngtech.archunit:archunit-junit5:0.13.0'
+    testCompile("org.assertj:assertj-core:3.15.0")
     compile group: 'com.h2database', name: 'h2', version: '1.4.200'
 }
 

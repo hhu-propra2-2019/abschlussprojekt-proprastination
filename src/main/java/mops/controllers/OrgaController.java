@@ -6,6 +6,8 @@ import mops.services.dbServices.ModuleService;
 import mops.services.webServices.AccountGenerator;
 import mops.services.webServices.WebOrganizerService;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +25,7 @@ import org.springframework.web.context.annotation.SessionScope;
 @RequestMapping("/bewerbung2/organisator")
 public class OrgaController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(OrgaController.class);
     private final OrgaService orgaService;
     private final WebOrganizerService webOrganizerService;
     private final ModuleService moduleService;
@@ -100,6 +103,7 @@ public class OrgaController {
         if (token != null) {
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             orgaService.saveEvaluations(applications);
+            LOGGER.debug("Saved Evaluations of Module with ID " + id);
         }
         return "redirect:/bewerbung2/organisator/" + id + "/";
     }
@@ -117,6 +121,7 @@ public class OrgaController {
                                    @RequestParam("phone") final String phone) {
         if (token != null) {
             webOrganizerService.changePhonenumber(token.getName(), phone);
+            LOGGER.debug("Updated " + token.getName() + " phone number");
         }
         return "redirect:/bewerbung2/organisator/";
     }

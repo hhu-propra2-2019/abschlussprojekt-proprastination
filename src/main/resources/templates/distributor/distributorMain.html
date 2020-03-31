@@ -21,6 +21,19 @@
                 background-color: rgba(108, 179, 255, 0.51);
             }
         </style>
+        <style>
+            /* Chrome, Safari, Edge, Opera */
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+
+            /* Firefox */
+            input[type=number] {
+                -moz-appearance: textfield;
+            }
+        </style>
     </th:block>
 </head>
 <body>
@@ -94,7 +107,7 @@
                                     </div>
                                     <div class="col-4">
                                         <div>
-                                            <input onClick="this.select();" id="textfield" type="text" size="1" th:value="${applicant.distributorHours}" th:attr="data-distributionId=${distribution.id}, data-applicantId=${applicant.id}" onblur="saveHours(this)" onkeyup="saveHoursEnter(event, this)">
+                                            <input type="number" min="0" onfocus="this.select();" id="textfield" size="1" th:value="${applicant.distributorHours}" th:attr="data-distributionId=${distribution.id}, data-applicantId=${applicant.id}" onblur="saveHours(this)" onkeyup="saveHoursEnter(event, this)">
                                             <label>Stunden</label>
                                         </div>
                                     </div>
@@ -183,8 +196,6 @@
     <script>
 
         function drag(ev) {
-            ev.dataTransfer.setData("text", ev.target.id);
-
             ev.dataTransfer.setData("applicantId", ev.currentTarget.id);
         }
 
@@ -192,13 +203,7 @@
     <script>
 
         function drop(ev, el) {
-
             var distributionId = el.dataset.distributionid;
-
-            ev.preventDefault();
-            var data = ev.dataTransfer.getData("text");
-            document.getElementById('drop' + distributionId).appendChild(document.getElementById(data));
-
             var applicantElId = ev.dataTransfer.getData("applicantId");
             var applicantEl = document.getElementById(applicantElId);
             var applicantId = applicantEl.dataset.applicantid;
@@ -233,6 +238,7 @@
                     hours: hours
                 }
             });
+            location.reload();
         }
 
     </script>
@@ -255,6 +261,7 @@
                         hours: hours
                     }
                 });
+                location.reload();
             }
         }
 

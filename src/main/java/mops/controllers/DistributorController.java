@@ -4,6 +4,8 @@ import mops.services.logicServices.DistributionService;
 import mops.services.webServices.AccountGenerator;
 import mops.services.webServices.WebDistributionService;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,7 @@ import org.springframework.web.context.annotation.SessionScope;
 @RequestMapping("/bewerbung2/verteiler")
 public class DistributorController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(DistributorController.class);
     private final WebDistributionService webDistributionService;
     private final DistributionService distributionService;
 
@@ -70,6 +73,7 @@ public class DistributorController {
         if (token != null) {
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             distributionService.moveApplicant(applicantId, distributionId);
+            LOGGER.debug("Moved Applicant with ID " + applicantId + " to Distribution with ID " + distributionId);
         }
     }
 
@@ -92,6 +96,7 @@ public class DistributorController {
         if (token != null) {
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             distributionService.saveHours(applicantId, distributionId, hours);
+            LOGGER.debug("Updated hours of Applicant with ID " + applicantId);
         }
     }
 
@@ -111,6 +116,7 @@ public class DistributorController {
         if (token != null) {
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             distributionService.saveChecked(applicantId, checked);
+            LOGGER.debug("Updated checked status of Applicant with ID " + applicantId);
         }
     }
 
@@ -130,6 +136,7 @@ public class DistributorController {
         if (token != null) {
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             distributionService.saveCollapsed(applicantId, collapsed);
+            LOGGER.debug("Updated collapsed status of Applicant with ID " + applicantId);
         }
     }
 
@@ -146,6 +153,7 @@ public class DistributorController {
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             distributionService.changeAllFinalHours();
             distributionService.distribute();
+            LOGGER.debug("Triggered automatic distribution");
         }
         return "redirect:/bewerbung2/verteiler/";
     }
