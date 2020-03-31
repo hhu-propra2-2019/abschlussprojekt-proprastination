@@ -83,7 +83,7 @@ public class OrgaController {
             || !webOrganizerService.checkForPhoneNumber(token.getName())) {
                 return "redirect:/bewerbung2/organisator/";
             }
-            model.addAttribute("WebList", new WebListClass(orgaService.getAllListEntrys(id)));
+            model.addAttribute("WebList", new WebListClass(orgaService.getAllListEntries(id)));
         }
         return "organizer/orgaOverview";
     }
