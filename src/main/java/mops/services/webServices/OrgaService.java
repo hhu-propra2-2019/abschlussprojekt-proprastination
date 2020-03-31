@@ -92,7 +92,7 @@ public class OrgaService {
      * @param id module id.
      * @return Lst of WebList applications.
      */
-    public List<WebList> getAllListEntrys(final String id) {
+    public List<WebList> getAllListEntries(final String id) {
         return wrapListObjects(applicationService.findAllByModuleId(Long.parseLong(id)));
     }
 
