@@ -71,6 +71,7 @@ public class DistributionService {
                 dbDistributionService.save(Distribution.builder()
                         .module(module)
                         .build());
+                changeAllFinalHours();
             }
         }
     }
@@ -88,6 +89,7 @@ public class DistributionService {
             saveChecked(applicant.getId() + "", "false");
             saveCollapsed(applicant.getId() + "", "false");
         }
+        changeAllFinalHours();
 
         List<Applicant>[] applicantsPerModule = new List[modules.size()];
 
