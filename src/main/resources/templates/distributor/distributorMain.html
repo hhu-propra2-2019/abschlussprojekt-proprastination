@@ -107,7 +107,7 @@
                                     </div>
                                     <div class="col-4">
                                         <div>
-                                            <input type="number" min="0" onClick="this.select();" id="textfield" size="1" th:value="${applicant.distributorHours}" th:attr="data-distributionId=${distribution.id}, data-applicantId=${applicant.id}" onblur="saveHours(this)" onkeyup="saveHoursEnter(event, this)">
+                                            <input type="number" min="0" onfocus="this.select();" id="textfield" size="1" th:value="${applicant.distributorHours}" th:attr="data-distributionId=${distribution.id}, data-applicantId=${applicant.id}" onblur="saveHours(this)" onkeyup="saveHoursEnter(event, this)">
                                             <label>Stunden</label>
                                         </div>
                                     </div>
@@ -246,7 +246,7 @@
                     hours: hours
                 }
             });
-            reloadWithTurbolinks;
+            location.reload();
         }
 
     </script>
@@ -269,8 +269,8 @@
                         hours: hours
                     }
                 });
+                location.reload();
             }
-            reloadWithTurbolinks;
         }
 
     </script>
