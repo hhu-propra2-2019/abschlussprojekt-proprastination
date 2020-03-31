@@ -3,6 +3,8 @@ package mops.services.webServices;
 import mops.model.classes.*;
 import mops.model.classes.Module;
 import mops.model.classes.orgaWebClasses.OrgaApplication;
+import mops.model.classes.orgaWebClasses.WebList;
+import mops.model.classes.orgaWebClasses.WebListClass;
 import mops.services.dbServices.ApplicantService;
 import mops.services.dbServices.ApplicationService;
 import mops.services.dbServices.EvaluationService;
@@ -12,8 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class OrgaServiceTest {
 
@@ -57,6 +58,20 @@ class OrgaServiceTest {
             .comment("Keine Panik auf der Titanic!")
             .build();
 
+    private WebList webList1 = WebList.builder()
+            .id(42)
+            .firstName("Jean")
+            .surname("Grey")
+            .role(Role.PROOFREADER)
+            .priority(2)
+            .studentPriority(Priority.VERYHIGH)
+            .grade(3.7)
+            .uniserial("jegre777")
+            .minHours(7)
+            .maxHours(17)
+            .finalHours(17)
+            .build();
+
     private Application application2 = Application.builder()
             .id(33)
             .semester("SS10")
@@ -84,6 +99,20 @@ class OrgaServiceTest {
             .lecturer("you222")
             .grade(2.3)
             .comment("Mit dem 2. sieht man besser!")
+            .build();
+
+    private WebList webList2 = WebList.builder()
+            .id(33)
+            .firstName("Black")
+            .surname("Widow")
+            .role(Role.TUTOR)
+            .priority(4)
+            .studentPriority(Priority.NEUTRAL)
+            .grade(2.3)
+            .uniserial("blwid333")
+            .minHours(9)
+            .maxHours(9)
+            .finalHours(9)
             .build();
 
     @Test
@@ -115,5 +144,34 @@ class OrgaServiceTest {
         List<OrgaApplication> result = orgaService.getAllApplications("1");
 
         assertEquals(expected, result);
+    }
+
+    @Test
+    void saveEvaluations() {
+        List<WebList> list = new ArrayList<>();
+        list.add(webList1);
+        list.add(webList2);
+        WebListClass evaluations = new WebListClass(list);
+
+        Evaluation evaluation1 = Evaluation.builder()
+                .application(application1)
+                .hours(17)
+                .priority(Priority.HIGH)
+                .build();
+        Evaluation evaluation2 = Evaluation.builder()
+                .application(application2)
+                .hours(9)
+                .priority(Priority.NEGATIVE)
+                .build();
+
+        when(mockApplicationService.findById(42)).thenReturn(application1);
+        when(mockApplicationService.findById(33)).thenReturn(application2);
+        when(mockEvaluationService.findByApplication(application1)).thenReturn(evaluation1);
+        when(mockEvaluationService.findByApplication(application2)).thenReturn(null);
+
+        orgaService.saveEvaluations(evaluations);
+
+        verify(mockEvaluationService, times(1)).save(evaluation1);
+        verify(mockEvaluationService, times(1)).save(evaluation2);
     }
 }
