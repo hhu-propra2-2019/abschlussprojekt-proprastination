@@ -95,7 +95,7 @@
                         <th scope="col"></th>
                         <th scope="col">Modul</th>
                         <th scope="col">Bewerbungsfrist</th>
-                        <th scope="col">Bewerbungsstatus</th>
+                        <th hidden scope="col">Bewerbungsstatus</th>
                     </tr>
 
                     <tr th:each="app, appNum : ${applicant?.applications}">
@@ -105,7 +105,10 @@
                             <span th:text="${app.module.deadlineDate}"></span>
                             <span th:text="${app.module.deadlineTime}"></span>
                         </td>
-                        <td>Example #3</td>
+                        <td hidden>
+                            <span th:text="${app.module.deadlineDate}"></span>
+                            <span th:text="${app.module.deadlineTime}"></span>
+                        </td>
                     </tr>
 
                     </tbody>
