@@ -4,6 +4,8 @@ import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebModule;
 import mops.services.dbServices.ModuleService;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -122,5 +124,24 @@ public class WebModuleService {
                 .nineHourLimit(webModule.getNineHourLimit())
                 .seventeenHourLimit(webModule.getSeventeenHourLimit())
                 .build();
+    }
+
+    /**
+     * Add an error to the binding result if applicant deadline is after orga deadline.
+     * @param webModule
+     * @param bindingResult
+     * @param webModule2
+     */
+    public void generateErrorIfApplicantDeadlineAfterOrgaDeadline(final WebModule webModule,
+                                                                  final BindingResult bindingResult,
+                                                                  final String webModule2) {
+        LocalDateTime applicantDeadline = LocalDateTime.parse(webModule.getApplicantDeadlineDate()
+                + "T" + webModule.getApplicantDeadlineTime());
+        LocalDateTime orgaDeadline = LocalDateTime.parse(webModule.getOrgaDeadlineDate()
+                + "T" + webModule.getOrgaDeadlineTime());
+        if (applicantDeadline.isAfter(orgaDeadline)) {
+            bindingResult.addError(new FieldError(webModule2, "applicantDeadlineDate",
+                    "Die Bearbeitungsfrist darf nicht vor der Bewerbungsfrist sein."));
+        }
     }
 }
