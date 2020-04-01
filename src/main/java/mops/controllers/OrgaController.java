@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.annotation.SessionScope;
 
+import java.time.LocalDateTime;
+
 
 @SessionScope
 @Controller
@@ -77,7 +79,8 @@ public class OrgaController {
         if (token != null) {
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             if (!token.getName().equals(moduleService.findById(Long.parseLong(id)).getProfSerial())
-            || !webOrganizerService.checkForPhoneNumber(token.getName())) {
+            || !webOrganizerService.checkForPhoneNumber(token.getName())
+            || moduleService.findById(Long.parseLong(id)).getOrgaDeadline().isBefore(LocalDateTime.now())) {
                 return "redirect:/bewerbung2/organisator/";
             }
             model.addAttribute("WebList", new WebListClass(orgaService.getAllListEntrys(id)));
