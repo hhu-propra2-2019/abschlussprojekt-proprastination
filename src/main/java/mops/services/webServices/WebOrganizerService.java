@@ -11,6 +11,7 @@ import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.keycloak.representations.IDToken;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class WebOrganizerService {
     public List<Module> getOrganizerModulesByName(final String name) {
         List<Module> modules = new ArrayList<>();
         for (Module module : moduleService.getModules()) {
-            if (module.getProfSerial().equals(name)) {
+            if (module.getProfSerial().equals(name) && LocalDateTime.now().isBefore(module.getOrgaDeadline())) {
                 modules.add(module);
             }
         }
