@@ -399,7 +399,7 @@ public class ApplicationController {
                 attributes.addFlashAttribute("errormessage", "Diese Bewerbung gehört dir nicht!");
                 return new RedirectView("bewerbungsUebersicht", true);
             }
-            if (application.getModule().getDeadline().isBefore(LocalDateTime.now())) {
+            if (application.getModule().getApplicantDeadline().isBefore(LocalDateTime.now())) {
                 attributes.addFlashAttribute("errormessage", "Der Bewerbungszeitraum ist abgelaufen");
                 return new RedirectView("bewerbungsUebersicht", true);
             }

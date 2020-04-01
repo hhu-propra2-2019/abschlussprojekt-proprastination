@@ -34,7 +34,7 @@ import java.util.List;
 @RequestMapping("/bewerbung2/setup")
 public class SetupController {
     private static final Logger LOGGER = LoggerFactory.getLogger(SetupController.class);
-    private final WebModuleService webService;
+    private final WebModuleService webModuleService;
 
     private final ApplicantService applicantService;
 
@@ -53,7 +53,7 @@ public class SetupController {
     @SuppressWarnings("checkstyle:HiddenField")
     public SetupController(final WebModuleService webService, final ApplicantService applicantService,
                            final ModuleService moduleService, final DeletionService deletionService) {
-        this.webService = webService;
+        this.webModuleService = webService;
         this.applicantService = applicantService;
         this.moduleService = moduleService;
         this.deletionService = deletionService;
@@ -69,7 +69,7 @@ public class SetupController {
     @Secured("ROLE_setup")
     public String index(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
-            List<WebModule> modules = webService.getModules();
+            List<WebModule> modules = webModuleService.getModules();
             model.addAttribute("modules", modules);
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             model.addAttribute("module", Module.builder().build());
@@ -98,7 +98,7 @@ public class SetupController {
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             return "/setup/modulBearbeiten";
         }
-        webService.update(module, oldName);
+        webModuleService.update(module, oldName);
         return index(token, model);
     }
 
@@ -138,7 +138,8 @@ public class SetupController {
             }
             return "setup/neuesModul";
         }
-        webService.save(module);
+
+        webModuleService.save(module);
         return index(token, model);
     }
 
@@ -170,7 +171,7 @@ public class SetupController {
     @Secured("ROLE_setup")
     public String postDeleteModule(final KeycloakAuthenticationToken token, final Model model,
                                 @RequestParam("nameDelete") final String name) {
-        webService.deleteOne(name);
+        webModuleService.deleteOne(name);
         return index(token, model);
     }
 
@@ -183,7 +184,7 @@ public class SetupController {
     @PostMapping("/alleModuleLoeschen")
     @Secured("ROLE_setup")
     public String postDeleteAllModule(final KeycloakAuthenticationToken token, final Model model) {
-        webService.deleteAll();
+        webModuleService.deleteAll();
         return index(token, model);
     }
 

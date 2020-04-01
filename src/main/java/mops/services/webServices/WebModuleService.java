@@ -44,7 +44,7 @@ public class WebModuleService {
      * @param webmodule module.
      */
     public void save(final WebModule webmodule) {
-        concatenateDeadlines(webmodule);
+        concatenateDeadlinesWebModule(webmodule);
         moduleService.save(toModule(webmodule));
     }
 
@@ -52,14 +52,28 @@ public class WebModuleService {
      *
      * @param webmodule current webmodule
      */
-    private void concatenateDeadlines(final WebModule webmodule) {
-        if (webmodule.getDeadlineDate() == null || webmodule.getDeadlineTime() == null) {
+    private void concatenateDeadlinesWebModule(final WebModule webmodule) {
+        if (webmodule.getOrgaDeadlineDate() == null || webmodule.getOrgaDeadlineTime() == null
+        || webmodule.getApplicantDeadlineDate() == null || webmodule.getApplicantDeadlineTime() == null) {
+            System.out.println(webmodule.getOrgaDeadlineTime());
+            System.out.println(webmodule.getOrgaDeadlineDate());
+            System.out.println(webmodule.getApplicantDeadlineTime());
+            System.out.println(webmodule.getApplicantDeadlineDate());
             return;
         }
-        webmodule.setDeadline(LocalDateTime.parse((String.format("%sT%s:00",
-                webmodule.getDeadlineDate(), webmodule.getDeadlineTime()))));
-    }
 
+        System.out.println(webmodule.getApplicantDeadlineDate());
+        System.out.println(webmodule.getApplicantDeadlineTime());
+        System.out.println(webmodule.getOrgaDeadlineDate());
+        System.out.println(webmodule.getOrgaDeadlineTime());
+        webmodule.setOrgaDeadline(LocalDateTime.parse((String.format("%sT%s:00",
+                webmodule.getOrgaDeadlineDate(), webmodule.getOrgaDeadlineTime()))));
+        System.out.println(webmodule.getOrgaDeadline());
+
+        webmodule.setApplicantDeadline(LocalDateTime.parse((String.format("%sT%s:00",
+                webmodule.getApplicantDeadlineDate(), webmodule.getApplicantDeadlineTime()))));
+        System.out.println(webmodule.getApplicantDeadline());
+    }
 
     /**
      * saves an updated version of Module
@@ -98,9 +112,12 @@ public class WebModuleService {
                 .name(webModule.getName())
                 .shortName(webModule.getShortName())
                 .profSerial(webModule.getProfSerial())
-                .deadlineDate(webModule.getDeadlineDate())
-                .deadlineTime(webModule.getDeadlineTime())
-                .deadline(webModule.getDeadline())
+                .applicantDeadlineDate(webModule.getApplicantDeadlineDate())
+                .applicantDeadlineTime(webModule.getApplicantDeadlineTime())
+                .orgaDeadlineDate(webModule.getOrgaDeadlineDate())
+                .orgaDeadlineTime(webModule.getOrgaDeadlineTime())
+                .applicantDeadline(webModule.getApplicantDeadline())
+                .orgaDeadline(webModule.getOrgaDeadline())
                 .sevenHourLimit(webModule.getSevenHourLimit())
                 .nineHourLimit(webModule.getNineHourLimit())
                 .seventeenHourLimit(webModule.getSeventeenHourLimit())

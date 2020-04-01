@@ -46,83 +46,135 @@
                     </div>
                 </div>
             </div>
-            <div class="card-body">
-                <div class="row container-fluid">
-                    <div class="col-3">
-                        <div class="card-text">Name des Moduls</div>
-                    </div>
-                    <div class="col-3">
-                        <div class="card-text">Kurzform des Moduls</div>
-                    </div>
-                    <div class="col-3">
-                        <div class="card-text">Zugeordnete Person (Unikennung)</div>
-                    </div>
-                    <div class="col-3">
-                        <div class="card-text">Bewerbungsfrist</div>
-                    </div>
-                </div>
-                <div class="row container-fluid">
-                    <input id="oldName" name="oldName" type="hidden" th:value="*{name}">
-                    <div class="col-3">
-                        <input type="text" name="name" id="name"
-                               th:value="*{name}" th:placeholder="*{name}" th:field="*{name}">
-                    </div>
-                    <div class="col-3">
-                        <input type="text" name="shortName" id="shortName"
-                               th:value="*{shortName}" th:placeholder="*{shortName}" th:field="*{shortName}">
-                    </div>
-                    <div class="col-3">
-                        <input type="text" name="profSeriale" id="profSerial"
-                               th:value="*{profSerial}" th:placeholder="*{profSerial}" th:field="*{profSerial}">
-                    </div>
-                    <div class="col-3">
-                        <input type="text" name="deadlineDate" id="deadlineDate" onfocus="(this.type='date')"
-                               th:field="*{deadlineDate}" th:attr="value = *{deadlineDate}" onclick="minimumDate()"
-                               onblur="(this.type='text')" class="form-control" th:placeholder="*{deadlineDate}"
-                               required pattern="[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])" min="2020-01-01">
-                        <div th:if="${#fields.hasErrors('deadlineDate')}" class="text-danger">
-                            Bitte geben Sie eine gültige Bewerbungsfrist an.
+            <div class="card-body container-fluid">
+                <div class="d-flex align-items-sm-center">
+                    <div class="col-md-4 px-md-1 align-self-center">
+                        <div class="row form-group">
+                            <div>
+                                <input id="oldName" name="oldName" type="hidden" th:value="*{name}">
+                                <label for="name">Modulname</label><br>
+                                <input type="text" name="name" id="name"
+                                       th:value="*{name}" th:placeholder="*{name}" th:field="*{name}">
+                            </div>
                         </div>
                     </div>
-                </div><br>
-                <div class="row container-fluid">
-                    <div class="col-3">
-                        <div class="card-text">Personenanzahl 7 Std: </div>
+                    <div class="col-md-4 px-md-1 align-self-center">
+                         <div class="row form-group">
+                             <div>
+                                <label for="shortName">Kurzform des Moduls</label><br>
+                                <input type="text" name="shortName" id="shortName"
+                                       th:value="*{shortName}" th:placeholder="*{shortName}" th:field="*{shortName}">
+                            </div>
+                         </div>
                     </div>
-                    <div class="col-3">
-                        <div class="card-text">Personenanzahl 9 Std: </div>
+                    <div class="col-md-4 px-md-1 align-self-center">
+                        <div class="row form-group">
+                            <div>
+                                <label for="profSerial">Zugeordnete Person (Unikennung)</label><br>
+                                <input type="text" name="profSeriale" id="profSerial"
+                                       th:value="*{profSerial}" th:placeholder="*{profSerial}" th:field="*{profSerial}">
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-3">
-                        <div class="card-text">Personenanzahl 17 Std: </div>
-                    </div>
-                    <div class="col-3"></div>
                 </div>
-                <div class="row container-fluid">
-                    <div class="col-3">
-                        <input type="number" name="sevenHourLimit" id="sevenHourLimit"
-                               th:value="*{sevenHourLimit}" th:placeholder="*{sevenHourLimit}"
-                               required pattern="0|([1-9][0-9]*)"
-                               th:field="*{sevenHourLimit}">
+            </div>
+            <div class="card-body container-fluid">
+                <div class="d-flex align-items-sm-center">
+                    <div class="col-md-4 px-md-1 align-self-center">
+                        <div class="row form-group">
+                            <div>
+                                <label for="applicantDeadlineDate">Bewerbungsfrist</label><br>
+                                <input type="text" name="applicantDeadlineDate" id="applicantDeadlineDate" onfocus="(this.type='date')"
+                                       th:field="*{applicantDeadlineDate}" th:attr="value = *{applicantDeadlineDate}" onclick="minimumDate1()"
+                                       onblur="(this.type='text')" class="form-control" th:placeholder="*{applicantDeadlineDate}"
+                                       required pattern="[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])" min="2020-01-01">
+                                <div th:if="${#fields.hasErrors('applicantDeadlineDate')}" class="text-danger">
+                                    Bitte geben Sie eine gültige Bewerbungsfrist an.
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-3">
-                        <input type="number" name="nineHourLimit" id="nineHourLimit"
-                               th:value="*{nineHourLimit}" th:placeholder="*{nineHourLimit}"
-                               required pattern="0|([1-9][0-9]*)"
-                               th:field="*{nineHourLimit}">
+                    <div class="col-md-4 px-md-1 align-self-center">
+                        <div class="row form-group">
+                            <div>
+                                <label for="orgaDeadlineDate">Bearbeitungsfrist</label>
+                                <input type="text" name="orgaDeadlineDate" id="orgaDeadlineDate" onfocus="(this.type='date')"
+                                       th:field="*{orgaDeadlineDate}" th:attr="value = *{orgaDeadlineDate}" onclick="minimumDate2()"
+                                       onblur="(this.type='text')" class="form-control" th:placeholder="*{orgaDeadlineDate}"
+                                       required pattern="[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])" min="2020-01-01">
+                                <div th:if="${#fields.hasErrors('orgaDeadlineDate')}" class="text-danger">
+                                    Bitte geben Sie eine gültige Bewerbungsfrist an.
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-3">
-                        <input type="number" name="seventeenHourLimit" id="seventeenHourLimit"
-                               th:value="*{seventeenHourLimit}" th:placeholder="*{seventeenHourLimit}"
-                               required pattern="0|([1-9][0-9]*)"
-                               th:field="*{seventeenHourLimit}">
+                </div>
+            </div>
+            <div class="card-body container-fluid">
+                <div class="d-flex align-items-sm-center">
+                    <div class="col-md-4 px-md-1 align-self-center">
+                        <div class="row form-group">
+                            <div>
+                                <label for="applicantDeadlineTime">Bewerbungsfrist - Uhrzeit</label><br>
+                                <input type="text" name="applicantDeadlineTime" id="applicantDeadlineTime" onfocus="(this.type='time')"
+                                       th:field="*{applicantDeadlineTime}" th:attr="value = *{applicantDeadlineTime}"
+                                       onblur="(this.type='text')" class="form-control" th:placeholder="*{applicantDeadlineTime}"
+                                       required pattern="(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9])">
+                                <div th:if="${#fields.hasErrors('applicantDeadlineTime')}" class="text-danger">
+                                    Bitte geben Sie eine gültige Zeit für die Bewerbungsfrist an.
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-3">
-                        <input type="text" name="deadlineTime" id="deadlineTime" onfocus="(this.type='time')"
-                               th:field="*{deadlineTime}" th:attr="value = *{deadlineTime}"
-                               onblur="(this.type='text')" class="form-control" th:placeholder="*{deadlineTime}"
-                               required pattern="(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9])">
-                        <div th:if="${#fields.hasErrors('deadlineTime')}" class="text-danger">
-                            Bitte geben Sie eine gültige Zeit für die Bewerbungsfrist an.
+                    <div class="col-md-4 px-md-1 align-self-center">
+                        <div class="row form-group">
+                            <div>
+                                <label for="orgaDeadlineTime">Bearbeitungsfrist - Uhrzeit</label><br>
+                                <input type="text" name="orgaDeadlineTime" id="orgaDeadlineTime" onfocus="(this.type='time')"
+                                       th:field="*{orgaDeadlineTime}" th:attr="value = *{orgaDeadlineTime}"
+                                       onblur="(this.type='text')" class="form-control" th:placeholder="*{orgaDeadlineTime}"
+                                       required pattern="(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9])">
+                                <div th:if="${#fields.hasErrors('orgaDeadlineTime')}" class="text-danger">
+                                    Bitte geben Sie eine gültige Zeit für die Bewerbungsfrist an.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body container-fluid">
+                <div class="d-flex align-items-sm-center">
+                    <div class="col-md-4 px-md-1 align-self-center">
+                        <div class="row form-group">
+                            <div>
+                                <label for="sevenHourLimit">Personenanzahl 7 Std:</label><br>
+                                <input type="number" name="sevenHourLimit" id="sevenHourLimit"
+                                       th:value="*{sevenHourLimit}" th:placeholder="*{sevenHourLimit}"
+                                       required pattern="0|([1-9][0-9]*)"
+                                       th:field="*{sevenHourLimit}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 px-md-1 align-self-center">
+                        <div class="row form-group">
+                            <div>
+                                <label for="nineHourLimit">Personenanzahl 9 Std:</label><br>
+                                <input type="number" name="nineHourLimit" id="nineHourLimit"
+                                       th:value="*{nineHourLimit}" th:placeholder="*{nineHourLimit}"
+                                       required pattern="0|([1-9][0-9]*)"
+                                       th:field="*{nineHourLimit}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 px-md-1 align-self-center">
+                        <div class="row form-group">
+                            <div>
+                                <label for="seventeenHourLimit">Personenanzahl 17 Std:</label><br>
+                                <input type="number" name="seventeenHourLimit" id="seventeenHourLimit"
+                                       th:value="*{seventeenHourLimit}" th:placeholder="*{seventeenHourLimit}"
+                                       required pattern="0|([1-9][0-9]*)"
+                                       th:field="*{seventeenHourLimit}">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -131,14 +183,24 @@
     </form>
     <div th:replace="${content} ? ${content}: ~{}"></div>
     <script>
-        function minimumDate() {
+        function minimumDate1() {
             const todaysDate = new Date();
             const year = todaysDate.getFullYear();
             const month = ("0" + (todaysDate.getMonth() + 1)).slice(-2);
             const day = ("0" + todaysDate.getDate()).slice(-2);
             const minDate = (year + "-" + month + "-" + day);
 
-            const deadlineDate = document.getElementById("deadlineDate");
+            const deadlineDate = document.getElementById("applicantDeadlineDate");
+            deadlineDate.setAttribute("min", minDate);
+        }
+        function minimumDate2() {
+            const todaysDate = new Date();
+            const year = todaysDate.getFullYear();
+            const month = ("0" + (todaysDate.getMonth() + 1)).slice(-2);
+            const day = ("0" + todaysDate.getDate()).slice(-2);
+            const minDate = (year + "-" + month + "-" + day);
+
+            const deadlineDate = document.getElementById("orgaDeadlineDate");
             deadlineDate.setAttribute("min", minDate);
         }
     </script>
