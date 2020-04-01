@@ -33,17 +33,14 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("checkstyle:MagicNumber")
 @Component
 public class DatabaseInit implements ServletContextInitializer {
+
+    private static final boolean DUMMY_DATA_CREATION = false;
     private static final int ENTRYNUMBER = 100;
     private transient Random random = new Random();
-
     private transient ApplicantRepository applicantRepository;
-
     private transient ApplicationRepository applicationRepository;
-
     private transient DistributionRepository distributionRepository;
-
     private transient EvaluationRepository evaluationRepository;
-
     private transient ModuleRepository moduleRepository;
 
 
@@ -76,11 +73,13 @@ public class DatabaseInit implements ServletContextInitializer {
      * @param servletContext context.
      */
     public void onStartup(final ServletContext servletContext) {
-        Faker faker = new Faker(Locale.GERMAN);
-        fakeModules(faker);
-        fakeApplicants(faker);
-        fakeEvaluations(faker);
-        fakeDistribution();
+        if (DUMMY_DATA_CREATION) {
+            Faker faker = new Faker(Locale.GERMAN);
+            fakeModules(faker);
+            fakeApplicants(faker);
+            fakeEvaluations(faker);
+            fakeDistribution();
+        }
     }
 
     /**
@@ -367,7 +366,6 @@ public class DatabaseInit implements ServletContextInitializer {
     private void fakeEvaluations(final Faker faker) {
         applicationRepository.findAll().forEach(application -> {
                     Evaluation evaluation = Evaluation.builder()
-                            .comment(truncate(faker.yoda().quote(), 255))
                             .hours(nextFinalHour())
                             .priority(nextPriority())
                             .application(application)

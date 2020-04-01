@@ -27,6 +27,14 @@ public class CSVService {
     private static final int SEVEN_HOUR_LIMIT = 3;
     private static final int NINE_HOUR_LIMIT = 4;
     private static final int SEVENTEEN_HOUR_LIMIT = 5;
+    private static final String MODULES_PATH =
+            System.getProperty("user.dir") + File.separator + "csv" + File.separator + "module.csv";
+    private static final String COUNTRIES_PATH =
+            System.getProperty("user.dir") + File.separator + "csv" + File.separator + "countries.csv";
+    private static final String SEMESTER_PATH =
+            System.getProperty("user.dir") + File.separator + "csv" + File.separator + "semester.csv";
+    private static final String COURSES_PATH =
+            System.getProperty("user.dir") + File.separator + "csv" + File.separator + "courses.csv";
 
     /**
      * Reads from CSV-file
@@ -86,7 +94,8 @@ public class CSVService {
      * @param moduleName Name of the module
      */
     public static void deleteModule(final String moduleName) {
-        List<String[]> readData = readFromCSV(System.getProperty("user.dir") + "/csv/module.csv");
+        List<String[]> readData = readFromCSV(System.getProperty("user.dir")
+                + File.separator + "csv" + File.separator + "module.csv");
         List<String[]> writeData = new ArrayList<>();
         String[] tmp;
         for (String[] readDatum : readData) {
@@ -96,7 +105,7 @@ public class CSVService {
             }
         }
         cleanModules();
-        writeInCSV(System.getProperty("user.dir") + "/csv/module.csv", writeData);
+        writeInCSV(MODULES_PATH, writeData);
     }
 
     /**
@@ -105,7 +114,7 @@ public class CSVService {
     public static void cleanModules() {
         final Charset charset = StandardCharsets.UTF_8;
         try {
-            new FileWriter(System.getProperty("user.dir") + "/csv/module.csv", charset).close();
+            new FileWriter(MODULES_PATH, charset).close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -116,7 +125,7 @@ public class CSVService {
      * @return List of all modules
      */
     public static List<String> getModules() {
-        return getCSVData(NAME, System.getProperty("user.dir") + "/csv/module.csv");
+        return getCSVData(NAME, MODULES_PATH);
     }
 
     /**
@@ -124,7 +133,7 @@ public class CSVService {
      * @return list of short names
      */
     public  static List<String> getShortModuleNames() {
-        return getCSVData(SHORT_NAME, System.getProperty("user.dir") + "/csv/module.csv");
+        return getCSVData(SHORT_NAME, MODULES_PATH);
     }
 
     /**
@@ -133,7 +142,7 @@ public class CSVService {
      */
 
     public static List<String> getModuleProfs() {
-        return getCSVData(PROF_SERIAL, System.getProperty("user.dir") + "/csv/module.csv");
+        return getCSVData(PROF_SERIAL, MODULES_PATH);
     }
 
     /**
@@ -141,7 +150,7 @@ public class CSVService {
      * @return return module with details as list of Modules
      */
     public static List<WebModule> getModulesWithDetails() {
-        List<String[]> modules = readFromCSV(System.getProperty("user.dir") + "/csv/module.csv");
+        List<String[]> modules = readFromCSV(MODULES_PATH);
         List<WebModule> moduleList = new ArrayList<>();
         String[] tmp;
         for (String[] module : modules) {
@@ -164,7 +173,7 @@ public class CSVService {
      * @return list of countries
      */
     public static List<String> getCountries() {
-        return getCSVData(0, System.getProperty("user.dir") + "/csv/countries.csv");
+        return getCSVData(0, COUNTRIES_PATH);
     }
 
     /**
@@ -174,7 +183,7 @@ public class CSVService {
      */
 
     public static String getProfForModule(final String moduleName) {
-        List<String[]> data = readFromCSV(System.getProperty("user.dir") + "/csv/module.csv");
+        List<String[]> data = readFromCSV(MODULES_PATH);
         String[] strArr;
         for (String[] datum : data) {
             strArr = datum;
@@ -192,7 +201,7 @@ public class CSVService {
      * @return countrycode
      */
     public static String getCodeForCountry(final String country) {
-        List<String[]> data = readFromCSV(System.getProperty("user.dir") + "/csv/countries.csv");
+        List<String[]> data = readFromCSV(COUNTRIES_PATH);
         String[] strArr;
         for (String[] datum : data) {
             strArr = datum;
@@ -212,7 +221,7 @@ public class CSVService {
 
     public static List<String> getModulesForProf(final String profSerial) {
         List<String> list = new ArrayList<>();
-        List<String[]> profs = readFromCSV(System.getProperty("user.dir") + "/csv/module.csv");
+        List<String[]> profs = readFromCSV(MODULES_PATH);
         String[] strArr;
         for (String[] prof : profs) {
             strArr = prof;
@@ -228,7 +237,7 @@ public class CSVService {
      * @return List of all courses
      */
     public static List<String> getCourses() {
-        return getCSVData(0, System.getProperty("user.dir") + "/csv/courses.csv");
+        return getCSVData(0, COURSES_PATH);
     }
 
     /**
@@ -237,7 +246,7 @@ public class CSVService {
      * @return List of all Semesters
      */
     public static List<String> getSemester() {
-        return getCSVData(0, System.getProperty("user.dir") + "/csv/semester.csv");
+        return getCSVData(0, SEMESTER_PATH);
     }
 
     /**

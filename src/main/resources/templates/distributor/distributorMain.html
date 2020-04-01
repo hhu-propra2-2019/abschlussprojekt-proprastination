@@ -16,6 +16,24 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="/turbolinks.js"></script>
         <script src="/jquery.dnd_page_scroll.js"></script>
+        <style>
+            .doneBackground{
+                background-color: rgba(108, 179, 255, 0.51);
+            }
+        </style>
+        <style>
+            /* Chrome, Safari, Edge, Opera */
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+
+            /* Firefox */
+            input[type=number] {
+                -moz-appearance: textfield;
+            }
+        </style>
     </th:block>
 </head>
 <body>
@@ -55,23 +73,23 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-6" th:each="distribution: ${distributions}">
+        <div class="col-sm-6" th:each="distribution: ${distributions}" th:attr="data-distributionid=${distribution.id}" ondrop="drop(event, this)" ondragover="allowDrop(event)">
             <div class="card bg-light mb-3 border-primary">
                 <div class="card-header d-flex justify-content-start align-items-start"
-                     th:style="${distribution.hours7Set} == ${distribution.hours7} ?
+                     th:style="${distribution.module} != 'Nicht Zugeteilt' ? (${distribution.hours7Set} == ${distribution.hours7} ?
                      (${distribution.hours9Set} == ${distribution.hours9} ?
-                     (${distribution.hours17Set} == ${distribution.hours17} ? 'background-color: rgba(108, 179, 255, 0.51)'))">
+                     (${distribution.hours17Set} == ${distribution.hours17} ? 'background-color: rgba(108, 179, 255, 0.51)')))">
                     <div class="col text-left" th:text="${distribution.module}">
                         Propra
                     </div>
                     <div class="col text-right">
-                            <div th:class="${distribution.hours7Set} > ${distribution.hours7} ? 'text-danger'" th:text="'7 Stunden: ' + ${distribution.hours7Set} + '/' + ${distribution.hours7}">
+                            <div th:class="${distribution.hours7Set} > ${distribution.hours7} ? 'text-danger'" th:text="${distribution.module} != 'Nicht Zugeteilt' ? '7 Stunden: ' + ${distribution.hours7Set} + '/' + ${distribution.hours7}">
                                 4
                             </div>
-                            <div th:class="${distribution.hours9Set} > ${distribution.hours9} ? 'text-danger'" th:text="'9 Stunden: ' + ${distribution.hours9Set} + '/' + ${distribution.hours9}">
+                            <div th:class="${distribution.hours9Set} > ${distribution.hours9} ? 'text-danger'" th:text="${distribution.module} != 'Nicht Zugeteilt' ? '9 Stunden: ' + ${distribution.hours9Set} + '/' + ${distribution.hours9}">
                                 7
                             </div>
-                            <div th:class="${distribution.hours17Set} > ${distribution.hours17} ? 'text-danger'" th:text="'17 Stunden: ' + ${distribution.hours17Set} + '/' + ${distribution.hours17}">
+                            <div th:class="${distribution.hours17Set} > ${distribution.hours17} ? 'text-danger'" th:text="${distribution.module} != 'Nicht Zugeteilt' ? '17 Stunden: ' + ${distribution.hours17Set} + '/' + ${distribution.hours17}">
                                 3
                             </div>
                     </div>
@@ -79,17 +97,17 @@
                 <div class="card-body" id="div1" th:id="drop + ${distribution.id}" th:attr="data-distributionid=${distribution.id}" ondrop="drop(event, this)" ondragover="allowDrop(event)">
                     <div th:each="applicant: ${distribution.webDistributorApplicants}">
                         <div class="card w-100 bg-light mb-1 border-primary" th:id="drag + ${applicant.id}" id="drag1"  th:attr="data-applicantId=${applicant.id}" draggable="true" ondragstart="drag(event)">
-                            <div class="card-header" th:style="${applicant.checked} ? 'background-color: rgba(108, 179, 255, 0.51)'">
+                            <div class="card-header" th:classappend="${applicant.checked} ? 'doneBackground'">
                                 <div class="row">
                                     <div class="col-7 text-left">
-                                        <button class="btn" data-toggle="collapse" th:attr="data-target='#collapse'+${applicant.id}" data-target="#collapse1"
-                                                aria-expanded="false" th:text="'[' + ${applicant.type} + '] ' + ${applicant.fullName}">
+                                        <button class="btn" data-toggle="collapse" th:attr="data-target='#collapse'+${applicant.id}, data-applicantId=${applicant.id}" data-target="#collapse1"
+                                                aria-expanded="false" th:text="'[' + ${applicant.type} + '] ' + ${applicant.fullName}" onclick="saveCollapsed(this)">
                                             Mamus100
                                         </button>
                                     </div>
                                     <div class="col-4">
                                         <div>
-                                            <input onClick="this.select();" type="text" size="1" th:value="${applicant.distributorHours}" th:attr="data-distributionId=${distribution.id}, data-applicantId=${applicant.id}" onblur="saveHours(this)" onkeyup="saveHoursEnter(event, this)">
+                                            <input type="number" min="0" onfocus="this.select();" id="textfield" size="1" th:value="${applicant.distributorHours}" th:attr="data-distributionId=${distribution.id}, data-applicantId=${applicant.id}" onblur="saveHours(this)" onkeyup="saveHoursEnter(event, this)">
                                             <label>Stunden</label>
                                         </div>
                                     </div>
@@ -98,7 +116,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div th:id="collapse + ${applicant.id}" id="collapse1" class="collapse">
+                            <div th:id="collapse + ${applicant.id}" id="collapse1" class="collapse" th:classappend="${applicant.collapsed} ? 'show'">
                                 <div class="container text-center">
                                     <div class="row border font-weight-bold">
                                         <div class="col" title="Modul" style="text-overflow: ellipsis; overflow: hidden; width: 20%; white-space: nowrap">Modul</div>
@@ -178,8 +196,6 @@
     <script>
 
         function drag(ev) {
-            ev.dataTransfer.setData("text", ev.target.id);
-
             ev.dataTransfer.setData("applicantId", ev.currentTarget.id);
         }
 
@@ -187,14 +203,10 @@
     <script>
 
         function drop(ev, el) {
-            ev.preventDefault();
-            var data = ev.dataTransfer.getData("text");
-            el.appendChild(document.getElementById(data));
-
+            var distributionId = el.dataset.distributionid;
             var applicantElId = ev.dataTransfer.getData("applicantId");
             var applicantEl = document.getElementById(applicantElId);
             var applicantId = applicantEl.dataset.applicantid;
-            var distributionId = el.dataset.distributionid;
 
             $.ajax({
                 async: false,
@@ -205,7 +217,7 @@
                     applicantId: applicantId
                 }
             });
-            reloadWithTurbolinks();
+            location.reload();
         }
 
     </script>
@@ -226,7 +238,7 @@
                     hours: hours
                 }
             });
-            reloadWithTurbolinks();
+            location.reload();
         }
 
     </script>
@@ -234,6 +246,7 @@
 
         function saveHoursEnter(ev, el) {
             if (event.which === 13) {
+                el.blur();
                 var hours = el.value;
                 var applicantId = el.dataset.applicantid;
                 var distributionId = el.dataset.distributionid;
@@ -248,7 +261,7 @@
                         hours: hours
                     }
                 });
-                reloadWithTurbolinks();
+                location.reload();
             }
         }
 
@@ -256,6 +269,11 @@
     <script>
 
         function saveChecked(el) {
+            if($(el).is(":checked")){
+                $(el).parent().parent().parent().addClass("doneBackground");
+            }else{
+                $(el).parent().parent().parent().removeClass("doneBackground");
+            }
             var checked = el.checked;
             var applicantId = el.dataset.applicantid;
 
@@ -268,7 +286,24 @@
                     checked: checked
                 }
             });
-            reloadWithTurbolinks();
+        }
+
+    </script>
+    <script>
+
+        function saveCollapsed(el) {
+            var applicantId = el.dataset.applicantid;
+            var collapsed = (document.getElementById('collapse' + applicantId).className !== 'collapse show');
+
+            $.ajax({
+                async: false,
+                method:'GET',
+                url: "/bewerbung2/verteiler/saveCollapsed/",
+                data: {
+                    applicantId: applicantId,
+                    collapsed: collapsed
+                }
+            });
         }
 
     </script>
@@ -278,7 +313,7 @@
             var scrollPosition;
 
             function reload () {
-                scrollPosition = [window.scrollX, window.scrollY];
+                scrollPosition = [localStorage.scrollX = window.scrollX, localStorage.scrollY = window.scrollY];
                 Turbolinks.visit(window.location.toString(), { action: 'replace' })
             }
 
@@ -292,6 +327,15 @@
 
             return reload
         })()
+
+    </script>
+    <script>
+
+        window.addEventListener('scroll', function () {
+            localStorage.scrollX = window.scrollX;
+            localStorage.scrollY = window.scrollY;
+        })
+
     </script>
 </main>
 </body>
