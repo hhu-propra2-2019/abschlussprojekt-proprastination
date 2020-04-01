@@ -17,6 +17,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -130,6 +132,14 @@ public class SetupController {
     @Secured("ROLE_setup")
     public String postNewModule(final KeycloakAuthenticationToken token, final Model model,
                                 @Valid final WebModule module, final BindingResult bindingResult) {
+        LocalDateTime applicantDeadline = LocalDateTime.parse(module.getApplicantDeadlineDate()
+                + "T" + module.getApplicantDeadlineTime());
+        LocalDateTime orgaDeadline = LocalDateTime.parse(module.getOrgaDeadlineDate()
+                + "T" + module.getOrgaDeadlineTime());
+        if (applicantDeadline.isAfter(orgaDeadline)) {
+            bindingResult.addError(new ObjectError("module",
+                    "Die Bearbeitungsfrist darf nicht vor der Bewerbungsfrist sein."));
+        }
         if (bindingResult.hasErrors()) {
             bindingResult.getAllErrors().forEach(err -> LOGGER.info("ERROR {}", err.getDefaultMessage()));
             if (token != null) {
