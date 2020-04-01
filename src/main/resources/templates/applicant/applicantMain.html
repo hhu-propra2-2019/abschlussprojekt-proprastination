@@ -95,17 +95,12 @@
                         <th scope="col"></th>
                         <th scope="col">Modul</th>
                         <th scope="col">Bewerbungsfrist</th>
-                        <th hidden scope="col">Bewerbungsstatus</th>
                     </tr>
 
                     <tr th:each="app, appNum : ${applicant?.applications}">
                         <th scope="row" th:text="${appNum.count}"></th>
                         <td th:text="${app.module.name}">Example #1</td>
                         <td>
-                            <span th:text="${app.module.deadlineDate}"></span>
-                            <span th:text="${app.module.deadlineTime}"></span>
-                        </td>
-                        <td hidden>
                             <span th:text="${app.module.deadlineDate}"></span>
                             <span th:text="${app.module.deadlineTime}"></span>
                         </td>
