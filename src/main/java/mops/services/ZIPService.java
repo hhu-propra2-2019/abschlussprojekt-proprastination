@@ -104,6 +104,11 @@ public class ZIPService {
                         fileName = (distribution.getModule().getName() + File.separator
                                 + applicant.getFirstName() + "_" + applicant.getSurname() + ".pdf");
                         writeToZipFile(file, zipOS, fileName);
+                        boolean deleted = file.delete();
+                        if (!deleted) {
+                            logger.warn("Could not delete File: " + file.getName() + " on Path: "
+                                    + file.getAbsolutePath());
+                        }
                     }
                 }
             }
@@ -127,11 +132,11 @@ public class ZIPService {
      * @param modules modules
      * @return randomised zipPath
      */
-    public File getZipFileForModule(final List<Module> modules) throws IOException {
+    public File getZipFileForModule(final List<Module> modules) {
         File file;
         String fileName;
         Applicant applicant;
-        File tmpFile = null;
+        File tmpFile;
         Organizer organizer;
         List<Application> applicationList;
         try {
@@ -155,6 +160,10 @@ public class ZIPService {
                             + applicant.getFirstName().replaceAll("[^A-Za-z0-9.,ß]", "") + "_"
                             + applicant.getSurname().replaceAll("[^A-Za-z0-9.,ß]", "") + ".pdf");
                     writeToZipFile(file, zipOS, fileName);
+                    boolean deleted = file.delete();
+                    if (!deleted) {
+                        logger.warn("Could not delete File: " + file.getName() + " on Path: " + file.getAbsolutePath());
+                    }
                 }
             }
         } catch (IOException e) {
