@@ -23,6 +23,8 @@ public class EMailService {
     private String senderEmail = "dummy@example.com";
 
     private JavaMailSender emailSender;
+    private static final int MBSIZE = 1048576;
+    private static final int MAXSIZE = 5;
 
     /**
      * Autowiring the JavaMailSender
@@ -71,6 +73,10 @@ public class EMailService {
     public void sendEmailToRecipient(final String recipient, final File zipfile) throws MailSendException {
 
         try {
+            if (zipfile.length() / MBSIZE >= MAXSIZE) {
+                throw new MailSendException("Anhang zu groß!");
+            }
+
             MimeMessage message = emailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setFrom(senderEmail);
