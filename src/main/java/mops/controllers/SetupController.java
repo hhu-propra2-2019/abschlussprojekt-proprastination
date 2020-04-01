@@ -93,6 +93,14 @@ public class SetupController {
     public String postEditedModule(final KeycloakAuthenticationToken token, final Model model,
                                    @RequestParam("oldName") final String oldName,
                                    @Valid final WebModule module, final BindingResult bindingResult) {
+        LocalDateTime applicantDeadline = LocalDateTime.parse(module.getApplicantDeadlineDate()
+                + "T" + module.getApplicantDeadlineTime());
+        LocalDateTime orgaDeadline = LocalDateTime.parse(module.getOrgaDeadlineDate()
+                + "T" + module.getOrgaDeadlineTime());
+        if (applicantDeadline.isAfter(orgaDeadline)) {
+            bindingResult.addError(new ObjectError("module",
+                    "Die Bearbeitungsfrist darf nicht vor der Bewerbungsfrist sein."));
+        }
         if (bindingResult.hasErrors()) {
             bindingResult.getAllErrors().forEach(err -> LOGGER.info("ERROR {}", err.getDefaultMessage()));
             model.addAttribute("oldName", oldName);
