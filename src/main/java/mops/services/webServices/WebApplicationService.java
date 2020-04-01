@@ -71,11 +71,11 @@ public class WebApplicationService {
         Applicant applicant = applicantService.findByUniserial(account.getName());
 
         WebApplicant webApplicant = (applicant == null)
-                ? WebApplicant.builder().build() : studentService.getExsistingApplicant(applicant);
+                ? WebApplicant.builder().build() : studentService.getExistingApplicant(applicant);
         WebAddress webAddress = (applicant == null)
-                ? WebAddress.builder().build() : studentService.getExsistingAddress(applicant.getAddress());
+                ? WebAddress.builder().build() : studentService.getExistingAddress(applicant.getAddress());
         WebCertificate webCertificate = (applicant == null)
-                ? WebCertificate.builder().build() : studentService.getExsistingCertificate(applicant.getCerts());
+                ? WebCertificate.builder().build() : studentService.getExistingCertificate(applicant.getCerts());
         List<Module> modules = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
 
         model.addAttribute("account", account);
@@ -112,11 +112,11 @@ public class WebApplicationService {
      * @param modules
      * @param webCertificate
      */
-    public void removeCurrentModuleFromListOfAvailebleModuleToApplyTo(final KeycloakAuthenticationToken token,
-                                                                      final WebApplicant webApplicant,
-                                                                      final WebAddress webAddress,
-                                                                      final Model model, final String modules,
-                                                                      final WebCertificate webCertificate) {
+    public void removeCurrentModuleFromListAndSavePersonalInfo(final KeycloakAuthenticationToken token,
+                                                               final WebApplicant webApplicant,
+                                                               final WebAddress webAddress,
+                                                               final Model model, final String modules,
+                                                               final WebCertificate webCertificate) {
         Applicant applicant = studentService.savePersonalData(token, webApplicant, webAddress, webCertificate);
         Module module = moduleService.findModuleByName(modules);
         List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());

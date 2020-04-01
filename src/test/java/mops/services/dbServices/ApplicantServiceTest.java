@@ -2,6 +2,7 @@ package mops.services.dbServices;
 
 import mops.model.classes.*;
 import mops.model.classes.Module;
+import mops.repositories.ApplicantRepository;
 import mops.repositories.ModuleRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +11,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest
@@ -208,6 +212,18 @@ class ApplicantServiceTest {
         Applicant result = applicantService.findByApplications(application1);
 
         assertEquals(applicant.getId(), result.getId());
+    }
+
+    @Test
+    void testFindByApplicationsApplicantIsNull() {
+        ApplicantRepository mockRepository = mock(ApplicantRepository.class);
+        ApplicantService testApplicantService = new ApplicantService(mockRepository);
+        when(mockRepository.findByApplications(application1)).thenReturn(Optional.empty());
+
+        Applicant result = testApplicantService.findByApplications(application1);
+
+        verify(mockRepository, times(1)).findByApplications(application1);
+        assertNull(result);
     }
 
 }
