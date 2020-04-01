@@ -180,6 +180,7 @@ public class WebPdfService {
         modules.add(moduleService.findModuleByName(module));
         File file = zipService.getZipFileForModule(modules, downloadProgress);
         loadFileToUser(response, file);
+        downloadProgress.zero();
     }
 
     /**
