@@ -8,7 +8,7 @@ Einführung und Ziele {#section-introduction-and-goals}
 **Einfach, praktisch und gut**
 
 Was ist unserer Ziel? Wir möchten eine einfache, übersichtliche und intuitive Platform bieten, auf der Bewerbungen erstellt und abgeschickt, sowie direkt bearbeitet werden können. 
-Bewerber sollen die Möglichkeit haben Bewerbungen für mehrere Module abschicken zu können und den Bearbeitungsstatus jener einzusehen (in Bearbeitung oder fertig).
+Bewerber sollen die Möglichkeit haben Bewerbungen für mehrere Module abschicken zu können.
 Unser System soll mit Filtern die eingetroffenen Bewerbungen gruppieren und so eine simple Übersicht bieten, mit der Organisatoren ihre zukünftigen Korrektoren priorisieren können. 
 Ebenso soll unser System dem Verteiler eine intuitive Oberfläche bieten um die Korrektoren den passenden Modulen zuzuordnen.
 Dabei wollen wir eine Möglichkeit geben, die Daten bearbeiten zu können, bis die Frist abgelaufen ist. 
@@ -37,16 +37,18 @@ Wir wollen ein Subsystem für MOPS bieten, welches wesentlich besser, schneller 
 
 **Form.**
 
+- Ersteller-Dashboard
+    - BITTE IRGENDWAS ERGÄNZEN!
 - Bewerber-Dashboard mit übersichtlicher Bewerbung
     - Bewerbungen sind editierbar bis zum Frist-Ende
 - Organisator-Dashboard mit vereinfachter Priorisierung
     - Bewerbungen nach den wichtigsten Eigenschaften filterbar
-    - Anbindung an Terminfindung für eventuelle Einladung zum Vorstellungsgespräch
     - Einfache Priorisierung 
-    - Übersicht über Mehrfachbewerber
+    - Möglichkeit, die ganze Bewerbung eines Bewerbers anzusehen
 - Verteiler-Dashboard mit intuitiver Zuordnung
     - Prioritäten von Bewerber und Organisator auf einen Blick
     - Einfache Zuteilung der Bewerber zum Modul
+    - Möglichkeit, vom System eine (sinnvolle) automatische Verteilung generieren zu lassen
     - Möglichkeit zur Änderung vor der endgültigen Absendung
     - Legt die Wochenstundenzahl endgültig fest
 - Automatisierte Erstellung der Einstellungsbögen mithilfe der Bewerbungsinformationen und Möglichkeit zum Download
@@ -72,10 +74,10 @@ bezüglich der Architektur und deren Dokumentation.
 
 | Rolle | Kontakt |
 | -------- | -------- |
-|   Entwickler  |   Sind selber Studenten und wollen eine optimierte Plattform, sammeln wichtige Kenntnisse in der Softwareentwicklung und das Praktikum bestehen |
-|   Bewerber   |   Wollen die Möglichkeit, ihre Bewerbung zu ändern und eine Statusmeldung zu haben|
+|   Entwickler  |   Sind selber Studenten und wollen eine optimierte Plattform, sammeln wichtige Kenntnisse in der Softwareentwicklung und wollen das Praktikum bestehen |
+|   Bewerber   |   Wollen die Möglichkeit, ihre Bewerbung vor Ablauf der Frist jederzeit ändern zu können|
 |   Organisatoren   |   Brauchen einfachen Weg der Priorisierung ohne langes Kopieren aller Bewerbungen    |
-| Ersteller | Will möglichst schnell und einfach die zur Bewerbung offenen Module mit den jeweiligen Einstellungsinformationen eintragen
+|   Ersteller | Will möglichst schnell und einfach die zur Bewerbung offenen Module mit den jeweiligen Einstellungsinformationen eintragen
 |   Verteiler   |  Abgesehen vom praktischen, automatischen Erstellen der Einstellungsbögen wollen Sie eine einfache und bestenfalls teils-automatisierte Verteilungsmöglichkeit|
 |   Jens Bendisposto  |   Möchte endlich das AUAS verlassen können und will, dass wir das Praktium bestehen und ein tolles System zusammenstellen  |
 
@@ -90,8 +92,7 @@ Randbedingungen {#section-architecture-constraints}
 
 | Randbedindung | Erläuterung, Begründung |
 | -------- | -------- |
-|Implementierung in Spring-Boot mit Java | Vorgegeben und bisher auch fast ausschließlich bei vorbereiteten Projekten genutzt |
-| Verknüpfung mit anderen Subsystemen durch Links|Organisatorisch einfacher, hebt viele Abhängigkeiten auf, was isoliertes Arbeiten erleichtert |
+|Implementierung in Spring-Boot mit Java | Vorgegeben und bisher auch fast ausschließlich bei vorbereitenden Projekten genutzt |
 |System als Docker Image| Das System wird mit einem Befehl einheitlich gestartet, einfacher für die Korrektoren|
 |Gemeinsamer Styleguide|Einheitliches Aussehen und ersparen von Kleinarbeit|
 |Authentifizierung über KeyCloak|Absicherung der Anwendung und Aufteilung in verschiedene Rollen|
@@ -103,9 +104,10 @@ Randbedingungen {#section-architecture-constraints}
 | -------- | -------- |
 |Merge in develop Branch nur über Pull Request| Kleinschrittiges Arbeiten, Requests können zugewiesen werden|
 |Code Review| Build gründlich reviewen, Fehler nicht selber beheben|
+|Issues| Auch wenn wir diese Funktion von git erst sehr spät im Projekt für uns entdeckt haben, haben wir dennoch in der letzten Woche des Praktikums regen Gebrauch davon gemacht, um auf Probleme hinzuweisen und Arbeit zuzuteilen
 |Team | Kleinere Teams für Features, arbeiten auf Feature Branches|
 |Zeitplan| Einen Monat Zeit, Grundbuild soll nach maximal der Hälfte der Zeit sicher stehen|
-|Vorgehensmodell| Schicht-Architektur, testgetrieben, Dokumentation nach arc42|
+|Vorgehensmodell| Schicht-Architektur, Dokumentation nach arc42|
 
 **Konventionen**
 
@@ -131,24 +133,23 @@ Fachlicher Kontext {#_fachlicher_kontext}
 
 * *Ersteller*
 
-Der Ersteller gibt die jeweiligen Module zur Bewerbung frei und startet den Bewerbungsprozess. Dies kann ein Student, Professor oder Mitarbeiter sein.
+Der Ersteller gibt die jeweiligen Module zur Bewerbung frei und startet den Bewerbungsprozess. Dies kann ein Student, Professor oder Mitarbeiter sein. **Der Ersteller kann auch Dinge aus der Datenbank löschen, oder? Bitte ergänzen, wer sich damit auskennt!**
 
 * *Bewerber*
 
- Allen voran sind unsere Nutzer die Studenten und Mitarbeiter, die sich um eine Stelle bewerben wollen. Sie haben ihre persönlichen Daten und offenen Bewerbungen direkt auf einen Blick und können alles bearbeiten, zumindest bis zum Bewerbungsschluss.
-
+Allen voran sind unsere Nutzer die Studenten und Mitarbeiter, die sich um eine Stelle bewerben wollen. Sie haben ihre persönlichen Daten und offenen Bewerbungen direkt auf einen Blick und können alles bearbeiten, zumindest bis zum Bewerbungsschluss.
 
 * *Organisator*
 
-Der Organisator, der zu Anfang meist auch die Bewerbung für sein Modul eröffnet, muss für jede Bewerbung eine Priorität von 1-4 setzen, wobei 1 die höchste Priorität ist. Er gibt auch seine gewünschten Wochenarbeitsstunden für den Verteiler an.
+Der Organisator muss für jede Bewerbung eine Priorität von 1-4 setzen, wobei 1 die höchste Priorität ist. Er gibt auch seine gewünschten Wochenarbeitsstunden für den Verteiler an.
 
 * *Verteiler*
 
-Am Ende bekommt der Verteiler gesammelt alle Bewerbungen pro Modul mit der Priorität des Bewerbers und des Professors/Organisators. Anhand dessen wird erst einmal automatisch eine Zuweisung erstellt, die manuell noch veränderbar ist. Er legt auch die engültige Wochenarbeitszeit fest.
+Am Ende bekommt der Verteiler gesammelt alle Bewerbungen pro Modul mit der Priorität des Bewerbers und des Professors/Organisators. Er kann dann seine Zuordnung vornehmen oder automatisch eine Verteilung erstellen, die danach aber manuell noch veränderbar ist. Er legt auch die engültige Wochenarbeitszeit fest.
 
 **Personalabteilung**
 
-Nachdem nun die Korrektoren und Tutoren für jedes Fach ausgewählt worden sind, werden von unserem System automatisch Einstellungsbögen erstellt und an die Personalabteilung geschickt.
+Nachdem nun die Korrektoren und Tutoren für jedes Fach ausgewählt worden sind, kann der Verteiler automatisch Einstellungsbögen erstellen lassen und herunterladen oder per Button an die Personalabteilung schicken.
 
 
 Technischer Kontext {#_technischer_kontext}
@@ -179,9 +180,8 @@ Lösungsstrategie {#section-solution-strategy}
   
 * *Benutzbarkeit*:
 
-  Übersichtliche UI's mit intuitiven Buttons zum Hinzufügen von Bewerbungen direkt vom Dashboard
+  Übersichtliche UI's mit intuitiver Bedienung für alle Beteiligten
   
-  Bearbeitungsmöglichkeit von Bewerbung und auch Verteilung
 * *Zuverlässigkeit*:
 
   Checks und Abfragen der Eingaben
@@ -250,10 +250,10 @@ Kontrollieren den Fluss der HTML Websites und das Weitergeben der Daten aus den 
 
 | Datei | Zweck |
 | -------- | -------- |
+| Setup Controller| Ermöglicht dem Ersteller auf seiner Seite auf die zur Bewerbung freigegebenen Module zuzugreifen und neue hinzuzufügen oder sie zu Ändern |
 | Application Controller | Nimmt das Mapping der Rolle *studentin* entgegen und lädt die gespeicherten persönlichen Daten (auch Keycloak Account Daten) und die offenen Bewerbungen als Java Webclassen (siehe Abschnitt 6) in die html Seiten des Bewerbers und gibt Änderungen an den Service weiter |
 | Orga Controller | Übergibt an den Organisator die Bewerbungen für sein jeweiliges Modul und nimmt aus den Formularen die vom Organisator eingetragene Priorität und die gwünschte Arbeitszeit an |
-| Distributor Controller | Gibt an die Verteilerseite alle eingegangenen Bewerbungen, diese wurden schon vorher mit einem Algorithmus bestmöglich verteilt. Gibt etwaige manuelle Änderungen an der Verteilung an den VerteilerService weiter |
-|Setup Controller| Ermöglicht dem Ersteller auf seiner Seite auf die zur Bewerbung freigegebenen Module zuzugreifen und neue hinzuzufügen oder sie zu Ändern |
+| Distributor Controller | Gibt an die Verteilerseite alle eingegangenen Bewerbungen, die sich per Buttonklick automatisch vorverteilen lassen. Gibt etwaige manuelle Änderungen an der Verteilung an den VerteilerService weiter |
 
 *Andere*
 
@@ -289,7 +289,7 @@ Veränderte Daten werden weitergereicht und es kann nach bestimmten Attributen g
 | Distribute Service | Rückgabe einzelner html Paths und checken der Rollen | Einfacheres und zentraleres Weiterleiten je nach angemeldeter Rolle |
 | Orga Service | Nutzt die anderen Entity Services und deren Methoden | Stellt dem Orga Controller die entsprechenden Bewerber, Bewerbungen und Prioritäten zur Verfügung und gibt die eingegebene Organisator Präferenz an den Evaluation Service weiter|
 | Student Service | Methoden zur Umwandlung von Webklassen in Modelklassen und vice versa | Aus dem Controller ausgelagerte Logik die den Übergang zwischen den im Frontend verwendeten Webklassen und den in der Datenbank benutzten Modelklassen |
-| Webapplication Service | Ausgabe von Binding errors und Erstelen von Bwerbern falls es noch keinen für diese Bewerbung gibt | Überprüft Eingaben des Bewerbers und löscht das Modul der abgesendeten Bewerbung aus der Liste möglicher weiterer Bewerbungen. |
+| Webapplication Service | Ausgabe von Binding errors und Erstellen von Bewerbern, falls es noch keinen für diese Bewerbung gibt | Überprüft Eingaben des Bewerbers und löscht das Modul der abgesendeten Bewerbung aus der Liste möglicher weiterer Bewerbungen. |
 | WebDistributionService | Suchmethoden zu den unterschiedlichen Arbeitszeiten sowie Umwandlungsmethoden | Mittler zwischen den in der Datenbank eingetragenen Verteilungen und der Darstellung auf der Seite des Verteilers |
 | Webmodul Service | Wandelt Web Module in Module und andersherum und speichert oder schickt diese weiter | Zur einfacheren Handhabung im Setup Controller |
 | WebOrganizer Service | Gibt Daten aus den Organisator Seiten an die Datenbank weiter und Ergebnisse aus Suchen im repository zurück | Die Organisator Daten werden vor allem für die Erstellung der pfd Bögen gebraucht, der Service speichert Änderungen die eingegebn werden |
@@ -328,12 +328,12 @@ Erstellen mit JPA Hibernate die Tabellen in der Datenbank und sind Transporter d
 | Datei | Zweck |
 | -------- | -------- |
 | Module | Speichert Name, Kurzform und Verantwortlichen für das Modul, sowie die gewünschte Anzahl an Mitarbeitern mit 7,9 und 17 Wochenstunden. Hat eine eigene Methode die es in ein WebModule verwandelt|
-| Applicant | Speichert die standardmäßigen persönlichen Daten des Bewerbers zusätzlich zu seiner Unikennung, sowie den Studienganz, die gewünschte Einstellungsart (Tutor/Korrektor/Beides), den bisher höchsten Abschluss falls es einen gibt und die bisher abgeschickten Bewerbungen. Dazu gibt es eine Methode die einzelne Bewerbungen raussucht |
+| Applicant | Speichert die standardmäßigen persönlichen Daten des Bewerbers zusätzlich zu seiner Unikennung, sowie den Studienganz, die gewünschte Einstellungsart (Tutor/Korrektor/Beides), den bisher höchsten Abschluss falls es einen gibt und die bisher abgeschickten Bewerbungen. Für die Darstellung auf der Verteilerübersicht werden auch noch zwei Booleans (checked und collapsed) gespeichert. Dazu gibt es eine Methode die einzelne Bewerbungen raussucht |
 | Address | Speichert die Adresse des Bewerbers, als Feld dort gespeichert |
 | Certificate | Speichert den höchsten Abschluss des Bewerbers, falls es einen gibt |
 | Course | Speichert den Studiengang, die Liste an möglichen Studiengängen ist in der Datenbank gespeichert |
 | Application | Speichert die Bewerbungsdetails, abgesehen vom Modul und der Mindest- und Maximalarbeitszeit auch die Note und Details des eigenen Besuchs des Bewerbungsmoduls |
-| Evaluation | Repräsentiert die "Bewertung" des Organisators der einzelnen Bewerbungen, speichert die Bewerbung und die eingegebene Priorität des Organisators, sowie die Wochenstunden und ein Kommentar falls nötig |
+| Evaluation | Repräsentiert die "Bewertung" des Organisators der einzelnen Bewerbungen, speichert die Bewerbung und die eingegebene Priorität des Organisators sowie die gewünschten Wochenstunden |
 | Distribution | Speichert die Einteilung des Verteilers, also das Modul und die zugewiesenen Bewerber |
 | Organizer | Speichert persönliche Daten der Organisatoren |
 
@@ -376,11 +376,15 @@ Auf dem Dashboard des Bewerbers (**/applicantMain**) sieht dieser seine persönl
 
 *Organisator*
 
-Auf seinem Dashboard (**/orgaMain**) sieht der Organisator die ihm zugeteilten Module. Klickt er auf diese, wird er weitergeleitet und sieht geordnet die für sein Modul eingegangenen Bewerbungen und die von den Bewerbern abgegebene Priorität (**/OrgaOverview**). Dort kann er nun seine Priorität und seine gewünschten Wochenarbeitsstunden eintragen und wenn er möchte nochmal die ganze Bewerbung sehen (**/applicationModalContent**).
+Auf seinem Dashboard (**/orgaMain**) sieht der Organisator die ihm zugeteilten Module und seine persönlichen Daten, die er dort auch bearbeiten kann. Klickt er auf ein Modul, wird geprüft, ob er schon eine Telefonnummer gesetzt ist (Da diese für die Einstellungsbögen notwendig ist) und je nachdem darauf hingewiesen oder weitergeleitet auf die Übersichtsseite zum jeweiligen Modul. Dort sieht er geordnet die für sein Modul eingegangenen Bewerbungen und hat die wichtigsten Informationen sortierbar in einer Tabelle auf einen Blick (**/OrgaOverview**). Dort kann er nun seine Priorität und seine gewünschten Wochenarbeitsstunden eintragen und wenn er möchte nochmal die ganze Bewerbung sehen (**/applicationModalContent**).
 
 *Verteiler*
 
-Der Verteiler sieht auf seinem Dashboard (**/distributorMain**) die einzelnen Module des Semesters und die schon durch den Verteileralgorithmus verteilten Bewerber. Diese kann er nun per drag and drop manuell noch verändern oder mit einem Klick auf die Checkbox als final markieren. 
+Der Verteiler sieht auf seinem Dashboard (**/distributorMain**) die einzelnen Module des Semesters und das Modul "Nicht zugeordnet", dem zu Anfang alle Studenten zugeordnet sind. Diese kann er dann manuell per drag & drop oder automatisch zuordnen (lassen), sich alle wichtigen Informationen beim Ausklappen eines Bewerbers anschauen, Stundenazahlen ggf. anpassen und sie mittels einer Checkbox für sich selbst zum Überblick als final markieren. Am Ende gelangt er über einen Button zur PDF Übersichtsseite.
+
+*PDF*
+
+**Kann das jemand ergänzen, der Ahnung davon hat?**
 
 #### (3) << application properties >>
 
@@ -430,21 +434,6 @@ Laufzeitsicht {#section-runtime-view}
 3. Organisator und Bewerber geben eine ähnliche Priorität an
 4. Bewerbung wird automatisch dem Modul zugeteilt, Verteiler segnet dies ab und verschickt den Einstellungsbogen
 
-*Problemszenario 1* {#__emphasis_bezeichnung_laufzeitszenario_2_emphasis}
-------------------------------------
-1. Ersteller stellt ein Modul ein, gibt aber die falsche Stundenzahl an.
-2. s.o.
-3. Der Organisator sieht die falsche Stundenanzahl und meldet sich beim Verteiler
-4. Verteiler ändert in Absprache mit dem Bewerber die finale Arbeitszeit
-
-*Problemszenario 2* {#__emphasis_bezeichnung_laufzeitszenario_n_emphasis}
-------------------------------------
-1. Ersteller stellt ein Modul ein
-2. Bewerber bewirbt sich auf mehrere Module und gibt überall eine hohe Priorität an
-3. Organisator gibt auch eine hohe Priorität an, bei jeder Bewerbung des Bewerbers
-4. Verteilalgorithmus trägt den Bewerber bei einem beliebigen Modul ein
-5. Verteiler trägt nach Absprache mit dem Bewerber manuell die Verteilung ein
-
 Dadurch, dass die Datenbank und die darin enthaltenen Daten von jedem Service erreicht werden können, kann eine hohe Modularität und Flexibilität erreicht werden. Die einzelnen Bausteine arbeiten zusammen um einen sicheren Datenaustausch zu garantieren und lässt Platz für Human Errors.
 
 Verteilungssicht {#section-deployment-view}
@@ -472,6 +461,8 @@ Fehler können zum Beispiel bei den Eingaben in die Felder der Websites vorkomme
 ![](https://i.imgur.com/NhivfjK.png)
 
 *Beispiel nicht ausgewählte Nationalität nach dem Klicken auf <<Bestätigen>>*
+
+Ein weiterer Fehler, der von unserer Anwendung verhindert wird, ist in der Verteileransicht das Verschieben von Bewerbern in Module, für die sie sich nicht beworben haben. In einem früheren Stadium des Projektes haben wir falsch zugeordnete Bewerber rot hervorgehoben, um das zu signalisieren, zum jetzigen Zeitpunkt ist es gar nicht mehr möglich, Bewerber falsch zuzuordnen. 
 
 Logging {#__emphasis_konzept_2_emphasis}
 ---------------
@@ -531,14 +522,14 @@ Qualitätsszenarien {#_qualit_tsszenarien}
 
 | Nr | Szenario |
 | -------- | -------- |
-| 1 | Der Verteilalgorithmus bekommt eine Bewerbung, die von Organisator und Student die höchste Priorität bekommen hat. Er sortiert sie in das entsprechende Modul. |
+| 1 | Der Verteilalgorithmus bekommt eine Bewerbung und sortiert sie anhand der angegebenen Daten von Bewerber und Organisator in ein Modul ein (Nach dem Verfahren, das uns Daniel Neugebauer, der die Verteilung letztes Jahr von Hand vorgenommen hat, beschrieben hat). |
 | 2 | Ein Student füllt eine Bewerbung aus. Er vergisst, seine Hausnummer einzutragen. Die Anwendung zeigt ihm dort einen Fehler an und lässt ihn erst abschicken, als das Feld gefüllt ist. |
 | 3 | Der Organisator sieht auf einen Blick die wichtigstens Informationen seiner Bewerbungen und kann diese bei Bedarf ganz anzeigen |
 | 4 |  Die html Seiten werden auch mit Laden der Daten aus der Datenbank in Millisekunden geladen |
 | 5 | Der Verteiler finalisiert seine Angaben und es werden automatisch von der Anwendung die Personalbögen erstellen. |
 | 6 | Ein Student meldet sich an. Er wird auf die Startseite des Studenten geleitet.|
 | 7 | Beim Bearbeiten eines Moduls sieht der Ersteller die vorherigen Angaben in den jeweiligen Textfeldern |
-| 8 | Die Wunscharbeitszeit kann von Student und Organisator angegeben und vom Verteiler finalisiert werden|
+| 8 | Die Wunscharbeitszeit kann von Student und Organisator angegeben und vom Verteiler finalisiert werden **Gehört das wirklich zu Wartbarkeit?**|
 | 9 | Ein Entwickler möchte eine eine neue Website einstellen. Durch die Projektstruktur und den kommentierten Code findet er sich leicht zurecht und kann seinen content einfach einbinden |
 
 Risiken und technische Schulden {#section-technical-risks}
