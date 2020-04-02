@@ -207,13 +207,12 @@ public class ApplicationController {
 
         Module modul = moduleService.findModuleByName(module);
         Applicant applicant = applicantService.findByUniserial(token.getName());
-        List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
-        availableMods.remove(modul);
 
         Application application = studentService.buildApplication(webApplication);
         applicant = applicant.toBuilder().application(application).build();
         applicantService.saveApplicant(applicant);
-
+        List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
+        availableMods.remove(modul);
 
         model.addAttribute("semesters", CSVService.getSemester());
         model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
