@@ -61,7 +61,7 @@ class ZIPServiceTest {
     @BeforeEach
     void setup() throws IOException {
         Module module = Module.builder()
-                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
+                .applicantDeadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("Info4")
                 .build();
         Address address = Address.builder()
