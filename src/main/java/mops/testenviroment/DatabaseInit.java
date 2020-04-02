@@ -386,11 +386,16 @@ public class DatabaseInit implements ServletContextInitializer {
         for (int i = 0; i < modulenames.length; i++) {
             SimpleDateFormat deadlineDatePattern = new SimpleDateFormat("yyyy-MM-dd");
             SimpleDateFormat deadlineTimePattern = new SimpleDateFormat("hh:mm");
-            String applicantDeadlineDate = deadlineDatePattern.format(faker.date().future(300, 30, TimeUnit.DAYS));
-            String applicantDeadlineTime = deadlineTimePattern.format(faker.date().future(300, 30, TimeUnit.DAYS));
-            String orgaDeadlineDate = deadlineDatePattern.format(faker.date().future(300, 30, TimeUnit.DAYS));
-            String orgaDeadlineTime = deadlineTimePattern.format(faker.date().future(300, 30, TimeUnit.DAYS));
-            LocalDateTime applicantDate = LocalDateTime.parse(applicantDeadlineDate + "T" + applicantDeadlineTime + ":00");
+            String applicantDeadlineDate =
+                    deadlineDatePattern.format(faker.date().future(300, 30, TimeUnit.DAYS));
+            String applicantDeadlineTime =
+                    deadlineTimePattern.format(faker.date().future(300, 30, TimeUnit.DAYS));
+            String orgaDeadlineDate =
+                    deadlineDatePattern.format(faker.date().future(300, 30, TimeUnit.DAYS));
+            String orgaDeadlineTime =
+                    deadlineTimePattern.format(faker.date().future(300, 30, TimeUnit.DAYS));
+            LocalDateTime applicantDate =
+                    LocalDateTime.parse(applicantDeadlineDate + "T" + applicantDeadlineTime + ":00");
             LocalDateTime orgaDate = LocalDateTime.parse(orgaDeadlineDate + "T" + orgaDeadlineTime + ":00");
             if (orgaDate.isBefore(applicantDate)) {
                 LocalDateTime help = applicantDate;
