@@ -91,6 +91,9 @@ public class SetupController {
     public String postEditedModule(final KeycloakAuthenticationToken token, final Model model,
                                    @RequestParam("oldName") final String oldName,
                                    @Valid final WebModule module, final BindingResult bindingResult) {
+       webModuleService.generateErrorIfApplicantDeadlineAfterOrgaDeadline(module.getApplicantDeadlineDate(),
+               module.getApplicantDeadlineTime(), module.getOrgaDeadlineDate(), module.getOrgaDeadlineTime(),
+               bindingResult, "module");
         if (bindingResult.hasErrors()) {
             bindingResult.getAllErrors().forEach(err -> LOGGER.info("ERROR {}", err.getDefaultMessage()));
             model.addAttribute("oldName", oldName);
@@ -130,6 +133,9 @@ public class SetupController {
     @Secured("ROLE_setup")
     public String postNewModule(final KeycloakAuthenticationToken token, final Model model,
                                 @Valid final WebModule module, final BindingResult bindingResult) {
+        webModuleService.generateErrorIfApplicantDeadlineAfterOrgaDeadline(module.getApplicantDeadlineDate(),
+                module.getApplicantDeadlineTime(), module.getOrgaDeadlineDate(), module.getOrgaDeadlineTime(),
+                bindingResult, "Module");
         if (bindingResult.hasErrors()) {
             bindingResult.getAllErrors().forEach(err -> LOGGER.info("ERROR {}", err.getDefaultMessage()));
             if (token != null) {

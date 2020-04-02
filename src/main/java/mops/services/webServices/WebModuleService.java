@@ -4,8 +4,11 @@ import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebModule;
 import mops.services.dbServices.ModuleService;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,5 +125,45 @@ public class WebModuleService {
                 .nineHourLimit(webModule.getNineHourLimit())
                 .seventeenHourLimit(webModule.getSeventeenHourLimit())
                 .build();
+    }
+
+    /**
+     * Add an error to the binding result if applicant deadline is after orga deadline.
+     * @param applicantDeadlineDate date of the deadline for applications as entered by the setup user (YYYY-MM-DD)
+     * @param applicantDeadlineTime time of the deadline for applications as entered by the setup user (HH:MM)
+     * @param orgaDeadlineDate date of the deadline for reviewing applications as entered by the setup user (YYYY-MM-DD)
+     * @param orgaDeadlineTime time of the deadline for reviewing applications as entered by the setup user (HH:MM)
+     * @param bindingResult the binding result to be returned
+     * @param webModuleName name of the webModule to be added to the model
+     */
+    public void generateErrorIfApplicantDeadlineAfterOrgaDeadline(final String applicantDeadlineDate,
+                                                                  final String applicantDeadlineTime,
+                                                                  final String orgaDeadlineDate,
+                                                                  final String orgaDeadlineTime,
+                                                                  final BindingResult bindingResult,
+                                                                  final String webModuleName) {
+        LocalDateTime applicantDeadline;
+        LocalDateTime orgaDeadline;
+
+        try {
+            applicantDeadline = LocalDateTime.parse(applicantDeadlineDate + "T" + applicantDeadlineTime);
+        } catch (DateTimeParseException exception) {
+            bindingResult.addError(new FieldError(webModuleName, "applicantDeadlineDate",
+                    "Das Format der Bewerbungsfrist ist ungültig."));
+            return;
+        }
+
+        try {
+            orgaDeadline = LocalDateTime.parse(orgaDeadlineDate + "T" + orgaDeadlineTime);
+        } catch (DateTimeParseException exception) {
+            bindingResult.addError(new FieldError(webModuleName, "applicantDeadlineDate",
+                    "Das Format der Bearbeitungsfrist ist ungültig."));
+            return;
+        }
+
+        if (applicantDeadline.isAfter(orgaDeadline)) {
+            bindingResult.addError(new FieldError(webModuleName, "applicantDeadlineDate",
+                    "Die Bearbeitungsfrist darf nicht vor der Bewerbungsfrist sein."));
+        }
     }
 }
