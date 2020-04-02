@@ -54,6 +54,9 @@
             <li th:if="${account.roles.contains('setup')}"><a th:href="@{/bewerbung2/setup/}">Ersteller Übersicht</a></li>
             <li th:if="${account.roles.contains('studentin')}"><a th:href="@{/bewerbung2/bewerber/}">Bewerber Übersicht</a></li>
         </ul>
+        <ul>
+            <li> <a th:href="@{/bewerbung2/organisator/}">Dashboard</a></li>
+        </ul>
     </nav>
 </header>
 

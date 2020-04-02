@@ -80,7 +80,8 @@ public class OrgaController {
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             if (!token.getName().equals(moduleService.findById(Long.parseLong(id)).getProfSerial())
             || !webOrganizerService.checkForPhoneNumber(token.getName())
-            || moduleService.findById(Long.parseLong(id)).getOrgaDeadline().isBefore(LocalDateTime.now())) {
+            || moduleService.findById(Long.parseLong(id)).getOrgaDeadline().isBefore(LocalDateTime.now())
+            || LocalDateTime.now().isBefore(moduleService.findById(Long.parseLong(id)).getApplicantDeadline())) {
                 return "redirect:/bewerbung2/organisator/";
             }
             model.addAttribute("WebList", new WebListClass(orgaService.getAllListEntrys(id)));

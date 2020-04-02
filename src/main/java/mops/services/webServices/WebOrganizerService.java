@@ -41,7 +41,8 @@ public class WebOrganizerService {
     public List<Module> getOrganizerModulesByName(final String name) {
         List<Module> modules = new ArrayList<>();
         for (Module module : moduleService.getModules()) {
-            if (module.getProfSerial().equals(name) && LocalDateTime.now().isBefore(module.getOrgaDeadline())) {
+            if (module.getProfSerial().equals(name) && LocalDateTime.now().isBefore(module.getOrgaDeadline())
+            && module.getApplicantDeadline().isBefore(LocalDateTime.now())) {
                 modules.add(module);
             }
         }
