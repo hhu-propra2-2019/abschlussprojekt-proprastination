@@ -70,7 +70,7 @@
                         <div class="col">
                             <select required th:class="form-control" th:field="*{country}"
                                     th:id="country" th:name="country" th:value="${webAddress.country}">
-                                <option value="" disabled hidden>Wohnsitz</option>
+                                <option value="" selected hidden>Wohnsitz</option>
                                 <option th:each="country:${countries}" th:text="${country}"
                                         th:value="${country}"></option>
                             </select>
@@ -90,7 +90,7 @@
                         <div class="col-5">
                             <select name="nationality" id="nationality" class="form-control"
                                     th:field="*{nationality}" required>
-                                <option value="" disabled hidden>Nationalität</option>
+                                <option value="" selected hidden>Nationalität</option>
                                 <option th:each="country:${countries}" th:text="${country}" th:value="${country}"></option>
                             </select>
                             <div th:if="${#fields.hasErrors('nationality')}" class="text-danger">
@@ -113,7 +113,7 @@
                         <div class="col-2">
                             <select name="gender" id="gender" class="form-control"
                                     th:field="*{gender}" required>
-                                <option value="" disabled selected hidden>Geschlecht</option>
+                                <option value="" selected hidden>Geschlecht</option>
                                 <option th:value="male">männlich</option>
                                 <option th:value="female">weiblich</option>
                             </select>
