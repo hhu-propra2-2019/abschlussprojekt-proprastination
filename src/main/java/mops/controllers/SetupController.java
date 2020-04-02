@@ -102,6 +102,7 @@ public class SetupController {
             return "/setup/modulBearbeiten";
         }
         webModuleService.update(module, oldName);
+        LOGGER.debug("Updated Module " + oldName + " to module " + module.getName());
         return index(token, model);
     }
 
@@ -143,6 +144,8 @@ public class SetupController {
                 model.addAttribute("Module", WebModule.builder().build());
             }
             return "setup/neuesModul";
+        } else {
+            LOGGER.debug("Added Module " + module.getName());
         }
 
         webModuleService.save(module);
@@ -163,6 +166,7 @@ public class SetupController {
         model.addAttribute("oldName", oldModule.getName());
         model.addAttribute("module", oldModule);
         model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
+        LOGGER.debug("Updated Module " + oldModule.getName());
         return "/setup/modulBearbeiten";
     }
 
@@ -178,6 +182,7 @@ public class SetupController {
     public String postDeleteModule(final KeycloakAuthenticationToken token, final Model model,
                                 @RequestParam("nameDelete") final String name) {
         webModuleService.deleteOne(name);
+        LOGGER.debug("Removed Module " + name);
         return index(token, model);
     }
 
@@ -191,6 +196,7 @@ public class SetupController {
     @Secured("ROLE_setup")
     public String postDeleteAllModule(final KeycloakAuthenticationToken token, final Model model) {
         webModuleService.deleteAll();
+        LOGGER.debug("Removed all Modules");
         return index(token, model);
     }
 
@@ -248,6 +254,7 @@ public class SetupController {
             Account account = AccountGenerator.createAccountFromPrincipal(token);
             attributes.addFlashAttribute("message", deletionService.deleteModule(module, account));
         }
+        LOGGER.debug("Removed Module " + module);
         return new RedirectView("loeschen", true);
     }
 
@@ -267,6 +274,7 @@ public class SetupController {
             Account account = AccountGenerator.createAccountFromPrincipal(token);
             attributes.addFlashAttribute("message", deletionService.deleteApplicant(applicant, account));
         }
+        LOGGER.debug("Removed Applicant with uniserial " + applicant);
         return new RedirectView("loeschen", true);
     }
 
@@ -287,6 +295,7 @@ public class SetupController {
             Account account = AccountGenerator.createAccountFromPrincipal(token);
             attributes.addFlashAttribute("message", deletionService.deleteApplication(application, account));
         }
+        LOGGER.debug("Removed application with id " + application);
         return new RedirectView("loeschen", true);
     }
 

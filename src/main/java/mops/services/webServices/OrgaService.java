@@ -4,9 +4,9 @@ import mops.model.classes.Applicant;
 import mops.model.classes.Application;
 import mops.model.classes.Evaluation;
 import mops.model.classes.Priority;
-import mops.model.classes.orgaWebClasses.WebList;
-import mops.model.classes.orgaWebClasses.OrgaApplication;
-import mops.model.classes.orgaWebClasses.WebListClass;
+import mops.model.classes.webclasses.WebList;
+import mops.model.classes.webclasses.OrgaApplication;
+import mops.model.classes.webclasses.WebListClass;
 import mops.services.dbServices.ApplicantService;
 import mops.services.dbServices.ApplicationService;
 import mops.services.dbServices.EvaluationService;
@@ -92,7 +92,7 @@ public class OrgaService {
      * @param id module id.
      * @return Lst of WebList applications.
      */
-    public List<WebList> getAllListEntrys(final String id) {
+    public List<WebList> getAllListEntries(final String id) {
         return wrapListObjects(applicationService.findAllByModuleId(Long.parseLong(id)));
     }
 
