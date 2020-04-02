@@ -11,6 +11,7 @@ import org.keycloak.KeycloakSecurityContext;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.keycloak.representations.IDToken;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,18 +40,26 @@ class WebOrganizerServiceTest {
 
         Module correctProfessor1 = mock(Module.class);
         when(correctProfessor1.getProfSerial()).thenReturn("neo001");
+        when(correctProfessor1.getApplicantDeadline()).thenReturn(LocalDateTime.MIN);
+        when(correctProfessor1.getOrgaDeadline()).thenReturn(LocalDateTime.MAX);
         modules.add(correctProfessor1);
 
         Module incorrectProfessor1 = mock(Module.class);
         when(incorrectProfessor1.getProfSerial()).thenReturn("jabon007");
+        when(incorrectProfessor1.getApplicantDeadline()).thenReturn(LocalDateTime.MIN);
+        when(incorrectProfessor1.getOrgaDeadline()).thenReturn(LocalDateTime.MAX);
         modules.add(incorrectProfessor1);
 
         Module correctProfessor2 = mock(Module.class);
         when(correctProfessor2.getProfSerial()).thenReturn("neo001");
+        when(correctProfessor2.getApplicantDeadline()).thenReturn(LocalDateTime.MIN);
+        when(correctProfessor2.getOrgaDeadline()).thenReturn(LocalDateTime.MAX);
         modules.add(correctProfessor2);
 
         Module incorrectProfessor2 = mock(Module.class);
         when(incorrectProfessor2.getProfSerial()).thenReturn("random000");
+        when(incorrectProfessor2.getApplicantDeadline()).thenReturn(LocalDateTime.MIN);
+        when(incorrectProfessor2.getOrgaDeadline()).thenReturn(LocalDateTime.MAX);
         modules.add(incorrectProfessor2);
 
         List<Module> result = webOrganizerService.getOrganizerModulesByName("neo001");
