@@ -21,8 +21,8 @@
         </ul>
         <ul>
             <li><a th:href="@{/}">Startseite</a></li>
-            <li><a th:href="@{neueBewerbung}">Neue Bewerbungen</a></li>
-            <li><a th:href="@{bewerbungsUebersicht}">Offene Bewerbungen</a></li>
+            <li><a th:href="@{neueBewerbung}">Bewerbungen hinzufügen</a></li>
+            <li><a th:href="@{bewerbungsUebersicht}">Meine Bewerbungen</a></li>
         </ul>
     </nav>
 </header>
@@ -30,14 +30,14 @@
     <div class="card-deck">
         <div class="card bg-light mb-3 border-primary">
             <div class="card-header d-flex justify-content-start align-items-start">
-                <h3 class="col">Neue Bewerbungen</h3>
+                <h3 class="col">Bewerbungen hinzufügen</h3>
             </div>
             <div class="card-body flex-column h-100">
                 <p class="card-text">Hier können Sie neue Bewerbungen für Module ausfüllen
                     und abschicken. Diese werden nach Ablauf der Frist weitergeleitet und Sie
                     werden per Post über das ergebniss benachrichtigt. Blablabla hier fehlt noch Text.</p>
                 <div class="text-center">
-                    <a th:href="@{neueBewerbung}" class="btn btn-outline-primary">Neue Bewerbung</a>
+                    <a th:href="@{neueBewerbung}" class="btn btn-outline-primary">Bewerbungen hinzufügen</a>
                 </div>
             </div>
         </div>
