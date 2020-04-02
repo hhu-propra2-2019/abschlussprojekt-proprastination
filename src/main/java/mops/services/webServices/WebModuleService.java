@@ -156,7 +156,7 @@ public class WebModuleService {
         try {
             orgaDeadline = LocalDateTime.parse(orgaDeadlineDate + "T" + orgaDeadlineTime);
         } catch (DateTimeParseException exception) {
-            bindingResult.addError(new FieldError(webModuleName, "applicantDeadlineDate",
+            bindingResult.addError(new FieldError(webModuleName, "orgaDeadlineDate",
                     "Das Format der Bearbeitungsfrist ist ungültig."));
             return;
         }
