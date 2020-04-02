@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -141,8 +142,25 @@ public class WebModuleService {
                                                                   final String orgaDeadlineTime,
                                                                   final BindingResult bindingResult,
                                                                   final String webModuleName) {
-        LocalDateTime applicantDeadline = LocalDateTime.parse(applicantDeadlineDate + "T" + applicantDeadlineTime);
-        LocalDateTime orgaDeadline = LocalDateTime.parse(orgaDeadlineDate + "T" + orgaDeadlineTime);
+        LocalDateTime applicantDeadline;
+        LocalDateTime orgaDeadline;
+
+        try {
+            applicantDeadline = LocalDateTime.parse(applicantDeadlineDate + "T" + applicantDeadlineTime);
+        } catch (DateTimeParseException exception) {
+            bindingResult.addError(new FieldError(webModuleName, "applicantDeadlineDate",
+                    "Das Format der Bewerbungsfrist ist ungültig."));
+            return;
+        }
+
+        try {
+            orgaDeadline = LocalDateTime.parse(orgaDeadlineDate + "T" + orgaDeadlineTime);
+        } catch (DateTimeParseException exception) {
+            bindingResult.addError(new FieldError(webModuleName, "applicantDeadlineDate",
+                    "Das Format der Bearbeitungsfrist ist ungültig."));
+            return;
+        }
+
         if (applicantDeadline.isAfter(orgaDeadline)) {
             bindingResult.addError(new FieldError(webModuleName, "applicantDeadlineDate",
                     "Die Bearbeitungsfrist darf nicht vor der Bewerbungsfrist sein."));
