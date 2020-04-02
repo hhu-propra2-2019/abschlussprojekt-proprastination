@@ -1,6 +1,6 @@
 package mops.controllers;
 
-import mops.model.classes.orgaWebClasses.WebListClass;
+import mops.model.classes.webclasses.WebListClass;
 import mops.services.webServices.OrgaService;
 import mops.services.dbServices.ModuleService;
 import mops.services.webServices.AccountGenerator;

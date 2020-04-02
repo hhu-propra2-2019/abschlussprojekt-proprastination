@@ -2,9 +2,9 @@ package mops.services.webServices;
 
 import mops.model.classes.*;
 import mops.model.classes.Module;
-import mops.model.classes.orgaWebClasses.OrgaApplication;
-import mops.model.classes.orgaWebClasses.WebList;
-import mops.model.classes.orgaWebClasses.WebListClass;
+import mops.model.classes.webclasses.OrgaApplication;
+import mops.model.classes.webclasses.WebList;
+import mops.model.classes.webclasses.WebListClass;
 import mops.services.dbServices.ApplicantService;
 import mops.services.dbServices.ApplicationService;
 import mops.services.dbServices.EvaluationService;

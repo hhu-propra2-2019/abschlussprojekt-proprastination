@@ -1,4 +1,4 @@
-package mops.model.classes.orgaWebClasses;
+package mops.model.classes.webclasses;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
