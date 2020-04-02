@@ -128,19 +128,23 @@ public class WebModuleService {
 
     /**
      * Add an error to the binding result if applicant deadline is after orga deadline.
-     * @param webModule
-     * @param bindingResult
-     * @param webModule2
+     * @param applicantDeadlineDate date of the deadline for applications as entered by the setup user (YYYY-MM-DD)
+     * @param applicantDeadlineTime time of the deadline for applications as entered by the setup user (HH:MM)
+     * @param orgaDeadlineDate date of the deadline for reviewing applications as entered by the setup user (YYYY-MM-DD)
+     * @param orgaDeadlineTime time of the deadline for reviewing applications as entered by the setup user (HH:MM)
+     * @param bindingResult the binding result to be returned
+     * @param webModuleName name of the webModule to be added to the model
      */
-    public void generateErrorIfApplicantDeadlineAfterOrgaDeadline(final WebModule webModule,
+    public void generateErrorIfApplicantDeadlineAfterOrgaDeadline(final String applicantDeadlineDate,
+                                                                  final String applicantDeadlineTime,
+                                                                  final String orgaDeadlineDate,
+                                                                  final String orgaDeadlineTime,
                                                                   final BindingResult bindingResult,
-                                                                  final String webModule2) {
-        LocalDateTime applicantDeadline = LocalDateTime.parse(webModule.getApplicantDeadlineDate()
-                + "T" + webModule.getApplicantDeadlineTime());
-        LocalDateTime orgaDeadline = LocalDateTime.parse(webModule.getOrgaDeadlineDate()
-                + "T" + webModule.getOrgaDeadlineTime());
+                                                                  final String webModuleName) {
+        LocalDateTime applicantDeadline = LocalDateTime.parse(applicantDeadlineDate + "T" + applicantDeadlineTime);
+        LocalDateTime orgaDeadline = LocalDateTime.parse(orgaDeadlineDate + "T" + orgaDeadlineTime);
         if (applicantDeadline.isAfter(orgaDeadline)) {
-            bindingResult.addError(new FieldError(webModule2, "applicantDeadlineDate",
+            bindingResult.addError(new FieldError(webModuleName, "applicantDeadlineDate",
                     "Die Bearbeitungsfrist darf nicht vor der Bewerbungsfrist sein."));
         }
     }
