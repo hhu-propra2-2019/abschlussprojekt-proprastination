@@ -115,7 +115,7 @@
                                 <option th:value="17">17 Stunden</option>
                             </select>
                         </td>
-                        <td class="text-center" th:text="${appl.firstName + ' ' + appl.surname}">Mamus100</td>
+                        <td th:attr="data-order=${appl.surname}" class="text-center" th:text="${appl.firstName + ' ' + appl.surname}">Mamus100</td>
                         <td class="text-center">
                             <button class="btn btn-outline-dark openBtn" data-target="#applicationModal"
                                     data-toggle="modal"
