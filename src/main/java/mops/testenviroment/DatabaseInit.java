@@ -393,6 +393,17 @@ public class DatabaseInit implements ServletContextInitializer {
             String orgaDeadlineTime = deadlineTimePattern.format(faker.date().future(300, 30, TimeUnit.DAYS));
             LocalDateTime applicantDate = LocalDateTime.parse(applicantDeadlineDate + "T" + applicantDeadlineTime + ":00");
             LocalDateTime orgaDate = LocalDateTime.parse(orgaDeadlineDate + "T" + orgaDeadlineTime + ":00");
+            if (orgaDate.isBefore(applicantDate)) {
+                LocalDateTime help = applicantDate;
+                String helpTime = applicantDeadlineTime;
+                String helpDate = applicantDeadlineDate;
+                applicantDeadlineTime = orgaDeadlineTime;
+                applicantDeadlineDate = orgaDeadlineDate;
+                applicantDate = orgaDate;
+                orgaDeadlineTime = helpTime;
+                orgaDeadlineDate = helpDate;
+                orgaDate = help;
+            }
             Module module = Module.builder()
                     .name(modulenames[i])
                     .shortName(shortNames[i])
