@@ -102,7 +102,7 @@
                                 </div>
                                 <form th:action="@{/bewerbung2/organisator/}" th:method="POST">
                                     <div class="modal-body">
-                                        <input autofocus type="text" name="phone" id="phone" class="form-control" placeholder="Telefonnummer">
+                                        <input autofocus onfocus="this.select();" type="text" name="phone" id="phone" class="form-control" th:value="${organizer.phonenumber} == '' ? '' : ${organizer.phonenumber}" placeholder="Telefonnummer">
                                     </div>
                                     <div class="modal-footer">
                                         <button class="btn btn-outline-primary" type="submit"> Speichern </button>
