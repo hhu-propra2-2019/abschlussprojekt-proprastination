@@ -333,25 +333,33 @@ public class DistributionService {
     public void moveApplicant(final String applicantId, final String distributionId) {
         Optional<Distribution> newDistribution = dbDistributionService.findById(Long.parseLong(distributionId));
         Applicant applicant = applicantService.findById(Long.parseLong(applicantId));
-        for (Application application : applicant.getApplications()) {
-            if ("-1".equals(distributionId)) {
-                for (Distribution distribution : dbDistributionService.findAll()) {
-                    distribution.getEmployees().remove(applicant);
-                    dbDistributionService.save(distribution);
-                }
-            } else {
-                if (newDistribution.isPresent()) {
-                    if (application.getModule().equals(newDistribution.get().getModule())) {
-                        for (Distribution distribution : dbDistributionService.findAll()) {
-                            distribution.getEmployees().remove(applicant);
-                            dbDistributionService.save(distribution);
-                        }
-                        newDistribution.get().getEmployees().add(applicant);
-                        dbDistributionService.save(newDistribution.get());
-                    }
-                }
+
+        if (newDistribution.isPresent()) {
+            Optional<Application> validApplication = applicant.getApplications().parallelStream()
+                    .filter(
+                            application -> application.getModule().equals(newDistribution.get().getModule())
+                    ).findAny();
+            if (validApplication.isEmpty()) {
+                return;
             }
         }
+        List<Distribution> distributionList = dbDistributionService.findAll();
+
+        Optional<Distribution> oldDistribution = distributionList
+                .parallelStream()
+                .filter(
+                        distribution -> distribution.getEmployees().contains(applicant)
+                ).findFirst();
+
+        oldDistribution.ifPresent(oldDist -> {
+            oldDist.getEmployees().remove(applicant);
+            dbDistributionService.save(oldDist);
+        });
+
+        newDistribution.ifPresent(newDist -> {
+            newDist.getEmployees().add(applicant);
+            dbDistributionService.save(newDist);
+        });
     }
 
     /**
