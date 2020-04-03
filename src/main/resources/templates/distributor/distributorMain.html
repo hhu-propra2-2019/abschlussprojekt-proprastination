@@ -19,19 +19,6 @@
                 background-color: rgba(108, 179, 255, 0.51);
             }
         </style>
-        <style>
-            /* Chrome, Safari, Edge, Opera */
-            input::-webkit-outer-spin-button,
-            input::-webkit-inner-spin-button {
-                -webkit-appearance: none;
-                margin: 0;
-            }
-
-            /* Firefox */
-            input[type=number] {
-                -moz-appearance: textfield;
-            }
-        </style>
     </th:block>
 </head>
 <body>
@@ -238,30 +225,6 @@
                 }
             });
             location.reload();
-        }
-
-    </script>
-    <script>
-
-        function saveHoursEnter(ev, el) {
-            if (event.which === 13) {
-                el.blur();
-                var hours = el.value;
-                var applicantId = el.dataset.applicantid;
-                var distributionId = el.dataset.distributionid;
-
-                $.ajax({
-                    async: false,
-                    method: 'GET',
-                    url: "/bewerbung2/verteiler/saveHours/",
-                    data: {
-                        distributionId: distributionId,
-                        applicantId: applicantId,
-                        hours: hours
-                    }
-                });
-                location.reload();
-            }
         }
 
     </script>
