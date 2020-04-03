@@ -83,18 +83,23 @@
                 <div class="card-body" th:id="drop + ${distribution.id}" th:attr="data-distributionid=${distribution.id}" ondrop="drop(event, this)" ondragover="allowDrop(event)">
                     <div th:each="applicant: ${distribution.webDistributorApplicants}">
                         <div class="card w-100 bg-light mb-1 border-primary" th:id="drag + ${applicant.id}" id="drag1"  th:attr="data-applicantId=${applicant.id}" draggable="true" ondragstart="drag(event)">
-                            <div class="card-header " th:classappend="${applicant.checked} ? 'doneBackground'">
+                            <div class="card-header" th:classappend="${applicant.checked} ? 'doneBackground'">
                                 <div class="row h-100">
                                     <div class="col-1 text-left my-auto">
-                                        <input type="checkbox" th:checked="${applicant.checked}" th:attr="data-applicantId=${applicant.id}" onclick="saveChecked(this)">
+                                        <input class="h-100 my-auto" type="checkbox" th:checked="${applicant.checked}" th:attr="data-applicantId=${applicant.id}" onclick="saveChecked(this)">
                                     </div>
-                                    <div class="col-5 text-left my-auto">
+                                    <div class="col-4 text-left my-auto">
                                         <button class="btn" data-toggle="collapse" th:attr="data-target='#collapse'+${applicant.id}, data-applicantId=${applicant.id}" data-target="#collapse1"
-                                                aria-expanded="false" th:text="'[' + ${applicant.type} + '] ' + ${applicant.fullName}" onclick="saveCollapsed(this)">
+                                                aria-expanded="false" th:text="${applicant.fullName}" onclick="saveCollapsed(this)">
                                             Mamus100
                                         </button>
                                     </div>
-                                    <div class="col-4 text-left my-auto">
+                                    <div class="col-1 text-left my-auto">
+                                        <label class="h-100 my-auto" th:text="${applicant.type}">
+                                            SHK
+                                        </label>
+                                    </div>
+                                    <div class="col-4 text-right my-auto">
                                         <select th:if="${applicant.distributorHours} != '0'" th:attr="data-distributionId=${distribution.id}, data-applicantId=${applicant.id}" onchange="saveHours(this)">
                                             <option value="7" th:selected="${applicant.distributorHours} == '7'">7 Stunden</option>
                                             <option value="9" th:selected="${applicant.distributorHours} == '9'">9 Stunden</option>
