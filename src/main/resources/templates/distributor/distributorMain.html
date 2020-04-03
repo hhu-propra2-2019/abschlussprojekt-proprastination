@@ -6,7 +6,6 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
-    <meta name="turbolinks-cache-control" content="no-preview">
     <title>Name des Subsystems</title>
     <th:block th:fragment="headcontent">
         <!-- Links, Skripts, Styles hier einfügen! -->
@@ -14,7 +13,6 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="/turbolinks.js"></script>
         <script src="/jquery.dnd_page_scroll.js"></script>
         <style>
             .doneBackground{
@@ -305,36 +303,6 @@
                 }
             });
         }
-
-    </script>
-    <script>
-
-        var reloadWithTurbolinks = (function () {
-            var scrollPosition;
-
-            function reload () {
-                scrollPosition = [localStorage.scrollX = window.scrollX, localStorage.scrollY = window.scrollY];
-                Turbolinks.visit(window.location.toString(), { action: 'replace' })
-            }
-
-            document.addEventListener('turbolinks:load', function () {
-                if (scrollPosition) {
-                    window.scrollTo.apply(window, scrollPosition);
-                    scrollPosition = null;
-                    $().dndPageScroll();
-                }
-            });
-
-            return reload
-        })()
-
-    </script>
-    <script>
-
-        window.addEventListener('scroll', function () {
-            localStorage.scrollX = window.scrollX;
-            localStorage.scrollY = window.scrollY;
-        })
 
     </script>
 </main>
