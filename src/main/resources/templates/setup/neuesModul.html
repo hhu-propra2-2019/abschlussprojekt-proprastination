@@ -41,6 +41,8 @@
                     <h2 style="margin-bottom: .0rem" class="card-text col-6 float-left">Neues Modul</h2>
                     <div class="col-6">
                         <button class="btn btn-outline-primary btn-sm float-right" th:type="submit">Speichern</button>
+                        <button class="btn btn-outline-primary btn-sm float-right" th:href="@{/bewerbung2/setup}">
+                            Zurück</button>
                     </div>
                 </div>
             </div>
@@ -53,7 +55,7 @@
                                     <input id="oldName" name="oldName" type="hidden" th:value="*{name}">
                                     <label for="name">Modulname</label><br>
                                     <input type="text" name="name" id="name"
-                                           th:value="*{name}" th:placeholder="*{name}" th:field="*{name}">
+                                           th:value="*{name}" th:placeholder="*{name}" th:field="*{name}" required>
                                 </div>
                             </div>
                         </div>
@@ -62,7 +64,9 @@
                                 <div>
                                     <label for="shortName">Kurzform des Moduls</label><br>
                                     <input type="text" name="shortName" id="shortName"
-                                           th:value="*{shortName}" th:placeholder="*{shortName}" th:field="*{shortName}">
+                                           th:value="*{shortName}" th:placeholder="*{shortName}" th:field="*{shortName}"
+                                           required
+                                    >
                                 </div>
                             </div>
                         </div>
@@ -71,7 +75,9 @@
                                 <div>
                                     <label for="profSerial">Zugeordnete Person (Unikennung)</label><br>
                                     <input type="text" name="profSeriale" id="profSerial"
-                                           th:value="*{profSerial}" th:placeholder="*{profSerial}" th:field="*{profSerial}">
+                                           th:value="*{profSerial}" th:placeholder="*{profSerial}" th:field="*{profSerial}"
+                                           required
+                                    >
                                 </div>
                             </div>
                         </div>
@@ -83,7 +89,8 @@
                             <div class="row form-group">
                                 <div>
                                     <script>minimumDate1();</script>
-                                    <label for="applicantDeadlineDate">Bewerbungsfrist</label><br>
+                                    <label for="applicantDeadlineDate">Bewerbungsfrist - Geben Sie die Frist an, an<br> der
+                                    die Bewerbung endgültig abgesendet wird<br><br></label><br>
                                     <input type="text" name="applicantDeadlineDate" id="applicantDeadlineDate" onfocus="(this.type='date')"
                                            th:field="*{applicantDeadlineDate}" th:attr="value = *{applicantDeadlineDate}" onclick="minimumDate1()"
                                            onblur="(this.type='text')" class="form-control" placeholder="2020-01-01"
@@ -98,7 +105,8 @@
                             <div class="row form-group">
                                 <div>
                                     <script>minimumDate2();</script>
-                                    <label for="orgaDeadlineDate">Bearbeitungsfrist</label>
+                                    <label for="orgaDeadlineDate">Bearbeitungsfrist - Geben Sie die Frist an, an der
+                                    der Organisator seine Auswahl engültig bestätigt hat</label>
                                     <input type="text" name="orgaDeadlineDate" id="orgaDeadlineDate" onfocus="(this.type='date')"
                                            th:field="*{orgaDeadlineDate}" th:attr="value = *{orgaDeadlineDate}" onclick="minimumDate2()"
                                            onblur="(this.type='text')" class="form-control" placeholder="2020-12-31"
@@ -120,7 +128,9 @@
                                     <input type="text" name="applicantDeadlineTime" id="applicantDeadlineTime" onfocus="(this.type='time')"
                                            th:field="*{applicantDeadlineTime}" th:attr="value = *{applicantDeadlineTime}"
                                            onblur="(this.type='text')" class="form-control" placeholder="23:58"
-                                           required pattern="(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9])" min="">
+                                           required pattern="(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9])" min=""
+                                           value="23:58"
+                                    >
                                     <div th:if="${#fields.hasErrors('applicantDeadlineTime')}" class="text-danger">
                                         Bitte geben Sie eine gültige Zeit für die Bewerbungsfrist an.
                                     </div>
@@ -134,7 +144,9 @@
                                     <input type="text" name="orgaDeadlineTime" id="orgaDeadlineTime" onfocus="(this.type='time')"
                                            th:field="*{orgaDeadlineTime}" th:attr="value = *{orgaDeadlineTime}"
                                            onblur="(this.type='text')" class="form-control" placeholder="23:59"
-                                           required pattern="(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9])" min="">
+                                           required pattern="(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9])" min=""
+                                           value="23:59"
+                                    >
                                     <div th:if="${#fields.hasErrors('orgaDeadlineTime')}" class="text-danger">
                                         Bitte geben Sie eine gültige Zeit für die Bewerbungsfrist an.
                                     </div>
