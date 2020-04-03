@@ -178,8 +178,9 @@
                             <div class="col-6">
                                 <select class="form-control" th:attr="value = ${webCertificate.graduation}"
                                         th:field="*{graduation}"
-                                        th:id="name" th:name="graduation">
-                                    <option th:value="keins">kein Universitätsabschluss</option>
+                                        th:id="graduation" th:name="graduation"
+                                        onchange="toggleGraduationSubject()">
+                                    <option th:value="Keins">kein Universitätsabschluss</option>
                                     <option th:value="Bachelor">Bachelor</option>
                                     <option th:value="Master">Master</option>
                                     <option th:value="Diplom">Diplom</option>
@@ -227,6 +228,14 @@
     </div>
     </form>
     </div>
+    <script>
+        function toggleGraduationSubject() {
+            document.getElementById("graduationsubject").disabled
+                = document.getElementById("graduation").value === "Keins";
+        }
+
+        document.addEventListener('DOMContentLoaded', toggleGraduationSubject, false);
+    </script>
 </main>
 </body>
 </html>
