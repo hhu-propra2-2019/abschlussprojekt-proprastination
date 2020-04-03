@@ -104,10 +104,11 @@
                                         </button>
                                     </div>
                                     <div class="col-4">
-                                        <div>
-                                            <input type="number" min="0" onfocus="this.select();" id="textfield" size="1" th:value="${applicant.distributorHours}" th:attr="data-distributionId=${distribution.id}, data-applicantId=${applicant.id}" onblur="saveHours(this)" onkeyup="saveHoursEnter(event, this)">
-                                            <label>Stunden</label>
-                                        </div>
+                                        <select th:if="${applicant.distributorHours} != '0'" th:attr="data-distributionId=${distribution.id}, data-applicantId=${applicant.id}" onchange="saveHours(this)">
+                                            <option value="7" th:selected="${applicant.distributorHours} == '7'">7 Stunden</option>
+                                            <option value="9" th:selected="${applicant.distributorHours} == '9'">9 Stunden</option>
+                                            <option value="17" th:selected="${applicant.distributorHours} == '17'">17 Stunden</option>
+                                        </select>
                                     </div>
                                     <div class="col-1 text-right">
                                         <input type="checkbox" th:checked="${applicant.checked}" th:attr="data-applicantId=${applicant.id}" onclick="saveChecked(this)">
