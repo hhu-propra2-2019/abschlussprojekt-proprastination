@@ -115,9 +115,7 @@ public class ApplicationController {
     @GetMapping("/weiterZuModulen")
     @Secured("ROLE_studentin")
     public String skipPersonal(final KeycloakAuthenticationToken token, final Model model) {
-        if (token != null) {
-            model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
-        }
+        model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
         Applicant applicant = applicantService.findByUniserial(token.getName());
         List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
 
