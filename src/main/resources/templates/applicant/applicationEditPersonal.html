@@ -96,6 +96,7 @@
                             <input class="form-control" id="birthday" name="birthday" onblur="(this.type='text')"
                                    onfocus="(this.type='date')" placeholder="Geburtstag"
                                    required th:attr="value = ${webApplicant.birthday}" th:field="*{birthday}"
+                                   pattern="[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])"
                                    type="text">
                             <div th:if="${#fields.hasErrors('birthday')}" class="text-danger">
                                 Bitte geben Sie ein gültiges Geburtsdatum an.
