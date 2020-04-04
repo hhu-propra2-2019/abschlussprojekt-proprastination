@@ -1,5 +1,6 @@
 package mops.controllers;
 
+import mops.model.classes.webclasses.DownloadProgress;
 import mops.services.dbServices.DbDistributionService;
 import mops.services.logicServices.DistributionService;
 import mops.services.dbServices.ModuleService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
@@ -33,6 +35,7 @@ public class PDFController {
     private final DistributionService distributionService;
     private final DbDistributionService dbDistributionService;
     private final WebPdfService webPdfService;
+    private DownloadProgress downloadProgress;
 
     /**
      * Initiates PDF Controller
@@ -54,6 +57,7 @@ public class PDFController {
         this.distributionService = distributionService;
         this.dbDistributionService = dbDistributionService;
         this.webPdfService = webPdfService;
+        this.downloadProgress = new DownloadProgress();
     }
 
     /**
@@ -69,7 +73,7 @@ public class PDFController {
         model.addAttribute("verteilt", distributionService.getSize());
         model.addAttribute("modules", moduleService.getModuleNames());
         model.addAttribute("modulesStudent", moduleService.getModuleNames());
-        return "pdfhandling";
+        return "pdf/pdfhandling";
     }
 
     /**
@@ -88,7 +92,7 @@ public class PDFController {
         model.addAttribute("module", module);
         model.addAttribute("applicants", webApplicationService.getApplicantUniserialsByModule(module));
 
-        return "pdfhandlingapplicant";
+        return "pdf/pdfhandlingapplicant";
     }
 
     /**
@@ -121,7 +125,6 @@ public class PDFController {
     public String downloadModule(@RequestParam("modules") final String module) {
         return webPdfService.getDownloadRedirectOfModule(module);
     }
-
     /**
      * download all applications
      *
@@ -151,7 +154,7 @@ public class PDFController {
             model.addAttribute("modules", moduleService.getModuleNames());
             model.addAttribute("modulesStudent", moduleService.getModuleNames());
         }
-        return "pdfhandlingdistribution";
+        return "pdf/pdfhandlingdistribution";
     }
 
     /**
@@ -168,9 +171,10 @@ public class PDFController {
 
         model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
         model.addAttribute("module", module);
-        model.addAttribute("applicants", webApplicationService.getApplicantUniserialsByModule(module));
+        model.addAttribute("applicants",
+                dbDistributionService.findByModule(moduleService.findModuleByName(module)).getEmployees());
 
-        return "pdfhandlingapplicant";
+        return "pdf/pdfhandlingapplicantAssigned";
     }
 
     /**
@@ -201,7 +205,7 @@ public class PDFController {
                                          final RedirectAttributes attributes,
                                          @RequestParam("email") final String eMail) {
         if (token != null) {
-            webPdfService.sendEmail(token, attributes, eMail);
+            webPdfService.sendEmail(token, attributes, eMail, downloadProgress);
         }
         return new RedirectView("zuteilungUebersicht", true);
     }
@@ -240,13 +244,35 @@ public class PDFController {
      */
     @Secured({"ROLE_verteiler", "ROLE_orga"})
     @RequestMapping(value = "zipModuleDownload", method = RequestMethod.GET)
-    public void zipSystemResource(
+    public void zipModuleDownload(
             @RequestParam(value = "module") final String module,
             final KeycloakAuthenticationToken token, final Model model,
             final HttpServletResponse response) throws IOException, NoSuchElementException {
         if (token != null) {
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
-            webPdfService.generateSingleZip(module, response);
+            webPdfService.generateSingleZip(module, response, downloadProgress);
+        } else {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+        }
+    }
+
+    /**
+     * Downloads all applications for a module
+     *
+     * @param module   module
+     * @param token    token
+     * @param model    model
+     * @param response HttpResponse
+     */
+    @Secured({"ROLE_verteiler", "ROLE_orga"})
+    @RequestMapping(value = "/zipModuleDownloadAssigned", method = RequestMethod.POST)
+    public void zipDownloadAssignedModule(
+            @RequestParam(value = "modules") final String module,
+            final KeycloakAuthenticationToken token, final Model model,
+            final HttpServletResponse response) throws IOException, NoSuchElementException {
+        if (token != null) {
+            model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
+            webPdfService.generateZipForModuleAssigned(response, module, downloadProgress);
         } else {
             response.sendError(HttpServletResponse.SC_FORBIDDEN);
         }
@@ -267,7 +293,7 @@ public class PDFController {
 
         if (token != null) {
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
-            webPdfService.generateMultipleZip(response);
+            webPdfService.generateZipForModuleUnassigned(response, downloadProgress);
         } else {
             response.sendError(HttpServletResponse.SC_FORBIDDEN);
         }
@@ -287,9 +313,25 @@ public class PDFController {
             final HttpServletResponse response) throws IOException, NoSuchElementException {
         if (token != null) {
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
-            webPdfService.generateMultipleZipForAssigned(response);
+            webPdfService.generateZipForAllAssigned(response, downloadProgress);
         } else {
             response.sendError(HttpServletResponse.SC_FORBIDDEN);
         }
+    }
+
+    /**
+     * REST Response to downloadstatus of user download.
+     *
+     * @param token keycloaktoken.
+     * @return Progress.
+     */
+    @ResponseBody
+    @Secured("ROLE_verteiler")
+    @GetMapping("/progress")
+    public DownloadProgress getProgress(final KeycloakAuthenticationToken token) {
+        if (token != null) {
+            return downloadProgress;
+        }
+        return new DownloadProgress();
     }
 }

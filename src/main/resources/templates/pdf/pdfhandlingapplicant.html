@@ -28,7 +28,7 @@
         </ul>
         <ul>
             <li><a th:href="@{/}">Startseite</a></li>
-            <li><a th:href="@{./}">Übersicht</a></li>
+            <li><a th:href="@{./uebersicht}">Übersicht</a></li>
         </ul>
     </nav>
 </header>
@@ -47,7 +47,10 @@
                     <input th:type="hidden" th:name="module" th:id="module" th:value="${module}">
                     <label th:for="applicants">Suchen Sie hier den Studenten aus!</label><br>
                     <select th:name="applicants" th:id="applicants" class="form-control">
-                        <option th:each="applicant : ${applicants}" th:value="${applicant}" th:text="${applicant}">Bewerber a</option>
+                        <option th:each="applicant : ${applicants}"
+                                th:text="${applicant.firstName + ' ' + applicant.surname}"
+                                th:value="${applicant.uniserial}">Bewerber a
+                        </option>
                     </select>
                 </div>
                 <br>

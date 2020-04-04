@@ -93,17 +93,16 @@ public class WebApplicationService {
 
     /**
      * -
+     *
      * @param module
      * @return -
      */
-    public List<String> getApplicantUniserialsByModule(final String module) {
+    public List<Applicant> getApplicantUniserialsByModule(final String module) {
         return applicationService.
                 findApplicationsByModule(moduleService
                         .findModuleByName(module))
                 .stream()
-                .map(application -> applicantService
-                        .findByApplications(application)
-                        .getUniserial())
+                .map(applicantService::findByApplications)
                 .collect(Collectors.toList());
     }
 
