@@ -4,6 +4,7 @@ import mops.model.classes.Applicant;
 import mops.model.classes.Application;
 import mops.model.classes.Module;
 import mops.model.classes.Organizer;
+import mops.model.classes.webclasses.DownloadProgress;
 import mops.services.EMailService;
 import mops.services.PDFService;
 import mops.services.ZIPService;
@@ -84,17 +85,20 @@ public class WebPdfService {
 
     /**
      * -
-     * @param token keycloak
-     * @param attributes redirect
-     * @param eMail email
+     *
+     * @param token            keycloak
+     * @param attributes       redirect
+     * @param eMail            email
+     * @param downloadProgress Progress
      */
     public void sendEmail(final KeycloakAuthenticationToken token,
-                          final RedirectAttributes attributes, final String eMail) {
+                          final RedirectAttributes attributes, final String eMail,
+                          final DownloadProgress downloadProgress) {
         attributes.addFlashAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
         String message;
         String type;
         try {
-            File file = zipService.getZipFileForAllDistributions();
+            File file = zipService.getZipFileForAllDistributions(downloadProgress);
             eMailService.sendEmailToRecipient(eMail, file);
             message = "Die Email wurde erfolgreich versendet";
             type = "success";
@@ -102,6 +106,7 @@ public class WebPdfService {
             message = e.getMessage();
             type = "danger";
         }
+        downloadProgress.zero();
         attributes.addFlashAttribute("message", message);
         attributes.addFlashAttribute("type", type);
     }
@@ -160,42 +165,67 @@ public class WebPdfService {
     /**
      * -
      *
-     * @param module   module
-     * @param response HttpResponse
+     * @param module           module
+     * @param response         HttpResponse
+     * @param downloadProgress Progress
      * @throws IOException IO
      */
-    public void generateSingleZip(final String module, final HttpServletResponse response) throws IOException {
+    public void generateSingleZip(final String module, final HttpServletResponse response,
+                                  final DownloadProgress downloadProgress) throws IOException {
         if (module == null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
         List<Module> modules = new ArrayList<>();
         modules.add(moduleService.findModuleByName(module));
-        File file = zipService.getZipFileForModule(modules);
+        File file = zipService.getZipFileForModule(modules, downloadProgress);
         loadFileToUser(response, file);
+        downloadProgress.zero();
     }
 
     /**
      * -
      *
-     * @param response HttpResponse
+     * @param response         HttpResponse
+     * @param downloadProgress Progress
      * @throws IOException IO
      */
-    public void generateMultipleZip(final HttpServletResponse response) throws IOException {
+    public void generateZipForModuleUnassigned(final HttpServletResponse response,
+                                               final DownloadProgress downloadProgress) throws IOException {
         List<Module> modules = moduleService.getModules();
-        File file = zipService.getZipFileForModule(modules);
+        File file = zipService.getZipFileForModule(modules, downloadProgress);
         loadFileToUser(response, file);
+        downloadProgress.zero();
     }
 
     /**
      * -
      *
-     * @param response HttpResponse
+     * @param response         HttpResponse
+     * @param downloadProgress Progress
+     * @param module           module
      * @throws IOException IO
      */
-    public void generateMultipleZipForAssigned(final HttpServletResponse response) throws IOException {
-        File file = zipService.getZipFileForAllDistributions();
+    public void generateZipForModuleAssigned(final HttpServletResponse response, final String module,
+                                             final DownloadProgress downloadProgress) throws IOException {
+        Module modules = moduleService.findModuleByName(module);
+        File file = zipService.getZipFileForModuleDistributions(modules, downloadProgress);
         loadFileToUser(response, file);
+        downloadProgress.zero();
+    }
+
+    /**
+     * -
+     *
+     * @param response         HttpResponse
+     * @param downloadProgress Progress
+     * @throws IOException IO
+     */
+    public void generateZipForAllAssigned(final HttpServletResponse response,
+                                          final DownloadProgress downloadProgress) throws IOException {
+        File file = zipService.getZipFileForAllDistributions(downloadProgress);
+        loadFileToUser(response, file);
+        downloadProgress.zero();
     }
 
     private void loadFileToUser(final HttpServletResponse response, final File file) throws IOException {

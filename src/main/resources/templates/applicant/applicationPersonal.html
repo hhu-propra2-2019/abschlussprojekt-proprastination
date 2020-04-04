@@ -68,11 +68,10 @@
                             <br>
                         </div>
                         <div class="col">
-                            <select required th:class="form-control" th:field="*{country}"
-                                    th:id="country" th:name="country" th:value="${webAddress.country}">
-                                <option value="" disabled hidden>Wohnsitz</option>
+                            <select required th:class="form-control" th:field="*{country}">
+                                <option disabled hidden selected value="">Wohnsitz</option>
                                 <option th:each="country:${countries}" th:text="${country}"
-                                        th:value="${country}"></option>
+                                        th:selected="${country == 'Deutschland'}" th:value="${country}"></option>
                             </select>
                         </div>
                     </div>
