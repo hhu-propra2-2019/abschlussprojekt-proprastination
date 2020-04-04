@@ -27,10 +27,10 @@
 <main th:fragment="bodycontent">
     <div style="text-align: center;">
         <!-- Restlichen Inhalt hier einfügen! -->
-        <div class="card">
+        <div class="card" th:if="${modules.size()} ne 0">
             <div class="card-header">Für welches Modul möchten Sie sich bewerben?</div>
             <div class="card-body">
-                <form class="row" th:action="${erstesModul}" th:method="GET">
+                <form class="row" th:action="${erstesModul}" th:method="GET" >
                     <div class="col-8">
                         <select th:name="modules" th:id="modules" class="form-control">
                             <option th:each="module:${modules}" th:text="${module.name}"
@@ -44,6 +44,17 @@
                         </button>
                     </div>
                 </form>
+            </div>
+        </div>
+        <div class="card bg-light mb-3 border-primary" th:unless="${modules.size()} ne 0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <label for="back"><h3>Sie können keine weiteren Bewerbungen ausfüllen!</h3></label>
+                        <a class="btn btn-outline-danger" name="back"
+                           th:href="@{/bewerbung2/bewerber/}" type="submit"> Zurück</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
