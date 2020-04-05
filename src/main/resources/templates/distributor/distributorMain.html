@@ -107,7 +107,7 @@
                                         </select>
                                     </div>
                                     <div class="col-2 text-right my-auto">
-                                        <button th:if="${applicant.distributorHours} != '0'" class="btn" th:attr="data-applicantId=${applicant.id}" onclick="moveToUnassigned(this)">
+                                        <button th:if="${applicant.distributorHours} != '0'" title="Bewerber in 'Nicht Zugeteilt' verschieben" class="btn" th:attr="data-applicantId=${applicant.id}" onclick="moveToUnassigned(this)">
                                             <i class="fa fa-trash fa-lg text-primary"></i>
                                         </button>
                                     </div>
