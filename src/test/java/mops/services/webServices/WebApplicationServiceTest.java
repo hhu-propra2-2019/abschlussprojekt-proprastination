@@ -110,4 +110,30 @@ class WebApplicationServiceTest {
         assertTrue(returnValue);
     }
 
+    @Test
+    void getApplicantUniserialsByModule() {
+        Module moduleMock = mock(Module.class);
+
+        Applicant applicantMock1 = mock(Applicant.class);
+        Applicant applicantMock2 = mock(Applicant.class);
+        List<Applicant> expected = new ArrayList<>();
+        expected.add(applicantMock1);
+        expected.add(applicantMock2);
+
+        List<Application> applications = new ArrayList<>();
+        Application application1 = mock(Application.class);
+        Application application2 = mock(Application.class);
+        applications.add(application1);
+        applications.add(application2);
+
+        when(moduleServiceMock.findModuleByName("testModule")).thenReturn(moduleMock);
+        when(applicationServiceMock.findApplicationsByModule(moduleMock)).thenReturn(applications);
+        when(applicantServiceMock.findByApplications(application1)).thenReturn(applicantMock1);
+        when(applicantServiceMock.findByApplications(application2)).thenReturn(applicantMock2);
+
+        List<Applicant> result = webApplicationService.getApplicantUniserialsByModule("testModule");
+
+        assertEquals(expected, result);
+    }
+
 }
