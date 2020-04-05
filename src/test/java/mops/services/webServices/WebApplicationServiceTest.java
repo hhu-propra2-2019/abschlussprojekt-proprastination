@@ -5,17 +5,24 @@ import mops.model.classes.*;
 import mops.model.classes.Module;
 import mops.model.classes.webclasses.WebAddress;
 import mops.model.classes.webclasses.WebApplicant;
+import mops.model.classes.webclasses.WebApplication;
 import mops.model.classes.webclasses.WebCertificate;
 import mops.services.CSVService;
 import mops.services.dbServices.ApplicantService;
 import mops.services.dbServices.ApplicationService;
 import mops.services.dbServices.ModuleService;
 import org.junit.jupiter.api.Test;
+import org.keycloak.KeycloakPrincipal;
+import org.keycloak.KeycloakSecurityContext;
+import org.keycloak.adapters.OidcKeycloakAccount;
+import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.keycloak.representations.IDToken;
 import org.springframework.ui.Model;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -134,6 +141,57 @@ class WebApplicationServiceTest {
         List<Applicant> result = webApplicationService.getApplicantUniserialsByModule("testModule");
 
         assertEquals(expected, result);
+    }
+
+    @Test
+    void removeCurrentModuleFromListAndSavePersonalInfo() {
+        KeycloakAuthenticationToken tokenMock = mock(KeycloakAuthenticationToken.class);
+        KeycloakPrincipal principalMock = mock(KeycloakPrincipal.class);
+        when(tokenMock.getPrincipal()).thenReturn(principalMock);
+        when(principalMock.getName()).thenReturn("Muster Name");
+        KeycloakSecurityContext contextMock = mock(KeycloakSecurityContext.class);
+        when(principalMock.getKeycloakSecurityContext()).thenReturn(contextMock);
+        IDToken idTokenMock = mock(IDToken.class);
+        when(contextMock.getIdToken()).thenReturn(idTokenMock);
+        when(idTokenMock.getEmail()).thenReturn("muster@mail.net");
+        OidcKeycloakAccount keycloakAccountMock = mock(OidcKeycloakAccount.class);
+        when(tokenMock.getAccount()).thenReturn(keycloakAccountMock);
+        Set<String> roles = new HashSet<>();
+        when((keycloakAccountMock.getRoles())).thenReturn(roles);
+
+        WebApplicant webApplicantMock = mock(WebApplicant.class);
+        WebAddress webAddressMock = mock(WebAddress.class);
+        Model modelMock = mock(Model.class);
+        WebCertificate webCertificateMock = mock(WebCertificate.class);
+        Module moduleMock1 = mock(Module.class);
+        Module moduleMock2 = mock(Module.class);
+        Applicant applicantMock = mock(Applicant.class);
+
+        List<Module> fullList = new ArrayList<>();
+        fullList.add(moduleMock1);
+        fullList.add(moduleMock2);
+
+        List<Module> expectedList = new ArrayList<>();
+        expectedList.add(moduleMock2);
+
+        when(studentServiceMock.savePersonalData(tokenMock, webApplicantMock, webAddressMock, webCertificateMock)).thenReturn(applicantMock);
+        when(moduleServiceMock.getModules()).thenReturn(fullList);
+        when(moduleServiceMock.findModuleByName("Tieftauchen")).thenReturn(moduleMock1);
+        when(studentServiceMock.getAllNotfilledModules(applicantMock, fullList)).thenReturn(fullList);
+
+        webApplicationService.removeCurrentModuleFromListAndSavePersonalInfo(tokenMock,
+                webApplicantMock, webAddressMock, modelMock, "Tieftauchen", webCertificateMock);
+
+        verify(studentServiceMock, times(1)).getAllNotfilledModules(applicantMock, fullList);
+        verify(studentServiceMock, times(1)).savePersonalData(tokenMock,
+                webApplicantMock, webAddressMock, webCertificateMock);
+        verify(modelMock, times(1)).addAttribute(eq("account"),
+               any(Account.class));
+        verify(modelMock, times(1)).addAttribute("newModule", moduleMock1);
+        verify(modelMock, times(1)).addAttribute("semesters", CSVService.getSemester());
+        verify(modelMock, times(1)).addAttribute("modules", expectedList);
+        verify(modelMock, times(1)).addAttribute("webApplication",
+                WebApplication.builder().module("Tieftauchen").build());
     }
 
 }
