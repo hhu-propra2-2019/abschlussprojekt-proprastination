@@ -260,8 +260,13 @@
     </div>
     <script>
         function toggleGraduationSubject() {
-            document.getElementById("graduationsubject").disabled
-                = document.getElementById("graduation").value === "Keins";
+            if(document.getElementById("graduation").value === "Keins") {
+                document.getElementById("graduationsubject").disabled = true;
+                document.getElementById("graduationsubject").value = "";
+            }
+            else {
+                document.getElementById("graduationsubject").disabled = false;
+            }
         }
 
         document.addEventListener('DOMContentLoaded', toggleGraduationSubject, false);
