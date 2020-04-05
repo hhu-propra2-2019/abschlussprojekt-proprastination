@@ -24,6 +24,8 @@ public class EMailService {
 
     private JavaMailSender emailSender;
     private static final int MBSIZE = 1048576;
+    //our test mail adress (webmail) is limited to 5 mb attachments,
+    //you can change this limit if larger attachments are possible
     private static final int MAXSIZE = 5;
 
     /**
