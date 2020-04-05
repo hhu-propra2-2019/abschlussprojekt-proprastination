@@ -65,10 +65,12 @@ public class WebApplicationService {
      * -
      * @param account
      * @param model
+     * @return false if a new applicant was created, true if an existing applicant was found
      */
-    public void createNewApplicantIfNoneWasFound(final Account account, final Model model) {
+    public boolean createNewApplicantIfNoneWasFound(final Account account, final Model model) {
 
         Applicant applicant = applicantService.findByUniserial(account.getName());
+        boolean applicantFound = (applicant != null);
 
         WebApplicant webApplicant = (applicant == null)
                 ? WebApplicant.builder().build() : studentService.getExistingApplicant(applicant);
@@ -85,6 +87,8 @@ public class WebApplicationService {
         model.addAttribute("webAddress", webAddress);
         model.addAttribute("webCertificate", webCertificate);
         model.addAttribute("modules", modules);
+
+        return applicantFound;
     }
 
     /**

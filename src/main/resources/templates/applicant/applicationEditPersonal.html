@@ -96,6 +96,7 @@
                             <input class="form-control" id="birthday" name="birthday" onblur="(this.type='text')"
                                    onfocus="(this.type='date')" placeholder="Geburtstag"
                                    required th:attr="value = ${webApplicant.birthday}" th:field="*{birthday}"
+                                   pattern="[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])"
                                    type="text">
                             <div th:if="${#fields.hasErrors('birthday')}" class="text-danger">
                                 Bitte geben Sie ein gültiges Geburtsdatum an.
@@ -152,10 +153,10 @@
                                     Neueinstellung (bisher keine Anstellung an der HHU)
                                 </option>
                                 <option th:value="Weiterbeschäftigung">
-                                    Weiterbeschäftigung (bestehender Vertrag bis zum DD.MM.YYYY)
+                                    Weiterbeschäftigung
                                 </option>
                                 <option th:value="Änderung">
-                                    Wiedereinstellung (KEIN bestehender Vertrag bis zum DD.MM.YYYY)
+                                    Wiedereinstellung
                                 </option>
                             </select>
                             <div th:if="${#fields.hasErrors('status')}" class="text-danger">
@@ -178,8 +179,9 @@
                             <div class="col-6">
                                 <select class="form-control" th:attr="value = ${webCertificate.graduation}"
                                         th:field="*{graduation}"
-                                        th:id="name" th:name="graduation">
-                                    <option th:value="keins">kein Universitätsabschluss</option>
+                                        th:id="graduation" th:name="graduation"
+                                        onchange="toggleGraduationSubject()">
+                                    <option th:value="Keins">kein Universitätsabschluss</option>
                                     <option th:value="Bachelor">Bachelor</option>
                                     <option th:value="Master">Master</option>
                                     <option th:value="Diplom">Diplom</option>
@@ -227,6 +229,14 @@
     </div>
     </form>
     </div>
+    <script>
+        function toggleGraduationSubject() {
+            document.getElementById("graduationsubject").disabled
+                = document.getElementById("graduation").value === "Keins";
+        }
+
+        document.addEventListener('DOMContentLoaded', toggleGraduationSubject, false);
+    </script>
 </main>
 </body>
 </html>
