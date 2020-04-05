@@ -29,9 +29,13 @@
         <!-- Restlichen Inhalt hier einfügen! -->
         <form th:action="${weiteresModul}" th:method="POST" th:object="${webApplication}">
             <div class="card bg-light mb-3 border-primary">
-                <div class="card-header"><h2 th:text="${newModule.name}"></h2>
-                    <input th:field="*{module}" th:type="hidden"
-                           th:value="${newModule.name}">
+                <div class="card-header">
+                    <div class="row">
+                        <h2 class="col-10" th:text="${newModule.name}"></h2>
+                        <input th:field="*{module}" th:type="hidden"
+                               th:value="${newModule.name}">
+                        <a href="/bewerbung2/bewerber/" class="btn btn-outline-danger col-2">Abbrechen</a>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="row form-row mb-3">
