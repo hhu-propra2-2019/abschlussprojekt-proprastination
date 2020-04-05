@@ -54,6 +54,9 @@ public class DistributorController {
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             model.addAttribute("distributions", webDistributionService.convertDistributionsToWebDistributions());
         }
+        if (!distributionService.checkForOrgaDeadlines()) {
+            return "distributor/deadlineError";
+        }
         return "distributor/distributorMain";
     }
 

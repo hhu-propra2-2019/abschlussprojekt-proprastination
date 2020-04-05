@@ -16,6 +16,7 @@ import mops.services.dbServices.ApplicationService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
@@ -333,25 +334,33 @@ public class DistributionService {
     public void moveApplicant(final String applicantId, final String distributionId) {
         Optional<Distribution> newDistribution = dbDistributionService.findById(Long.parseLong(distributionId));
         Applicant applicant = applicantService.findById(Long.parseLong(applicantId));
-        for (Application application : applicant.getApplications()) {
-            if ("-1".equals(distributionId)) {
-                for (Distribution distribution : dbDistributionService.findAll()) {
-                    distribution.getEmployees().remove(applicant);
-                    dbDistributionService.save(distribution);
-                }
-            } else {
-                if (newDistribution.isPresent()) {
-                    if (application.getModule().equals(newDistribution.get().getModule())) {
-                        for (Distribution distribution : dbDistributionService.findAll()) {
-                            distribution.getEmployees().remove(applicant);
-                            dbDistributionService.save(distribution);
-                        }
-                        newDistribution.get().getEmployees().add(applicant);
-                        dbDistributionService.save(newDistribution.get());
-                    }
-                }
+
+        if (newDistribution.isPresent()) {
+            Optional<Application> validApplication = applicant.getApplications().parallelStream()
+                    .filter(
+                            application -> application.getModule().equals(newDistribution.get().getModule())
+                    ).findAny();
+            if (validApplication.isEmpty()) {
+                return;
             }
         }
+        List<Distribution> distributionList = dbDistributionService.findAll();
+
+        Optional<Distribution> oldDistribution = distributionList
+                .parallelStream()
+                .filter(
+                        distribution -> distribution.getEmployees().contains(applicant)
+                ).findFirst();
+
+        oldDistribution.ifPresent(oldDist -> {
+            oldDist.getEmployees().remove(applicant);
+            dbDistributionService.save(oldDist);
+        });
+
+        newDistribution.ifPresent(newDist -> {
+            newDist.getEmployees().add(applicant);
+            dbDistributionService.save(newDist);
+        });
     }
 
     /**
@@ -409,12 +418,6 @@ public class DistributionService {
      * @param hours hours
      */
     public void saveHours(final String applicantId, final String distributionId, final String hours) {
-        if ("".equals(hours)) {
-            return;
-        }
-        if (Integer.parseInt(hours) < 0) {
-            return;
-        }
         Applicant applicant = applicantService.findById(Long.parseLong(applicantId));
         Optional<Distribution> distribution = dbDistributionService.findById(Long.parseLong(distributionId));
         if (distribution.isPresent()) {
@@ -452,6 +455,20 @@ public class DistributionService {
         applicantService.saveApplicant(applicant.toBuilder()
                 .collapsed(collapsedBoolean)
                 .build());
+    }
+
+    /**
+     * checks if orga deadlines are exposed
+     * @return true, if it's the distributors turn
+     */
+    public boolean checkForOrgaDeadlines() {
+        List<Module> modules = moduleService.getModules();
+        for (Module module : modules) {
+            if (LocalDateTime.now().isBefore(module.getOrgaDeadline())) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

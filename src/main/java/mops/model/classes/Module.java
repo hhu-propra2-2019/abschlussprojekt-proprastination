@@ -30,9 +30,12 @@ public class Module {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String name;
-    private String deadlineDate;
-    private String deadlineTime;
-    private LocalDateTime deadline;
+    private String applicantDeadlineDate;
+    private String applicantDeadlineTime;
+    private LocalDateTime applicantDeadline;
+    private String orgaDeadlineDate;
+    private String orgaDeadlineTime;
+    private LocalDateTime orgaDeadline;
     private String shortName;
     private String profSerial;
     private String sevenHourLimit;

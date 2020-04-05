@@ -6,7 +6,6 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
-    <meta name="turbolinks-cache-control" content="no-preview">
     <title>Name des Subsystems</title>
     <th:block th:fragment="headcontent">
         <!-- Links, Skripts, Styles hier einfügen! -->
@@ -14,24 +13,11 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="/turbolinks.js"></script>
         <script src="/jquery.dnd_page_scroll.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <style>
             .doneBackground{
                 background-color: rgba(108, 179, 255, 0.51);
-            }
-        </style>
-        <style>
-            /* Chrome, Safari, Edge, Opera */
-            input::-webkit-outer-spin-button,
-            input::-webkit-inner-spin-button {
-                -webkit-appearance: none;
-                margin: 0;
-            }
-
-            /* Firefox */
-            input[type=number] {
-                -moz-appearance: textfield;
             }
         </style>
     </th:block>
@@ -61,9 +47,9 @@
                             </button>
                         </div>
                         <div class="col-2"></div>
-                        <div class="col-3">
+                        <div class="col-3 text-center">
                             <form th:action="@{/bewerbung2/pdf/uebersicht}" th:method="GET">
-                                <button class="btn btn-outline-primary" type="submit"> Zu den Einstellungsbögen </button>
+                                <button class="btn btn-outline-primary form-control" type="submit"> Zu den Einstellungsbögen </button>
                             </form>
                         </div>
                         <div class="col-2"></div>
@@ -76,9 +62,9 @@
         <div class="col-sm-6" th:each="distribution: ${distributions}" th:attr="data-distributionid=${distribution.id}" ondrop="drop(event, this)" ondragover="allowDrop(event)">
             <div class="card bg-light mb-3 border-primary">
                 <div class="card-header d-flex justify-content-start align-items-start"
-                     th:style="${distribution.module} != 'Nicht Zugeteilt' ? (${distribution.hours7Set} == ${distribution.hours7} ?
+                     th:classappend="${distribution.module} != 'Nicht Zugeteilt' ? (${distribution.hours7Set} == ${distribution.hours7} ?
                      (${distribution.hours9Set} == ${distribution.hours9} ?
-                     (${distribution.hours17Set} == ${distribution.hours17} ? 'background-color: rgba(108, 179, 255, 0.51)')))">
+                     (${distribution.hours17Set} == ${distribution.hours17} ? 'doneBackground')))">
                     <div class="col text-left" th:text="${distribution.module}">
                         Propra
                     </div>
@@ -94,25 +80,36 @@
                             </div>
                     </div>
                 </div>
-                <div class="card-body" id="div1" th:id="drop + ${distribution.id}" th:attr="data-distributionid=${distribution.id}" ondrop="drop(event, this)" ondragover="allowDrop(event)">
+                <div class="card-body" th:id="drop + ${distribution.id}" th:attr="data-distributionid=${distribution.id}" ondrop="drop(event, this)" ondragover="allowDrop(event)">
                     <div th:each="applicant: ${distribution.webDistributorApplicants}">
                         <div class="card w-100 bg-light mb-1 border-primary" th:id="drag + ${applicant.id}" id="drag1"  th:attr="data-applicantId=${applicant.id}" draggable="true" ondragstart="drag(event)">
                             <div class="card-header" th:classappend="${applicant.checked} ? 'doneBackground'">
-                                <div class="row">
-                                    <div class="col-7 text-left">
+                                <div class="row h-100">
+                                    <div class="col-1 text-left my-auto">
+                                        <input class="h-100 my-auto" type="checkbox" th:checked="${applicant.checked}" th:attr="data-applicantId=${applicant.id}" onclick="saveChecked(this)">
+                                    </div>
+                                    <div class="col-4 text-left my-auto">
                                         <button class="btn" data-toggle="collapse" th:attr="data-target='#collapse'+${applicant.id}, data-applicantId=${applicant.id}" data-target="#collapse1"
-                                                aria-expanded="false" th:text="'[' + ${applicant.type} + '] ' + ${applicant.fullName}" onclick="saveCollapsed(this)">
+                                                aria-expanded="false" th:text="${applicant.fullName}" onclick="saveCollapsed(this)">
                                             Mamus100
                                         </button>
                                     </div>
-                                    <div class="col-4">
-                                        <div>
-                                            <input type="number" min="0" onfocus="this.select();" id="textfield" size="1" th:value="${applicant.distributorHours}" th:attr="data-distributionId=${distribution.id}, data-applicantId=${applicant.id}" onblur="saveHours(this)" onkeyup="saveHoursEnter(event, this)">
-                                            <label>Stunden</label>
-                                        </div>
+                                    <div class="col-1 text-left my-auto">
+                                        <label class="h-100 my-auto" th:text="${applicant.type}">
+                                            SHK
+                                        </label>
                                     </div>
-                                    <div class="col-1 text-right">
-                                        <input type="checkbox" th:checked="${applicant.checked}" th:attr="data-applicantId=${applicant.id}" onclick="saveChecked(this)">
+                                    <div class="col-4 text-right my-auto">
+                                        <select th:if="${applicant.distributorHours} != '0'" th:attr="data-distributionId=${distribution.id}, data-applicantId=${applicant.id}" onchange="saveHours(this)">
+                                            <option value="7" th:selected="${applicant.distributorHours} == '7'">7 Stunden</option>
+                                            <option value="9" th:selected="${applicant.distributorHours} == '9'">9 Stunden</option>
+                                            <option value="17" th:selected="${applicant.distributorHours} == '17'">17 Stunden</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-2 text-right my-auto">
+                                        <button th:if="${applicant.distributorHours} != '0'" title="Bewerber in 'Nicht Zugeteilt' verschieben" class="btn" th:attr="data-applicantId=${applicant.id}" onclick="moveToUnassigned(this)">
+                                            <i class="fa fa-trash fa-lg text-primary"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -223,6 +220,24 @@
     </script>
     <script>
 
+        function moveToUnassigned(el) {
+            var applicantId = el.dataset.applicantid;
+
+            $.ajax({
+                async: false,
+                method:'GET',
+                url: "/bewerbung2/verteiler/move/",
+                data: {
+                    distributionId: "-1",
+                    applicantId: applicantId
+                }
+            });
+            location.reload();
+        }
+
+    </script>
+    <script>
+
         function saveHours(el) {
             var hours = el.value;
             var applicantId = el.dataset.applicantid;
@@ -239,30 +254,6 @@
                 }
             });
             location.reload();
-        }
-
-    </script>
-    <script>
-
-        function saveHoursEnter(ev, el) {
-            if (event.which === 13) {
-                el.blur();
-                var hours = el.value;
-                var applicantId = el.dataset.applicantid;
-                var distributionId = el.dataset.distributionid;
-
-                $.ajax({
-                    async: false,
-                    method: 'GET',
-                    url: "/bewerbung2/verteiler/saveHours/",
-                    data: {
-                        distributionId: distributionId,
-                        applicantId: applicantId,
-                        hours: hours
-                    }
-                });
-                location.reload();
-            }
         }
 
     </script>
@@ -305,36 +296,6 @@
                 }
             });
         }
-
-    </script>
-    <script>
-
-        var reloadWithTurbolinks = (function () {
-            var scrollPosition;
-
-            function reload () {
-                scrollPosition = [localStorage.scrollX = window.scrollX, localStorage.scrollY = window.scrollY];
-                Turbolinks.visit(window.location.toString(), { action: 'replace' })
-            }
-
-            document.addEventListener('turbolinks:load', function () {
-                if (scrollPosition) {
-                    window.scrollTo.apply(window, scrollPosition);
-                    scrollPosition = null;
-                    $().dndPageScroll();
-                }
-            });
-
-            return reload
-        })()
-
-    </script>
-    <script>
-
-        window.addEventListener('scroll', function () {
-            localStorage.scrollX = window.scrollX;
-            localStorage.scrollY = window.scrollY;
-        })
 
     </script>
 </main>

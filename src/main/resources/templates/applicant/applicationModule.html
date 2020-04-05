@@ -19,7 +19,6 @@
             <li th:if="${account.roles.contains('studentin')}"><a th:href="@{/bewerbung2/bewerber/}">Bewerber Übersicht</a></li>
         </ul>
         <ul>
-            <li><a th:href="@{/}">Startseite</a></li>
             <li><a th:href="@{./}">Dashboard</a></li>
         </ul>
     </nav>
@@ -29,9 +28,13 @@
         <!-- Restlichen Inhalt hier einfügen! -->
         <form th:action="${weiteresModul}" th:method="POST" th:object="${webApplication}">
             <div class="card bg-light mb-3 border-primary">
-                <div class="card-header"><h2 th:text="${newModule.name}"></h2>
-                    <input th:field="*{module}" th:type="hidden"
-                           th:value="${newModule.name}">
+                <div class="card-header">
+                    <div class="row">
+                        <h2 class="col-10" th:text="${newModule.name}"></h2>
+                        <input th:field="*{module}" th:type="hidden"
+                               th:value="${newModule.name}">
+                        <a href="/bewerbung2/bewerber/" class="btn btn-outline-danger col-2">Abbrechen</a>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="row form-row mb-3">
@@ -39,7 +42,7 @@
                             <div class="col-md-4 px-md-1 align-self-center">
                                 <div class="form-group">
                                     <label th:for="minworkload">
-                                        Geben Sie bitte an wie viele Stunden Sie minimal pro Woche arbeiten möchten
+                                        Geben Sie bitte an wie viele Stunden Sie mindestens pro Woche arbeiten möchten:
                                     </label> <br>
                                     <select class="form-control" required th:attr="value = ${webApplication.minHours}"
                                             th:field="*{minHours}"
@@ -57,7 +60,7 @@
                             <div class="col-md-4 px-md-1 align-self-center">
                                 <div class="form-group">
                                     <label th:for="maxworkload">
-                                        Geben Sie bitte an wie viele Stunden Sie maximal pro Woche arbeiten möchten
+                                        Geben Sie bitte an wie viele Stunden Sie maximal pro Woche arbeiten möchten:
                                     </label> <br>
                                     <select class="form-control" required th:attr="value = ${webApplication.maxHours}"
                                             th:field="*{maxHours}"
@@ -75,7 +78,7 @@
                             </div>
                             <div class="col-md-4 px-md-1 align-self-center">
                                 <div class="form-group">
-                                    <label th:for="grade">Geben Sie von Ihnen in diesem Modul erreichte Note an</label> <br>
+                                    <label th:for="grade">Geben Sie die von Ihnen in diesem Modul erreichte Note an:</label> <br>
                                     <select class="form-control" required th:attr="value = ${webApplication.grade}"
                                             th:field="*{grade}"
                                             th:id="grade" th:name="grade">
@@ -102,7 +105,7 @@
                     <div class="row form-row">
                         <div class="col">
                             <div class="form-group">
-                                <label th:for="semesters">In welchem Semester haben Sie dieses Modul bestanden</label>
+                                <label th:for="semesters">In welchem Semester haben Sie dieses Modul bestanden?</label>
                                 <br>
                                 <select class="form-control" required th:attr="value = ${webApplication.semester}"
                                         th:field="*{semester}"
@@ -119,7 +122,7 @@
                         </div>
                         <div class="col">
                             <div class="form-group">
-                                <label th:for="lecturer">Bei welchem Dozent haben Sie dieses Modul bestanden</label>
+                                <label th:for="lecturer">Bei welchem Dozenten haben Sie dieses Modul bestanden?</label>
                                 <br>
                                 <input class="form-control" placeholder="Dozent" required
                                        th:attr="value = ${webApplication.lecturer}" th:field="*{lecturer}"
@@ -135,7 +138,7 @@
                     <div class="row">
                         <div class="col">
                             <div class="form-group">
-                                <label th:for="role">Welche Aufgaben möchten Sie übernehmen</label> <br> <br>
+                                <label th:for="role">Welche Aufgaben möchten Sie übernehmen?</label> <br> <br>
                                 <select class="form-control" id="tasks" name="tasks" th:field="*{role}">
                                     <option th:each="role : ${T(mops.model.classes.Role).values()}"
                                             th:text="${role.label}"
@@ -146,8 +149,8 @@
                         <div class="col">
                             <div class="form-group">
                                 <label th:for="priority">
-                                    Geben Sie bitte hier ihre Priorität für dieses Modul an,
-                                    falls sie vor haben sich noch bei anderen Modulen zu bewerben
+                                    Geben Sie bitte hier Ihre Priorität für dieses Modul an,
+                                    falls Sie vor haben sich noch bei anderen Modulen zu bewerben:
                                 </label> <br>
                                 <select class="form-control" id="priority" name="priority" th:field="*{priority}">
                                     <option th:each="module : ${T(mops.model.classes.Priority).values()}"
@@ -184,7 +187,7 @@
                         <div class="col-6">
                             <label th:for="modules">
                                 Falls Sie sich bei einem weiteren Modul bewerben möchten können Sie dieses hier
-                                auswählen
+                                auswählen:
                             </label>
                         </div>
                         <div class="col-4">
@@ -206,7 +209,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-10">
-                            Klicken sie hier falls sie ihre Bewerbung einreichen wollen.
+                            Klicken Sie hier falls Sie Ihre Bewerbung einreichen wollen.
                             Sie wird bis zur Frist noch änderbar sein.
                         </div>
                         <div class="col-2">

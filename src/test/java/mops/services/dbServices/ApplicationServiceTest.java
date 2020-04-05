@@ -62,7 +62,7 @@ public class ApplicationServiceTest {
                 .build();
 
         module = Module.builder()
-                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
+                .applicantDeadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("howToBeEvil")
                 .profSerial("prodo111")
                 .build();

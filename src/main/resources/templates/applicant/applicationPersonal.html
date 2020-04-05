@@ -19,7 +19,6 @@
             <li th:if="${account.roles.contains('studentin')}"><a th:href="@{/bewerbung2/bewerber/}">Bewerber Übersicht</a></li>
         </ul>
         <ul>
-            <li><a th:href="@{/}">Startseite</a></li>
             <li><a th:href="@{./}">Dashboard</a></li>
         </ul>
     </nav>
@@ -28,7 +27,12 @@
     <div style="text-align: center;">
         <form th:action="@{modul}" th:method="POST" th:object="${webApplicant}">
             <div class="card bg-light mb-3 border-primary">
-                <div class="card-header"><h2>Persönliche Daten</h2></div>
+                <div class="card-header">
+                    <div class="row">
+                        <h2 class="col-10">Persönliche Daten</h2>
+                        <a href="/bewerbung2/bewerber/" class="btn btn-outline-danger col-2">Abbrechen</a>
+                    </div>
+                </div>
                 <div class="card-body">
                     <div class="row" th:object="${webAddress}">
                         <div class="col-4">
@@ -68,8 +72,9 @@
                             <br>
                         </div>
                         <div class="col">
+
                             <select required th:class="form-control" th:field="*{country}">
-                                <option disabled hidden selected value="">Wohnsitz</option>
+                                <option hidden selected value="">Wohnsitz</option>
                                 <option th:each="country:${countries}" th:text="${country}"
                                         th:selected="${country == 'Deutschland'}" th:value="${country}"></option>
                             </select>
@@ -89,7 +94,7 @@
                         <div class="col-5">
                             <select name="nationality" id="nationality" class="form-control"
                                     th:field="*{nationality}" required>
-                                <option value="" disabled hidden>Nationalität</option>
+                                <option value="" selected hidden>Nationalität</option>
                                 <option th:each="country:${countries}" th:text="${country}" th:value="${country}"></option>
                             </select>
                             <div th:if="${#fields.hasErrors('nationality')}" class="text-danger">
@@ -112,7 +117,7 @@
                         <div class="col-2">
                             <select name="gender" id="gender" class="form-control"
                                     th:field="*{gender}" required>
-                                <option value="" disabled selected hidden>Geschlecht</option>
+                                <option value="" selected hidden>Geschlecht</option>
                                 <option th:value="male">männlich</option>
                                 <option th:value="female">weiblich</option>
                             </select>
@@ -123,7 +128,7 @@
                         <div class="col-4">
                             <div align="right">
                                 <label for="courses">
-                                    Wählen Sie ihr aktuellen Studienfach aus falls Sie an der HHU immatrikuliert sind.
+                                    Wählen Sie Ihr aktuelles Studienfach aus falls Sie an der HHU immatrikuliert sind.
                                     Ansonsten wählen sie bitte die Option <br>"nicht immatrikuliert".
                                 </label> <br>
                             </div>
@@ -145,7 +150,7 @@
                         <div class="col-6">
                             <div align="right">
                                 <label>
-                                    Wählen sie bitte Ihren aktuellen Angestelltenstatus
+                                    Wählen sie bitte Ihren aktuellen Angestelltenstatus:
                                 </label> <br>
                             </div>
                         </div>
@@ -157,10 +162,10 @@
                                     Neueinstellung (bisher keine Anstellung an der HHU)
                                 </option>
                                 <option th:value="Weiterbeschäftigung">
-                                    Weiterbeschäftigung (bestehender Vertrag bis zum DD.MM.YYYY)
+                                    Weiterbeschäftigung
                                 </option>
                                 <option th:value="Änderung">
-                                    Wiedereinstellung (KEIN bestehender Vertrag bis zum DD.MM.YYYY)
+                                    Wiedereinstellung
                                 </option>
                             </select>
                             <div th:if="${#fields.hasErrors('status')}" class="text-danger">
@@ -174,15 +179,16 @@
                             <label th:for="graduation">
                                 Was ist der bisher höchste Universitätsabschluss, den Sie erreicht haben?
                                 Bitte schreiben Sie in das Textfeld, in welchem Fach Sie Ihren Abschluss erreicht haben.
-                                Falls der Abschluss nicht an der HHU erlangt wurde, schreiben sie dies bitte dazu.
+                                Falls der Abschluss nicht an der HHU erlangt wurde, schreiben Sie dies bitte dazu.
                             </label> <br>
                         </div>
                     </div>
                     <div class="row">
                         <th:block th:object="${webCertificate}">
                             <div class="col-6">
-                                <select th:name="graduation" th:id="name" class="form-control"
-                                        th:field="*{graduation}" th:attr="value = ${webCertificate.graduation}">
+                                <select th:name="graduation" th:id="graduation" class="form-control"
+                                        th:field="*{graduation}" th:attr="value = ${webCertificate.graduation}"
+                                        onchange="toggleGraduationSubject()">
                                     <option th:value="Keins">kein Universitätsabschluss</option>
                                     <option th:value="Bachelor">Bachelor</option>
                                     <option th:value="Master">Master</option>
@@ -225,7 +231,7 @@
                     <div class="row">
                         <div class="col-6">
                             <label for="modules">
-                                Wählen Sie das Modul für das Sie sich bewerben möchten:
+                                Wählen Sie das Modul, für das Sie sich bewerben möchten:
                             </label>
                         </div>
                         <div class="col-4">
@@ -234,7 +240,7 @@
                             </select>
                         </div>
                         <div class="col-2">
-                            <button th:type="submit" class="btn btn-outline-primary form-control"> Bestätige</button>
+                            <button th:type="submit" class="btn btn-outline-primary form-control">Bestätigen</button>
                         </div>
                     </div>
                 </div>
@@ -244,7 +250,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <label for="back"><h3>Du kannst keine weiteren Bewerbungen ausfüllen!</h3></label>
+                        <label for="back"><h3>Sie können keine weiteren Bewerbungen ausfüllen!</h3></label>
                         <a class="btn btn-outline-danger" name="back"
                            th:href="@{/bewerbung2/bewerber/}" type="submit"> Zurück</a>
                     </div>
@@ -252,6 +258,19 @@
             </div>
         </div>
     </div>
+    <script>
+        function toggleGraduationSubject() {
+            if(document.getElementById("graduation").value === "Keins") {
+                document.getElementById("graduationsubject").disabled = true;
+                document.getElementById("graduationsubject").value = "";
+            }
+            else {
+                document.getElementById("graduationsubject").disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', toggleGraduationSubject, false);
+    </script>
 </main>
 </body>
 </html>
