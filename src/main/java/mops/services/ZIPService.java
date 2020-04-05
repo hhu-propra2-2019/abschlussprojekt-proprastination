@@ -115,11 +115,11 @@ public class ZIPService {
         Organizer organizer;
         File file;
         String fileName;
+        downloadProgress.addSize(distribution.getEmployees().size());
         for (Applicant applicant : distribution.getEmployees()) {
             Optional<Application> application = applicant.getApplications().stream()
                     .filter(app -> app.getModule().equals(distribution.getModule())).findFirst();
             if (application.isPresent()) {
-                downloadProgress.addSize(1);
                 organizer = organizerService.findByUniserial(application.get().getModule().getProfSerial());
                 file = pdfService.generatePDF(application.get(), applicant, organizer);
                 fileName = (distribution.getModule().getName() + File.separator
@@ -161,8 +161,10 @@ public class ZIPService {
         ) {
 
             for (Module module : modules) {
+                downloadProgress.addSize(applicationService.findApplicationsByModule(module).size());
+            }
+            for (Module module : modules) {
                 applicationList = applicationService.findApplicationsByModule(module);
-                downloadProgress.addSize(applicationList.size());
                 for (Application application : applicationList) {
                     organizer = organizerService.findByUniserial(application.getModule().getProfSerial());
                     applicant = applicantService.findByApplications(application);

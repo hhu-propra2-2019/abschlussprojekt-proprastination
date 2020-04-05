@@ -179,8 +179,9 @@ public class WebPdfService {
         List<Module> modules = new ArrayList<>();
         modules.add(moduleService.findModuleByName(module));
         File file = zipService.getZipFileForModule(modules, downloadProgress);
-        loadFileToUser(response, file);
         downloadProgress.zero();
+        loadFileToUser(response, file);
+
     }
 
     /**
@@ -194,8 +195,8 @@ public class WebPdfService {
                                                final DownloadProgress downloadProgress) throws IOException {
         List<Module> modules = moduleService.getModules();
         File file = zipService.getZipFileForModule(modules, downloadProgress);
-        loadFileToUser(response, file);
         downloadProgress.zero();
+        loadFileToUser(response, file);
     }
 
     /**
