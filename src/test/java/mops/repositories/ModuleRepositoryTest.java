@@ -31,17 +31,21 @@ class ModuleRepositoryTest {
     @BeforeEach
     void init() {
         LocalDateTime deadline = LocalDateTime.now();
+        LocalDateTime deadline2 = LocalDateTime.now();
         module = Module.builder()
                 .name("Programmier Praktikum")
                 .shortName("ProPra")
                 .profSerial("Jens")
-                .deadlineDate("2020-01-01")
-                .deadlineTime("09:41")
-                .deadline(deadline)
+                .applicantDeadlineDate("2020-01-01")
+                .applicantDeadlineTime("09:41")
+                .applicantDeadline(deadline)
+                .orgaDeadlineDate("2020-01-01")
+                .orgaDeadlineTime("09:42")
+                .orgaDeadline(deadline2)
                 .sevenHourLimit("2")
                 .nineHourLimit("3")
                 .seventeenHourLimit("2")
-                .deadline(deadline)
+                .applicantDeadline(deadline)
                 .build();
 
         entityManager.persist(module);

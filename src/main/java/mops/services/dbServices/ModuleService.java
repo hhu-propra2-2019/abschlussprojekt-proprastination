@@ -59,7 +59,6 @@ public class ModuleService {
      * @param module module.
      */
     public void save(final Module module) {
-        concatenateDeadlines(module);
         moduleRepository.save(module);
     }
 
@@ -68,11 +67,25 @@ public class ModuleService {
      * @param module current module
      */
     private void concatenateDeadlines(final Module module) {
-        if (module.getDeadlineDate().isEmpty() || module.getDeadlineTime().isEmpty()) {
+        if (module.getApplicantDeadlineDate().isEmpty() || module.getApplicantDeadlineTime().isEmpty()
+        || module.getOrgaDeadlineDate().isEmpty() || module.getOrgaDeadlineTime().isEmpty()) {
+            System.out.println(module.getApplicantDeadlineDate());
+            System.out.println(module.getApplicantDeadlineTime());
+            System.out.println(module.getOrgaDeadlineDate());
+            System.out.println(module.getOrgaDeadlineTime());
             return;
         }
-        module.setDeadline(LocalDateTime.parse((String.format("%sT%s:00",
-                module.getDeadlineDate(), module.getDeadlineTime()))));
+        System.out.println(module.getApplicantDeadlineDate());
+        System.out.println(module.getApplicantDeadlineTime());
+        System.out.println(module.getOrgaDeadlineDate());
+        System.out.println(module.getOrgaDeadlineTime());
+        module.setApplicantDeadline(LocalDateTime.parse((String.format("%sT%s:00",
+                module.getApplicantDeadlineDate(), module.getApplicantDeadlineTime()))));
+        System.out.println(module.getApplicantDeadline());
+
+        module.setOrgaDeadline(LocalDateTime.parse((String.format("%sT%s:00",
+                module.getOrgaDeadlineDate(), module.getOrgaDeadlineTime()))));
+        System.out.println(module.getOrgaDeadline());
     }
 
     /**
@@ -118,9 +131,12 @@ public class ModuleService {
                 .name(module.getName())
                 .shortName(module.getShortName())
                 .profSerial(module.getProfSerial())
-                .deadlineDate(module.getDeadlineDate())
-                .deadlineTime(module.getDeadlineTime())
-                .deadline(module.getDeadline())
+                .applicantDeadlineDate(module.getApplicantDeadlineDate())
+                .applicantDeadlineTime(module.getApplicantDeadlineTime())
+                .applicantDeadline(module.getApplicantDeadline())
+                .orgaDeadlineDate(module.getOrgaDeadlineDate())
+                .orgaDeadlineTime(module.getOrgaDeadlineTime())
+                .orgaDeadline(module.getOrgaDeadline())
                 .sevenHourLimit(module.getSevenHourLimit())
                 .nineHourLimit(module.getNineHourLimit())
                 .seventeenHourLimit(module.getSeventeenHourLimit())

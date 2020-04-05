@@ -316,12 +316,13 @@ class StudentServiceTest {
         assertEquals(webCertificate, result);
     }
 
+    //needs changes for OrgaDeadline
     @Test
     void getAllNotfilledModulesApplicantIsNull() {
         Module expired = mock(Module.class);
-        when(expired.getDeadline()).thenReturn(LocalDateTime.MIN);
+        when(expired.getApplicantDeadline()).thenReturn(LocalDateTime.MIN);
         Module notExpired = mock(Module.class);
-        when(notExpired.getDeadline()).thenReturn(LocalDateTime.MAX);
+        when(notExpired.getApplicantDeadline()).thenReturn(LocalDateTime.MAX);
         List<Module> modules = new ArrayList<>();
         modules.add(expired);
         modules.add(notExpired);
@@ -331,12 +332,13 @@ class StudentServiceTest {
         assertThat(result).containsOnly(notExpired);
     }
 
+    //needs changes for OrgaDeadline
     @Test
     void getAllNotfilledModulesApplicationsGetSortedOut() {
         Module applied = mock(Module.class);
-        when(applied.getDeadline()).thenReturn(LocalDateTime.MAX);
+        when(applied.getApplicantDeadline()).thenReturn(LocalDateTime.MAX);
         Module notApplied = mock(Module.class);
-        when(notApplied.getDeadline()).thenReturn(LocalDateTime.MAX);
+        when(notApplied.getApplicantDeadline()).thenReturn(LocalDateTime.MAX);
         List<Module> modules = new ArrayList<>();
         modules.add(applied);
         modules.add(notApplied);
@@ -352,12 +354,13 @@ class StudentServiceTest {
         assertThat(result).containsOnly(notApplied);
     }
 
+    //needs changes for OrgaDeadline
     @Test
     void getAllNotfilledModulesExpiredDeadlinesGetSortedOut() {
         Module notExpired = mock(Module.class);
-        when(notExpired.getDeadline()).thenReturn(LocalDateTime.MAX);
+        when(notExpired.getApplicantDeadline()).thenReturn(LocalDateTime.MAX);
         Module expired = mock(Module.class);
-        when(expired.getDeadline()).thenReturn(LocalDateTime.MIN);
+        when(expired.getApplicantDeadline()).thenReturn(LocalDateTime.MIN);
         List<Module> modules = new ArrayList<>();
         modules.add(notExpired);
         modules.add(expired);

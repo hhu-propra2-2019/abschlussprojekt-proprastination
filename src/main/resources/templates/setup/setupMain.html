@@ -73,8 +73,10 @@
                             <input id="sevenHourLimit" name="sevenHourLimit" type="hidden" th:value="*{sevenHourLimit}">
                             <input id="nineHourLimit" name="nineHourLimit" type="hidden" th:value="*{nineHourLimit}">
                             <input id="seventeenHourLimit" name="seventeenHourLimit" type="hidden" th:value="*{seventeenHourLimit}">
-                            <input id="deadlineDate" name="deadlineDate" type="hidden" th:value="*{deadlineDate}">
-                            <input id="deadlineTime" name="deadlineTime" type="hidden" th:value="*{deadlineTime}">
+                            <input id="applicantDeadlineDate" name="applicantDeadlineDate" type="hidden" th:value="*{applicantDeadlineDate}">
+                            <input id="applicantDeadlineTime" name="applicantDeadlineTime" type="hidden" th:value="*{applicantDeadlineTime}">
+                            <input id="orgaDeadlineDate" name="orgaDeadlineDate" type="hidden" th:value="*{orgaDeadlineDate}">
+                            <input id="orgaDeadlineTime" name="orgaDeadlineTime" type="hidden" th:value="*{orgaDeadlineTime}">
                             <button class="btn btn-outline-primary btn-sm float-right" type="submit">Bearbeiten</button>
                         </form>
                     </div>
@@ -84,13 +86,15 @@
                 <div class="row">
                     <div class="col-6">
                         <div th:text="'Kurzform: &ensp;' + *{shortName}"></div>
-                        <span th:text="'Bewerbungsfrist: &ensp;' + *{deadlineDate}"></span><span th:text="'&ensp;' + *{deadlineTime}"></span>
+                        <span th:text="'Bewerbungsfrist: &ensp;' + *{applicantDeadlineDate}"></span><span th:text="'&ensp;' + *{applicantDeadlineTime}"></span>
+                        <br>
+                        <span th:text="'Bearbeitungsfrist: &ensp;' + *{orgaDeadlineDate}"></span><span th:text="'&ensp;' + *{orgaDeadlineTime}"></span>
                         <div th:text="'Zugeordnete Person (Unikennung): &ensp;' + *{profSerial}"></div>
                     </div>
                     <div class="col-6">
                         <div th:text="'Personenanzahl 7 Std: &ensp;' + *{sevenHourLimit}"></div>
                         <div th:text="'Personenanzahl 9 Std: &ensp;' + *{nineHourLimit}"></div>
-                        <div th:text="'Personenanzahl 17 Std: ' + *{seventeenHourLimit}"></div>
+                        <div th:text="'Personenanzahl 17 Std:&ensp;' + *{seventeenHourLimit}"></div>
                     </div>
                 </div>
             </div>

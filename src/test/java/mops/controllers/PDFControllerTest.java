@@ -63,7 +63,7 @@ class PDFControllerTest {
     @WithMockKeycloackAuth(name = "name", roles = "studentin")
     void fileSystemResource() throws Exception {
         Module module = Module.builder()
-                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
+                .applicantDeadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("Info4")
                 .build();
         Application application = Application.builder()
@@ -96,7 +96,7 @@ class PDFControllerTest {
     @WithMockKeycloackAuth(name = "baum", roles = "studentin")
     void noSuchApplication() throws Exception {
         Module module = Module.builder()
-                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
+                .applicantDeadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("Info4")
                 .build();
         Application application = Application.builder()

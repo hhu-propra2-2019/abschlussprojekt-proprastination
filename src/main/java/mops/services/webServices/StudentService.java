@@ -197,13 +197,13 @@ public class StudentService {
      */
     public List<Module> getAllNotfilledModules(final Applicant applicant, final List<Module> modules) {
         if (applicant == null) {
-            modules.removeIf(module -> module.getDeadline().isBefore(LocalDateTime.now()));
+            modules.removeIf(module -> module.getApplicantDeadline().isBefore(LocalDateTime.now()));
             return modules;
         }
         for (Application app : applicant.getApplications()) {
             modules.remove(app.getModule());
         }
-        modules.removeIf(module -> module.getDeadline().isBefore(LocalDateTime.now()));
+        modules.removeIf(module -> module.getApplicantDeadline().isBefore(LocalDateTime.now()));
         return modules;
     }
 
