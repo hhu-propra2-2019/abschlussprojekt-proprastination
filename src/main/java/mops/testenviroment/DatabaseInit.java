@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class DatabaseInit implements ServletContextInitializer {
 
-    private static final boolean DUMMY_DATA_CREATION = false;
+    private static final boolean DUMMY_DATA_CREATION = true;
     private static final int ENTRYNUMBER = 100;
     private transient Random random = new Random();
     private transient ApplicantRepository applicantRepository;
