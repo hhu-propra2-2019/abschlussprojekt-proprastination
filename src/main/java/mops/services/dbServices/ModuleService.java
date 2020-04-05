@@ -69,23 +69,13 @@ public class ModuleService {
     private void concatenateDeadlines(final Module module) {
         if (module.getApplicantDeadlineDate().isEmpty() || module.getApplicantDeadlineTime().isEmpty()
         || module.getOrgaDeadlineDate().isEmpty() || module.getOrgaDeadlineTime().isEmpty()) {
-            System.out.println(module.getApplicantDeadlineDate());
-            System.out.println(module.getApplicantDeadlineTime());
-            System.out.println(module.getOrgaDeadlineDate());
-            System.out.println(module.getOrgaDeadlineTime());
             return;
         }
-        System.out.println(module.getApplicantDeadlineDate());
-        System.out.println(module.getApplicantDeadlineTime());
-        System.out.println(module.getOrgaDeadlineDate());
-        System.out.println(module.getOrgaDeadlineTime());
         module.setApplicantDeadline(LocalDateTime.parse((String.format("%sT%s:00",
                 module.getApplicantDeadlineDate(), module.getApplicantDeadlineTime()))));
-        System.out.println(module.getApplicantDeadline());
 
         module.setOrgaDeadline(LocalDateTime.parse((String.format("%sT%s:00",
                 module.getOrgaDeadlineDate(), module.getOrgaDeadlineTime()))));
-        System.out.println(module.getOrgaDeadline());
     }
 
     /**

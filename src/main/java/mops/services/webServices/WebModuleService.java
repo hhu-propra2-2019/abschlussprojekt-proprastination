@@ -58,24 +58,13 @@ public class WebModuleService {
     private void concatenateDeadlinesWebModule(final WebModule webmodule) {
         if (webmodule.getOrgaDeadlineDate() == null || webmodule.getOrgaDeadlineTime() == null
         || webmodule.getApplicantDeadlineDate() == null || webmodule.getApplicantDeadlineTime() == null) {
-            System.out.println(webmodule.getOrgaDeadlineTime());
-            System.out.println(webmodule.getOrgaDeadlineDate());
-            System.out.println(webmodule.getApplicantDeadlineTime());
-            System.out.println(webmodule.getApplicantDeadlineDate());
             return;
         }
-
-        System.out.println(webmodule.getApplicantDeadlineDate());
-        System.out.println(webmodule.getApplicantDeadlineTime());
-        System.out.println(webmodule.getOrgaDeadlineDate());
-        System.out.println(webmodule.getOrgaDeadlineTime());
         webmodule.setOrgaDeadline(LocalDateTime.parse((String.format("%sT%s:00",
                 webmodule.getOrgaDeadlineDate(), webmodule.getOrgaDeadlineTime()))));
-        System.out.println(webmodule.getOrgaDeadline());
 
         webmodule.setApplicantDeadline(LocalDateTime.parse((String.format("%sT%s:00",
                 webmodule.getApplicantDeadlineDate(), webmodule.getApplicantDeadlineTime()))));
-        System.out.println(webmodule.getApplicantDeadline());
     }
 
     /**
