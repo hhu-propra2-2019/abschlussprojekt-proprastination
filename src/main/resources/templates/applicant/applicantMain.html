@@ -20,7 +20,6 @@
             <li th:if="${account.roles.contains('studentin')}"><a th:href="@{/bewerbung2/bewerber/}">Bewerber Übersicht</a></li>
         </ul>
         <ul>
-            <li><a th:href="@{/}">Startseite</a></li>
             <li><a th:href="@{neueBewerbung}">Bewerbungen hinzufügen</a></li>
             <li><a th:href="@{bewerbungsUebersicht}">Meine Bewerbungen</a></li>
         </ul>
@@ -35,7 +34,7 @@
             <div class="card-body flex-column h-100">
                 <p class="card-text">Hier können Sie neue Bewerbungen für einzelne Module ausfüllen
                     und abschicken. Diese werden nach Ablauf der jeweiligen Frist an die Verantwortlichen
-                    weitergeleitet und Sie werden per Post über das Ergebnis benachrichtigt.</p>
+                    weitergeleitet und Sie werden per E-Mail über das Ergebnis benachrichtigt.</p>
                 <div class="text-center">
                     <a th:href="@{neueBewerbung}" class="btn btn-outline-primary">Bewerbungen hinzufügen</a>
                 </div>
@@ -101,8 +100,8 @@
                         <th scope="row" th:text="${appNum.count}"></th>
                         <td th:text="${app.module.name}">Example #1</td>
                         <td>
-                            <span th:text="${app.module.deadlineDate}"></span>
-                            <span th:text="${app.module.deadlineTime}"></span>
+                            <span th:text="${app.module.applicantDeadlineDate}"></span>
+                            <span th:text="${app.module.applicantDeadlineTime}"></span>
                         </td>
                     </tr>
 

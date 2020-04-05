@@ -16,7 +16,7 @@ class EvaluationTest {
     @BeforeEach
     void setup() {
         Module module = Module.builder()
-                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
+                .applicantDeadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("Info4")
                 .build();
         //We do not Test the Applicant and Application here.
@@ -47,7 +47,8 @@ class EvaluationTest {
 
         String evalString = evaluation.toString();
         String expected = "Evaluation(application=Application(minHours=0, finalHours=0, maxHours=0, " +
-                "module=Module(name=Info4, deadlineDate=null, deadlineTime=null, deadline=1970-01-01T00:01:40," +
+                "module=Module(name=Info4, applicantDeadlineDate=null, applicantDeadlineTime=null, applicantDeadline=1970-01-01T00:01:40," +
+                " orgaDeadlineDate=null, orgaDeadlineTime=null, orgaDeadline=null," +
                 " shortName=null, profSerial=null, sevenHourLimit=null, nineHourLimit=null, seventeenHourLimit=null)," +
                 " priority=null, grade=0.0, lecturer=null, semester=null, role=null, comment=null), hours=0," +
                 " priority=NEUTRAL)";

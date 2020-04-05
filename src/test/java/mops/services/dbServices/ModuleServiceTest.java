@@ -21,7 +21,8 @@ class ModuleServiceTest {
             .name("Kung Fu")
             .shortName("KF")
             .profSerial("neo001")
-            .deadline(LocalDateTime.parse("1970-01-01T00:00:00.000"))
+            .applicantDeadline(LocalDateTime.parse("1970-01-01T00:00:00.000"))
+            .orgaDeadline(LocalDateTime.parse("1970-01-02T00:00:00.000"))
             .sevenHourLimit("70")
             .nineHourLimit("90")
             .seventeenHourLimit("170")
@@ -36,7 +37,8 @@ class ModuleServiceTest {
         expected.setSevenHourLimit("70");
         expected.setNineHourLimit("90");
         expected.setSeventeenHourLimit("170");
-        expected.setDeadline(LocalDateTime.parse("1970-01-01T00:00:00.000"));
+        expected.setApplicantDeadline(LocalDateTime.parse("1970-01-01T00:00:00.000"));
+        expected.setOrgaDeadline(LocalDateTime.parse("1970-01-02T00:00:00.000"));
 
         WebModule result = moduleService.toWebModule(module);
 

@@ -34,7 +34,7 @@ import java.util.List;
 @RequestMapping("/bewerbung2/setup")
 public class SetupController {
     private static final Logger LOGGER = LoggerFactory.getLogger(SetupController.class);
-    private final WebModuleService webService;
+    private final WebModuleService webModuleService;
 
     private final ApplicantService applicantService;
 
@@ -53,7 +53,7 @@ public class SetupController {
     @SuppressWarnings("checkstyle:HiddenField")
     public SetupController(final WebModuleService webService, final ApplicantService applicantService,
                            final ModuleService moduleService, final DeletionService deletionService) {
-        this.webService = webService;
+        this.webModuleService = webService;
         this.applicantService = applicantService;
         this.moduleService = moduleService;
         this.deletionService = deletionService;
@@ -69,7 +69,7 @@ public class SetupController {
     @Secured("ROLE_setup")
     public String index(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
-            List<WebModule> modules = webService.getModules();
+            List<WebModule> modules = webModuleService.getModules();
             model.addAttribute("modules", modules);
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             model.addAttribute("module", Module.builder().build());
@@ -91,6 +91,9 @@ public class SetupController {
     public String postEditedModule(final KeycloakAuthenticationToken token, final Model model,
                                    @RequestParam("oldName") final String oldName,
                                    @Valid final WebModule module, final BindingResult bindingResult) {
+       webModuleService.generateErrorIfApplicantDeadlineAfterOrgaDeadline(module.getApplicantDeadlineDate(),
+               module.getApplicantDeadlineTime(), module.getOrgaDeadlineDate(), module.getOrgaDeadlineTime(),
+               bindingResult, "module");
         if (bindingResult.hasErrors()) {
             bindingResult.getAllErrors().forEach(err -> LOGGER.info("ERROR {}", err.getDefaultMessage()));
             model.addAttribute("oldName", oldName);
@@ -98,7 +101,7 @@ public class SetupController {
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             return "/setup/modulBearbeiten";
         }
-        webService.update(module, oldName);
+        webModuleService.update(module, oldName);
         LOGGER.debug("Updated Module " + oldName + " to module " + module.getName());
         return index(token, model);
     }
@@ -131,6 +134,9 @@ public class SetupController {
     @Secured("ROLE_setup")
     public String postNewModule(final KeycloakAuthenticationToken token, final Model model,
                                 @Valid final WebModule module, final BindingResult bindingResult) {
+        webModuleService.generateErrorIfApplicantDeadlineAfterOrgaDeadline(module.getApplicantDeadlineDate(),
+                module.getApplicantDeadlineTime(), module.getOrgaDeadlineDate(), module.getOrgaDeadlineTime(),
+                bindingResult, "Module");
         if (bindingResult.hasErrors()) {
             bindingResult.getAllErrors().forEach(err -> LOGGER.info("ERROR {}", err.getDefaultMessage()));
             if (token != null) {
@@ -141,7 +147,8 @@ public class SetupController {
         } else {
             LOGGER.debug("Added Module " + module.getName());
         }
-        webService.save(module);
+
+        webModuleService.save(module);
         return index(token, model);
     }
 
@@ -174,7 +181,7 @@ public class SetupController {
     @Secured("ROLE_setup")
     public String postDeleteModule(final KeycloakAuthenticationToken token, final Model model,
                                 @RequestParam("nameDelete") final String name) {
-        webService.deleteOne(name);
+        webModuleService.deleteOne(name);
         LOGGER.debug("Removed Module " + name);
         return index(token, model);
     }
@@ -188,7 +195,7 @@ public class SetupController {
     @PostMapping("/alleModuleLoeschen")
     @Secured("ROLE_setup")
     public String postDeleteAllModule(final KeycloakAuthenticationToken token, final Model model) {
-        webService.deleteAll();
+        webModuleService.deleteAll();
         LOGGER.debug("Removed all Modules");
         return index(token, model);
     }
