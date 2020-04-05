@@ -120,6 +120,7 @@ public class WebDistributionService {
                     .id(applicant.getId() + "")
                     .type(distributionService.getTypeOfApplicant(applicant))
                     .checked(applicant.isChecked())
+                    .collapsed(applicant.isCollapsed())
                     .fullName(applicant.getFirstName() + " " + applicant.getSurname())
                     .webDistributorApplications(webDistributorApplicationList)
                     .distributorHours("0")
@@ -147,6 +148,7 @@ public class WebDistributionService {
                     .id(applicant.getId() + "")
                     .type(distributionService.getTypeOfApplicant(applicant))
                     .checked(applicant.isChecked())
+                    .collapsed(applicant.isCollapsed())
                     .fullName(applicant.getFirstName() + " " + applicant.getSurname())
                     .webDistributorApplications(webDistributorApplicationList)
                     .distributorHours(finalHours + "")
@@ -160,16 +162,18 @@ public class WebDistributionService {
         List<WebDistributorApplication> webDistributorApplicationList = new ArrayList<>();
         for (Application application : applicationSet) {
             Evaluation evaluation = evaluationService.findByApplication(application);
-            WebDistributorApplication webDistributorApplication = WebDistributorApplication.builder()
-                    .applicantPriority(application.getPriority())
-                    .minHours(application.getMinHours() + "")
-                    .maxHours(application.getMaxHours() + "")
-                    .module(application.getModule().getName())
-                    .moduleShort(application.getModule().getShortName())
-                    .organizerHours(evaluation.getHours() + "")
-                    .organizerPriority(evaluation.getPriority())
-                    .build();
-            webDistributorApplicationList.add(webDistributorApplication);
+            if (evaluation != null) {
+                WebDistributorApplication webDistributorApplication = WebDistributorApplication.builder()
+                        .applicantPriority(application.getPriority())
+                        .minHours(application.getMinHours() + "")
+                        .maxHours(application.getMaxHours() + "")
+                        .module(application.getModule().getName())
+                        .moduleShort(application.getModule().getShortName())
+                        .organizerHours(evaluation.getHours() + "")
+                        .organizerPriority(evaluation.getPriority())
+                        .build();
+                webDistributorApplicationList.add(webDistributorApplication);
+            }
         }
         return  webDistributorApplicationList;
     }

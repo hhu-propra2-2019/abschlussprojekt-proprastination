@@ -96,10 +96,56 @@ public class ApplicationController {
     @Secured("ROLE_studentin")
     public String newAppl(final KeycloakAuthenticationToken token, final Model model) {
         if (token != null) {
-            webApplicationService.createNewApplicantIfNoneWasFound(
+            boolean skipPersonalInfo = webApplicationService.createNewApplicantIfNoneWasFound(
                     AccountGenerator.createAccountFromPrincipal(token), model);
+            if (skipPersonalInfo) {
+                return "redirect:weiterZuModulen";
+            }
         }
         return "applicant/applicationPersonal";
+    }
+
+    /**
+     * GetMapping for when you want to add new applications but have already filled in your personal data.
+     * Shows a list of available modules to pick from.
+     * @param token the Keycloak token
+     * @param model model to add attributes to
+     * @return html for the module selection page
+     */
+    @GetMapping("/weiterZuModulen")
+    @Secured("ROLE_studentin")
+    public String skipPersonal(final KeycloakAuthenticationToken token, final Model model) {
+        model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
+        Applicant applicant = applicantService.findByUniserial(token.getName());
+        List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
+
+        model.addAttribute("modules", availableMods);
+
+        return "applicant/skipPersonal";
+    }
+
+    /**
+     * Get mapping for viewing the first module form after skipping the personal information.
+     * @param token the Keycloak token
+     * @param model model to add attributes to
+     * @param module name of the selected module
+     * @return html for the normal module application form
+     */
+    @GetMapping("/erstesModul")
+    @Secured("ROLE_studentin")
+    public String skipPersonalFirstModule(final KeycloakAuthenticationToken token, final Model model,
+                                          @RequestParam("modules") final String module) {
+        Module modul = moduleService.findModuleByName(module);
+        Applicant applicant = applicantService.findByUniserial(token.getName());
+        List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
+        availableMods.remove(modul);
+
+        model.addAttribute("semesters", CSVService.getSemester());
+        model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
+        model.addAttribute("newModule", modul);
+        model.addAttribute("modules", availableMods);
+        model.addAttribute("webApplication", WebApplication.builder().module(module).build());
+        return "applicant/applicationModule";
     }
 
     /**
@@ -160,8 +206,9 @@ public class ApplicationController {
         webApplicationService.printBindingResultErrorsToLog(addressBindingResult);
         webApplicationService.printBindingResultErrorsToLog(certificateBindingResult);
         if (token != null) {
-            webApplicationService.removeCurrentModuleFromListOfAvailebleModuleToApplyTo(
+            webApplicationService.removeCurrentModuleFromListAndSavePersonalInfo(
                     token, webApplicant, webAddress, model, modules, webCertificate);
+            LOGGER.debug("Saved Infos of Applicant " + token.getName());
         }
         if (applicantBindingResult.hasErrors() || addressBindingResult.hasErrors()
                 || certificateBindingResult.hasErrors()) {
@@ -207,13 +254,13 @@ public class ApplicationController {
 
         Module modul = moduleService.findModuleByName(module);
         Applicant applicant = applicantService.findByUniserial(token.getName());
-        List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
-        availableMods.remove(modul);
 
         Application application = studentService.buildApplication(webApplication);
         applicant = applicant.toBuilder().application(application).build();
         applicantService.saveApplicant(applicant);
-
+        List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());
+        availableMods.remove(modul);
+        LOGGER.debug("Saved Application of Applicant " + token.getName());
 
         model.addAttribute("semesters", CSVService.getSemester());
         model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
@@ -253,6 +300,7 @@ public class ApplicationController {
         if (applicantBindingResult.hasErrors() || addressBindingResult.hasErrors()
                 || certificateBindingResult.hasErrors()) {
             if (token != null) {
+                model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
                 model.addAttribute("countries", CSVService.getCountries());
                 model.addAttribute("courses", CSVService.getCourses());
                 model.addAttribute("webApplicant", webApplicant);
@@ -264,6 +312,7 @@ public class ApplicationController {
         if (token != null) {
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
             studentService.savePersonalData(token, webApplicant, webAddress, webCertificate);
+            LOGGER.debug("Updated info about Applicant " + token.getName());
         }
         return "redirect:bewerbungsUebersicht";
     }
@@ -334,6 +383,7 @@ public class ApplicationController {
             Application application = studentService.buildApplication(webApplication);
             applicant = applicant.toBuilder().application(application).build();
             applicantService.saveApplicant(applicant);
+            LOGGER.debug("Saved Application of Applicant " + token.getName());
         }
         return "redirect:bewerbungsUebersicht";
     }
@@ -399,7 +449,7 @@ public class ApplicationController {
                 attributes.addFlashAttribute("errormessage", "Diese Bewerbung gehört dir nicht!");
                 return new RedirectView("bewerbungsUebersicht", true);
             }
-            if (application.getModule().getDeadline().isBefore(LocalDateTime.now())) {
+            if (application.getModule().getApplicantDeadline().isBefore(LocalDateTime.now())) {
                 attributes.addFlashAttribute("errormessage", "Der Bewerbungszeitraum ist abgelaufen");
                 return new RedirectView("bewerbungsUebersicht", true);
             }
@@ -456,6 +506,7 @@ public class ApplicationController {
             Application application = applicationService.findById(webApplication.getId());
             Application newApplication = studentService.changeApplication(webApplication, application);
             applicationService.save(newApplication);
+            LOGGER.debug("Updated Application of Applicant " + token.getName());
         }
 
         if (bindingResult.hasErrors()) {
@@ -487,6 +538,7 @@ public class ApplicationController {
             if (application == null) {
                 return "redirect:bewerbungsUebersicht";
             }
+            LOGGER.debug("Deleted Application " + application.getId() + " of Applicant " + token.getName());
             applicantService.deleteApplication(application, applicant);
 
         }

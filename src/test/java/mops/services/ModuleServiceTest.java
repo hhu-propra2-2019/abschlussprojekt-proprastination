@@ -2,6 +2,7 @@ package mops.services;
 
 import mops.repositories.ModuleRepository;
 import mops.services.dbServices.ModuleService;
+import org.apache.tomcat.jni.Local;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,14 +42,18 @@ class ModuleServiceTest {
     @BeforeEach
     void init() {
         LocalDateTime deadline = LocalDateTime.now();
+        LocalDateTime deadline2 = LocalDateTime.now();
         m1 = Module.builder()
                 .id(01)
                 .name("Programmier Praktikum")
                 .shortName("ProPra")
                 .profSerial("Jens")
-                .deadlineDate("2020-01-01")
-                .deadlineTime("09:41")
-                .deadline(deadline)
+                .applicantDeadlineDate("2020-01-01")
+                .applicantDeadlineTime("09:41")
+                .applicantDeadline(deadline)
+                .orgaDeadlineDate("2020-01-01")
+                .orgaDeadlineTime("09:42")
+                .orgaDeadline(deadline2)
                 .sevenHourLimit("2")
                 .nineHourLimit("3")
                 .seventeenHourLimit("2")

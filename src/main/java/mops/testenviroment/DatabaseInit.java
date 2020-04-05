@@ -33,17 +33,14 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("checkstyle:MagicNumber")
 @Component
 public class DatabaseInit implements ServletContextInitializer {
+
+    private static final boolean DUMMY_DATA_CREATION = false;
     private static final int ENTRYNUMBER = 100;
     private transient Random random = new Random();
-
     private transient ApplicantRepository applicantRepository;
-
     private transient ApplicationRepository applicationRepository;
-
     private transient DistributionRepository distributionRepository;
-
     private transient EvaluationRepository evaluationRepository;
-
     private transient ModuleRepository moduleRepository;
 
 
@@ -76,11 +73,13 @@ public class DatabaseInit implements ServletContextInitializer {
      * @param servletContext context.
      */
     public void onStartup(final ServletContext servletContext) {
-        Faker faker = new Faker(Locale.GERMAN);
-        fakeModules(faker);
-        fakeApplicants(faker);
-        fakeEvaluations(faker);
-        fakeDistribution();
+        if (DUMMY_DATA_CREATION) {
+            Faker faker = new Faker(Locale.GERMAN);
+            fakeModules(faker);
+            fakeApplicants(faker);
+            fakeEvaluations(faker);
+            fakeDistribution();
+        }
     }
 
     /**
@@ -387,16 +386,38 @@ public class DatabaseInit implements ServletContextInitializer {
         for (int i = 0; i < modulenames.length; i++) {
             SimpleDateFormat deadlineDatePattern = new SimpleDateFormat("yyyy-MM-dd");
             SimpleDateFormat deadlineTimePattern = new SimpleDateFormat("hh:mm");
-            String deadlineDate = deadlineDatePattern.format(faker.date().future(300, 30, TimeUnit.DAYS));
-            String deadlineTime = deadlineTimePattern.format(faker.date().future(300, 30, TimeUnit.DAYS));
-            LocalDateTime date = LocalDateTime.parse(deadlineDate + "T" + deadlineTime + ":00");
+            String applicantDeadlineDate =
+                    deadlineDatePattern.format(faker.date().future(300, 30, TimeUnit.DAYS));
+            String applicantDeadlineTime =
+                    deadlineTimePattern.format(faker.date().future(300, 30, TimeUnit.DAYS));
+            String orgaDeadlineDate =
+                    deadlineDatePattern.format(faker.date().future(300, 30, TimeUnit.DAYS));
+            String orgaDeadlineTime =
+                    deadlineTimePattern.format(faker.date().future(300, 30, TimeUnit.DAYS));
+            LocalDateTime applicantDate =
+                    LocalDateTime.parse(applicantDeadlineDate + "T" + applicantDeadlineTime + ":00");
+            LocalDateTime orgaDate = LocalDateTime.parse(orgaDeadlineDate + "T" + orgaDeadlineTime + ":00");
+            if (orgaDate.isBefore(applicantDate)) {
+                LocalDateTime help = applicantDate;
+                String helpTime = applicantDeadlineTime;
+                String helpDate = applicantDeadlineDate;
+                applicantDeadlineTime = orgaDeadlineTime;
+                applicantDeadlineDate = orgaDeadlineDate;
+                applicantDate = orgaDate;
+                orgaDeadlineTime = helpTime;
+                orgaDeadlineDate = helpDate;
+                orgaDate = help;
+            }
             Module module = Module.builder()
                     .name(modulenames[i])
                     .shortName(shortNames[i])
                     .profSerial(profSerial[i])
-                    .deadlineDate(deadlineDate)
-                    .deadlineTime(deadlineTime)
-                    .deadline(date)
+                    .applicantDeadlineDate(applicantDeadlineDate)
+                    .applicantDeadlineTime(applicantDeadlineTime)
+                    .orgaDeadlineDate(orgaDeadlineDate)
+                    .orgaDeadlineTime(orgaDeadlineTime)
+                    .applicantDeadline(applicantDate)
+                    .orgaDeadline(orgaDate)
                     .sevenHourLimit((1 + random.nextInt(5)) + "")
                     .nineHourLimit((1 + random.nextInt(5)) + "")
                     .seventeenHourLimit((1 + random.nextInt(5)) + "")

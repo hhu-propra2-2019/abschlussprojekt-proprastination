@@ -20,7 +20,7 @@ class DistributionTest {
     @BeforeEach
     void init() {
         Module module = Module.builder()
-                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
+                .applicantDeadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("Info4")
                 .build();
         Application application = Application.builder().module(module).build();
@@ -60,7 +60,7 @@ class DistributionTest {
     @Test
     void testBuilder() {
         Module module = Module.builder()
-                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
+                .applicantDeadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("Info4")
                 .build();
         assertThat(dist)
@@ -70,14 +70,18 @@ class DistributionTest {
 
     @Test
     void testToString() {
-        assertThat(dist.toString()).isEqualTo("Distribution(module=Module(name=Info4, deadlineDate=null, deadlineTime=null, " +
-                "deadline=1970-01-01T00:01:40, shortName=null, profSerial=null, sevenHourLimit=null, nineHourLimit=null, " +
+        assertThat(dist.toString()).isEqualTo("Distribution(module=Module(name=Info4, applicantDeadlineDate=null, applicantDeadlineTime=null, " +
+                "applicantDeadline=1970-01-01T00:01:40, " +
+                "orgaDeadlineDate=null, orgaDeadlineTime=null, orgaDeadline=null, " +
+                "shortName=null, profSerial=null, sevenHourLimit=null, nineHourLimit=null, " +
                 "seventeenHourLimit=null), employees=[Applicant(uniserial=null, birthplace=Wakanda, firstName=null," +
                 " surname=J, address=Address(street=Baker Street, houseNumber=21B, city=London, country=England," +
-                " zipcode=20394), checked=false, gender=null, birthday=01.01.2001, nationality=English, course=Arts, status=New," +
+                " zipcode=20394), checked=false, collapsed=false, gender=null, birthday=01.01.2001, nationality=English, course=Arts, status=New," +
                 " comment=null, certs=Certificate(name=Bachelor, course=Harvard), applications=["+
                 "Application(minHours=0, finalHours=0, maxHours=0, module=Module(name=Info4," +
-                " deadlineDate=null, deadlineTime=null, deadline=1970-01-01T00:01:40, shortName=null, profSerial=null," +
+                " applicantDeadlineDate=null, applicantDeadlineTime=null, applicantDeadline=1970-01-01T00:01:40," +
+                " orgaDeadlineDate=null, orgaDeadlineTime=null, orgaDeadline=null," +
+                " shortName=null, profSerial=null," +
                 " sevenHourLimit=null, nineHourLimit=null, seventeenHourLimit=null), priority=null, grade=0.0," +
                 " lecturer=null, semester=null, role=null, comment=null)])])"
         );
@@ -93,7 +97,7 @@ class DistributionTest {
     @Test
     void testEquals() {
         Module newModule = Module.builder()
-                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
+                .applicantDeadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("Info4")
                 .build();
         Application newApplication = Application.builder().module(newModule).build();
@@ -136,7 +140,7 @@ class DistributionTest {
     @Test
     void testEqualsNotEqual() {
         Module newModule = Module.builder()
-                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
+                .applicantDeadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("Info6")
                 .build();
         Application newApplication = Application.builder().module(newModule).build();
@@ -179,7 +183,7 @@ class DistributionTest {
     @Test
     void testHashCode() {
         Module newModule = Module.builder()
-                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
+                .applicantDeadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("Info4")
                 .build();
         Application newApplication = Application.builder().module(newModule).build();
@@ -224,7 +228,7 @@ class DistributionTest {
     @Test
     void testHashCodeNotEqual() {
         Module newModule = Module.builder()
-                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
+                .applicantDeadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("Info6")
                 .build();
         Application newApplication = Application.builder().module(newModule).build();

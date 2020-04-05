@@ -52,6 +52,7 @@ class DistributionServiceTest {
         List<Application> applications = createApplications();
         createApplicants(applications);
         createEvaluations(applications);
+        distributionService.createEmptyDistributions();
     }
 
     private void createModules() {
@@ -60,16 +61,30 @@ class DistributionServiceTest {
                 .sevenHourLimit("1")
                 .nineHourLimit("2")
                 .seventeenHourLimit("3")
-                .deadlineDate("")
-                .deadlineTime("")
+                .applicantDeadlineDate("")
+                .applicantDeadlineTime("")
+                .orgaDeadlineDate("")
+                .orgaDeadlineTime("")
                 .build());
         moduleService.save(Module.builder()
                 .name("Aldat")
                 .sevenHourLimit("3")
                 .nineHourLimit("2")
                 .seventeenHourLimit("1")
-                .deadlineDate("")
-                .deadlineTime("")
+                .applicantDeadlineDate("")
+                .applicantDeadlineTime("")
+                .orgaDeadlineDate("")
+                .orgaDeadlineTime("")
+                .build());
+        moduleService.save(Module.builder()
+                .name("ProPra")
+                .sevenHourLimit("1")
+                .nineHourLimit("2")
+                .seventeenHourLimit("3")
+                .applicantDeadlineDate("")
+                .applicantDeadlineTime("")
+                .orgaDeadlineDate("")
+                .orgaDeadlineTime("")
                 .build());
     }
 
@@ -249,6 +264,8 @@ class DistributionServiceTest {
         for (Applicant applicant : applicantsAldat) {
             assertTrue(dbDistributionService.findByModule(moduleService.findModuleByName("Aldat")).getEmployees().contains(applicant));
         }
+
+        assertEquals(dbDistributionService.findByModule(moduleService.findModuleByName("ProPra")).getEmployees().size(), 0);
     }
 
     @Test
@@ -316,15 +333,6 @@ class DistributionServiceTest {
 
     @Test
     public void testMoveApplicantToWrongModule() {
-        moduleService.save(Module.builder()
-                .name("ProPra")
-                .sevenHourLimit("1")
-                .nineHourLimit("2")
-                .seventeenHourLimit("3")
-                .deadlineDate("")
-                .deadlineTime("")
-                .build());
-
         distributionService.distribute();
         distributionService.moveApplicant(Long.toString(applicantService.findByUniserial("2").getId()), Long.toString(dbDistributionService.findByModule(moduleService.findModuleByName("ProPra")).getId()));
 
@@ -402,11 +410,11 @@ class DistributionServiceTest {
     public void testGetSize() {
         distributionService.distribute();
 
-        assertEquals(distributionService.getSize(), 2);
+        assertEquals(distributionService.getSize(), 3);
     }
 
     @Test
     public void testGetSizeBeforeDistribute() {
-        assertEquals(distributionService.getSize(), 0);
+        assertEquals(distributionService.getSize(), 3);
     }
 }

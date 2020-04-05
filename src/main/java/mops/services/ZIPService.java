@@ -5,6 +5,7 @@ import mops.model.classes.Application;
 import mops.model.classes.Distribution;
 import mops.model.classes.Module;
 import mops.model.classes.Organizer;
+import mops.model.classes.webclasses.DownloadProgress;
 import mops.services.dbServices.ApplicantService;
 import mops.services.dbServices.ApplicationService;
 import mops.services.dbServices.DbDistributionService;
@@ -79,12 +80,10 @@ public class ZIPService {
     /**
      * Returns all Distributed Applications as PDFs
      *
+     * @param downloadProgress Progress
      * @return Zip File
      */
-    public File getZipFileForAllDistributions() throws IOException {
-        File file;
-        String fileName;
-        Organizer organizer;
+    public File getZipFileForAllDistributions(final DownloadProgress downloadProgress) throws IOException {
         File tmpFile = null;
         List<Distribution> distributions = dbDistributionService.findAll();
         FileOutputStream fos = null;
@@ -95,17 +94,7 @@ public class ZIPService {
             fos = new FileOutputStream(tmpFile);
             zipOS = new ZipOutputStream(fos);
             for (Distribution distribution : distributions) {
-                for (Applicant applicant : distribution.getEmployees()) {
-                    Optional<Application> application = applicant.getApplications().stream()
-                            .filter(app -> app.getModule().equals(distribution.getModule())).findFirst();
-                    if (application.isPresent()) {
-                        organizer = organizerService.findByUniserial(application.get().getModule().getProfSerial());
-                        file = pdfService.generatePDF(application.get(), applicant, organizer);
-                        fileName = (distribution.getModule().getName() + File.separator
-                                + applicant.getFirstName() + "_" + applicant.getSurname() + ".pdf");
-                        writeToZipFile(file, zipOS, fileName);
-                    }
-                }
+                writeFilesForDistribution(zipOS, distribution, downloadProgress);
             }
         } catch (IOException e) {
             logger.warn(e.getMessage());
@@ -121,17 +110,43 @@ public class ZIPService {
         return tmpFile;
     }
 
+    private void writeFilesForDistribution(final ZipOutputStream zipOS, final Distribution distribution,
+                                           final DownloadProgress downloadProgress) throws IOException {
+        Organizer organizer;
+        File file;
+        String fileName;
+        for (Applicant applicant : distribution.getEmployees()) {
+            Optional<Application> application = applicant.getApplications().stream()
+                    .filter(app -> app.getModule().equals(distribution.getModule())).findFirst();
+            if (application.isPresent()) {
+                downloadProgress.addSize(1);
+                organizer = organizerService.findByUniserial(application.get().getModule().getProfSerial());
+                file = pdfService.generatePDF(application.get(), applicant, organizer);
+                fileName = (distribution.getModule().getName() + File.separator
+                        + applicant.getFirstName() + "_" + applicant.getSurname() + ".pdf");
+                writeToZipFile(file, zipOS, fileName);
+                downloadProgress.addProgress();
+                boolean deleted = file.delete();
+                if (!deleted) {
+                    logger.warn("Could not delete File: " + file.getName() + " on Path: "
+                            + file.getAbsolutePath());
+                }
+            }
+        }
+    }
+
     /**
      * returns path for zipFile
      *
-     * @param modules modules
+     * @param modules          modules
+     * @param downloadProgress Progress
      * @return randomised zipPath
      */
-    public File getZipFileForModule(final List<Module> modules) throws IOException {
+    public File getZipFileForModule(final List<Module> modules, final DownloadProgress downloadProgress) {
         File file;
         String fileName;
         Applicant applicant;
-        File tmpFile = null;
+        File tmpFile;
         Organizer organizer;
         List<Application> applicationList;
         try {
@@ -147,6 +162,7 @@ public class ZIPService {
 
             for (Module module : modules) {
                 applicationList = applicationService.findApplicationsByModule(module);
+                downloadProgress.addSize(applicationList.size());
                 for (Application application : applicationList) {
                     organizer = organizerService.findByUniserial(application.getModule().getProfSerial());
                     applicant = applicantService.findByApplications(application);
@@ -155,13 +171,50 @@ public class ZIPService {
                             + applicant.getFirstName().replaceAll("[^A-Za-z0-9.,ß]", "") + "_"
                             + applicant.getSurname().replaceAll("[^A-Za-z0-9.,ß]", "") + ".pdf");
                     writeToZipFile(file, zipOS, fileName);
+                    boolean deleted = file.delete();
+                    if (!deleted) {
+                        logger.warn("Could not delete File: " + file.getName() + " on Path: " + file.getAbsolutePath());
+                    }
+                    downloadProgress.addProgress();
                 }
             }
         } catch (IOException e) {
             logger.warn("Error creating Application PDF");
             logger.debug(e.getMessage());
         }
+        downloadProgress.setFinished(true);
+        return tmpFile;
+    }
 
+    /**
+     * Returns all Distributed Applications for a given module as PDFs
+     *
+     * @param module           module
+     * @param downloadProgress Progress
+     * @return Zip File
+     */
+    public File getZipFileForModuleDistributions(final Module module,
+                                                 final DownloadProgress downloadProgress) throws IOException {
+        File tmpFile = null;
+        FileOutputStream fos = null;
+        ZipOutputStream zipOS = null;
+        try {
+            tmpFile = File.createTempFile("bewerbung", ".zip");
+            tmpFile.deleteOnExit();
+            fos = new FileOutputStream(tmpFile);
+            zipOS = new ZipOutputStream(fos);
+            Distribution distribution = dbDistributionService.findByModule(module);
+            writeFilesForDistribution(zipOS, distribution, downloadProgress);
+        } catch (IOException e) {
+            logger.warn(e.getMessage());
+        } finally {
+            if (zipOS != null) {
+                zipOS.close();
+            }
+            if (fos != null) {
+                fos.close();
+            }
+        }
         return tmpFile;
     }
 }

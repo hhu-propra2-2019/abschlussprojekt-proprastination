@@ -65,10 +65,12 @@ public class WebApplicationService {
      * -
      * @param account
      * @param model
+     * @return false if a new applicant was created, true if an existing applicant was found
      */
-    public void createNewApplicantIfNoneWasFound(final Account account, final Model model) {
+    public boolean createNewApplicantIfNoneWasFound(final Account account, final Model model) {
 
         Applicant applicant = applicantService.findByUniserial(account.getName());
+        boolean applicantFound = (applicant != null);
 
         WebApplicant webApplicant = (applicant == null)
                 ? WebApplicant.builder().build() : studentService.getExistingApplicant(applicant);
@@ -85,21 +87,22 @@ public class WebApplicationService {
         model.addAttribute("webAddress", webAddress);
         model.addAttribute("webCertificate", webCertificate);
         model.addAttribute("modules", modules);
+
+        return applicantFound;
     }
 
     /**
      * -
+     *
      * @param module
      * @return -
      */
-    public List<String> getApplicantUniserialsByModule(final String module) {
+    public List<Applicant> getApplicantUniserialsByModule(final String module) {
         return applicationService.
                 findApplicationsByModule(moduleService
                         .findModuleByName(module))
                 .stream()
-                .map(application -> applicantService
-                        .findByApplications(application)
-                        .getUniserial())
+                .map(applicantService::findByApplications)
                 .collect(Collectors.toList());
     }
 
@@ -112,11 +115,11 @@ public class WebApplicationService {
      * @param modules
      * @param webCertificate
      */
-    public void removeCurrentModuleFromListOfAvailebleModuleToApplyTo(final KeycloakAuthenticationToken token,
-                                                                      final WebApplicant webApplicant,
-                                                                      final WebAddress webAddress,
-                                                                      final Model model, final String modules,
-                                                                      final WebCertificate webCertificate) {
+    public void removeCurrentModuleFromListAndSavePersonalInfo(final KeycloakAuthenticationToken token,
+                                                               final WebApplicant webApplicant,
+                                                               final WebAddress webAddress,
+                                                               final Model model, final String modules,
+                                                               final WebCertificate webCertificate) {
         Applicant applicant = studentService.savePersonalData(token, webApplicant, webAddress, webCertificate);
         Module module = moduleService.findModuleByName(modules);
         List<Module> availableMods = studentService.getAllNotfilledModules(applicant, moduleService.getModules());

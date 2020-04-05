@@ -19,7 +19,6 @@
             <li th:if="${account.roles.contains('studentin')}"><a th:href="@{/bewerbung2/bewerber/}">Bewerber Übersicht</a></li>
         </ul>
         <ul>
-            <li><a th:href="@{/}">Startseite</a></li>
             <li><a th:href="@{./}">Dashboard</a></li>
         </ul>
     </nav>
@@ -40,7 +39,6 @@
                             <h2><label class="text-center" th:text="${app.module.name}">[Modulname]</label></h2>
                             <input th:field="*{module}" th:value="${app.module.name}" type="hidden">
                             <input th:field="*{id}" type="hidden">
-
                         </div>
                         <div class="col">
                             <button class="btn btn-outline-primary float-right" name="submit" type="submit">Speichern

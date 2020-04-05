@@ -44,9 +44,12 @@ class ApplicantRepositoryTest {
     @Test
     public void test() {
         Module module = Module.builder()
-                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
-                .deadlineDate("1976-04-01")
-                .deadlineTime("09:41")
+                .applicantDeadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
+                .applicantDeadlineDate("1976-04-01")
+                .applicantDeadlineTime("09:41")
+                .orgaDeadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
+                .orgaDeadlineDate("1976-04-02")
+                .orgaDeadlineTime("09:30")
                 .name("Info4")
                 .build();
 

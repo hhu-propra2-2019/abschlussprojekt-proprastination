@@ -9,6 +9,7 @@ import mops.model.classes.Module;
 import mops.model.classes.Organizer;
 import mops.model.classes.Priority;
 import mops.model.classes.Role;
+import mops.model.classes.webclasses.DownloadProgress;
 import mops.services.dbServices.ApplicantService;
 import mops.services.dbServices.ApplicationService;
 import mops.services.dbServices.DbDistributionService;
@@ -27,7 +28,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Arrays;
@@ -61,7 +61,7 @@ class ZIPServiceTest {
     @BeforeEach
     void setup() throws IOException {
         Module module = Module.builder()
-                .deadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
+                .applicantDeadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
                 .name("Info4")
                 .build();
         Address address = Address.builder()
@@ -129,7 +129,7 @@ class ZIPServiceTest {
 
     @Test
     void getZipFileForAllDistributions() throws IOException {
-        File file = zipService.getZipFileForAllDistributions();
+        File file = zipService.getZipFileForAllDistributions(new DownloadProgress());
 
         assertThat(file).exists();
         assertThat(file).isFile();
@@ -140,7 +140,7 @@ class ZIPServiceTest {
 
     @Test
     void getZipFileForModule() throws IOException {
-        File file = zipService.getZipFileForModule(Arrays.asList(Module.builder().build()));
+        File file = zipService.getZipFileForModule(Arrays.asList(Module.builder().build()), new DownloadProgress());
 
         assertThat(file).exists();
         assertThat(file).isFile();

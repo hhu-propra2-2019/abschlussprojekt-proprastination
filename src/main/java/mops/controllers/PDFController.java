@@ -1,5 +1,6 @@
 package mops.controllers;
 
+import mops.model.classes.webclasses.DownloadProgress;
 import mops.services.dbServices.DbDistributionService;
 import mops.services.logicServices.DistributionService;
 import mops.services.dbServices.ModuleService;
@@ -7,9 +8,6 @@ import mops.services.webServices.AccountGenerator;
 import mops.services.webServices.WebApplicationService;
 import mops.services.webServices.WebPdfService;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,10 +16,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.NoSuchElementException;
 
@@ -35,14 +35,16 @@ public class PDFController {
     private final DistributionService distributionService;
     private final DbDistributionService dbDistributionService;
     private final WebPdfService webPdfService;
+    private DownloadProgress downloadProgress;
 
     /**
      * Initiates PDF Controller
-     * @param moduleService
-     * @param webApplicationService
-     * @param distributionService
-     * @param dbDistributionService
-     * @param webPdfService
+     *
+     * @param moduleService         Module Service
+     * @param webApplicationService Application Service
+     * @param distributionService   Distribution Service
+     * @param dbDistributionService Database Distribution Service
+     * @param webPdfService         Web PDF Service
      */
     @SuppressWarnings("checkstyle:HiddenField")
     public PDFController(final ModuleService moduleService,
@@ -55,6 +57,7 @@ public class PDFController {
         this.distributionService = distributionService;
         this.dbDistributionService = dbDistributionService;
         this.webPdfService = webPdfService;
+        this.downloadProgress = new DownloadProgress();
     }
 
     /**
@@ -70,7 +73,7 @@ public class PDFController {
         model.addAttribute("verteilt", distributionService.getSize());
         model.addAttribute("modules", moduleService.getModuleNames());
         model.addAttribute("modulesStudent", moduleService.getModuleNames());
-        return "pdfhandling";
+        return "pdf/pdfhandling";
     }
 
     /**
@@ -89,7 +92,7 @@ public class PDFController {
         model.addAttribute("module", module);
         model.addAttribute("applicants", webApplicationService.getApplicantUniserialsByModule(module));
 
-        return "pdfhandlingapplicant";
+        return "pdf/pdfhandlingapplicant";
     }
 
     /**
@@ -113,25 +116,23 @@ public class PDFController {
 
     /**
      * download all applications for this module
-     * @param token token
+     *
      * @param module module
      * @return module pdf
      */
     @Secured({"ROLE_verteiler", "ROLE_orga"})
     @PostMapping("/downloadModul")
-    public String downloadModule(final KeycloakAuthenticationToken token,
-                                  @RequestParam("modules") final String module) {
+    public String downloadModule(@RequestParam("modules") final String module) {
         return webPdfService.getDownloadRedirectOfModule(module);
     }
-
     /**
      * download all applications
-     * @param token token
+     *
      * @return module
      */
     @Secured({"ROLE_verteiler", "ROLE_orga"})
     @PostMapping("/downloadAlles")
-    public String downloadAll(final KeycloakAuthenticationToken token) {
+    public String downloadAll() {
         return "redirect:zipAllDownload";
     }
 
@@ -153,7 +154,7 @@ public class PDFController {
             model.addAttribute("modules", moduleService.getModuleNames());
             model.addAttribute("modulesStudent", moduleService.getModuleNames());
         }
-        return "pdfhandlingdistribution";
+        return "pdf/pdfhandlingdistribution";
     }
 
     /**
@@ -170,16 +171,17 @@ public class PDFController {
 
         model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
         model.addAttribute("module", module);
-        model.addAttribute("applicants", webApplicationService.getApplicantUniserialsByModule(module));
+        model.addAttribute("applicants",
+                dbDistributionService.findByModule(moduleService.findModuleByName(module)).getEmployees());
 
-        return "pdfhandlingapplicant";
+        return "pdf/pdfhandlingapplicantAssigned";
     }
 
     /**
      * Redirect to download all
      *
-     * @param token
-     * @param model
+     * @param token keycloak
+     * @param model model
      * @return download
      */
     @Secured({"ROLE_verteiler", "ROLE_orga"})
@@ -203,7 +205,7 @@ public class PDFController {
                                          final RedirectAttributes attributes,
                                          @RequestParam("email") final String eMail) {
         if (token != null) {
-            webPdfService.sendEmail(token, attributes, eMail);
+            webPdfService.sendEmail(token, attributes, eMail, downloadProgress);
         }
         return new RedirectView("zuteilungUebersicht", true);
     }
@@ -211,76 +213,125 @@ public class PDFController {
     /**
      * Returns a FileStream of the requested PDF.
      *
-     * @param module  module name of the application.
-     * @param student student uniserial.
-     * @param token   Keycloak token.
-     * @param model   Model.
-     * @return InputStreamResource
+     * @param module   module name of the application.
+     * @param student  student uniserial.
+     * @param token    Keycloak token.
+     * @param model    Model.
+     * @param response HttpResponse
      */
     @Secured({"ROLE_verteiler", "ROLE_orga"})
     @RequestMapping(value = "pdfDownload", method = RequestMethod.GET)
-    public ResponseEntity<Resource> fileSystemResource(
+    public void fileSystemResource(
             @RequestParam(value = "module") final String module, @RequestParam(value = "student") final String student,
-            final KeycloakAuthenticationToken token, final Model model) throws IOException, NoSuchElementException {
+            final KeycloakAuthenticationToken token, final Model model,
+            final HttpServletResponse response) throws IOException, NoSuchElementException {
 
         if (token != null) {
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
-            return webPdfService.generatePdfForDownload(module, student);
+            webPdfService.generatePdfForDownload(module, student, response);
+        } else {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
     /**
      * Downloads all applications for a module
      *
-     * @param module module
-     * @param token  token
-     * @param model model
-     * @return file
+     * @param module   module
+     * @param token    token
+     * @param model    model
+     * @param response HttpResponse
      */
     @Secured({"ROLE_verteiler", "ROLE_orga"})
     @RequestMapping(value = "zipModuleDownload", method = RequestMethod.GET)
-    public ResponseEntity<Resource> zipSystemResource(
+    public void zipModuleDownload(
             @RequestParam(value = "module") final String module,
-            final KeycloakAuthenticationToken token, final Model model) throws IOException, NoSuchElementException {
+            final KeycloakAuthenticationToken token, final Model model,
+            final HttpServletResponse response) throws IOException, NoSuchElementException {
         if (token != null) {
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
-            return webPdfService.generateSingleZip(module);
+            webPdfService.generateSingleZip(module, response, downloadProgress);
+        } else {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+
+    /**
+     * Downloads all applications for a module
+     *
+     * @param module   module
+     * @param token    token
+     * @param model    model
+     * @param response HttpResponse
+     */
+    @Secured({"ROLE_verteiler", "ROLE_orga"})
+    @RequestMapping(value = "/zipModuleDownloadAssigned", method = RequestMethod.POST)
+    public void zipDownloadAssignedModule(
+            @RequestParam(value = "modules") final String module,
+            final KeycloakAuthenticationToken token, final Model model,
+            final HttpServletResponse response) throws IOException, NoSuchElementException {
+        if (token != null) {
+            model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
+            webPdfService.generateZipForModuleAssigned(response, module, downloadProgress);
+        } else {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+        }
     }
 
     /**
      * Downloads all applications as zip
-     * @param token token
-     * @param model model
-     * @return file
+     *
+     * @param token    token
+     * @param model    model
+     * @param response HttpResponse
      */
     @Secured({"ROLE_verteiler", "ROLE_orga"})
     @RequestMapping(value = "zipAllDownload", method = RequestMethod.GET)
-    public ResponseEntity<Resource> zipAllSystemResource(
-            final KeycloakAuthenticationToken token, final Model model) throws IOException, NoSuchElementException {
+    public void zipAllSystemResource(final KeycloakAuthenticationToken token,
+                                     final Model model, final HttpServletResponse response
+    ) throws IOException, NoSuchElementException {
+
         if (token != null) {
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
-            return webPdfService.generateMultipleZip();
+            webPdfService.generateZipForModuleUnassigned(response, downloadProgress);
+        } else {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
     /**
      * Downloads all distributed as zip
-     * @param token token
-     * @param model model
-     * @return Zip file
+     *
+     * @param token    token
+     * @param model    model
+     * @param response HttpResponse
      */
     @Secured({"ROLE_verteiler", "ROLE_orga"})
     @RequestMapping(value = "zipAllDistributedDownload", method = RequestMethod.GET)
-    public ResponseEntity<Resource> zipAllDistributedSystemResource(
-            final KeycloakAuthenticationToken token, final Model model) throws IOException, NoSuchElementException {
+    public void zipAllDistributedSystemResource(
+            final KeycloakAuthenticationToken token, final Model model,
+            final HttpServletResponse response) throws IOException, NoSuchElementException {
         if (token != null) {
             model.addAttribute("account", AccountGenerator.createAccountFromPrincipal(token));
-            return webPdfService.generateMultipleZipForAssigned();
+            webPdfService.generateZipForAllAssigned(response, downloadProgress);
+        } else {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+
+    /**
+     * REST Response to downloadstatus of user download.
+     *
+     * @param token keycloaktoken.
+     * @return Progress.
+     */
+    @ResponseBody
+    @Secured("ROLE_verteiler")
+    @GetMapping("/progress")
+    public DownloadProgress getProgress(final KeycloakAuthenticationToken token) {
+        if (token != null) {
+            return downloadProgress;
+        }
+        return new DownloadProgress();
     }
 }
