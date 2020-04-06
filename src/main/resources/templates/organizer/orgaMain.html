@@ -46,8 +46,9 @@
         </div>
         <div class="card bg-light mb-3 border-primary">
             <div class="card-header">
-                <div>
-                    <h3 class="col">Persönliche Informationen</h3>
+                <div class="row">
+                    <h3 class="col">Mein Benutzerprofil</h3>
+                    <a class="btn btn-outline-primary float-right" href="https://keycloak.cs.hhu.de/auth/realms/MOPS/account">Profil bearbeiten</a>
                 </div>
             </div>
             <div class="card-body flex-column h-50">
@@ -58,29 +59,17 @@
                     <tr>
                         <td scope="col" height="60" class="align-middle">Name</td>
                         <td scope="col" height="60" class="align-middle" th:text="*{name}">Max Mustermann</td>
-                        <td height="60" class="align-middle">
-                            <div class="btn btn-outline-primary btn-sm float-right">
-                                <a href="https://keycloak.cs.hhu.de/auth/realms/MOPS/account">Bearbeiten</a>
-                            </div>
-                        </td>
+                        <td height="60" class="align-middle"></td>
                     </tr>
                     <tr>
                         <td scope="col" height="60" class="align-middle">Rolle</td>
                         <td scope="col" height="60" class="align-middle" th:text="*{roles}">Admin</td>
-                        <td height="60" class="align-middle">
-                            <div class="btn btn-outline-primary btn-sm float-right">
-                                <a href="https://keycloak.cs.hhu.de/auth/realms/MOPS/account">Bearbeiten</a>
-                            </div>
-                        </td>
+                        <td height="60" class="align-middle"></td>
                     </tr>
                     <tr>
                         <td scope="col" height="60" class="align-middle">E-Mail</td>
                         <td scope="col" height="60" class="align-middle" th:text="*{email}">Max.Mustermann@uni-duesseldorf.de</td>
-                        <td height="60" class="align-middle">
-                            <div class="btn btn-outline-primary btn-sm float-right">
-                                <a href="https://keycloak.cs.hhu.de/auth/realms/MOPS/account">Bearbeiten</a>
-                            </div>
-                        </td>
+                        <td height="60" class="align-middle"></td>
                     </tr>
                     <tr th:style="${organizer.phonenumber} == '' ? 'background-color: rgba(227, 74, 74)' : _">
                         <td scope="col" height="60" class="align-middle">Telefon</td>
