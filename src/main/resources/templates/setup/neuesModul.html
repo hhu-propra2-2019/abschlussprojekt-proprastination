@@ -40,8 +40,6 @@
                     <h2 style="margin-bottom: .0rem" class="card-text col-6 float-left">Neues Modul</h2>
                     <div class="col-6">
                         <button class="btn btn-outline-primary btn-sm float-right" th:type="submit">Speichern</button>
-                        <button class="btn btn-outline-primary btn-sm float-right" th:href="@{/bewerbung2/setup}">
-                            Zurück</button>
                     </div>
                 </div>
             </div>
@@ -64,8 +62,7 @@
                                     <label for="shortName">Kurzform des Moduls</label><br>
                                     <input type="text" name="shortName" id="shortName"
                                            th:value="*{shortName}" th:placeholder="*{shortName}" th:field="*{shortName}"
-                                           required
-                                    >
+                                           required>
                                 </div>
                             </div>
                         </div>
@@ -75,8 +72,7 @@
                                     <label for="profSerial">Zugeordnete Person (Unikennung)</label><br>
                                     <input type="text" name="profSeriale" id="profSerial"
                                            th:value="*{profSerial}" th:placeholder="*{profSerial}" th:field="*{profSerial}"
-                                           required
-                                    >
+                                           required>
                                 </div>
                             </div>
                         </div>
@@ -170,7 +166,7 @@
                                     <label for="sevenHourLimit">Personenanzahl 7 Std:</label><br>
                                     <input type="number" name="sevenHourLimit" id="sevenHourLimit"
                                            th:value="*{sevenHourLimit}" th:placeholder="*{sevenHourLimit}"
-                                           required pattern="0|([1-9][0-9]*)"
+                                           required min="0"
                                            th:field="*{sevenHourLimit}">
                                 </div>
                             </div>
@@ -181,7 +177,7 @@
                                     <label for="nineHourLimit">Personenanzahl 9 Std:</label><br>
                                     <input type="number" name="nineHourLimit" id="nineHourLimit"
                                            th:value="*{nineHourLimit}" th:placeholder="*{nineHourLimit}"
-                                           required pattern="0|([1-9][0-9]*)"
+                                           required min="0"
                                            th:field="*{nineHourLimit}">
                                 </div>
                             </div>
@@ -192,7 +188,7 @@
                                     <label for="seventeenHourLimit">Personenanzahl 17 Std:</label><br>
                                     <input type="number" name="seventeenHourLimit" id="seventeenHourLimit"
                                            th:value="*{seventeenHourLimit}" th:placeholder="*{seventeenHourLimit}"
-                                           required pattern="0|([1-9][0-9]*)"
+                                           required min="0"
                                            th:field="*{seventeenHourLimit}">
                                 </div>
                             </div>
