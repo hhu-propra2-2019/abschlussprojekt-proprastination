@@ -149,7 +149,7 @@
                                 <label for="sevenHourLimit">Personenanzahl 7 Std:</label><br>
                                 <input type="number" name="sevenHourLimit" id="sevenHourLimit"
                                        th:value="*{sevenHourLimit}" th:placeholder="*{sevenHourLimit}"
-                                       required pattern="0|([1-9][0-9]*)"
+                                       required min="0"
                                        th:field="*{sevenHourLimit}">
                             </div>
                         </div>
@@ -160,7 +160,7 @@
                                 <label for="nineHourLimit">Personenanzahl 9 Std:</label><br>
                                 <input type="number" name="nineHourLimit" id="nineHourLimit"
                                        th:value="*{nineHourLimit}" th:placeholder="*{nineHourLimit}"
-                                       required pattern="0|([1-9][0-9]*)"
+                                       required min="0"
                                        th:field="*{nineHourLimit}">
                             </div>
                         </div>
@@ -171,7 +171,7 @@
                                 <label for="seventeenHourLimit">Personenanzahl 17 Std:</label><br>
                                 <input type="number" name="seventeenHourLimit" id="seventeenHourLimit"
                                        th:value="*{seventeenHourLimit}" th:placeholder="*{seventeenHourLimit}"
-                                       required pattern="0|([1-9][0-9]*)"
+                                       required min="0"
                                        th:field="*{seventeenHourLimit}">
                             </div>
                         </div>
