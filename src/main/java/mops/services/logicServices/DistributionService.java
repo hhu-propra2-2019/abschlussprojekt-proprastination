@@ -458,7 +458,8 @@ public class DistributionService {
     }
 
     /**
-     * checks if orga deadlines are exposed
+     * checks if orga deadlines have expired
+     *
      * @return true, if it's the distributors turn
      */
     public boolean checkForOrgaDeadlines() {
@@ -478,5 +479,19 @@ public class DistributionService {
      */
     public long getSize() {
         return dbDistributionService.count();
+    }
+
+    /**
+     * Returns true if all Distributions are empty.
+     *
+     * @return boolean.
+     */
+    public boolean isAllEmpty() {
+        for (Distribution distribution : dbDistributionService.findAll()) {
+            if (distribution.getEmployees().size() > 0) {
+                return false;
+            }
+        }
+        return true;
     }
 }

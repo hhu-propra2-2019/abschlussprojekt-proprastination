@@ -8,11 +8,11 @@ async function spinnerLoading(id) {
             const res = await getData();
             console.log(res);
             document.getElementById(id).innerHTML = '<span>Generiere PDFs: [' + res["progress"] + '/' + res["size"] + ']</span>';
-            if (res["progress"] === 0) {
+            if (res["progress"] === res["size"]) {
                 count++;
             }
             finished = res["finished"];
-            if (count >= 4) {
+            if (count >= 8) {
                 finished = true;
             }
 

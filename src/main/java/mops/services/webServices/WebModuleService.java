@@ -74,6 +74,7 @@ public class WebModuleService {
      */
     public void update(final WebModule webmodule, final String oldName) {
         Module m = moduleService.findModuleByName(oldName);
+        concatenateDeadlinesWebModule(webmodule);
         Module updated = toModule(webmodule);
         updated.setId(m.getId());
         moduleService.save(updated);
