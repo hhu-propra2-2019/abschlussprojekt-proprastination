@@ -25,8 +25,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -72,15 +70,6 @@ public class WebPdfService {
      */
     public String getDownloadRedirectOfApplicantWithModule(final String module, final String applicant) {
         return "redirect:pdfDownload?student=" + applicant + "&module=" + module;
-    }
-
-    /**
-     * -
-     * @param module module
-     * @return -
-     */
-    public String getDownloadRedirectOfModule(final String module) {
-        return "redirect:zipModuleDownload?module=" + module;
     }
 
     /**
@@ -162,42 +151,8 @@ public class WebPdfService {
         }
     }
 
-    /**
-     * -
-     *
-     * @param module           module
-     * @param response         HttpResponse
-     * @param downloadProgress Progress
-     * @throws IOException IO
-     */
-    public void generateSingleZip(final String module, final HttpServletResponse response,
-                                  final DownloadProgress downloadProgress) throws IOException {
-        if (module == null) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
-        List<Module> modules = new ArrayList<>();
-        modules.add(moduleService.findModuleByName(module));
-        File file = zipService.getZipFileForModule(modules, downloadProgress);
-        downloadProgress.zero();
-        loadFileToUser(response, file);
 
-    }
 
-    /**
-     * -
-     *
-     * @param response         HttpResponse
-     * @param downloadProgress Progress
-     * @throws IOException IO
-     */
-    public void generateZipForModuleUnassigned(final HttpServletResponse response,
-                                               final DownloadProgress downloadProgress) throws IOException {
-        List<Module> modules = moduleService.getModules();
-        File file = zipService.getZipFileForModule(modules, downloadProgress);
-        downloadProgress.zero();
-        loadFileToUser(response, file);
-    }
 
     /**
      * -

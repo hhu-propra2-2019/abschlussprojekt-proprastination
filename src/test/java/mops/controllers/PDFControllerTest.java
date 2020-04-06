@@ -53,45 +53,6 @@ class PDFControllerTest {
                 .build();
     }
 
-    /**
-     * TODO: Test needs to be fixed due to NullPointerException while loading mocked file;
-     *
-     * @throws Exception e.
-     */
-    @Ignore("Test needs to be fixed.")
-    //@Test
-    @WithMockKeycloackAuth(name = "name", roles = "studentin")
-    void fileSystemResource() throws Exception {
-        Module module = Module.builder()
-                .applicantDeadline(LocalDateTime.ofEpochSecond(100, 0, ZoneOffset.UTC))
-                .name("Info4")
-                .build();
-        Application application = Application.builder()
-                .module(module)
-                .build();
-        Applicant applicant = Applicant.builder().application(application).build();
-
-
-        File file = File.createTempFile("xxxx", ".tmp");
-        file.deleteOnExit();
-
-        FileWriter writer = new FileWriter(file);
-        writer.write("Test data");
-        writer.close();
-
-        when(appService.findByUniserial(any(String.class))).thenReturn(applicant);
-        when(service.generatePDF(any(Application.class), any(Applicant.class), any(Organizer.class))).thenReturn(file);
-
-
-        //mvc.perform(get("/bewerbung2/bewerber/pdf/download?module=createNewApplicantIfNoneWasFound")).andExpect(status().isOk());
-
-        mvc.perform(get("/bewerbung2/pdf/pfdDownload?module=createNewApplicantIfNoneWasFound?student=name")).andExpect(status().is4xxClientError());
-
-        verify(appService, times(1)).findByUniserial(any(String.class));
-        verify(service, times(1)).generatePDF(any(Application.class), any(Applicant.class), any(Organizer.class));
-        boolean ignoreme = file.delete();
-    }
-
     @Test
     @WithMockKeycloackAuth(name = "baum", roles = "studentin")
     void noSuchApplication() throws Exception {

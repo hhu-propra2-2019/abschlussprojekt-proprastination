@@ -138,16 +138,6 @@ class ZIPServiceTest {
         assertThat(file.getName()).contains(".zip");
     }
 
-    @Test
-    void getZipFileForModule() throws IOException {
-        File file = zipService.getZipFileForModule(Arrays.asList(Module.builder().build()), new DownloadProgress());
-
-        assertThat(file).exists();
-        assertThat(file).isFile();
-        assertThat(file).canRead();
-        assertThat(file.getName()).contains("bewerbung");
-        assertThat(file.getName()).contains(".zip");
-    }
 
     @Test
     void writeToZipFile() throws IOException {

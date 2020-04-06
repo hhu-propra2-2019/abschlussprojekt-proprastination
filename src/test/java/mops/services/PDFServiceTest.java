@@ -93,5 +93,7 @@ class PDFServiceTest {
         assertThat(acroForm.getField("Studiengang").getValueAsString()).isEqualTo("Arts");
         assertThat(acroForm.getField("Antragsteller_Name").getValueAsString()).isEqualTo("test");
 
+        document1.close();
+
     }
 }

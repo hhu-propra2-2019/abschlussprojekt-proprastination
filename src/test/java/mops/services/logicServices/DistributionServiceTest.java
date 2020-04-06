@@ -417,4 +417,16 @@ class DistributionServiceTest {
     public void testGetSizeBeforeDistribute() {
         assertEquals(distributionService.getSize(), 3);
     }
+
+    @Test
+    public void testIsAllEmpty() {
+        assertTrue(distributionService.isAllEmpty());
+    }
+
+    @Test
+    public void testIsAllEmptyAfterDistribute() {
+        distributionService.distribute();
+
+        assertFalse(distributionService.isAllEmpty());
+    }
 }

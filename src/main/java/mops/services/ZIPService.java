@@ -86,6 +86,9 @@ public class ZIPService {
     public File getZipFileForAllDistributions(final DownloadProgress downloadProgress) throws IOException {
         File tmpFile = null;
         List<Distribution> distributions = dbDistributionService.findAll();
+        for (Distribution distribution : distributions) {
+            downloadProgress.addSize(distribution.getEmployees().size());
+        }
         FileOutputStream fos = null;
         ZipOutputStream zipOS = null;
         try {
@@ -115,7 +118,6 @@ public class ZIPService {
         Organizer organizer;
         File file;
         String fileName;
-        downloadProgress.addSize(distribution.getEmployees().size());
         for (Applicant applicant : distribution.getEmployees()) {
             Optional<Application> application = applicant.getApplications().stream()
                     .filter(app -> app.getModule().equals(distribution.getModule())).findFirst();
@@ -136,59 +138,6 @@ public class ZIPService {
     }
 
     /**
-     * returns path for zipFile
-     *
-     * @param modules          modules
-     * @param downloadProgress Progress
-     * @return randomised zipPath
-     */
-    public File getZipFileForModule(final List<Module> modules, final DownloadProgress downloadProgress) {
-        File file;
-        String fileName;
-        Applicant applicant;
-        File tmpFile;
-        Organizer organizer;
-        List<Application> applicationList;
-        try {
-            tmpFile = File.createTempFile("bewerbung", ".zip");
-            tmpFile.deleteOnExit();
-        } catch (Exception e) {
-            logger.warn(e.getMessage());
-            return null;
-        }
-        try (FileOutputStream fos = new FileOutputStream(tmpFile);
-             ZipOutputStream zipOS = new ZipOutputStream(fos)
-        ) {
-
-            for (Module module : modules) {
-                downloadProgress.addSize(applicationService.findApplicationsByModule(module).size());
-            }
-            for (Module module : modules) {
-                applicationList = applicationService.findApplicationsByModule(module);
-                for (Application application : applicationList) {
-                    organizer = organizerService.findByUniserial(application.getModule().getProfSerial());
-                    applicant = applicantService.findByApplications(application);
-                    file = pdfService.generatePDF(application, applicant, organizer);
-                    fileName = (module.getName() + File.separator
-                            + applicant.getFirstName().replaceAll("[^A-Za-z0-9.,ß]", "") + "_"
-                            + applicant.getSurname().replaceAll("[^A-Za-z0-9.,ß]", "") + ".pdf");
-                    writeToZipFile(file, zipOS, fileName);
-                    boolean deleted = file.delete();
-                    if (!deleted) {
-                        logger.warn("Could not delete File: " + file.getName() + " on Path: " + file.getAbsolutePath());
-                    }
-                    downloadProgress.addProgress();
-                }
-            }
-        } catch (IOException e) {
-            logger.warn("Error creating Application PDF");
-            logger.debug(e.getMessage());
-        }
-        downloadProgress.setFinished(true);
-        return tmpFile;
-    }
-
-    /**
      * Returns all Distributed Applications for a given module as PDFs
      *
      * @param module           module
@@ -206,6 +155,7 @@ public class ZIPService {
             fos = new FileOutputStream(tmpFile);
             zipOS = new ZipOutputStream(fos);
             Distribution distribution = dbDistributionService.findByModule(module);
+            downloadProgress.addSize(distribution.getEmployees().size());
             writeFilesForDistribution(zipOS, distribution, downloadProgress);
         } catch (IOException e) {
             logger.warn(e.getMessage());

@@ -1,7 +1,7 @@
 
 <!doctype html>
 <html lang="en"
-      th:replace="~{mopslayout :: html(name='Download PDFs', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}"
+      th:replace="~{mopslayout :: html(name='Einstellungsbögen', headcontent=~{:: headcontent}, navigation=~{:: navigation}, bodycontent=~{:: bodycontent})}"
       xmlns:th="http://www.thymeleaf.org" xmlns:text-align="http://www.w3.org/1999/xhtml">
 
 <head>
@@ -33,10 +33,6 @@
             <li th:if="${account.roles.contains('studentin')}"><a th:href="@{/bewerbung2/bewerber/}">Bewerber
                 Übersicht</a></li>
         </ul>
-        <ul>
-            <li><a th:href="@{/}">Startseite</a></li>
-            <li><a th:href="@{./uebersicht}">Übersicht</a></li>
-        </ul>
     </nav>
 </header>
 
@@ -46,39 +42,42 @@
             <label th:text="${message}"></label>
         </div>
         <div class="card bg-light mb-3 border-primary">
-            <div class="card-header"><h2><b>Downloaden</b> Sie alle <b>verteilten</b> Bewerbungen als PDFs hier!</h2>
+            <div class="card-header"><h2>Download-Möglichkeit für alle Einstellungsbögen der Bewerber</h2>
             </div>
         </div>
         <div class="card bg-light mb-3 border-primary">
-            <div class="card-header"><h4>Senden Sie <b>alle verteilten</b> Bewerbungen als Email!</h4></div>
+            <div class="card-header"><h4>Senden aller Einstellungsbögen als E-Mail</h4></div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-auto">
-                        <label>Achtung, der EMailversand kann bei großer Bewerberanzahl fehlschlagen!</label>
+                    <div class="col">
+                        <label>Achtung, der E-Mailversand kann bei großer Bewerberanzahl fehlschlagen.</label>
                     </div>
                 </div>
                 <div class="row form-row">
-                    <label th:for="email">Bitte geben Sie zusätzlich die E-Mail-Adresse an, an die Sie die Bewerbungen
-                        schicken wollen</label>
-                    <br>
-                    <div class="col form-inline">
-                        <input th:id="email" th:name="email" th:type="text">
-                        <button class="btn btn-outline-primary form-control" th:formaction="@{versenden}"
-                                th:type="submit"
-                                id="emailButton"
-                                onclick="spinnerLoading('emailButton')"
-                                th:value="absenden"
-                        >Absenden
-                        </button>
+                    <div class="col">
+                        <label th:for="email">Bitte geben Sie die E-Mail-Adresse an, an die Sie die Einstellungsbögen
+                            schicken wollen:</label>
+                        <br>
+                        <div class="col form-inline">
+                            <input class="form-row mx-2" th:id="email" th:name="email" th:type="text">
+                            <button class="btn btn-outline-primary form-control ml-3" id="emailButton"
+                                    onclick="spinnerLoading('emailButton')"
+                                    th:formaction="@{versenden}"
+                                    th:type="submit"
+                                    th:value="absenden"
+                            >Absenden
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card bg-light mb-3 border-primary">
-            <div class="card-header"><h4>Downloaden Sie alle Bewerbungen hier!</h4></div>
+            <div class="card-header"><h4>Download aller Einstellungsbögen</h4></div>
             <div class="card-body">
                 <div class="row form-row">
-                    <label>Oder laden Sie <b>alle</b> Bewerbungen hier herunter!</label><br>
+                    <label>Hier können Sie alle Einstellungsbögen entsprechend Ihrer Zuteilung
+                        herunterladen.</label><br>
                 </div>
                 <div class="row form-row">
                     <button class="btn btn-outline-primary form-control" id="downloadAll"
@@ -88,11 +87,12 @@
             </div>
         </div>
         <div class="card bg-light mb-3 border-primary">
-            <div class="card-header"><h4>Downloaden Sie alle Bewerbung <b>eines Moduls</b> hier!</h4></div>
+            <div class="card-header"><h4>Download aller Einstellungsbögen eines Moduls</h4></div>
             <div class="card-body">
                 <div class="row form-row">
-                    <label th:for="modules">Suchen Sie hier aus, für welches Modul sie die Bewerbungen downloaden
-                        wollen!</label><br>
+                    <label th:for="modules">Wählen Sie hier aus, für welches Modul Sie die Einstellungsbögen
+                        herunterladen wollen.
+                    </label><br>
                     <select th:name="modules" th:id="modules" class="form-control">
                         <option th:each="module : ${modules}" th:value="${module}" th:text="${module}">Modul a</option>
                     </select>
@@ -107,12 +107,15 @@
             </div>
         </div>
         <div class="card bg-light mb-3 border-primary">
-            <div class="card-header"><h4>Downloaden Sie <b>eine</b> Bewerbung eines Studenten hier!</h4></div>
+            <div class="card-header"><h4>Download des Einstellungsbogens eines Studenten</h4></div>
             <div class="card-body">
                 <div class="row form-row">
-                    <label th:for="modulesStudent">Suchen Sie hier zuerst aus, für welches Modul sie die Bewerbung downloaden wollen!</label><br>
+                    <label th:for="modulesStudent">Wählen Sie hier zuerst aus, für welches Modul Sie den
+                        Einstellungsbogen herunterladen wollen.</label><br>
                     <select th:name="modulesStudent" th:id="modulesStudent" class="form-control">
-                        <option th:each="moduleStudent : ${modulesStudent}" th:value="${moduleStudent}" th:text="${moduleStudent}">Modul a</option>
+                        <option th:each="moduleStudent : ${modulesStudent}" th:text="${moduleStudent}"
+                                th:value="${moduleStudent}">Modul a
+                        </option>
                     </select>
                 </div>
                 <br>
